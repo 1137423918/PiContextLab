@@ -1,0 +1,24 @@
+{
+  "purpose": "New prospective v4 business integration, not a repeat of closed net-sales/returns cases",
+  "provider": "https://api.deepseek.com",
+  "model": "deepseek-flash",
+  "thinking": "disabled",
+  "cases": [
+    {
+      "id": "gross-sales-country-june-july",
+      "question": "Investigate gross_sales for baseline [2011-06-01,2011-07-01) and current [2011-07-01,2011-08-01), calendar_month. Inspect coverage and policy, compare the periods, break down the change by country with top5 plus OTHER, then seal a report using the saved evidence. Keep causal hypotheses separate.",
+      "max_calls": 6,
+      "max_output": 1024
+    },
+    {
+      "id": "returns-high-ambiguous",
+      "question": "这次退货为什么这么高？",
+      "max_calls": 3,
+      "max_output": 512
+    }
+  ],
+  "maximum_requests": 9,
+  "output_token_ceiling": 7680,
+  "no_automatic_retry": true,
+  "GPU": false
+}
