@@ -1,0 +1,154 @@
+{
+  "purpose": "New real multi-metric monthly review, intended to exercise native context pressure without padding. One fixed workflow, not a general accuracy benchmark or rerun of closed studies.",
+  "core_version": "1.6.0-contextlab.6",
+  "intent": {
+    "metric": "net_sales",
+    "baseline": {
+      "start": "2011-03-01",
+      "end": "2011-04-01"
+    },
+    "current": {
+      "start": "2011-04-01",
+      "end": "2011-05-01"
+    },
+    "basis": "calendar_month"
+  },
+  "components": [
+    {
+      "id": "net_sales-country",
+      "comparison": {
+        "metric": "net_sales",
+        "baseline": {
+          "start": "2011-03-01",
+          "end": "2011-04-01"
+        },
+        "current": {
+          "start": "2011-04-01",
+          "end": "2011-05-01"
+        },
+        "basis": "calendar_month"
+      },
+      "dimension": "country",
+      "limit": 10
+    },
+    {
+      "id": "net_sales-stock_code",
+      "comparison": {
+        "metric": "net_sales",
+        "baseline": {
+          "start": "2011-03-01",
+          "end": "2011-04-01"
+        },
+        "current": {
+          "start": "2011-04-01",
+          "end": "2011-05-01"
+        },
+        "basis": "calendar_month"
+      },
+      "dimension": "stock_code",
+      "limit": 12
+    },
+    {
+      "id": "gross_sales-country",
+      "comparison": {
+        "metric": "gross_sales",
+        "baseline": {
+          "start": "2011-03-01",
+          "end": "2011-04-01"
+        },
+        "current": {
+          "start": "2011-04-01",
+          "end": "2011-05-01"
+        },
+        "basis": "calendar_month"
+      },
+      "dimension": "country",
+      "limit": 10
+    },
+    {
+      "id": "gross_sales-stock_code",
+      "comparison": {
+        "metric": "gross_sales",
+        "baseline": {
+          "start": "2011-03-01",
+          "end": "2011-04-01"
+        },
+        "current": {
+          "start": "2011-04-01",
+          "end": "2011-05-01"
+        },
+        "basis": "calendar_month"
+      },
+      "dimension": "stock_code",
+      "limit": 12
+    },
+    {
+      "id": "returns-country",
+      "comparison": {
+        "metric": "returns",
+        "baseline": {
+          "start": "2011-03-01",
+          "end": "2011-04-01"
+        },
+        "current": {
+          "start": "2011-04-01",
+          "end": "2011-05-01"
+        },
+        "basis": "calendar_month"
+      },
+      "dimension": "country",
+      "limit": 10
+    },
+    {
+      "id": "returns-stock_code",
+      "comparison": {
+        "metric": "returns",
+        "baseline": {
+          "start": "2011-03-01",
+          "end": "2011-04-01"
+        },
+        "current": {
+          "start": "2011-04-01",
+          "end": "2011-05-01"
+        },
+        "basis": "calendar_month"
+      },
+      "dimension": "stock_code",
+      "limit": 12
+    }
+  ],
+  "question": "Prepare one monthly operating review for baseline [2011-03-01,2011-04-01) and current [2011-04-01,2011-05-01), calendar_month. Inspect coverage and policy first. Compare all three metrics net_sales, gross_sales and returns. For EACH metric obtain BOTH a country breakdown with top10 plus OTHER and a stock_code breakdown with top12 plus OTHER. Seal one report containing ALL THREE saved comparisons and ALL SIX saved breakdowns (nine distinct evidence IDs). Discuss gross_sales minus returns equals net_sales as bookkeeping reconciliation; explanations remain unverified and causal hypotheses separate. When context contains a storage handle, use the exact source evidence ID rather than the ctx_ handle. Do not invent or omit evidence.",
+  "variant_order": [
+    "full",
+    "budgeted"
+  ],
+  "variants": {
+    "full": {
+      "contextMode": "upstream",
+      "maxContextBytes": 65536,
+      "artifactSearch": false
+    },
+    "budgeted": {
+      "contextMode": "budgeted",
+      "maxContextBytes": 24576,
+      "artifactSearch": false
+    }
+  },
+  "model": "deepseek-flash",
+  "provider": "https://api.deepseek.com",
+  "thinking": "disabled",
+  "temperature": 0,
+  "max_calls_per_job": 8,
+  "max_output_per_call": 2048,
+  "request_timeout_ms": 20000,
+  "global_max_requests": 16,
+  "global_output_token_ceiling": 32768,
+  "dataset_csv_sha256": "1f8144bb8670bcad07cde08205532fc6322d99e96c6ac8e8b5c979f169852065",
+  "grading": "Exactly nine unique source-valid evidence records, three intended comparisons and six exact dimension/limit breakdowns. Validate comparison/Top/OTHER/totals AND every saved SQL group/period row against independent CSV Decimal oracle; check gross-returns=net for both periods. Narrative and causal quality ungraded.",
+  "preflight": "Actual Pi Runner with explicit scripted provider performs inspect, three comparisons, six breakdowns and submission. Submission IDs must be recovered from provider-view exact root/source_identity IDs, never side-loaded from Store. Both variants must grade correctly, compacted view <=24576 and pressure trigger/spill>0 in budgeted control before any real requests. If not feasible, preserve failure and do not pay or retune this task.",
+  "controls_vs_models": "Scripted fixed batch schedule is only a CPU feasibility control; actual model decides its own scheduling. If real model never triggers pressure or fails, report that and never claim pressure success.",
+  "source": "Prospective source commit published after CPU preflight, before one actual study. No algorithm/protocol/grader changes after model outputs; no quality retry/top-up.",
+  "stopping": "Retain every reservation, provider-boundary input and failure/unknown. Finish at original caps. Existing v1/v2/v4/business-v6/CPU diagnostics remain closed.",
+  "GPU": false,
+  "local_model_deployment": false
+}

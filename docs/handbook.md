@@ -1,6 +1,6 @@
 # 从 Pi 到 PiContextLab：框架改造与验证客户端完整讲解
 
-本文对应官方 Pi **1.6.0**、派生核心 **1.6.0-contextlab.6** 与本仓库代码。框架改进是主线，PiMetricLab 经营指标应用是验证客户端。建议按“先跑一个报告，再读架构和恢复，最后看源码”的顺序学习。上游身份见 [upstream-lock.json](../upstream-lock.json)，研究来由见 [references.md](references.md)，实际运行证据见 [validation.md](validation.md)。
+本文对应官方 Pi **1.6.0**、派生核心 **1.6.0-contextlab.7** 与本仓库代码。框架改进是主线，PiMetricLab 经营指标应用是验证客户端。建议按“先跑一个报告，再读架构和恢复，最后看源码”的顺序学习。上游身份见 [upstream-lock.json](../upstream-lock.json)，研究来由见 [references.md](references.md)，实际运行证据见 [validation.md](validation.md)。
 
 ## 1. 项目要解决的具体问题
 
@@ -371,3 +371,12 @@ Python直接读取同一冻结CSV，使用Decimal独立计算所有分组；CPU�
 
 
 本次按先行提交68cf51f实际运行12次DeepSeek请求，两任务的完整/预算配置均完成。两个预算视图最大约10.6/11.0KiB，无外置或回读，不能用这个成功反推旧压力审计已修复。独立事后审计再逐条核对全部保存分组行；原预检只有Top/OTHER汇总校验，其范围说明已更正，原评分未改。原输入、oracle、完整消息、来源hash和报告均可在验证记录追溯。
+
+
+## 29. 小结果相加也会超预算
+
+业务复盘可能同时包含三项指标、国家和商品六个分解。单条结果都没有超过4KiB，不代表所有结果连同工具schema和当前工具事务都能放进24KiB。旧策略把单条阈值当硬候选门槛，正是在这种真实数据脚本控制中拒绝了请求。
+
+contextlab.7保留硬总预算，但允许压力模式继续尝试较小、能节省字节的普通结果；优先较大者，够用即停。每条精确原文仍按hash保存，引用保留来源ID，所以最后提交可以引用原证据，不用把ctx句柄冒充evidence ID。最新回读批次仍保护；强制部分放不下仍拒绝。单条阈值的旧行为仅在显式threshold模式保留。
+
+先看aggregate-pressure.test.ts的中等结果控制，再看run-pressure-business.ts：脚本provider只读取模型视图中的来源ID；真实API则自行规划，不使用固定脚本选择。评分器还检查全部原始SQL分组行，避免只验证Top汇总却把范围写成全量逐组。原始模型调用必须在源码公开和CPU可行性验证之后运行，状态与限制见验证记录。

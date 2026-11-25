@@ -314,3 +314,24 @@ v4 最终服务器验证：**33 项测试、14 项浏览器检查通过**。完�
 总估计费用约$0.0067，按冻结单价和全部usage计算，**不是供应商账单**；前缀缓存、固定顺序及不同输出长度影响费用，不推导省钱比例。报告叙述与因果假设没有评分，仍未经人工审核。
 
 [原始任务/消息/证据](../evidence/business-v6/results.json) · [逐例汇总](../evidence/business-v6/summary.json) · [Pi provider边界输入](../evidence/business-v6/wire-transcripts.json) · [执行源码身份](../evidence/business-v6/source-sha256.json) · [全部分组行补查](../evidence/business-v6/raw-group-audit.json) · [新退货报告](../evidence/business-v6/reports/returns-april-may-country.html) · [新商品报告](../evidence/business-v6/reports/net-sales-feb-halves-products.html) · [资源](../evidence/business-v6/runs/)。所谓wire记录是传给Pi适配器的context，不是原始HTTP body；API适配器还会按自身协议转换。
+
+
+## contextlab.7：累计中等结果的真实数据控制
+
+新[月度复盘方案](evaluation-pressure-business-plan.md)固定三月/四月三指标、国家/商品六个分解，共九份证据；完整64KiB与预算24KiB，未改变案例或评分去调结果。[任务等价核对](../evidence/pressure-business/task-equivalence.json)留存旧新协议及输入hash。第一次驱动的类型错误先修正，再取得core6真实数据控制；当时没有发模型请求。
+
+core6完整分支完成，但预算分支在第四次脚本provider调用前拒绝。10条结果（含inspect）最大仅1,913内容JSON字节，均不超过4,096单条阈值；总视图仍超预算，没有旧轮可归档。这暴露通用候选门槛限制，不是DeepSeek效果失败。
+
+core7只修复压力模式的候选过滤：按大小优先、净节省才替换，必要时包含低于单条阈值的普通结果；无压力零写入，保护最近回读批次，显式threshold保留旧门槛。新增belowThresholdSpills与候选循环取消检查。独立中等结果/兼容模式回归通过。
+
+| 同一显式脚本控制 | core6 | core7 |
+|---|---|---|
+| 完整分支 | 完成，4次脚本调用 | 完成，4次脚本调用 |
+| 预算分支 | 3次后拒绝，无报告 | 完成，4次脚本调用 |
+| 新版预算实际pressure/外置 | — | 1次准备 / 2条结果 |
+| 新版预算最大视图 | — | 24,564 / 24,576字节 |
+| 新版报告独立原始组核对 | — | 每报告8,544组次（跨指标/维度重复计数） |
+
+这8,544是六个组成部分的组检查数，不是独立样本或订单数。脚本提交只从provider视图中的id/source_identity.id取九个来源身份，未绕过上下文从Store取答案。它证明程序可行性和精确来源保留，不是模型质量结果。
+
+服务器通过56项Node测试、14项浏览器检查、完整UCI核对；owned进程0，GPU0。新研究尚未发付费请求；后续只在本修订源码公开后按固定16请求上限运行一次，失败保留。[56项测试](../evidence/pressure-business/preflight-tests.tap) · [失败根因的结果大小](../evidence/pressure-business/preflight-cause.json) · [旧控制](../evidence/pressure-business/controls/core6/) · [新控制](../evidence/pressure-business/controls/core7/) · [独立oracle](../evidence/pressure-business/oracle.json) · [阶段/资源/类型错误](../evidence/pressure-business/runs/)。既有关闭研究未重跑。

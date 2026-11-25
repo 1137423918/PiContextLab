@@ -150,7 +150,7 @@
 +import { routeTools, ToolRoutingIndexCache, type RankedTool, type ToolRoutingCacheStats, type ToolRoutingOptions } from "./tool-router.ts";
 +
 +export interface BudgetedPolicyTrace extends ContextPackingTrace {
-+	policy: "pi-context-lab-v6";
++	policy: "pi-context-lab-v7";
 +	request: number;
 +	registeredTools: number;
 +	selectedToolNames: string[];
@@ -240,7 +240,7 @@
 +		const eager = this.options.spillMode === "threshold" && input.context.messages.some(message => message.role === "toolResult" && contextBytes(message.content) > this.options.inlineToolResultBytes);
 +		const decision = exceedsBudget || eager ? select([reader, ...(this.options.artifactSearch ? [this.tools[2]] : [])]) : initial;
 +		const packed = await packModelContext(input.context, decision.tools, query, { maxContextBytes: this.options.maxContextBytes, inlineToolResultBytes: this.options.inlineToolResultBytes, store: this.options.artifacts, artifactSearch: this.options.artifactSearch, spillMode: this.options.spillMode }, signal);
-+		const trace: BudgetedPolicyTrace = { policy: "pi-context-lab-v6", request: this.request, registeredTools: input.tools.length, selectedToolNames: decision.tools.map((t) => t.name), schemaBytes: decision.schemaBytes, ranking: decision.ranked, routingCache: this.routingIndex.stats, ...packed.trace };
++		const trace: BudgetedPolicyTrace = { policy: "pi-context-lab-v7", request: this.request, registeredTools: input.tools.length, selectedToolNames: decision.tools.map((t) => t.name), schemaBytes: decision.schemaBytes, ranking: decision.ranked, routingCache: this.routingIndex.stats, ...packed.trace };
 +		await this.options.onPrepared?.(trace);
 +		return { context: packed.context, tools: decision.tools };
 +	}
@@ -330,7 +330,7 @@
 +}
 --- /dev/null
 +++ b/src/context-budget.ts
-@@ -0,0 +1,177 @@
+@@ -0,0 +1,183 @@
 +/** Budget provider views while preserving system instructions and complete tool-call transactions. */
 +import { getCurrentSystemMessage, normalizeContext, toToolDeclaration, type Message, type TranscriptContext } from "@earendil-works/pi-ai";
 +import { contextArtifact, type ContextArtifact, type ContextArtifactStore } from "./context-artifacts.ts";
@@ -354,6 +354,8 @@
 +	protectedRecallCallIds: string[];
 +	afterBytes: number;
 +	spilledResults: string[];
++	/** Pressure-only fallback spills at/below the normal per-result inline threshold. */
++	belowThresholdSpills: string[];
 +	archivedTurns: string[];
 +	retainedHistoryTurns: number;
 +	indexArtifact?: string;
@@ -425,7 +427,7 @@
 +	};
 +	let prepared = build(body);
 +	const normalizedBeforeBytes = contextBytes(prepared);
-+	const trace: ContextPackingTrace = { beforeBytes: contextBytes(context), normalizedBeforeBytes, spillMode, trigger: normalizedBeforeBytes > options.maxContextBytes ? "pressure" : "none", protectedRecallCallIds: [], afterBytes: 0, spilledResults: [], archivedTurns: [], retainedHistoryTurns: Math.max(0,context.messages.filter((message)=>message.role==='user').length-1) };
++	const trace: ContextPackingTrace = { beforeBytes: contextBytes(context), normalizedBeforeBytes, spillMode, trigger: normalizedBeforeBytes > options.maxContextBytes ? "pressure" : "none", protectedRecallCallIds: [], afterBytes: 0, spilledResults: [], belowThresholdSpills: [], archivedTurns: [], retainedHistoryTurns: Math.max(0,context.messages.filter((message)=>message.role==='user').length-1) };
 +	if (spillMode === "pressure" && normalizedBeforeBytes <= options.maxContextBytes) { trace.afterBytes = normalizedBeforeBytes; return { context: prepared, trace }; }
 +	// A parallel recall batch is one completed transaction: protect all its recall results.
 +	const lastAssistant = body.findLastIndex(message => message.role === "assistant");
@@ -434,9 +436,12 @@
 +		trace.protectedRecallCallIds = latestBatch.filter(message => message.role === "toolResult" && ["read_context_artifact", "search_context_artifact"].includes(message.toolName)).map(message => message.role === "toolResult" ? message.toolCallId : "");
 +	}
 +	const protectedIds = new Set(trace.protectedRecallCallIds);
-+	const candidates = body.flatMap((message, index) => message.role === "toolResult" && !protectedIds.has(message.toolCallId) && message.content.every(item => item.type === "text") && contextBytes(message.content) > options.inlineToolResultBytes ? [{ index, bytes: contextBytes(message.content) }] : []);
++	// The per-result threshold must not make aggregate pressure impossible to relieve.
++	// Largest-first order still prefers big results; smaller results require positive byte savings.
++	const candidates = body.flatMap((message, index) => message.role === "toolResult" && !protectedIds.has(message.toolCallId) && message.content.every(item => item.type === "text") && (spillMode === "pressure" || contextBytes(message.content) > options.inlineToolResultBytes) ? [{ index, bytes: contextBytes(message.content) }] : []);
 +	candidates.sort((a, b) => spillMode === "pressure" ? b.bytes - a.bytes || a.index - b.index : a.index - b.index);
 +	for (const candidate of candidates) {
++		signal?.throwIfAborted();
 +		const message = body[candidate.index];
 +		if (message.role !== "toolResult") continue;
 +		const text = message.content.map((item) => item.type === "text" ? item.text : "").join("\n");
@@ -460,6 +465,7 @@
 +		if (spillMode === "pressure" && contextBytes(replacement.content) >= candidate.bytes) continue;
 +		await options.store.put(artifact);
 +		trace.spilledResults.push(artifact.id);
++		if (candidate.bytes <= options.inlineToolResultBytes) trace.belowThresholdSpills.push(artifact.id);
 +		if (trace.trigger === "none") trace.trigger = "threshold";
 +		body[candidate.index] = replacement;
 +		prepared = build(body);

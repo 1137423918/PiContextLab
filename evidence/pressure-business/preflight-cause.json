@@ -1,0 +1,47 @@
+{
+  "core6_result_sizes": [
+    {
+      "tool": "inspect_dataset",
+      "content_JSON_bytes": 1518
+    },
+    {
+      "tool": "compare_metric",
+      "content_JSON_bytes": 1443
+    },
+    {
+      "tool": "compare_metric",
+      "content_JSON_bytes": 1447
+    },
+    {
+      "tool": "compare_metric",
+      "content_JSON_bytes": 1435
+    },
+    {
+      "tool": "breakdown_change",
+      "content_JSON_bytes": 1721
+    },
+    {
+      "tool": "breakdown_change",
+      "content_JSON_bytes": 1904
+    },
+    {
+      "tool": "breakdown_change",
+      "content_JSON_bytes": 1724
+    },
+    {
+      "tool": "breakdown_change",
+      "content_JSON_bytes": 1913
+    },
+    {
+      "tool": "breakdown_change",
+      "content_JSON_bytes": 1671
+    },
+    {
+      "tool": "breakdown_change",
+      "content_JSON_bytes": 1859
+    }
+  ],
+  "max_tool_result_JSON_bytes": 1913,
+  "inline_threshold": 4096,
+  "core6_context_budget_source_sha256": "f0ba5c63271708df32639abfdda6184b0c764564c505bce886d1a5f4f30196e0"
+}

@@ -1,0 +1,9 @@
+{
+  "same_task_budgets_and_grader_spec": true,
+  "metadata_only_differences": [
+    "core_version",
+    "preflight_revision_note"
+  ],
+  "core6_input_bundle_sha256": "58f5feb9d33b984dec1d119fd006830e4eae0dff2de1a098111daa8145b463a6",
+  "core6_core_source_matches_public_commit": true
+}

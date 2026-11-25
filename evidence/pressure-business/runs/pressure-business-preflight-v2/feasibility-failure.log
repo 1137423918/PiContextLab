@@ -1,0 +1,19 @@
+(node:1853380) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"variant":"full","status":"completed","error":null,"grade":{"passed":true,"error":null,"components":6,"raw_groups_checked":8544},"reserved":4,"input_tokens_including_cache":0,"output_tokens":0,"estimated_cost_usd":0,"usage_missing":0,"pressure_preparations":0,"spill_occurrences":0,"archive_occurrences":0,"max_prepared_JSON_bytes":0,"last_routing_cache":null}
+{"variant":"budgeted","status":"failed","error":"Current turn and system/tool declarations exceed the context budget after bounded spilling","grade":{"passed":false,"error":"No sealed report","components":0,"raw_groups_checked":0},"reserved":3,"input_tokens_including_cache":0,"output_tokens":0,"estimated_cost_usd":0,"usage_missing":0,"pressure_preparations":0,"spill_occurrences":0,"archive_occurrences":0,"max_prepared_JSON_bytes":12021,"last_routing_cache":{"hits":2,"misses":1,"builds":1,"evictions":0,"bypasses":0,"entries":1,"sourceBytes":5437}}
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: CPU feasibility task failed
+    at file:///tmp/pimetriclab-build-stage98-hagv1nqm/source/dist/scripts/run-pressure-business.js:101:12 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v22.23.5

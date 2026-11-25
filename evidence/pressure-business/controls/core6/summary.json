@@ -1,0 +1,62 @@
+{
+  "control": true,
+  "source_commit": null,
+  "protocol_sha256": "2c0527d342ae0330e8e16c30800c2ba9c18760a5fa18dc174d89ea4e3a2f0915",
+  "actual_provider_attempts": 7,
+  "model_calls": 0,
+  "total_reserved": 7,
+  "variants": [
+    {
+      "variant": "full",
+      "status": "completed",
+      "error": null,
+      "grade": {
+        "passed": true,
+        "error": null,
+        "components": 6,
+        "raw_groups_checked": 8544
+      },
+      "reserved": 4,
+      "input_tokens_including_cache": 0,
+      "output_tokens": 0,
+      "estimated_cost_usd": 0,
+      "usage_missing": 0,
+      "pressure_preparations": 0,
+      "spill_occurrences": 0,
+      "archive_occurrences": 0,
+      "max_prepared_JSON_bytes": 0,
+      "last_routing_cache": null
+    },
+    {
+      "variant": "budgeted",
+      "status": "failed",
+      "error": "Current turn and system/tool declarations exceed the context budget after bounded spilling",
+      "grade": {
+        "passed": false,
+        "error": "No sealed report",
+        "components": 0,
+        "raw_groups_checked": 0
+      },
+      "reserved": 3,
+      "input_tokens_including_cache": 0,
+      "output_tokens": 0,
+      "estimated_cost_usd": 0,
+      "usage_missing": 0,
+      "pressure_preparations": 0,
+      "spill_occurrences": 0,
+      "archive_occurrences": 0,
+      "max_prepared_JSON_bytes": 12021,
+      "last_routing_cache": {
+        "hits": 2,
+        "misses": 1,
+        "builds": 1,
+        "evictions": 0,
+        "bypasses": 0,
+        "entries": 1,
+        "sourceBytes": 5437
+      }
+    }
+  ],
+  "GPU_used": false,
+  "not_an_invoice": true
+}

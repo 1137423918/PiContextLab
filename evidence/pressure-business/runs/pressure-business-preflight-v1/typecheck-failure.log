@@ -1,0 +1,15 @@
+
+> pi-metriclab@0.1.0 check
+> tsc --noEmit -p vendor/pi-agent-core/tsconfig.json && tsc --noEmit
+
+scripts/pressure-business-evaluation.ts(22,62): error TS7023: 'values' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+scripts/pressure-business-evaluation.ts(22,93): error TS7022: 'e' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+scripts/run-pressure-business.ts(33,413): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/run-pressure-business.ts(36,40): error TS2345: Argument of type '{ type: "toolCall"; id: string; name: string; arguments: Record<string, unknown>; }[]' is not assignable to parameter of type '(TextContent | ThinkingContent | ToolCall)[]'.
+  Type '{ type: 'toolCall'; id: string; name: string; arguments: Record<string, unknown>; }' is not assignable to type 'TextContent | ThinkingContent | ToolCall'.
+    Type '{ type: 'toolCall'; id: string; name: string; arguments: Record<string, unknown>; }' is not assignable to type 'ToolCall'.
+      Types of property 'arguments' are incompatible.
+        Type 'Record<string, unknown>' is not assignable to type 'JsonObject'.
+          'string' index signatures are incompatible.
+            Type 'unknown' is not assignable to type 'JsonValue'.
