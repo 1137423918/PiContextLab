@@ -20,6 +20,7 @@ import {
 	validateToolArguments,
 } from "@earendil-works/pi-ai";
 import { getDefaultStreamFn } from "./stream-fn.ts";
+import { boundedToolValidationError } from "./validation-feedback.ts";
 import type { ExecutableTools } from "./model-context.ts";
 import type {
 	AgentContext,
@@ -698,7 +699,7 @@ type ExecutedToolCallOutcome = {
 type FinalizedToolCallOutcome = AgentToolCallOutcome;
 
 /** The `beforeToolCall` and `afterToolCall` hooks of {@link AgentLoopConfig}. */
-export type ToolCallHooks = Pick<AgentLoopConfig, "beforeToolCall" | "afterToolCall">;
+export type ToolCallHooks = Pick<AgentLoopConfig, "beforeToolCall" | "afterToolCall" | "toolValidationFeedback">;
 
 type ToolUpdateSink = (partialResult: AgentToolResult<any>) => Promise<void> | void;
 
@@ -750,7 +751,19 @@ async function prepareToolCall(
 
 	try {
 		const preparedToolCall = prepareToolCallArguments(tool, toolCall);
-		const validatedArgs = validateToolArguments(tool, preparedToolCall);
+		let validatedArgs: unknown;
+		try {
+			// Preserve upstream validation/coercion and clone semantics; only format a rejection.
+			validatedArgs = validateToolArguments(tool, preparedToolCall);
+		} catch (error) {
+			return {
+				kind: "immediate",
+				result: config.toolValidationFeedback === "bounded"
+					? boundedToolValidationError(error, preparedToolCall.arguments)
+					: createErrorToolResult(error instanceof Error ? error.message : String(error)),
+				isError: true,
+			};
+		}
 		if (config.beforeToolCall) {
 			const beforeResult = await config.beforeToolCall(
 				{

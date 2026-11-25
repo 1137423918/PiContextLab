@@ -8,15 +8,16 @@
  	getCurrentTools,
  	getToolStateChanges,
  	mergeClientIdentity,
-@@ -19,6 +20,7 @@
+@@ -19,6 +20,8 @@
  	validateToolArguments,
  } from "@earendil-works/pi-ai";
  import { getDefaultStreamFn } from "./stream-fn.ts";
++import { boundedToolValidationError } from "./validation-feedback.ts";
 +import type { ExecutableTools } from "./model-context.ts";
  import type {
  	AgentContext,
  	AgentEvent,
-@@ -248,7 +250,8 @@
+@@ -248,7 +251,8 @@
  			}
  
  			// Stream assistant response
@@ -26,7 +27,7 @@
  			newMessages.push(message);
  
  			if (message.stopReason === "error" || message.stopReason === "aborted") {
-@@ -276,7 +279,9 @@
+@@ -276,7 +280,9 @@
  				const executedToolBatch =
  					message.stopReason === "length"
  						? await failToolCallsFromTruncatedMessage(toolCalls, emit)
@@ -37,7 +38,7 @@
  				toolResults.push(...executedToolBatch.messages);
  				hasMoreToolCalls = !executedToolBatch.terminate;
  
-@@ -393,7 +398,7 @@
+@@ -393,7 +399,7 @@
  	signal: AbortSignal | undefined,
  	emit: AgentEventSink,
  	streamFunction: StreamFn,
@@ -46,7 +47,7 @@
  	// Apply context transform if configured (AgentMessage[] → AgentMessage[])
  	let messages = context.messages;
  	if (config.transformContext) {
-@@ -403,7 +408,19 @@
+@@ -403,7 +409,19 @@
  	// Convert to LLM-compatible messages (AgentMessage[] → Message[])
  	const llmMessages = await config.convertToLlm(messages);
  
@@ -67,7 +68,7 @@
  
  	// Resolve API key (important for expiring tokens)
  	const resolvedApiKey =
-@@ -462,7 +479,7 @@
+@@ -462,7 +480,7 @@
  					await emit({ type: "message_start", message: { ...finalMessage } });
  				}
  				await emit({ type: "message_end", message: finalMessage });
@@ -76,7 +77,7 @@
  			}
  		}
  	}
-@@ -475,7 +492,7 @@
+@@ -475,7 +493,7 @@
  		await emit({ type: "message_start", message: { ...finalMessage } });
  	}
  	await emit({ type: "message_end", message: finalMessage });
@@ -85,6 +86,36 @@
  }
  
  /**
+@@ -681,7 +699,7 @@
+ type FinalizedToolCallOutcome = AgentToolCallOutcome;
+ 
+ /** The `beforeToolCall` and `afterToolCall` hooks of {@link AgentLoopConfig}. */
+-export type ToolCallHooks = Pick<AgentLoopConfig, "beforeToolCall" | "afterToolCall">;
++export type ToolCallHooks = Pick<AgentLoopConfig, "beforeToolCall" | "afterToolCall" | "toolValidationFeedback">;
+ 
+ type ToolUpdateSink = (partialResult: AgentToolResult<any>) => Promise<void> | void;
+ 
+@@ -733,7 +751,19 @@
+ 
+ 	try {
+ 		const preparedToolCall = prepareToolCallArguments(tool, toolCall);
+-		const validatedArgs = validateToolArguments(tool, preparedToolCall);
++		let validatedArgs: unknown;
++		try {
++			// Preserve upstream validation/coercion and clone semantics; only format a rejection.
++			validatedArgs = validateToolArguments(tool, preparedToolCall);
++		} catch (error) {
++			return {
++				kind: "immediate",
++				result: config.toolValidationFeedback === "bounded"
++					? boundedToolValidationError(error, preparedToolCall.arguments)
++					: createErrorToolResult(error instanceof Error ? error.message : String(error)),
++				isError: true,
++			};
++		}
+ 		if (config.beforeToolCall) {
+ 			const beforeResult = await config.beforeToolCall(
+ 				{
 --- a/src/agent.ts
 +++ b/src/agent.ts
 @@ -13,6 +13,7 @@
@@ -95,28 +126,31 @@
  import { getDefaultStreamFn } from "./stream-fn.ts";
  import type {
  	AfterToolCallContext,
-@@ -114,6 +115,7 @@
+@@ -114,6 +115,8 @@
  /** Options for constructing an {@link Agent}. */
  export interface AgentOptions {
  	initialState?: AgentInitialState;
 +	modelContextPolicy?: ModelContextPolicy;
++	toolValidationFeedback?: "bounded";
  	convertToLlm?: (messages: AgentMessage[]) => Message[] | Promise<Message[]>;
  	transformContext?: (messages: AgentMessage[], signal?: AbortSignal) => Promise<AgentMessage[]>;
  	streamFn: StreamFn;
-@@ -192,6 +194,8 @@
+@@ -192,6 +195,9 @@
   * and exposes queueing APIs for steering and follow-up messages.
   */
  export class Agent {
 +	/** Native request policy; does not replace or prune authoritative state.messages. */
 +	public readonly modelContextPolicy?: ModelContextPolicy;
++	public toolValidationFeedback?: "bounded";
  	private _state: MutableAgentState;
  	private readonly listeners = new Set<(event: AgentEvent, signal: AbortSignal) => Promise<void> | void>();
  	private readonly steeringQueue: PendingMessageQueue;
-@@ -239,6 +243,16 @@
+@@ -239,6 +245,17 @@
  		// Older compiled consumers may omit options or streamFn even though the current API requires them.
  		const runtimeOptions: Partial<AgentOptions> = options ?? {};
  		this._state = createMutableAgentState(runtimeOptions.initialState);
 +		this.modelContextPolicy = runtimeOptions.modelContextPolicy;
++		this.toolValidationFeedback = runtimeOptions.toolValidationFeedback;
 +		if (this.modelContextPolicy) {
 +			const registered = new Set(this._state.tools.map((tool) => tool.name));
 +			for (const tool of this.modelContextPolicy.tools) {
@@ -129,7 +163,7 @@
  		this.convertToLlm = runtimeOptions.convertToLlm ?? defaultConvertToLlm;
  		this.transformContext = runtimeOptions.transformContext;
  		this.streamFunction = runtimeOptions.streamFn ?? getDefaultStreamFn();
-@@ -477,6 +491,7 @@
+@@ -477,6 +494,7 @@
  		let skipInitialSteeringPoll = options.skipInitialSteeringPoll === true;
  		return {
  			model: this._state.model,
@@ -137,6 +171,14 @@
  			reasoning: this._state.thinkingLevel === "off" ? undefined : this._state.thinkingLevel,
  			sessionId: this.sessionId,
  			onPayload: this.onPayload,
+@@ -488,6 +506,7 @@
+ 			identity: this.identity,
+ 			toolExecution: this.toolExecution,
+ 			beforeToolCall: this.beforeToolCall,
++			toolValidationFeedback: this.toolValidationFeedback,
+ 			afterToolCall: this.afterToolCall,
+ 			finishTurn: this.finishTurn,
+ 			prepareRequest: this.prepareRequest,
 --- /dev/null
 +++ b/src/budgeted-policy.ts
 @@ -0,0 +1,105 @@
@@ -150,7 +192,7 @@
 +import { routeTools, ToolRoutingIndexCache, type RankedTool, type ToolRoutingCacheStats, type ToolRoutingOptions } from "./tool-router.ts";
 +
 +export interface BudgetedPolicyTrace extends ContextPackingTrace {
-+	policy: "pi-context-lab-v7";
++	policy: "pi-context-lab-v8";
 +	request: number;
 +	registeredTools: number;
 +	selectedToolNames: string[];
@@ -240,7 +282,7 @@
 +		const eager = this.options.spillMode === "threshold" && input.context.messages.some(message => message.role === "toolResult" && contextBytes(message.content) > this.options.inlineToolResultBytes);
 +		const decision = exceedsBudget || eager ? select([reader, ...(this.options.artifactSearch ? [this.tools[2]] : [])]) : initial;
 +		const packed = await packModelContext(input.context, decision.tools, query, { maxContextBytes: this.options.maxContextBytes, inlineToolResultBytes: this.options.inlineToolResultBytes, store: this.options.artifacts, artifactSearch: this.options.artifactSearch, spillMode: this.options.spillMode }, signal);
-+		const trace: BudgetedPolicyTrace = { policy: "pi-context-lab-v7", request: this.request, registeredTools: input.tools.length, selectedToolNames: decision.tools.map((t) => t.name), schemaBytes: decision.schemaBytes, ranking: decision.ranked, routingCache: this.routingIndex.stats, ...packed.trace };
++		const trace: BudgetedPolicyTrace = { policy: "pi-context-lab-v8", request: this.request, registeredTools: input.tools.length, selectedToolNames: decision.tools.map((t) => t.name), schemaBytes: decision.schemaBytes, ranking: decision.ranked, routingCache: this.routingIndex.stats, ...packed.trace };
 +		await this.options.onPrepared?.(trace);
 +		return { context: packed.context, tools: decision.tools };
 +	}
@@ -641,7 +683,7 @@
 +}
 --- a/src/index.ts
 +++ b/src/index.ts
-@@ -3,3 +3,10 @@
+@@ -3,3 +3,11 @@
  export * from "./proxy.ts";
  export { setDefaultStreamFn } from "./stream-fn.ts";
  export * from "./types.ts";
@@ -652,6 +694,7 @@
 +export * from "./budgeted-policy.ts";
 +export * from "./context-json.ts";
 +export * from "./context-search.ts";
++export * from "./validation-feedback.ts";
 --- /dev/null
 +++ b/src/model-context.ts
 @@ -0,0 +1,26 @@
@@ -893,3 +936,89 @@
  
  	/**
  	 * Converts AgentMessage[] to LLM-compatible Message[] before each LLM call.
+@@ -324,6 +327,8 @@
+ 	 * The hook receives the agent abort signal and is responsible for honoring it.
+ 	 */
+ 	beforeToolCall?: (context: BeforeToolCallContext, signal?: AbortSignal) => Promise<BeforeToolCallResult | undefined>;
++	/** Opt in to <=2048-byte serialized schema-error content, without echoing the full argument dump. */
++	toolValidationFeedback?: "bounded";
+ 
+ 	/**
+ 	 * Called after a tool finishes executing, before `tool_execution_end` and tool-result message events are emitted.
+--- /dev/null
++++ b/src/validation-feedback.ts
+@@ -0,0 +1,74 @@
++/** Bounded schema feedback; the original assistant arguments remain the audit source. */
++import type { AgentToolResult } from "./types.ts";
++
++export const VALIDATION_FEEDBACK_MAX_BYTES = 2048;
++const encoder = new TextEncoder();
++const bytes = (value: unknown): number => encoder.encode(JSON.stringify(value)).length;
++
++interface FieldShape {
++	pointer: string;
++	kind: string;
++	code_points?: number;
++	utf16_units?: number;
++	length?: number;
++}
++
++function fieldShapes(args: unknown): { fields: FieldShape[]; total: number } {
++	if (!args || typeof args !== "object" || Array.isArray(args)) return { fields: [], total: 0 };
++	const entries = Object.entries(args);
++	const fields: FieldShape[] = [];
++	for (const [key, value] of entries) {
++		if (fields.length === 8) break;
++		const pointer = "/" + key.replace(/~/g, "~0").replace(/\//g, "~1");
++		if (encoder.encode(pointer).length > 128) continue;
++		if (typeof value === "string") {
++			let count = 0;
++			for (const _point of value) count++;
++			fields.push({ pointer, kind: "string", code_points: count, utf16_units: value.length });
++		} else if (Array.isArray(value)) fields.push({ pointer, kind: "array", length: value.length });
++		else fields.push({ pointer, kind: value === null ? "null" : typeof value });
++	}
++	return { fields, total: entries.length };
++}
++
++/** Bound the serialized content array, including JSON escaping; no argument values or full error in details. */
++export function boundedToolValidationError(error: unknown, preparedArguments: unknown): AgentToolResult<{
++	kind: "bounded_validation_feedback";
++	original_error_utf8_bytes: number;
++	content_json_utf8_bytes: number;
++}> {
++	const original = error instanceof Error ? error.message : String(error);
++	const marker = original.indexOf("\n\nReceived arguments:\n");
++	const diagnostic = marker < 0 ? original : original.slice(0, marker);
++	const shapes = fieldShapes(preparedArguments);
++	const payload = {
++		error: "INVALID_TOOL_ARGUMENTS",
++		diagnostic: "",
++		diagnostic_truncated: false,
++		received_arguments_omitted: marker >= 0,
++		argument_stage: "after_prepareArguments",
++		fields: shapes.fields,
++		fields_omitted: shapes.total - shapes.fields.length,
++		source: "Original input remains in assistant toolCall.arguments or argumentsError. Field shapes contain no values. Correct arguments and retry within the existing job budget.",
++	};
++	const content = () => [{ type: "text" as const, text: JSON.stringify(payload) }];
++	while (bytes(content()) > VALIDATION_FEEDBACK_MAX_BYTES && payload.fields.length > 0) {
++		payload.fields.pop(); payload.fields_omitted++;
++	}
++	payload.diagnostic = diagnostic;
++	if (bytes(content()) > VALIDATION_FEEDBACK_MAX_BYTES) {
++		payload.diagnostic_truncated = true;
++		// Work on code points so a cut never leaves half a valid surrogate pair.
++		const points = Array.from(diagnostic);
++		let low = 0, high = points.length;
++		while (low < high) {
++			const middle = Math.ceil((low + high) / 2);
++			payload.diagnostic = points.slice(0, middle).join("");
++			if (bytes(content()) <= VALIDATION_FEEDBACK_MAX_BYTES) low = middle;
++			else high = middle - 1;
++		}
++		payload.diagnostic = points.slice(0, low).join("");
++	}
++	const result = content();
++	return { content: result, isError: true, details: { kind: "bounded_validation_feedback", original_error_utf8_bytes: encoder.encode(original).length, content_json_utf8_bytes: bytes(result) } };
++}

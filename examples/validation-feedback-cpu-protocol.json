@@ -1,0 +1,27 @@
+{
+  "purpose": "New CPU schema-feedback controls, not a paid-task retry or model accuracy evaluation.",
+  "baseline": "Frozen core7 runToolCall plus currentcore8 opt-in bounded mode, same prepared arguments/schema.",
+  "cases": [
+    "12000-character invalid string",
+    "90 unknown escaped property names",
+    "truncated JSON argumentsError with9000-char dump",
+    "Unicode/quote/newline invalid string"
+  ],
+  "invariants": [
+    "Full upstream validation/coercion unchanged",
+    "No execute or hooks on invalid args",
+    "Original assistant call unmodified",
+    "JSON serialized content <=2048UTF8bytes",
+    "No full input in details",
+    "Native sequential/parallel and host recovery share option"
+  ],
+  "metrics": [
+    "legacy/bounded serialized feedback bytes",
+    "rejected and execution count",
+    "raw argument identity",
+    "diagnostic truncation and field shapes"
+  ],
+  "no_quality_threshold": "Retain all outcomes; no effect claim, no API calls or GPU",
+  "model_calls": 0,
+  "GPU": false
+}

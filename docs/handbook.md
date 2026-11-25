@@ -1,6 +1,6 @@
 # 从 Pi 到 PiContextLab：框架改造与验证客户端完整讲解
 
-本文对应官方 Pi **1.6.0**、派生核心 **1.6.0-contextlab.7** 与本仓库代码。框架改进是主线，PiMetricLab 经营指标应用是验证客户端。建议按“先跑一个报告，再读架构和恢复，最后看源码”的顺序学习。上游身份见 [upstream-lock.json](../upstream-lock.json)，研究来由见 [references.md](references.md)，实际运行证据见 [validation.md](validation.md)。
+本文对应官方 Pi **1.6.0**、派生核心 **1.6.0-contextlab.8** 与本仓库代码。框架改进是主线，PiMetricLab 经营指标应用是验证客户端。建议按“先跑一个报告，再读架构和恢复，最后看源码”的顺序学习。上游身份见 [upstream-lock.json](../upstream-lock.json)，研究来由见 [references.md](references.md)，实际运行证据见 [validation.md](validation.md)。
 
 ## 1. 项目要解决的具体问题
 
@@ -383,3 +383,12 @@ contextlab.7保留硬总预算，但允许压力模式继续尝试较小、能�
 
 
 真实模型随后运行10次请求，完整分支和24KiB预算分支均未封存报告：前者三次解释超过3,000字符，校验反馈回显参数后触及发送上限；后者实际外置四条中等结果，再并行读取四个结果，之后当前轮超限。原研究已关闭，原分数不重算。这里只证明通用候选门槛修复和实际外置机制被执行，不能宣称复杂任务成功或更省token。完整记录与原始错误在验证文档；输出空间预留与有界错误反馈是待研究项。
+
+
+## 30. 校验错误为什么也需要上下文预算
+
+模型超过字段长度时必须拒绝，但不必把整段超长输入再回显一遍。contextlab.8提供独立于压缩策略的`toolValidationFeedback: 'bounded'`选项：错误反馈保留字段约束和顶层字段长度/数组大小，原始参数仍在assistant的arguments或解析失败的argumentsError里。interpretation实际有3,006字符时，模型可以看到长度统计，而不是只收到“最多3,000”和重复的3,006字符正文。
+
+SDK默认不启用；本应用显式对正常执行和恢复开启。验证与coercion仍由原版pi-ai负责，非法调用不执行工具或钩子。只改变schema拒绝反馈，不修改输入、不放宽长度、不自动续费重试。JSON包装、引号和Unicode都计入2,048字节上限，完整JSON不能因截断损坏；details仅存计数，不复制原输入。
+
+字段形状只看最多8个顶层字段，长字段名可省略；深层错误仍依赖原诊断。工具执行或hook本身抛错不属于这项格式化范围。阅读validation-feedback.ts与validation-feedback.test.ts可看清边界。当前只有CPU证据，旧真实模型压力研究继续是失败结果；不能把字节变少写成任务成功或省token。

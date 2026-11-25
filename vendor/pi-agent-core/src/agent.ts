@@ -116,6 +116,7 @@ function createMutableAgentState(initialState?: AgentInitialState): MutableAgent
 export interface AgentOptions {
 	initialState?: AgentInitialState;
 	modelContextPolicy?: ModelContextPolicy;
+	toolValidationFeedback?: "bounded";
 	convertToLlm?: (messages: AgentMessage[]) => Message[] | Promise<Message[]>;
 	transformContext?: (messages: AgentMessage[], signal?: AbortSignal) => Promise<AgentMessage[]>;
 	streamFn: StreamFn;
@@ -196,6 +197,7 @@ type ActiveRun = {
 export class Agent {
 	/** Native request policy; does not replace or prune authoritative state.messages. */
 	public readonly modelContextPolicy?: ModelContextPolicy;
+	public toolValidationFeedback?: "bounded";
 	private _state: MutableAgentState;
 	private readonly listeners = new Set<(event: AgentEvent, signal: AbortSignal) => Promise<void> | void>();
 	private readonly steeringQueue: PendingMessageQueue;
@@ -244,6 +246,7 @@ export class Agent {
 		const runtimeOptions: Partial<AgentOptions> = options ?? {};
 		this._state = createMutableAgentState(runtimeOptions.initialState);
 		this.modelContextPolicy = runtimeOptions.modelContextPolicy;
+		this.toolValidationFeedback = runtimeOptions.toolValidationFeedback;
 		if (this.modelContextPolicy) {
 			const registered = new Set(this._state.tools.map((tool) => tool.name));
 			for (const tool of this.modelContextPolicy.tools) {
@@ -503,6 +506,7 @@ export class Agent {
 			identity: this.identity,
 			toolExecution: this.toolExecution,
 			beforeToolCall: this.beforeToolCall,
+			toolValidationFeedback: this.toolValidationFeedback,
 			afterToolCall: this.afterToolCall,
 			finishTurn: this.finishTurn,
 			prepareRequest: this.prepareRequest,

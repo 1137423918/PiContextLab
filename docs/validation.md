@@ -355,3 +355,23 @@ core7只修复压力模式的候选过滤：按大小优先、净节省才替换
 总冻结单价估计约$0.0132，不是供应商账单。owned进程最终0，GPU0。默认真实入口仍为完整上下文。后续可研究有界schema错误反馈、请求前输出空间预留与跨并行读取的总响应预算；这些尚未实现或被模型验证，不写作成果，也不以本任务重试挑分。
 
 [逐配置汇总](../evidence/pressure-business/summary.json) · [完整压缩原记录](../evidence/pressure-business/results.json.gz) · [Pi边界输入](../evidence/pressure-business/wire-transcripts.json.gz) · [外置与调用分析](../evidence/pressure-business/analysis.json) · [离线错误诊断](../evidence/pressure-business/failure-analysis.json) · [执行源码](../evidence/pressure-business/source-sha256.json) · [128文件提交核对](../evidence/pressure-business/commit-verification.json) · [资源](../evidence/pressure-business/runs/)。gzip格式只压缩保存字节，不改原始JSON内容；Pi边界输入不是原始HTTP body，费用不作账单陈述。
+
+
+## contextlab.8：参数校验反馈的CPU控制
+
+新增可选有界schema拒绝反馈，只改变错误的模型可见表示；校验、coercion、原输入与执行边界保持原样。PiMetricLab正常与恢复都显式开启。独立SDK不选该项则保留旧文本。以下是新的合成机制控制，使用冻结core7与core8相同schema/参数，不是重跑已关闭模型压力任务。
+
+| 新控制 | core7 content JSON字节 | core8有界字节 |
+|---|---:|---:|
+| 12,000字符非法字符串 | 12,152 | 584 |
+| 90个带转义的未知字段 | 6,305 | 2,048 |
+| 错误JSON及9,000字符原文 | 9,112 | 478 |
+| Unicode、引号和换行 | 11,352 | 582 |
+
+四项旧新均拒绝，执行函数均未运行，原toolCall对象未改；未知字段的诊断明确标记截断。details仅101–102序列化字节，不藏完整dump。计数是整个content数组序列化后的UTF-8字节，不是token或HTTP body。字段形状不重复输入值，但字段诊断继承上游文案，名字仍是数据；这不是通用脱敏功能。
+
+62项Node测试覆盖默认旧路径、非法参数不执行、不运行hooks、合法prepare/coercion仍执行、未知/取消/准备阶段失败不改、Unicode转义边界，以及原生串行/并行回合和宿主恢复。脚本provider在反馈后返回有效参数只证明接线与协议，不代表真实模型纠正率。
+
+最终服务器通过62项测试、14项浏览器检查及完整UCI/16KiB控制，owned进程0。新增模型请求0、GPU0。保留初版v1检查与v2比较；v3修正了“JSON解析失败原文位于argumentsError”的来源提示并加断言。最终v4补充独立辅助函数的isError标记并断言。四个案例和上限不变，旧比较结果一并保留；没有调模型或重复已关闭研究。
+
+[固定CPU方案](../examples/validation-feedback-cpu-protocol.json) · [四项逐例输出](../evidence/validation-feedback/results.json) · [62项测试](../evidence/validation-feedback/tests.tap) · [实际源码清单](../evidence/validation-feedback/snapshot-manifest.json) · [冻结core7来源](../evidence/validation-feedback/baseline-source.json) · [全量核对](../evidence/validation-feedback/uci-validation.json) · [浏览器检查](../evidence/validation-feedback/browser-result.json) · [资源及各版结果](../evidence/validation-feedback/runs/)。实际模型是否更容易改正、能否避免原多指标任务失败，都尚未验证；原研究保持失败。

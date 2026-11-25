@@ -1,0 +1,149 @@
+{
+  "kind": "CPU schema-feedback size and execution-boundary diagnostic, not model quality",
+  "baseline": {
+    "version": "1.6.0-contextlab.7",
+    "agent_loop_js_sha256": "bd3017564d9aae7eafdc3278224df160ee52d84e57b16d538e420afd4ef6817e"
+  },
+  "protocol_sha256": "9ac0d67c5d14f4b0bc702b2634ce32bc779347085d197e9c0d6b8c7e13566531",
+  "rows": [
+    {
+      "case": "long-string",
+      "input_arguments_sha256": "a9f5dba6be4b7e4b5378f1009799a07a1821ca0b68fc3b46f3c58c891cb15c2d",
+      "legacy_content_JSON_bytes": 12152,
+      "bounded_content_JSON_bytes": 566,
+      "bounded_details_JSON_bytes": 102,
+      "diagnostic_truncated": false,
+      "fields_returned": 1,
+      "bounded_payload": {
+        "error": "INVALID_TOOL_ARGUMENTS",
+        "diagnostic": "Validation failed for tool \"save\":\n  - note: expected at most 64 characters",
+        "diagnostic_truncated": false,
+        "received_arguments_omitted": true,
+        "argument_stage": "after_prepareArguments",
+        "fields": [
+          {
+            "pointer": "/note",
+            "kind": "string",
+            "code_points": 12000,
+            "utf16_units": 12000
+          }
+        ],
+        "fields_omitted": 0,
+        "source": "Original input remains in assistant toolCall.arguments. Field shapes contain no values. Correct arguments and retry within the existing job budget."
+      },
+      "old_rejected": true,
+      "new_rejected": true,
+      "executions": 0
+    },
+    {
+      "case": "unknown-properties",
+      "input_arguments_sha256": "28b178a930a1ef2f4403ff6991de88b293d024e7171afcbaf9afb5e83a293cc9",
+      "legacy_content_JSON_bytes": 6305,
+      "bounded_content_JSON_bytes": 2048,
+      "bounded_details_JSON_bytes": 102,
+      "diagnostic_truncated": true,
+      "fields_returned": 8,
+      "bounded_payload": {
+        "error": "INVALID_TOOL_ARGUMENTS",
+        "diagnostic": "Validation failed for tool \"save\":\n  - unknown_\"\n/0: unknown field\n  - unknown_\"\n/1: unknown field\n  - unknown_\"\n/2: unknown field\n  - unknown_\"\n/3: unknown field\n  - unknown_\"\n/4: unknown field\n  - unknown_\"\n/5: unknown field\n  - unknown_\"\n/6: unknown field\n  - unknown_\"\n/7: unknown field\n  - unknown_\"\n/8: unknown field\n  - unknown_\"\n/9: unknown field\n  - unknown_\"\n/10: unknown field\n  - unknown_\"\n/11: unknown field\n  - unknown_\"\n/12: unknown field\n  - unknown_\"\n/13: unknown field\n  - unknown_\"\n/14: unknown field\n  - unknown_\"\n/15: unknown field\n  - unknown_\"\n/16: unknown field\n  - unknown_\"\n/17: unknown field\n  - unknown_\"\n/18: unknown field\n  - unknown_\"\n/19: unknown field\n  - unknown_\"\n/20: unknown field\n  - unknown_\"\n/21: unknown field\n  - unknown_\"\n/22: unknown field\n  - unknown_\"\n/23: unknown field\n  - unknown_\"\n/24: unknown field\n  - unknown_\"\n/25: unknown field\n  - unknown_\"\n/26: unknown field\n  - unknown_\"\n/27: unknown field\n  - unk",
+        "diagnostic_truncated": true,
+        "received_arguments_omitted": true,
+        "argument_stage": "after_prepareArguments",
+        "fields": [
+          {
+            "pointer": "/note",
+            "kind": "string",
+            "code_points": 5,
+            "utf16_units": 5
+          },
+          {
+            "pointer": "/unknown_\"\n~10",
+            "kind": "boolean"
+          },
+          {
+            "pointer": "/unknown_\"\n~11",
+            "kind": "boolean"
+          },
+          {
+            "pointer": "/unknown_\"\n~12",
+            "kind": "boolean"
+          },
+          {
+            "pointer": "/unknown_\"\n~13",
+            "kind": "boolean"
+          },
+          {
+            "pointer": "/unknown_\"\n~14",
+            "kind": "boolean"
+          },
+          {
+            "pointer": "/unknown_\"\n~15",
+            "kind": "boolean"
+          },
+          {
+            "pointer": "/unknown_\"\n~16",
+            "kind": "boolean"
+          }
+        ],
+        "fields_omitted": 83,
+        "source": "Original input remains in assistant toolCall.arguments. Field shapes contain no values. Correct arguments and retry within the existing job budget."
+      },
+      "old_rejected": true,
+      "new_rejected": true,
+      "executions": 0
+    },
+    {
+      "case": "malformed-json",
+      "input_arguments_sha256": "dff4901ffc8cc262eca0cbaede153e163af2bbf9a73795dd1d25653f42f459c0",
+      "legacy_content_JSON_bytes": 9112,
+      "bounded_content_JSON_bytes": 460,
+      "bounded_details_JSON_bytes": 101,
+      "diagnostic_truncated": false,
+      "fields_returned": 0,
+      "bounded_payload": {
+        "error": "INVALID_TOOL_ARGUMENTS",
+        "diagnostic": "Invalid arguments for tool \"save\": Unexpected end of input",
+        "diagnostic_truncated": false,
+        "received_arguments_omitted": true,
+        "argument_stage": "after_prepareArguments",
+        "fields": [],
+        "fields_omitted": 0,
+        "source": "Original input remains in assistant toolCall.arguments. Field shapes contain no values. Correct arguments and retry within the existing job budget."
+      },
+      "old_rejected": true,
+      "new_rejected": true,
+      "executions": 0
+    },
+    {
+      "case": "unicode",
+      "input_arguments_sha256": "b76b84f7a8014cd0153199a4cc70ec644896eb0f39e3d8bd07e3a9e874665e29",
+      "legacy_content_JSON_bytes": 11352,
+      "bounded_content_JSON_bytes": 564,
+      "bounded_details_JSON_bytes": 101,
+      "diagnostic_truncated": false,
+      "fields_returned": 1,
+      "bounded_payload": {
+        "error": "INVALID_TOOL_ARGUMENTS",
+        "diagnostic": "Validation failed for tool \"save\":\n  - note: expected at most 64 characters",
+        "diagnostic_truncated": false,
+        "received_arguments_omitted": true,
+        "argument_stage": "after_prepareArguments",
+        "fields": [
+          {
+            "pointer": "/note",
+            "kind": "string",
+            "code_points": 3200,
+            "utf16_units": 4000
+          }
+        ],
+        "fields_omitted": 0,
+        "source": "Original input remains in assistant toolCall.arguments. Field shapes contain no values. Correct arguments and retry within the existing job budget."
+      },
+      "old_rejected": true,
+      "new_rejected": true,
+      "executions": 0
+    }
+  ],
+  "model_calls": 0,
+  "GPU_used": false
+}

@@ -4,7 +4,7 @@
 
 ## 改动位置与已有能力
 
-固定 Pi 1.6.0 的完整 Agent Core 源码保留在 [vendor/pi-agent-core](../vendor/pi-agent-core)，原文件哈希见 [UPSTREAM.json](../vendor/pi-agent-core/UPSTREAM.json)，MIT 原许可一并保留。派生版本为 `1.6.0-contextlab.7`，不是上游发布或已合入 PR。原研究克隆保持不变。
+固定 Pi 1.6.0 的完整 Agent Core 源码保留在 [vendor/pi-agent-core](../vendor/pi-agent-core)，原文件哈希见 [UPSTREAM.json](../vendor/pi-agent-core/UPSTREAM.json)，MIT 原许可一并保留。派生版本为 `1.6.0-contextlab.8`，不是上游发布或已合入 PR。原研究克隆保持不变。
 
 上游已有 `transformContext`、工具调用屏障、完整的 `pi-durable` 持久化 Harness、摘要压缩，以及部分工具输出限制。本项目不把这些已有能力说成原创。
 
@@ -185,3 +185,23 @@ const decision = routeTools(currentQuestion, registeredTools, {
 新版压力模式仍按结果字节降序尝试；单条阈值成为优先级而不是硬过滤条件。达到总预算即停止，引用必须确实比原文小，才写artifact；最近完整回读批次仍保护，system与当前轮不丢弃。`belowThresholdSpills`记录不超过旧单条阈值的外置，原文与精确来源ID照常保留。无压力时零写入；显式threshold兼容模式仍按硬阈值工作。逐候选检查取消信号。
 
 这不是任意压缩小结果：仅在总压力确实存在时尝试，负收益替换跳过。控制任务需从provider视图而不是Store取9个真实证据ID，独立核对全部SQL分组、Top/OTHER与金额恒等式。源码、旧版拒绝和新版控制见[多指标方案](evaluation-pressure-business-plan.md)，实际验证状态见[验证记录](validation.md)。
+
+
+## contextlab.8：有界参数校验反馈
+
+上一项真实研究的完整分支三次返回过长interpretation，schema拒绝是正确行为；上游错误文本还附带完整Received arguments，导致反馈本身再次占据上下文。新增SDK可选项`toolValidationFeedback: 'bounded'`，只在`validateToolArguments`拒绝阶段格式化结果。原来的参数准备、验证、coercion和clone调用保持原样，不自动截断参数、不放宽schema；无效输入不进入before/execute/after。
+
+模型收到可解析JSON文本，包含INVALID_TOOL_ARGUMENTS、原始字段诊断前缀、诊断截断标记、是否省去参数dump，以及最多8个顶层字段的形状。字符串给出code point数与UTF-16单位数，数组给出项数；字段名以RFC6901 pointer表示，过长字段名省略，字段形状不包含对应值。计数发生在prepareArguments之后，明确标注argument_stage；它不声称覆盖嵌套所有字段。
+
+整个`content`数组JSON序列化后最多2,048 UTF-8字节，包括两层JSON转义和包装。超长诊断按code point边界二分截取，仍是完整可解析JSON；元数据details只保存原错误字节数和实际反馈字节数，不再藏一份完整dump。完整原始assistant参数仍在权威历史中（JSON解析失败时同时保留argumentsError里的原始输入）；自定义prepareArguments产生的临时值不是原始assistant参数，此处只记录其字段形状。
+
+SDK缺省仍保留原版错误文本。独立runToolCall也接受同名选项；PiMetricLab在正常Agent与恢复runToolCall中都显式开启，并加入运行指纹`bounded-2048-v1`，旧任务不静默复用。未知工具、取消、prepareArguments异常、before/after hook异常和execute异常仍走原路径；这不是所有错误统一2KiB或敏感内容脱敏功能。
+
+```ts
+const agent = new Agent({ streamFn, toolValidationFeedback: 'bounded', initialState });
+const outcome = await runToolCall(call, {
+  tools, assistantMessage, context, toolValidationFeedback: 'bounded',
+});
+```
+
+本轮只做服务器CPU机制验证，不再调用DeepSeek、不重跑已关闭压力任务。脚本provider按反馈进行下一步只验证回合/执行边界，不代表真实模型会纠正。实际字节和测试见验证记录，原研究失败分数保留。

@@ -1,0 +1,120 @@
+{
+  "source_snapshot_sha256": "f587940019bd329f5f23dc09eb380075c99b01124062469698a6bdd96bea79d0",
+  "source_snapshot_format": "source-only-v1",
+  "controller_sha256": "702289d5c34dc0ad000da725e10a11243d1b2d8dc357713033b0502fe917571b",
+  "wrapper_sha256": "9d7e401497343f3f99034a897cdf50d88c59d1ef669494a601a2e9cc326f6ff0",
+  "cpu_admission_sha256": "62350c3401c5336ff873d429da29fb4397f114c016bb96a003d5a2b673029fe1",
+  "input_bundle_sha256": "be3389c89c0cad8dd9784e98f5a37c0fc8eda166ca6bc38d8266890e7755cf66",
+  "phases": [
+    {
+      "name": "numeric-source-runtime-capability",
+      "argv": [
+        "NODE",
+        "-e",
+        "JSON.parse('9007199254740993',(_k,v,c)=>{if(c?.source!=='9007199254740993')throw Error('JSON.parse source unsupported');return v;});console.log('exact numeric source available')"
+      ]
+    },
+    {
+      "name": "source-snapshot-boundaries",
+      "argv": [
+        "/data1/wjz26/agent-lab-20261120/envs/model-request-budget-20261121/bin/python",
+        "scripts/check_source_snapshot.py"
+      ],
+      "cap": 30
+    },
+    {
+      "name": "build-native-fork",
+      "argv": [
+        "NODE",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "vendor/pi-agent-core/tsconfig.json"
+      ]
+    },
+    {
+      "name": "native-and-application-check",
+      "argv": [
+        "/tmp/agentlab-deeptutor-setup-stage92-02uddvuy/tools/node/bin/npm",
+        "run",
+        "check"
+      ]
+    },
+    {
+      "name": "build-application",
+      "argv": [
+        "NODE",
+        "node_modules/typescript/bin/tsc"
+      ]
+    },
+    {
+      "name": "framework-and-client-tests",
+      "argv": [
+        "NODE",
+        "--test",
+        "--test-concurrency=1",
+        "dist/test/framework.test.js",
+        "dist/test/business.test.js",
+        "dist/test/runtime.test.js",
+        "dist/test/api.test.js",
+        "dist/test/recovery.test.js",
+        "dist/test/integrity.test.js",
+        "dist/test/deepseek.test.js",
+        "dist/test/request-binding.test.js",
+        "dist/test/artifact-search.test.js",
+        "dist/test/audit-evaluation.test.js",
+        "dist/test/context-pressure.test.js",
+        "dist/test/routing-cache.test.js",
+        "dist/test/business-evaluation.test.js",
+        "dist/test/pressure-business-evaluation.test.js",
+        "dist/test/aggregate-pressure.test.js",
+        "dist/test/validation-feedback.test.js"
+      ],
+      "cap": 180
+    },
+    {
+      "name": "frozen-core7-feedback-comparison",
+      "argv": [
+        "NODE",
+        "dist/scripts/probe-validation-feedback.js",
+        "/tmp/pimetriclab-build-stage98-ar99jude/source/vendor/pi-agent-core/dist/index.js",
+        "validation-feedback-results.json"
+      ],
+      "cap": 90
+    },
+    {
+      "name": "final-UCI-oracle-reconciliation",
+      "argv": [
+        "NODE",
+        "dist/scripts/validate-uci.js",
+        "/tmp/pimetriclab-intake-stage98-_jz6nfyq/dataset",
+        "evidence/uci-oracle.json",
+        "validation-final"
+      ],
+      "cap": 180
+    },
+    {
+      "name": "browser-workflow",
+      "argv": [
+        "/tmp/agentlab-research-view-setup-stage89-vd1ix5wi/source/extras/research-view-checks/.venv/bin/python",
+        "scripts/browser_qa.py",
+        "--node",
+        "/tmp/agentlab-deeptutor-setup-stage92-02uddvuy/tools/node/bin/node",
+        "--home",
+        "validation-final/home",
+        "--browser",
+        "/tmp/agentlab-research-view-assets-stage89-vwc838a1/browsers/chromium_headless_shell-1255/chrome-headless-shell-linux64/chrome-headless-shell",
+        "--output",
+        "browser"
+      ],
+      "cap": 180
+    }
+  ],
+  "framework_install": true,
+  "purpose": "Core8 opt-in bounded schema feedback;62tests including native sequential/parallel and restored calls. No paid requests or closed-study regrade.",
+  "mode": "browser",
+  "environment": {
+    "LD_LIBRARY_PATH": "/tmp/agentlab-research-view-assets-stage89-g2hsf8v6/assets/lib",
+    "FONTCONFIG_FILE": "/tmp/agentlab-research-view-assets-stage89-g2hsf8v6/assets/fonts.conf",
+    "PLAYWRIGHT_BROWSERS_PATH": "/tmp/agentlab-research-view-assets-stage89-vwc838a1/browsers"
+  }
+}

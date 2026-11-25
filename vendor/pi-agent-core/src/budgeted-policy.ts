@@ -8,7 +8,7 @@ import type { ExecutableTools, ModelContextPolicy, ModelContextPolicyInput, Prep
 import { routeTools, ToolRoutingIndexCache, type RankedTool, type ToolRoutingCacheStats, type ToolRoutingOptions } from "./tool-router.ts";
 
 export interface BudgetedPolicyTrace extends ContextPackingTrace {
-	policy: "pi-context-lab-v7";
+	policy: "pi-context-lab-v8";
 	request: number;
 	registeredTools: number;
 	selectedToolNames: string[];
@@ -98,7 +98,7 @@ export class BudgetedContextPolicy implements ModelContextPolicy {
 		const eager = this.options.spillMode === "threshold" && input.context.messages.some(message => message.role === "toolResult" && contextBytes(message.content) > this.options.inlineToolResultBytes);
 		const decision = exceedsBudget || eager ? select([reader, ...(this.options.artifactSearch ? [this.tools[2]] : [])]) : initial;
 		const packed = await packModelContext(input.context, decision.tools, query, { maxContextBytes: this.options.maxContextBytes, inlineToolResultBytes: this.options.inlineToolResultBytes, store: this.options.artifacts, artifactSearch: this.options.artifactSearch, spillMode: this.options.spillMode }, signal);
-		const trace: BudgetedPolicyTrace = { policy: "pi-context-lab-v7", request: this.request, registeredTools: input.tools.length, selectedToolNames: decision.tools.map((t) => t.name), schemaBytes: decision.schemaBytes, ranking: decision.ranked, routingCache: this.routingIndex.stats, ...packed.trace };
+		const trace: BudgetedPolicyTrace = { policy: "pi-context-lab-v8", request: this.request, registeredTools: input.tools.length, selectedToolNames: decision.tools.map((t) => t.name), schemaBytes: decision.schemaBytes, ranking: decision.ranked, routingCache: this.routingIndex.stats, ...packed.trace };
 		await this.options.onPrepared?.(trace);
 		return { context: packed.context, tools: decision.tools };
 	}
