@@ -1,0 +1,86 @@
+{
+  "purpose": "New prospective core6 real-business integration on two previously unused comparisons; no reopened v1/v2/v4 audit or retrieval budgets. Not a task accuracy benchmark.",
+  "core_version": "1.6.0-contextlab.6",
+  "provider": "https://api.deepseek.com",
+  "model": "deepseek-flash",
+  "thinking": "disabled",
+  "temperature": 0,
+  "retries": 0,
+  "cases": [
+    {
+      "id": "returns-april-may-country",
+      "comparison": {
+        "metric": "returns",
+        "baseline": {
+          "start": "2011-04-01",
+          "end": "2011-05-01"
+        },
+        "current": {
+          "start": "2011-05-01",
+          "end": "2011-06-01"
+        },
+        "basis": "calendar_month"
+      },
+      "dimension": "country",
+      "limit": 8,
+      "question": "Investigate returns for baseline [2011-04-01,2011-05-01) and current [2011-05-01,2011-06-01), calendar_month. Inspect dataset coverage and metric policy, compare these periods, break down the change by country with top8 plus OTHER, then seal a report containing both saved comparison and breakdown evidence. Treat explanations as unverified; keep hypotheses separate.",
+      "variant_order": [
+        "full",
+        "budgeted"
+      ]
+    },
+    {
+      "id": "net-sales-feb-halves-products",
+      "comparison": {
+        "metric": "net_sales",
+        "baseline": {
+          "start": "2011-02-01",
+          "end": "2011-02-15"
+        },
+        "current": {
+          "start": "2011-02-15",
+          "end": "2011-03-01"
+        },
+        "basis": "equal_days"
+      },
+      "dimension": "stock_code",
+      "limit": 12,
+      "question": "Investigate net_sales for baseline [2011-02-01,2011-02-15) and current [2011-02-15,2011-03-01), equal_days. Inspect dataset coverage and metric policy, compare these periods, break down the change by stock_code with top12 plus OTHER, then seal a report containing both saved comparison and breakdown evidence. Treat explanations as unverified; keep hypotheses separate.",
+      "variant_order": [
+        "budgeted",
+        "full"
+      ]
+    }
+  ],
+  "variants": {
+    "full": {
+      "contextMode": "upstream",
+      "maxContextBytes": 65536,
+      "artifactSearch": false
+    },
+    "budgeted": {
+      "contextMode": "budgeted",
+      "maxContextBytes": 16384,
+      "artifactSearch": false
+    }
+  },
+  "max_calls_per_job": 6,
+  "max_output_per_call": 1024,
+  "request_timeout_ms": 20000,
+  "global_max_requests": 24,
+  "global_output_token_ceiling": 24576,
+  "dataset_csv_sha256": "1f8144bb8670bcad07cde08205532fc6322d99e96c6ac8e8b5c979f169852065",
+  "grading": "Sealed report includes exact requested comparison and dimension/limit; evidence identities/hashes valid; comparison, every top-group number, remaining groups and totals match independent CSV Decimal oracle. Missing/partial/different request or no report is failure. Narrative correctness is not evaluated.",
+  "oracle": "Python csv/Decimal over same frozen full541909-row CSV, independent of DuckDB/JS arithmetic. Oracle numbers never enter model questions or tools. This adds arithmetic validation for these new ranges, not new Excel-transformation validation.",
+  "stop": "Run once after prospective source commit and CPU preflight. No quality retries or budget top-ups; timeouts/unknowns retain reservations and partial checkpoints. A job failing does not cancel remaining fixed variants. Do not change protocol/grader after observing model outputs.",
+  "report": [
+    "per-variant result and failure",
+    "all actual wire attempts and durable reservations",
+    "context JSON bytes separately from cumulative provider tokens",
+    "cached input included in usage",
+    "estimated cost not invoice",
+    "spills, recalls and cache stats"
+  ],
+  "GPU": false,
+  "local_model_deployment": false
+}

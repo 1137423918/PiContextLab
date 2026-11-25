@@ -1,0 +1,34 @@
+{
+  "kind": "Independent CSV Decimal vs DuckDB arithmetic; no model calls",
+  "results": [
+    {
+      "case": "returns-april-may-country",
+      "grade": {
+        "passed": true,
+        "error": null,
+        "groups_checked": 31
+      },
+      "totals": {
+        "baseline": "44601.5000",
+        "current": "47202.5100",
+        "delta": "2601.0100"
+      }
+    },
+    {
+      "case": "net-sales-feb-halves-products",
+      "grade": {
+        "passed": true,
+        "error": null,
+        "groups_checked": 2417
+      },
+      "totals": {
+        "baseline": "229796.4900",
+        "current": "268266.1600",
+        "delta": "38469.6700"
+      }
+    }
+  ],
+  "passed": true,
+  "model_calls": 0,
+  "GPU_used": false
+}

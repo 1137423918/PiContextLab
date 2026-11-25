@@ -1,0 +1,348 @@
+TAP version 13
+# (node:1717803) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: HTTP workflow, strict request validation, origin guard, durable reload, report export and review binding
+ok 1 - HTTP workflow, strict request validation, origin guard, durable reload, report export and review binding
+  ---
+  duration_ms: 588.42047
+  type: 'test'
+  ...
+# (node:1717875) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: exact artifact reads preserve unsafe integers, fractional digits, exponent literals and nested numbers
+ok 2 - exact artifact reads preserve unsafe integers, fractional digits, exponent literals and nested numbers
+  ---
+  duration_ms: 18.49678
+  type: 'test'
+  ...
+# Subtest: field search locates escaped source paths with exact numeric previews and bounded Unicode JSON output
+ok 3 - field search locates escaped source paths with exact numeric previews and bounded Unicode JSON output
+  ---
+  duration_ms: 16.978882
+  type: 'test'
+  ...
+# Subtest: field search reports scan truncation and rejects foreign, corrupt or oversized artifacts
+ok 4 - field search reports scan truncation and rejects foreign, corrupt or oversized artifacts
+  ---
+  duration_ms: 91.007898
+  type: 'test'
+  ...
+# Subtest: optional field locator is exposed with the reader only under pressure and fits the same count/schema budgets
+ok 5 - optional field locator is exposed with the reader only under pressure and fits the same count/schema budgets
+  ---
+  duration_ms: 6.096068
+  type: 'test'
+  ...
+# (node:1717924) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: provenance grader derives labels from matching validated evidence and rejects partial/wrong answers
+ok 6 - provenance grader derives labels from matching validated evidence and rejects partial/wrong answers
+  ---
+  duration_ms: 206.931676
+  type: 'test'
+  ...
+# Subtest: audit source gate rejects missing breakdowns and different metric/period/dimension rather than substituting old evidence
+ok 7 - audit source gate rejects missing breakdowns and different metric/period/dimension rather than substituting old evidence
+  ---
+  duration_ms: 137.708971
+  type: 'test'
+  ...
+# (node:1717966) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: business grader checks independent amounts, all selected/remainder groups and source identity
+ok 8 - business grader checks independent amounts, all selected/remainder groups and source identity
+  ---
+  duration_ms: 224.720289
+  type: 'test'
+  ...
+# (node:1718291) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: exact decimals, rounding, invalid dates and semantic period guards
+ok 9 - exact decimals, rounding, invalid dates and semantic period guards
+  ---
+  duration_ms: 7.486883
+  type: 'test'
+  ...
+# Subtest: business oracle: line grain, unknown customers, returns, exact money, null group and remainder
+ok 10 - business oracle: line grain, unknown customers, returns, exact money, null group and remainder
+  ---
+  duration_ms: 460.527289
+  type: 'test'
+  ...
+# (node:1718377) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: fitting provider context preserves large results and ignores display-only size without allocating artifacts or utility schemas
+ok 11 - fitting provider context preserves large results and ignores display-only size without allocating artifacts or utility schemas
+  ---
+  duration_ms: 5.787425
+  type: 'test'
+  ...
+# Subtest: pressure spills the largest eligible result once and retains smaller source data when that fits
+ok 12 - pressure spills the largest eligible result once and retains smaller source data when that fits
+  ---
+  duration_ms: 8.654076
+  type: 'test'
+  ...
+# Subtest: all recall results in the latest parallel batch are protected while an ordinary result can be spilled
+ok 13 - all recall results in the latest parallel batch are protected while an ordinary result can be spilled
+  ---
+  duration_ms: 8.145563
+  type: 'test'
+  ...
+# Subtest: routing removes omitted schemas before deciding context pressure and retains an executable business tool
+ok 14 - routing removes omitted schemas before deciding context pressure and retains an executable business tool
+  ---
+  duration_ms: 14.592124
+  type: 'test'
+  ...
+# Subtest: history-only pressure exposes recall and archives whole turns even without large tool outputs
+ok 15 - history-only pressure exposes recall and archives whole turns even without large tool outputs
+  ---
+  duration_ms: 6.902343
+  type: 'test'
+  ...
+# Subtest: per-value continuation follows a shared budget exactly across Unicode pages and empty remaining budgets
+ok 16 - per-value continuation follows a shared budget exactly across Unicode pages and empty remaining budgets
+  ---
+  duration_ms: 5.055521
+  type: 'test'
+  ...
+# Subtest: eager threshold spilling remains explicit while pressure mode leaves the same fitting result intact
+ok 17 - eager threshold spilling remains explicit while pressure mode leaves the same fitting result intact
+  ---
+  duration_ms: 1.402598
+  type: 'test'
+  ...
+# (node:1718402) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: DeepSeek runtime emits disabled thinking and tool declarations through the real adapter; secrets stay out of model config
+ok 18 - DeepSeek runtime emits disabled thinking and tool declarations through the real adapter; secrets stay out of model config
+  ---
+  duration_ms: 41.754472
+  type: 'test'
+  ...
+# Subtest: real API entry defaults to full context and requires explicit valid flags for experimental policy/search
+ok 19 - real API entry defaults to full context and requires explicit valid flags for experimental policy/search
+  ---
+  duration_ms: 1.195202
+  type: 'test'
+  ...
+# (node:1718422) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: router admits dependency closure within schema/count budgets and refuses oversized required groups
+ok 20 - router admits dependency closure within schema/count budgets and refuses oversized required groups
+  ---
+  duration_ms: 10.084967
+  type: 'test'
+  ...
+# Subtest: native core enforces the routed execution allowlist; original Pi executes the same registered control call
+ok 21 - native core enforces the routed execution allowlist; original Pi executes the same registered control call
+  ---
+  duration_ms: 29.553081
+  type: 'test'
+  ...
+# Subtest: context spilling keeps exact source and tool pairs; bounded recall verifies checksum and JSON pointers
+ok 22 - context spilling keeps exact source and tool pairs; bounded recall verifies checksum and JSON pointers
+  ---
+  duration_ms: 13.81482
+  type: 'test'
+  ...
+# Subtest: history packing evicts whole user turns, preserves system sections and archives exact turns
+ok 23 - history packing evicts whole user turns, preserves system sections and archives exact turns
+  ---
+  duration_ms: 5.51873
+  type: 'test'
+  ...
+# Subtest: malformed tool history and mandatory oversized current turn fail before provider admission
+ok 24 - malformed tool history and mandatory oversized current turn fail before provider admission
+  ---
+  duration_ms: 3.53716
+  type: 'test'
+  ...
+# Subtest: tool discovery promotes missing schemas on the next native request; provider declarations match allowed tools
+ok 25 - tool discovery promotes missing schemas on the next native request; provider declarations match allowed tools
+  ---
+  duration_ms: 3.665566
+  type: 'test'
+  ...
+# Subtest: artifact identities distinguish kind and bounded Unicode recall never splits surrogate pairs
+ok 26 - artifact identities distinguish kind and bounded Unicode recall never splits surrogate pairs
+  ---
+  duration_ms: 2.36276
+  type: 'test'
+  ...
+# Subtest: one policy instance cannot share mutable lookup state across two Agents
+ok 27 - one policy instance cannot share mutable lookup state across two Agents
+  ---
+  duration_ms: 0.539855
+  type: 'test'
+  ...
+# Subtest: utility schemas stay hidden when the complete business toolset and context already fit
+ok 28 - utility schemas stay hidden when the complete business toolset and context already fit
+  ---
+  duration_ms: 1.08004
+  type: 'test'
+  ...
+# (node:1718682) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: intake rejects hidden decimal rounding instead of accepting rounded money
+ok 29 - intake rejects hidden decimal rounding instead of accepting rounded money
+  ---
+  duration_ms: 177.992673
+  type: 'test'
+  ...
+# Subtest: evidence sealing rejects wrong periods, altered SQL and nonexistent references; repeated sealing is idempotent
+ok 30 - evidence sealing rejects wrong periods, altered SQL and nonexistent references; repeated sealing is idempotent
+  ---
+  duration_ms: 178.220247
+  type: 'test'
+  ...
+# Subtest: real Pi OpenAI-compatible adapter sends one HTTP attempt for 503, with retries disabled
+ok 31 - real Pi OpenAI-compatible adapter sends one HTTP attempt for 503, with retries disabled
+  ---
+  duration_ms: 145.368567
+  type: 'test'
+  ...
+# (node:1718910) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: SIGKILL after durable assistant barrier recovers in a new process owner
+ok 32 - SIGKILL after durable assistant barrier recovers in a new process owner
+  ---
+  duration_ms: 876.540507
+  type: 'test'
+  ...
+# Subtest: SIGKILL after durable tool barrier recovers in a new process owner
+ok 33 - SIGKILL after durable tool barrier recovers in a new process owner
+  ---
+  duration_ms: 768.637359
+  type: 'test'
+  ...
+# (node:1719137) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: recovery uses the response-bound tools beyond500events, ignoring older and newer trace selections
+ok 34 - recovery uses the response-bound tools beyond500events, ignoring older and newer trace selections
+  ---
+  duration_ms: 322.301942
+  type: 'test'
+  ...
+# Subtest: a completed reply cannot be reused with a different execution selection
+ok 35 - a completed reply cannot be reused with a different execution selection
+  ---
+  duration_ms: 75.178648
+  type: 'test'
+  ...
+# Subtest: recovery pauses before execution and provider admission when saved assistant has no bound request
+ok 36 - recovery pauses before execution and provider admission when saved assistant has no bound request
+  ---
+  duration_ms: 77.916414
+  type: 'test'
+  ...
+# Subtest: persisted clarification beyond the first event page settles without another model call
+ok 37 - persisted clarification beyond the first event page settles without another model call
+  ---
+  duration_ms: 244.996305
+  type: 'test'
+  ...
+# (node:1719193) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: cached ranking, stable ties, dependency closure and promotions exactly match uncached routing
+ok 38 - cached ranking, stable ties, dependency closure and promotions exactly match uncached routing
+  ---
+  duration_ms: 6.767737
+  type: 'test'
+  ...
+# Subtest: in-place description, schema, custom document and registry-order changes invalidate catalog statistics
+ok 39 - in-place description, schema, custom document and registry-order changes invalidate catalog statistics
+  ---
+  duration_ms: 2.128097
+  type: 'test'
+  ...
+# Subtest: cache retains no execution objects and uses replacement live tools with identical metadata
+ok 40 - cache retains no execution objects and uses replacement live tools with identical metadata
+  ---
+  duration_ms: 0.650161
+  type: 'test'
+  ...
+# Subtest: entry and source-byte bounds evict or bypass without changing fresh results; clear releases retained state
+ok 41 - entry and source-byte bounds evict or bypass without changing fresh results; clear releases retained state
+  ---
+  duration_ms: 4.860834
+  type: 'test'
+  ...
+# Subtest: new budgets, dependencies and promotions reuse only scores and recompute selected groups
+ok 42 - new budgets, dependencies and promotions reuse only scores and recompute selected groups
+  ---
+  duration_ms: 0.893542
+  type: 'test'
+  ...
+# Subtest: mutable score/schema arrays and stats copies cannot poison subsequent cache hits
+ok 43 - mutable score/schema arrays and stats copies cannot poison subsequent cache hits
+  ---
+  duration_ms: 0.459314
+  type: 'test'
+  ...
+# Subtest: native policy reuses a private index and reports counters while newly registered tools stay executable
+ok 44 - native policy reuses a private index and reports counters while newly registered tools stay executable
+  ---
+  duration_ms: 3.726904
+  type: 'test'
+  ...
+# (node:1719246) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual Pi runtime drives four tools, seals evidence, reuses tools and binds human review
+ok 45 - actual Pi runtime drives four tools, seals evidence, reuses tools and binds human review
+  ---
+  duration_ms: 287.00612
+  type: 'test'
+  ...
+# Subtest: unknown pending request stays charged across connections; stale owner fenced; completed reply reused
+ok 46 - unknown pending request stays charged across connections; stale owner fenced; completed reply reused
+  ---
+  duration_ms: 82.590387
+  type: 'test'
+  ...
+# Subtest: restart reconciles committed assistant tools through Pi with cached results, without an extra provider request
+ok 47 - restart reconciles committed assistant tools through Pi with cached results, without an extra provider request
+  ---
+  duration_ms: 147.508922
+  type: 'test'
+  ...
+# Subtest: cancellation is durable and prevents further provider reservation
+ok 48 - cancellation is durable and prevents further provider reservation
+  ---
+  duration_ms: 70.306607
+  type: 'test'
+  ...
+# Subtest: graceful shutdown pauses an in-flight request; explicit resume charges the aborted attempt and completes
+ok 49 - graceful shutdown pauses an in-flight request; explicit resume charges the aborted attempt and completes
+  ---
+  duration_ms: 231.268374
+  type: 'test'
+  ...
+# Subtest: an ambiguous user request cannot expose query/report tools or invent its own date contract
+ok 50 - an ambiguous user request cannot expose query/report tools or invent its own date contract
+  ---
+  duration_ms: 84.082423
+  type: 'test'
+  ...
+# Subtest: a model cannot substitute different periods for an explicitly bound comparison
+ok 51 - a model cannot substitute different periods for an explicitly bound comparison
+  ---
+  duration_ms: 83.322965
+  type: 'test'
+  ...
+# Subtest: full-context host path completes the same business workflow without experimental context transforms
+ok 52 - full-context host path completes the same business workflow without experimental context transforms
+  ---
+  duration_ms: 184.551234
+  type: 'test'
+  ...
+1..52
+# tests 52
+# suites 0
+# pass 52
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 12133.521119

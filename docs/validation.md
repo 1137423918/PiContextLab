@@ -281,3 +281,14 @@ v4 最终服务器验证：**33 项测试、14 项浏览器检查通过**。完�
 另通过51项工程测试，包含就地修改失效、当前执行对象身份、预算/依赖重算、LRU和源字节旁路，以及原有协议、恢复和业务边界。完整UCI的541,909行/12指标/29国家核对及14项浏览器检查通过；脚本provider显式验证16KiB预算模式，不冒充真实大模型。最终owned进程0，新增模型请求0、GPU0。默认真实入口仍为完整上下文。
 
 [运行前方案](../examples/routing-cache-cpu-protocol.json) · [逐调用结果及冻结源码](../evidence/routing-cache/) · [51项测试](../evidence/routing-cache/tests.tap) · [执行源码身份](../evidence/routing-cache/source-sha256.json) · [资源和失败记录](../evidence/routing-cache/runs/)。首次严格类型检查也曾在计时前因驱动数组类型失败；原日志与上面的目录边界失败均保留。修正后在新目录只执行一次有效性能对照。
+
+
+## core6 新业务任务：运行前预检
+
+[运行前方案](evaluation-business-v6-plan.md)和[机器协议](../examples/business-v6-protocol.json)在付费请求前冻结。两个新范围分别为四月/五月returns-country和二月两个14天窗口net_sales-stock_code；完整64KiB与预算16KiB各一次，上限24请求，字段搜索关闭，不重新评价旧研究。
+
+服务器无密钥预检通过52项Node测试、14项浏览器检查与原全量UCI核对。新Python CSV/Decimal oracle同DuckDB核对31个国家分组、2,417个商品分组；对应退货金额44,601.5000→47,202.5100 GBP，净额229,796.4900→268,266.1600 GBP。这是独立算术控制，不是模型成功。
+
+新的源码归档控制验证必要fixture、排除私有/生成/旧archive、逐文件hash、相同输入字节一致及symlink拒绝。预检输入包512,820字节，含118个清单文件，不再嵌套历史实验包。已有冻结包保持不变。
+
+[52项预检](../evidence/business-v6/preflight-tests.tap) · [独立oracle](../evidence/business-v6/oracle.json) · [逐组核对](../evidence/business-v6/oracle-validation.json) · [源码归档控制](../evidence/business-v6/source-snapshot-checks.log) · [输入清单](../evidence/business-v6/snapshot-manifest.json) · [资源](../evidence/business-v6/runs/)。此提交尚未发出本研究真实请求，实际结果后续单独留存。

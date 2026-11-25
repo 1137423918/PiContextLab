@@ -1,0 +1,129 @@
+{
+  "source_snapshot_sha256": "f587940019bd329f5f23dc09eb380075c99b01124062469698a6bdd96bea79d0",
+  "source_snapshot_format": "source-only-v1",
+  "controller_sha256": "005c616b8316c76d56e79474082a49030f663b82c87fb273b4aa78e78c78aac7",
+  "wrapper_sha256": "9d7e401497343f3f99034a897cdf50d88c59d1ef669494a601a2e9cc326f6ff0",
+  "cpu_admission_sha256": "62350c3401c5336ff873d429da29fb4397f114c016bb96a003d5a2b673029fe1",
+  "input_bundle_sha256": "8b6599eaa919ba66ff2d6e1643e196cf8600db2655fb7124faea9d000729c8d1",
+  "phases": [
+    {
+      "name": "numeric-source-runtime-capability",
+      "argv": [
+        "NODE",
+        "-e",
+        "JSON.parse('9007199254740993',(_k,v,c)=>{if(c?.source!=='9007199254740993')throw Error('JSON.parse source unsupported');return v;});console.log('exact numeric source available')"
+      ]
+    },
+    {
+      "name": "source-snapshot-boundaries",
+      "argv": [
+        "/data1/wjz26/agent-lab-20261120/envs/model-request-budget-20261121/bin/python",
+        "scripts/check_source_snapshot.py"
+      ],
+      "cap": 30
+    },
+    {
+      "name": "build-native-fork",
+      "argv": [
+        "NODE",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "vendor/pi-agent-core/tsconfig.json"
+      ]
+    },
+    {
+      "name": "native-and-application-check",
+      "argv": [
+        "/tmp/agentlab-deeptutor-setup-stage92-02uddvuy/tools/node/bin/npm",
+        "run",
+        "check"
+      ]
+    },
+    {
+      "name": "build-application",
+      "argv": [
+        "NODE",
+        "node_modules/typescript/bin/tsc"
+      ]
+    },
+    {
+      "name": "framework-and-client-tests",
+      "argv": [
+        "NODE",
+        "--test",
+        "--test-concurrency=1",
+        "dist/test/framework.test.js",
+        "dist/test/business.test.js",
+        "dist/test/runtime.test.js",
+        "dist/test/api.test.js",
+        "dist/test/recovery.test.js",
+        "dist/test/integrity.test.js",
+        "dist/test/deepseek.test.js",
+        "dist/test/request-binding.test.js",
+        "dist/test/artifact-search.test.js",
+        "dist/test/audit-evaluation.test.js",
+        "dist/test/context-pressure.test.js",
+        "dist/test/routing-cache.test.js",
+        "dist/test/business-evaluation.test.js"
+      ],
+      "cap": 180
+    },
+    {
+      "name": "new-business-independent-CSV-oracle",
+      "argv": [
+        "/data1/wjz26/agent-lab-20261120/envs/model-request-budget-20261121/bin/python",
+        "scripts/oracle_business_v6.py",
+        "/tmp/pimetriclab-intake-stage98-_jz6nfyq/dataset/transactions.csv",
+        "examples/business-v6-protocol.json",
+        "business-v6-oracle.json"
+      ],
+      "cap": 90
+    },
+    {
+      "name": "new-business-oracle-engine-reconciliation",
+      "argv": [
+        "NODE",
+        "dist/scripts/validate-business-v6.js",
+        "/tmp/pimetriclab-build-stage98-whosstp1/source/validation-final/home/datasets",
+        "business-v6-oracle.json",
+        "business-v6-oracle-validation.json"
+      ],
+      "cap": 90
+    },
+    {
+      "name": "final-UCI-oracle-reconciliation",
+      "argv": [
+        "NODE",
+        "dist/scripts/validate-uci.js",
+        "/tmp/pimetriclab-intake-stage98-_jz6nfyq/dataset",
+        "evidence/uci-oracle.json",
+        "validation-final"
+      ],
+      "cap": 180
+    },
+    {
+      "name": "browser-workflow",
+      "argv": [
+        "/tmp/agentlab-research-view-setup-stage89-vd1ix5wi/source/extras/research-view-checks/.venv/bin/python",
+        "scripts/browser_qa.py",
+        "--node",
+        "/tmp/agentlab-deeptutor-setup-stage92-02uddvuy/tools/node/bin/node",
+        "--home",
+        "validation-final/home",
+        "--browser",
+        "/tmp/agentlab-research-view-assets-stage89-vwc838a1/browsers/chromium_headless_shell-1255/chrome-headless-shell-linux64/chrome-headless-shell",
+        "--output",
+        "browser"
+      ],
+      "cap": 180
+    }
+  ],
+  "framework_install": true,
+  "purpose": "Prospective new business-v6 arithmetic/grader/source-only packaging preflight;52tests plus snapshot boundaries, no model calls/GPU or closed-study reruns.",
+  "mode": "browser",
+  "environment": {
+    "LD_LIBRARY_PATH": "/tmp/agentlab-research-view-assets-stage89-g2hsf8v6/assets/lib",
+    "FONTCONFIG_FILE": "/tmp/agentlab-research-view-assets-stage89-g2hsf8v6/assets/fonts.conf",
+    "PLAYWRIGHT_BROWSERS_PATH": "/tmp/agentlab-research-view-assets-stage89-vwc838a1/browsers"
+  }
+}
