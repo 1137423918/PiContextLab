@@ -19,7 +19,7 @@ test('recovery uses the response-bound tools beyond500events, ignoring older and
   f.store.recordContextPrepared(claim,{selectedToolNames:runner.tools(claim).map(t=>t.name)});
   f.store.db.prepare('UPDATE jobs SET lease=0 WHERE id=?').run(job.id);
   let requests=0;
-  await new Runner(f.store,f.warehouse,model=>{requests++;return completedStream(message(model,[{type:'toolCall',id:'clarify-after-rejected-recovery',name:'request_clarification',arguments:{question:'Please confirm the investigation before continuing.'}}],'toolUse'));}).run(job.id);
+  await new Runner(f.store,f.warehouse,model=>{requests++;return completedStream(message(model,[{type:'toolCall',id:'clarify-after-rejected-recovery',name:'request_clarification',arguments:{question:'Please confirm the investigation before continuing.'}}],'toolUse'));},undefined,90000,65536,'budgeted').run(job.id);
   assert.equal(f.store.evidence(job.id).length,0);assert.equal(f.store.job(job.id).status,'clarification');assert.equal(requests,1);
   const result=f.store.job(job.id).messages.find(m=>m.role==='toolResult'&&m.toolCallId==='forbidden-on-this-request');assert.ok(result?.role==='toolResult'&&result.isError);
  }finally{f.store.close();await rm(f.root,{recursive:true,force:true});}
@@ -39,7 +39,7 @@ test('recovery pauses before execution and provider admission when saved assista
   const job=f.store.create(f.dataset.id,'Unbound saved response',8,1200,comparison);const claim=f.store.claim(job.id);const runner=new Runner(f.store,f.warehouse,scriptedProvider(comparison));
   f.store.messages(claim,[{role:'user',content:job.question,timestamp:job.created},message(runner.model,[{type:'toolCall',id:'unbound',name:'compare_metric',arguments:comparison}],'toolUse')]);
   f.store.recordContextPrepared(claim,{selectedToolNames:runner.tools(claim).map(t=>t.name)});f.store.db.prepare('UPDATE jobs SET lease=0 WHERE id=?').run(job.id);
-  let requests=0;await new Runner(f.store,f.warehouse,m=>{requests++;return completedStream(message(m,[]));}).run(job.id);
+  let requests=0;await new Runner(f.store,f.warehouse,m=>{requests++;return completedStream(message(m,[]));},undefined,90000,65536,'budgeted').run(job.id);
   assert.equal(requests,0);assert.equal(f.store.evidence(job.id).length,0);assert.equal(f.store.job(job.id).status,'paused');assert.match(f.store.job(job.id).error??'',/Missing request-bound/);
  }finally{f.store.close();await rm(f.root,{recursive:true,force:true});}
 });

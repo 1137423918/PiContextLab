@@ -15,7 +15,9 @@ export DEEPSEEK_API_KEY='YOUR_KEY'
 export METRICLAB_MODEL_URL=https://api.deepseek.com
 export METRICLAB_MODEL_ID=deepseek-flash
 export METRICLAB_CONTEXT_WINDOW=1048576
-export METRICLAB_MAX_CONTEXT_BYTES=16384
+export METRICLAB_MAX_CONTEXT_BYTES=65536
+export METRICLAB_CONTEXT_POLICY=upstream
+export METRICLAB_ARTIFACT_SEARCH=0
 export METRICLAB_REQUEST_TIMEOUT_MS=90000
 npm start
 ```
@@ -45,3 +47,18 @@ npm start
 ## 运行研究与业务应用的区别
 
 本项目不以两个集成用例声称模型准确率。后续若研究不同 DeepSeek 模型或 thinking 策略，应单独冻结任务集、模型、预算、评分规则和失败处理，再做可比对照。业务应用使用真实 API 只是基础条件，不自动证明某个研究结论。
+
+## v4 真实结果与当前默认配置
+
+先行发布的 [abd69e2方案](https://github.com/1137423918/PiContextLab/blob/abd69e28ee05773536b523def5008e90241b8369/docs/evaluation-v4-plan.md)执行23次真实请求：新业务报告3次、澄清2次、审计18次。完整上下文两个审计通过，native-read/native-search均未通过。日志中模型没有使用新增字段定位工具，反复分页消耗了额度；完整分析见 [验证](validation.md)。
+
+研究关闭后，真实API入口和Runner默认改为 `upstream` 完整上下文，字段定位默认关闭。仍使用本项目派生core的无策略路径，业务口径、额度和持久化照常工作。需要研究预算策略时显式设置：
+
+```bash
+export METRICLAB_CONTEXT_POLICY=budgeted
+export METRICLAB_ARTIFACT_SEARCH=0  # 设为1另行开启字段定位
+```
+
+未知枚举值及在upstream模式单独启用字段定位会拒绝。模型配置、contextMode和artifactSearch绑定任务，旧任务不会静默切换配置。`--scripted-control`显式使用预算策略演示工程路径，不调用模型。当前37项控制包含完整上下文路径和显式预算恢复；没有为默认值调整追加付费模型请求。
+
+严格复现v4研究请检出原始abd69e2提交，使用冻结协议和全新输出目录；当前默认值已变，不能直接用当前入口重跑后声称复现原条件。既有23请求原结果保持关闭。

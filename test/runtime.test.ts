@@ -11,7 +11,7 @@ import { createAssistantMessageEventStream } from '@earendil-works/pi-ai';
 test('actual Pi runtime drives four tools, seals evidence, reuses tools and binds human review', async () => {
   const f = await fixture(); try {
     const job = f.store.create(f.dataset.id,'Compare October and November net sales by country.',8,1200,comparison);
-    await new Runner(f.store,f.warehouse,scriptedProvider(comparison)).run(job.id);
+    await new Runner(f.store,f.warehouse,scriptedProvider(comparison),undefined,90000,65536,'budgeted').run(job.id);
     assert.equal(f.store.job(job.id).status,'completed'); assert.equal(f.store.calls(job.id).length,4); const report=f.store.report(job.id); assert.ok(report); assert.equal(report.evidence.length,2); assert.equal(f.store.reviewFor(report.id),null);
     assert.throws(()=>f.store.review(job.id,'wrong','accepted','Human check complete'),/version/); f.store.review(job.id,report.id,'accepted','TEST FIXTURE review, not a real human approval'); assert.ok(f.store.reviewFor(report.id));
     assert.equal(f.store.events(job.id).filter(e=>(e as {kind:string}).kind==='tool_committed').length,4);
@@ -27,7 +27,7 @@ test('unknown pending request stays charged across connections; stale owner fenc
 });
 test('restart reconciles committed assistant tools through Pi with cached results, without an extra provider request',async()=>{
   const f=await fixture();try{
-    const job=f.store.create(f.dataset.id,'Recover assistant batch',8,1200,comparison);const c=f.store.claim(job.id);const runner=new Runner(f.store,f.warehouse,scriptedProvider(comparison));
+    const job=f.store.create(f.dataset.id,'Recover assistant batch',8,1200,comparison);const c=f.store.claim(job.id);const runner=new Runner(f.store,f.warehouse,scriptedProvider(comparison),undefined,90000,65536,'budgeted');
     const tools=runner.tools(c);const compareTool=tools.find(t=>t.name==='compare_metric');assert.ok(compareTool);
     const assistant=message(runner.model,[{type:'toolCall',id:'recovered-compare',name:'compare_metric',arguments:comparison}], 'toolUse');
     f.store.messages(c,[{role:'user',content:job.question,timestamp:Date.now()},assistant]);
@@ -36,7 +36,7 @@ test('restart reconciles committed assistant tools through Pi with cached result
     const e=await f.warehouse.compare(f.dataset.id,comparison);const output={content:[{type:'text',text:JSON.stringify({id:e.id,result:e.result})}],details:{id:e.id}};
     f.store.commitTool(c,'recovered-compare',{name:'compare_metric',input:comparison},output,e);
     f.store.db.prepare('UPDATE jobs SET lease=0 WHERE id=?').run(job.id);
-    let requests=0;const recovery=new Runner(f.store,f.warehouse,(model,context)=>{requests++;const ids=context.messages.filter(m=>m.role==='toolResult').flatMap(m=>{const text=m.content.find(c=>c.type==='text');const d=JSON.parse(text?.type==='text'?text.text:'{}') as {id?:string};return d.id?[d.id]:[]});return completedStream(message(model,[{type:'toolCall',id:'final',name:'submit_investigation',arguments:{title:'Recovered',evidence_ids:ids,interpretation:'Control',hypotheses:[]}}],'toolUse'));});
+    let requests=0;const recovery=new Runner(f.store,f.warehouse,(model,context)=>{requests++;const ids=context.messages.filter(m=>m.role==='toolResult').flatMap(m=>{const text=m.content.find(c=>c.type==='text');const d=JSON.parse(text?.type==='text'?text.text:'{}') as {id?:string};return d.id?[d.id]:[]});return completedStream(message(model,[{type:'toolCall',id:'final',name:'submit_investigation',arguments:{title:'Recovered',evidence_ids:ids,interpretation:'Control',hypotheses:[]}}],'toolUse'));},undefined,90000,65536,'budgeted');
     await recovery.run(job.id);assert.equal(f.store.job(job.id).status,'completed');assert.equal(requests,1);assert.equal(f.store.evidence(job.id).length,1);
     assert.equal(hash(f.store.report(job.id)?.evidence[0]?.request),hash(comparison));
   }finally{f.store.close();await rm(f.root,{recursive:true,force:true});}
@@ -61,4 +61,12 @@ test('an ambiguous user request cannot expose query/report tools or invent its o
 });
 test('a model cannot substitute different periods for an explicitly bound comparison',async()=>{
  const f=await fixture();try{const job=f.store.create(f.dataset.id,'Fixed periods',8,1200,comparison);const changed={...comparison,basis:'equal_days' as const,baseline:{start:'2011-10-02',end:'2011-10-03'},current:{start:'2011-11-02',end:'2011-11-03'}};await new Runner(f.store,f.warehouse,m=>completedStream(message(m,[{type:'toolCall',id:'changed',name:'compare_metric',arguments:changed}],'toolUse'))).run(job.id);assert.equal(f.store.job(job.id).status,'clarification');assert.equal(f.store.evidence(job.id).length,0);}finally{f.store.close();await rm(f.root,{recursive:true,force:true});}
+});
+test('full-context host path completes the same business workflow without experimental context transforms',async()=>{
+ const f=await fixture();try{
+  const job=f.store.create(f.dataset.id,'Ordinary full-context business control',8,1200,comparison);
+  const runner=new Runner(f.store,f.warehouse,scriptedProvider(comparison),undefined,90000,16384);assert.equal(runner.contextMode,'upstream');await runner.run(job.id);
+  assert.equal(f.store.job(job.id).status,'completed');assert.equal(f.store.calls(job.id).length,4);assert.equal(f.store.report(job.id)?.evidence.length,2);
+  assert.equal(f.store.events(job.id).filter(e=>(e as {kind:string}).kind==='context_prepared').length,0);
+ }finally{f.store.close();await rm(f.root,{recursive:true,force:true});}
 });

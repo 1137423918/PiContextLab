@@ -29,7 +29,7 @@ assert.equal(groups.size, oracle.countries.length);
 const store = new Store(join(output, 'home/jobs.sqlite'));
 try {
   const job = store.create(dataset.id,'Compare October and November 2011 net sales using full calendar months, explain country contribution.',8,1200,demoComparison);
-  await new Runner(store, warehouse, scriptedProvider(),undefined,90000,maxContextBytes).run(job.id); assert.equal(store.job(job.id).status,'completed'); const report = store.report(job.id); assert.ok(report);
+  await new Runner(store, warehouse, scriptedProvider(),undefined,90000,maxContextBytes,'budgeted').run(job.id); assert.equal(store.job(job.id).status,'completed'); const report = store.report(job.id); assert.ok(report);
   await writeFile(join(output,'demo-report.html'),exportReport(report,null));
   const result = { passed: true, validation: 'real dataset / deterministic independent arithmetic + scripted actual Pi runtime, not real model inference',max_context_bytes:maxContextBytes, dataset, metric_checks: checks.length * 2, country_groups_checked: groups.size, quality_checks: Object.keys(oracle.quality).length, job:store.job(job.id), calls:store.calls(job.id), report, checks, breakdown, GPU_used:false, model_calls:0 };
   await writeFile(join(output,'validation.json'),JSON.stringify(result,null,2)); console.log(JSON.stringify({passed:true,dataset:dataset.id,rows:dataset.rows,metric_checks:12,country_groups_checked:groups.size,scripted_Pi_provider_requests:store.calls(job.id).length,real_model_calls:0}));

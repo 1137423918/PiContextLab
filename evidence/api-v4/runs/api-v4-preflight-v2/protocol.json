@@ -1,0 +1,61 @@
+{
+  "controller_sha256": "005c616b8316c76d56e79474082a49030f663b82c87fb273b4aa78e78c78aac7",
+  "wrapper_sha256": "9d7e401497343f3f99034a897cdf50d88c59d1ef669494a601a2e9cc326f6ff0",
+  "cpu_admission_sha256": "62350c3401c5336ff873d429da29fb4397f114c016bb96a003d5a2b673029fe1",
+  "input_bundle_sha256": "7fee32ee4ac4fd30fa7471e05900ad9bb8567a38270155e178c12bd9a0a2fab6",
+  "phases": [
+    {
+      "name": "numeric-source-runtime-capability",
+      "argv": [
+        "NODE",
+        "-e",
+        "JSON.parse('9007199254740993',(_k,v,c)=>{if(c?.source!=='9007199254740993')throw Error('JSON.parse source unsupported');return v;});console.log('exact numeric source available')"
+      ]
+    },
+    {
+      "name": "build-native-fork",
+      "argv": [
+        "NODE",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "vendor/pi-agent-core/tsconfig.json"
+      ]
+    },
+    {
+      "name": "native-and-application-check",
+      "argv": [
+        "/tmp/agentlab-deeptutor-setup-stage92-02uddvuy/tools/node/bin/npm",
+        "run",
+        "check"
+      ]
+    },
+    {
+      "name": "build-application",
+      "argv": [
+        "NODE",
+        "node_modules/typescript/bin/tsc"
+      ]
+    },
+    {
+      "name": "framework-and-client-tests",
+      "argv": [
+        "NODE",
+        "--test",
+        "--test-concurrency=1",
+        "dist/test/framework.test.js",
+        "dist/test/business.test.js",
+        "dist/test/runtime.test.js",
+        "dist/test/api.test.js",
+        "dist/test/recovery.test.js",
+        "dist/test/integrity.test.js",
+        "dist/test/deepseek.test.js",
+        "dist/test/request-binding.test.js",
+        "dist/test/artifact-search.test.js",
+        "dist/test/audit-evaluation.test.js"
+      ],
+      "cap": 180
+    }
+  ],
+  "framework_install": true,
+  "purpose": "CPU-only preflight for frozen newv4study and6field grader. No model key forwarded, no API/GPU."
+}

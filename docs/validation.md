@@ -14,7 +14,7 @@
 
 ## 框架与 DeepSeek 的实际结果
 
-当前交付核心为 `1.6.0-contextlab.4`；三轮真实 API 研究均已关闭，不重试挑选更好的成绩。v3 在 v2 失败轨迹之后修复了批量 recall 中“一个错误路径丢掉全部有效字段”的行为，仅做工程回归，**尚无 v3/v4 真实 API 效果结论**。以下明确标出版本和不同问题，不能合并计算准确率。
+当前交付核心为 `1.6.0-contextlab.4`；四轮真实 API 研究均已关闭，不重试挑选更好的成绩。v3 在 v2 失败轨迹之后修复了批量 recall 中“一个错误路径丢掉全部有效字段”的行为，仅做工程回归，**v4 已得到负的任务效果结果，没有已证明的改善**。以下明确标出版本和不同问题，不能合并计算准确率。
 
 ### 工具选择：公开 ToolRet 子集
 
@@ -182,7 +182,7 @@ HTTP 503 用例使用真实 Pi OpenAI-compatible adapter 指向受控失败服�
 
 ## contextlab.4：数字原始字面与可选字段定位
 
-新增 JSON 字段定位工具，按需与读取工具一起纳入预算；核心默认关闭，验证客户端显式启用。它定位原始 pointer 和有界值预览，不执行代码、不额外调用模型。字段扫描和返回都有上限；没有匹配不能证明字段不存在。
+新增 JSON 字段定位工具，按需与读取工具一起纳入预算；核心默认关闭；v4研究时客户端显式启用，研究后的普通入口也默认关闭。它定位原始 pointer 和有界值预览，不执行代码、不额外调用模型。字段扫描和返回都有上限；没有匹配不能证明字段不存在。
 
 独立合成数值控制直接固定原始字符串与预期文本，再对冻结 contextlab.3 和新版工具读取：
 
@@ -204,7 +204,7 @@ HTTP 503 用例使用真实 Pi OpenAI-compatible adapter 指向受控失败服�
 | 最大搜索 payload JSON 字节 | 3,934 / 8,192 |
 | 结构扫描完整 | 8/8 |
 
-组合表示没有胜过简单基线，保持负结果；不修改该诊断或重复运行挑分数。实际有界覆盖最多取 20 项，与 Recall@10 不是相同指标。结构完整不等于语义检索完整或字符串全文索引。当前没有 v4 DeepSeek 效果研究，v1/v2 已关闭付费实验不重跑。
+组合表示没有胜过简单基线，保持负结果；不修改该诊断或重复运行挑分数。实际有界覆盖最多取 20 项，与 Recall@10 不是相同指标。结构完整不等于语义检索完整或字符串全文索引。随后完成了独立v4 DeepSeek研究，结果见后文；已有CPU诊断和v1/v2付费实验均不重跑。
 
 [冻结诊断方案](../examples/field-location-cpu-protocol.json) · [逐例定位及数值对照](../evidence/artifact-search/results.json) · [来源身份](../evidence/artifact-search/source-manifest.json)。[完整诊断输入](../evidence/artifact-search/inputs/)来自本项目自身的公开 MIT 源码提交及锁文件，只含规范化 API data 对象，不包含认证头或私有 helper 状态；输入字节已冻结，可直接按 SHA256 核验。
 
@@ -214,3 +214,30 @@ HTTP 503 用例使用真实 Pi OpenAI-compatible adapter 指向受控失败服�
 v4 最终服务器验证：**33 项测试、14 项浏览器检查通过**。完整 UCI 控制调查在 **16,384 字节的规范化上下文预算**下完成，独立核对 12 个指标值及 29 个国家分组；这里的 provider 是显式脚本控制，不是付费模型调用。旧请求绑定、两种真实 SIGKILL 和故障适配器控制仍通过。
 
 [33 项测试](../evidence/artifact-search/tests.tap) · [实际源码身份](../evidence/artifact-search/source-sha256.json) · [严格预算全数据核对](../evidence/uci-validation.json) · [浏览器检查](../evidence/browser-result.json) · [资源及失败记录](../evidence/artifact-search/runs/)。最终 owned 进程为零，本轮模型调用及 GPU 均为零。
+
+## v4 真实 DeepSeek 新报告对照
+
+[方案先行发布在abd69e2](https://github.com/1137423918/PiContextLab/blob/abd69e28ee05773536b523def5008e90241b8369/docs/evaluation-v4-plan.md)，实际执行源码逐文件与该提交核对一致。35项CPU预检通过后，按冻结协议执行一次，实际23次请求：业务5次、审计18次，上限33。全部执行已关闭，owned进程为零，不追加质量重试。
+
+新六月/七月gross_sales报告3次请求完成；新的中文模糊退货问题2次进入clarification，未写查询证据。报告通过指定比较期间、country Top5及证据哈希校验后才开始审计，没有使用旧报告。新报告金额为761,739.9000→719,221.1910 GBP；这里是确定性工具结果，不表示新期间已另做一套独立会计核对。
+
+六项溯源字段审计结果：
+
+| 条件 | 完整上下文：正确/请求/输入tokens | 原生回读：正确/请求/输入tokens | 原生回读＋字段定位：正确/请求/输入tokens |
+|---|---|---|---|
+| 新报告 | 是 / 1 / 5,116 | 否 / 4 / 11,585 | 否 / 4 / 12,402 |
+| 新报告后加六轮资料 | 是 / 1 / 6,891 | 否 / 4 / 14,587 | 否 / 4 / 14,832 |
+
+两种原生分支均0/2，完整上下文2/2。累计输入包括缓存与全部轮次：full12,007、read26,172、search27,234。这里full允许64KiB、原生限制16KiB，测试的是把大历史放入较小预算的代价，不能据此断言Pi原版在所有任务更强。两个条件共享一个报告与六个目标，也不是独立随机任务。
+
+模型在字段定位分支中**没有调用search_context_artifact**，两例仍只调用读取工具，共7次；read分支8次。四个原生条件中三个耗尽固定额度，另一例输出五个正确字段与`breakdown_result_sha256:null`，按预定完整性标准未通过。返回null与胡编校验和不同，但仍没有完成任务。
+
+原始工具记录显示，四个原生分支的第二页都包含目标校验和，随后仍重复分页。较旧的回读页在后续准备中再次被外置；这些行为共同出现，没有独立消融证明单一原因。批量读取共享limit使第一批`/evidence`实际返回4,069而非4,096个codepoints，有些后续offset产生27字符空隙；有一例使用重叠分页仍失败，空隙不是唯一解释。准备记录可能多于实际请求，额度拒绝也可发生在prepare之后；实际请求数以账本和wire记录为准。
+
+总估计费用约$0.0206，按冻结单价计算，**不是供应商账单**。prefix缓存与固定顺序影响费用，不能由这个小样本外推成本倍数。旧v1/v2和本次的字段、报告、工具基线设置不同，不画版本成功率提升曲线。
+
+[业务原记录](../evidence/api-v4/native-runtime.json) · [审计原记录](../evidence/api-v4/context-ablation.json) · [完整消息与请求绑定](../evidence/api-v4/audit-transcripts.json) · [逐例汇总](../evidence/api-v4/summary.json) · [离线分析](../evidence/api-v4/analysis.json) · [冻结源码身份](../evidence/api-v4/source-sha256.json) · [真实未审核报告](../examples/deepseek-v4-gross-sales-report.html)。
+
+研究结束后，CLI、真实API入口及Runner默认改为完整上下文；预算策略与字段定位需显式开启。没有为这个默认值调整追加模型请求，也没有修改原研究的分数或源文件。发布控制为**37项Node测试＋14项浏览器检查**，另通过显式budgeted模式下16KiB的全量数据控制；完整上下文业务路径和显式预算恢复都覆盖。
+
+[37项发布测试](../evidence/api-v4/release-tests.tap) · [发布源码身份](../evidence/api-v4/release-source-sha256.json) · [35项运行前检查](../evidence/api-v4/preflight-tests.tap) · [阶段和资源](../evidence/api-v4/runs/)。实验前的首次类型检查在发送模型请求前失败，修正输出目录的类型收窄后通过并先行提交；[失败日志](../evidence/api-v4/initial-typecheck-failure.log)保留。

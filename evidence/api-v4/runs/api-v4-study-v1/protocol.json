@@ -1,0 +1,66 @@
+{
+  "controller_sha256": "005c616b8316c76d56e79474082a49030f663b82c87fb273b4aa78e78c78aac7",
+  "wrapper_sha256": "9d7e401497343f3f99034a897cdf50d88c59d1ef669494a601a2e9cc326f6ff0",
+  "cpu_admission_sha256": "62350c3401c5336ff873d429da29fb4397f114c016bb96a003d5a2b673029fe1",
+  "input_bundle_sha256": "7fda422ac27f75ab90a37176544536e30feb88e5c49b48813c4e9351dddea9b9",
+  "phases": [
+    {
+      "name": "build-native-fork",
+      "argv": [
+        "NODE",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "vendor/pi-agent-core/tsconfig.json"
+      ]
+    },
+    {
+      "name": "native-and-application-check",
+      "argv": [
+        "/tmp/agentlab-deeptutor-setup-stage92-02uddvuy/tools/node/bin/npm",
+        "run",
+        "check"
+      ]
+    },
+    {
+      "name": "build-application",
+      "argv": [
+        "NODE",
+        "node_modules/typescript/bin/tsc"
+      ]
+    },
+    {
+      "name": "deepseek-runtime-validation",
+      "argv": [
+        "/data1/wjz26/agent-lab-20261120/envs/model-request-budget-20261121/bin/python",
+        "scripts/run_api_studies_v4.py",
+        "--node",
+        "/tmp/agentlab-deeptutor-setup-stage92-02uddvuy/tools/node/bin/node",
+        "--dataset-root",
+        "/tmp/pimetriclab-build-stage98-whosstp1/source/validation-final/home/datasets",
+        "--output",
+        "api-studies-v4"
+      ],
+      "cap": 720
+    }
+  ],
+  "framework_install": true,
+  "purpose": "Once-only prospective v4 DeepSeek diagnostic, preregistered commit abd69e28ee05773536b523def5008e90241b8369;35CPUtests already passed on matching source. New JuneJulygross report,6provenancefields,2casesx3variants. Closed oldstudies stay closed.",
+  "provider": "deepseek",
+  "environment": {
+    "METRICLAB_MODEL_URL": "https://api.deepseek.com",
+    "METRICLAB_MODEL_ID": "deepseek-flash",
+    "METRICLAB_CONTEXT_WINDOW": "1048576",
+    "METRICLAB_REQUEST_TIMEOUT_MS": "90000",
+    "METRICLAB_MAX_CONTEXT_BYTES": "16384",
+    "METRICLAB_MODEL_PROTOCOL": "examples/native-v4-protocol.json",
+    "METRICLAB_AUDIT_SOURCE_COMMIT": "abd69e28ee05773536b523def5008e90241b8369"
+  },
+  "limits": {
+    "native_max_requests": 9,
+    "audit_max_requests": 24,
+    "output_token_ceiling": 26112,
+    "GPU": 0,
+    "no_local_model_deployment": true,
+    "no_automatic_paid_retry": true
+  }
+}

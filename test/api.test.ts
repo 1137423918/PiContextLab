@@ -6,7 +6,7 @@ import { Runner } from '../src/runtime.js';
 import { scriptedProvider } from '../src/demo.js';
 import { comparison, fixture } from './fixtures.js';
 test('HTTP workflow, strict request validation, origin guard, durable reload, report export and review binding',async()=>{
-  const f=await fixture();const runner=new Runner(f.store,f.warehouse,scriptedProvider(comparison));const server=app(f.store,f.warehouse,runner,'scripted-control');
+  const f=await fixture();const runner=new Runner(f.store,f.warehouse,scriptedProvider(comparison),undefined,90000,65536,'budgeted');const server=app(f.store,f.warehouse,runner,'scripted-control');
   await new Promise<void>(resolve=>server.listen(0,'127.0.0.1',resolve));const port=(server.address() as {port:number}).port;const url=`http://127.0.0.1:${port}`;
   const post=(path:string,value:unknown,origin=url)=>fetch(url+path,{method:'POST',headers:{'Content-Type':'application/json',Origin:origin},body:JSON.stringify(value)});
   try {

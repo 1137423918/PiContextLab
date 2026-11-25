@@ -17,7 +17,7 @@ for (const point of ['assistant','tool']) test(`SIGKILL after durable ${point} b
     assert.equal(f.store.calls(job.id).length,2);assert.equal(f.store.evidence(job.id).length,point==='tool'?1:0);
     // Production recovery waits for the 15-second lease; the test deterministically expires the dead owner's lease.
     f.store.db.prepare('UPDATE jobs SET lease=0 WHERE id=?').run(job.id);
-    await new Runner(f.store,f.warehouse,scriptedProvider(comparison)).run(job.id);
+    await new Runner(f.store,f.warehouse,scriptedProvider(comparison),undefined,90000,65536,'budgeted').run(job.id);
     assert.equal(f.store.job(job.id).status,'completed');assert.equal(f.store.calls(job.id).length,4);assert.equal(f.store.evidence(job.id).length,2);
     assert.equal(f.store.events(job.id).filter(e=>(e as {kind:string}).kind==='tool_committed').length,4);
   }finally{f.store.close();await rm(f.root,{recursive:true,force:true});}

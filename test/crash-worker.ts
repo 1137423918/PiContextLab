@@ -18,4 +18,4 @@ class CrashStore extends Store {
   }
 }
 const store = new CrashStore(join(root,'jobs.sqlite'));
-await new Runner(store,new Warehouse(join(root,'datasets')),scriptedProvider(comparison)).run(id);store.close();
+await new Runner(store,new Warehouse(join(root,'datasets')),scriptedProvider(comparison),undefined,90000,65536,'budgeted').run(id);store.close();

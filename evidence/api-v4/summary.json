@@ -1,0 +1,79 @@
+{
+  "finished": true,
+  "complete": true,
+  "source_commit": "abd69e28ee05773536b523def5008e90241b8369",
+  "provider": "official DeepSeek API",
+  "local_model_deployment": false,
+  "GPU_used": false,
+  "total_requests": 23,
+  "native_cases": [
+    {
+      "case": "gross-sales-country-june-july",
+      "status": "completed",
+      "requests": 3,
+      "report": true
+    },
+    {
+      "case": "returns-high-ambiguous",
+      "status": "clarification",
+      "requests": 2,
+      "report": false
+    }
+  ],
+  "ablation": [
+    {
+      "case": "gross-provenance",
+      "variant": "upstream-full",
+      "passed": true,
+      "requests": 1,
+      "input_tokens": 5116,
+      "estimated_cost_usd": 0.0016524,
+      "error": null
+    },
+    {
+      "case": "gross-provenance",
+      "variant": "native-read",
+      "passed": false,
+      "requests": 4,
+      "input_tokens": 11585,
+      "estimated_cost_usd": 0.003640284,
+      "error": "Fixed model request budget exhausted; unknown attempts remain charged"
+    },
+    {
+      "case": "gross-provenance",
+      "variant": "native-search",
+      "passed": false,
+      "requests": 4,
+      "input_tokens": 12402,
+      "estimated_cost_usd": 0.003546696,
+      "error": "Fixed model request budget exhausted; unknown attempts remain charged"
+    },
+    {
+      "case": "gross-provenance-after-reference",
+      "variant": "native-search",
+      "passed": false,
+      "requests": 4,
+      "input_tokens": 14832,
+      "estimated_cost_usd": 0.004174464,
+      "error": "Exact six-field answer mismatch"
+    },
+    {
+      "case": "gross-provenance-after-reference",
+      "variant": "native-read",
+      "passed": false,
+      "requests": 4,
+      "input_tokens": 14587,
+      "estimated_cost_usd": 0.0043150919999999995,
+      "error": "Fixed model request budget exhausted; unknown attempts remain charged"
+    },
+    {
+      "case": "gross-provenance-after-reference",
+      "variant": "upstream-full",
+      "passed": true,
+      "requests": 1,
+      "input_tokens": 6891,
+      "estimated_cost_usd": 0.000717252,
+      "error": null
+    }
+  ]
+}

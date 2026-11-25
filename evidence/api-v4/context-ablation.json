@@ -1,0 +1,1457 @@
+{
+  "study": "V4: new gross-sales provenance audit, full vs native-read vs native-search;2cases, not an accuracy benchmark",
+  "terminal": true,
+  "complete": true,
+  "stopped": false,
+  "source_commit": "abd69e28ee05773536b523def5008e90241b8369",
+  "protocol_sha256": "d605af35c71a1d4e17a9f28539abb08c5382410239d42ae766b1133cbb49c908",
+  "source_sha256": "4d25f389d0089c52f165ddef31fade07afacd96fa2ab12c63b5fd7a9244673cf",
+  "model": {
+    "id": "deepseek-flash",
+    "name": "Configured OpenAI-compatible model",
+    "api": "openai-completions",
+    "provider": "deepseek",
+    "baseUrl": "https://api.deepseek.com",
+    "reasoning": false,
+    "input": [
+      "text"
+    ],
+    "cost": {
+      "input": 0.3,
+      "output": 1.2,
+      "cacheRead": 0.006,
+      "cacheWrite": 0.3
+    },
+    "contextWindow": 1048576,
+    "maxTokens": 1200
+  },
+  "total_requests": 18,
+  "GPU_used": false,
+  "local_model_deployment": false,
+  "results": [
+    {
+      "case": "gross-provenance",
+      "variant": "upstream-full",
+      "shared_input_sha256": "2778d2fabc56bddde236e15f53ef398ff1add47ecc16e810d760b462e125d213",
+      "expected": {
+        "dataset_id": "ds_1f8144bb8670bcad07cde082",
+        "metric": "gross_sales",
+        "dimension": "country",
+        "baseline_start": "2011-06-01",
+        "current_end": "2011-08-01",
+        "breakdown_result_sha256": "463294ed0cbe5301c28a1a8e9a40353315cb918ae8ce6726b530864edf2f15a4"
+      },
+      "answer": {
+        "dataset_id": "ds_1f8144bb8670bcad07cde082",
+        "metric": "gross_sales",
+        "dimension": "country",
+        "baseline_start": "2011-06-01",
+        "current_end": "2011-08-01",
+        "breakdown_result_sha256": "463294ed0cbe5301c28a1a8e9a40353315cb918ae8ce6726b530864edf2f15a4"
+      },
+      "passed": true,
+      "error": null,
+      "requests": 1,
+      "input_tokens": 5116,
+      "output_tokens": 98,
+      "estimated_cost_usd": 0.0016524,
+      "wall_seconds": 0.8827822479999999,
+      "calls": [
+        {
+          "id": "8584a587-1598-41e4-8234-17db61f478d0",
+          "status": "done",
+          "stop": "stop",
+          "error": null,
+          "usage": {
+            "input": 5116,
+            "output": 98,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 5214,
+            "cost": {
+              "input": 0.0015348,
+              "output": 0.0001176,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0.0016524,
+              "totalFromProvider": false
+            }
+          }
+        }
+      ],
+      "wire": [
+        {
+          "bytes": 20111,
+          "sha256": "45e6e395895b4ac3782199c045f06e2e4ec68791812dffef19b3f68df19a63f0"
+        }
+      ],
+      "traces": [],
+      "new_tool_calls": []
+    },
+    {
+      "case": "gross-provenance",
+      "variant": "native-read",
+      "shared_input_sha256": "2778d2fabc56bddde236e15f53ef398ff1add47ecc16e810d760b462e125d213",
+      "expected": {
+        "dataset_id": "ds_1f8144bb8670bcad07cde082",
+        "metric": "gross_sales",
+        "dimension": "country",
+        "baseline_start": "2011-06-01",
+        "current_end": "2011-08-01",
+        "breakdown_result_sha256": "463294ed0cbe5301c28a1a8e9a40353315cb918ae8ce6726b530864edf2f15a4"
+      },
+      "answer": null,
+      "passed": false,
+      "error": "Fixed model request budget exhausted; unknown attempts remain charged",
+      "requests": 4,
+      "input_tokens": 11585,
+      "output_tokens": 545,
+      "estimated_cost_usd": 0.003640284,
+      "wall_seconds": 4.205926931,
+      "calls": [
+        {
+          "id": "d629d045-38f5-485c-900e-bd162eb27c00",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 2972,
+            "output": 138,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 3110,
+            "cost": {
+              "input": 0.0008916,
+              "output": 0.0001656,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0.0010572,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "be068787-7537-4351-b582-b832cba0ff79",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 2512,
+            "output": 136,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 2648,
+            "cost": {
+              "input": 0.0007536,
+              "output": 0.00016319999999999998,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0.0009168,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "7de0bcd9-fadf-4210-88b9-69c3e95c4db3",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 2181,
+            "output": 135,
+            "cacheRead": 640,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 2956,
+            "cost": {
+              "input": 0.0006543,
+              "output": 0.00016199999999999998,
+              "cacheRead": 0.00000384,
+              "cacheWrite": 0,
+              "total": 0.00082014,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "e7872071-f585-43fe-a241-4fa3dd5d66d8",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 2256,
+            "output": 136,
+            "cacheRead": 1024,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 3416,
+            "cost": {
+              "input": 0.0006768,
+              "output": 0.00016319999999999998,
+              "cacheRead": 0.000006144,
+              "cacheWrite": 0,
+              "total": 0.000846144,
+              "totalFromProvider": false
+            }
+          }
+        }
+      ],
+      "wire": [
+        {
+          "bytes": 11056,
+          "sha256": "f43880b92910c27dd38ddee3cccf86606f906039233b3f1af27d625952b70e78"
+        },
+        {
+          "bytes": 8399,
+          "sha256": "41f354bce85f59b247aa9f0b4e66dbc72162c182c192d65b045d4eb5ef7e27d8"
+        },
+        {
+          "bytes": 9502,
+          "sha256": "7ba89f1fa134868c6ebfff7dd3be5c41235b1e6bc47cf8c86f3bc8e3d6165e7f"
+        },
+        {
+          "bytes": 10694,
+          "sha256": "4c0a7583e53555f7867a76cdd511e76349338c18765d90edb0c16f346ff145e3"
+        }
+      ],
+      "traces": [
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 1,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact"
+          ],
+          "schemaBytes": 895,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 4.572090080037231,
+              "schemaBytes": 895
+            }
+          ],
+          "beforeBytes": 23259,
+          "afterBytes": 12733,
+          "spilledResults": [
+            "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63"
+          ],
+          "archivedTurns": [],
+          "retainedHistoryTurns": 1
+        },
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 2,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact"
+          ],
+          "schemaBytes": 895,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 4.572090080037231,
+              "schemaBytes": 895
+            }
+          ],
+          "beforeBytes": 34946,
+          "afterBytes": 8829,
+          "spilledResults": [
+            "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_6f71ec201c978166a545decdd317eb6bec723da392526f6ef165e02c13e6ce0d"
+          ],
+          "retainedHistoryTurns": 0,
+          "indexArtifact": "ctx_history-index_c4a8d4db679d96c4195cc283d9479d4cf00a0190f23271cbef56b2502e5e34f0"
+        },
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 3,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact"
+          ],
+          "schemaBytes": 895,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 4.572090080037231,
+              "schemaBytes": 895
+            }
+          ],
+          "beforeBytes": 45867,
+          "afterBytes": 10482,
+          "spilledResults": [
+            "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "ctx_tool-result_b171ac231ed60998f33a700817d95048a42beb43994783172a418b6a95eccf70"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_6f71ec201c978166a545decdd317eb6bec723da392526f6ef165e02c13e6ce0d"
+          ],
+          "retainedHistoryTurns": 0,
+          "indexArtifact": "ctx_history-index_c4a8d4db679d96c4195cc283d9479d4cf00a0190f23271cbef56b2502e5e34f0"
+        },
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 4,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact"
+          ],
+          "schemaBytes": 895,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 4.572090080037231,
+              "schemaBytes": 895
+            }
+          ],
+          "beforeBytes": 57131,
+          "afterBytes": 12236,
+          "spilledResults": [
+            "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "ctx_tool-result_b171ac231ed60998f33a700817d95048a42beb43994783172a418b6a95eccf70",
+            "ctx_tool-result_bd0d63f8e5581aba42c81925aaabbdebd4f213f22928296330be0bd91909799a"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_6f71ec201c978166a545decdd317eb6bec723da392526f6ef165e02c13e6ce0d"
+          ],
+          "retainedHistoryTurns": 0,
+          "indexArtifact": "ctx_history-index_c4a8d4db679d96c4195cc283d9479d4cf00a0190f23271cbef56b2502e5e34f0"
+        },
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 5,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact"
+          ],
+          "schemaBytes": 895,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 4.572090080037231,
+              "schemaBytes": 895
+            }
+          ],
+          "beforeBytes": 68067,
+          "afterBytes": 14144,
+          "spilledResults": [
+            "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "ctx_tool-result_b171ac231ed60998f33a700817d95048a42beb43994783172a418b6a95eccf70",
+            "ctx_tool-result_bd0d63f8e5581aba42c81925aaabbdebd4f213f22928296330be0bd91909799a",
+            "ctx_tool-result_b55ba18dff697af619df89be8c2f50ebb2def435115f911592fdde5990d98b9a"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_6f71ec201c978166a545decdd317eb6bec723da392526f6ef165e02c13e6ce0d"
+          ],
+          "retainedHistoryTurns": 0,
+          "indexArtifact": "ctx_history-index_c4a8d4db679d96c4195cc283d9479d4cf00a0190f23271cbef56b2502e5e34f0"
+        }
+      ],
+      "new_tool_calls": [
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "json_pointers": [
+              "/dataset",
+              "/evidence"
+            ],
+            "offset": 0,
+            "limit": 4096
+          }
+        },
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "json_pointers": [
+              "/evidence"
+            ],
+            "offset": 4000,
+            "limit": 3400
+          }
+        },
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "json_pointers": [
+              "/evidence"
+            ],
+            "offset": 0,
+            "limit": 4000
+          }
+        },
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "json_pointers": [
+              "/evidence"
+            ],
+            "offset": 4000,
+            "limit": 3400
+          }
+        }
+      ]
+    },
+    {
+      "case": "gross-provenance",
+      "variant": "native-search",
+      "shared_input_sha256": "2778d2fabc56bddde236e15f53ef398ff1add47ecc16e810d760b462e125d213",
+      "expected": {
+        "dataset_id": "ds_1f8144bb8670bcad07cde082",
+        "metric": "gross_sales",
+        "dimension": "country",
+        "baseline_start": "2011-06-01",
+        "current_end": "2011-08-01",
+        "breakdown_result_sha256": "463294ed0cbe5301c28a1a8e9a40353315cb918ae8ce6726b530864edf2f15a4"
+      },
+      "answer": null,
+      "passed": false,
+      "error": "Fixed model request budget exhausted; unknown attempts remain charged",
+      "requests": 4,
+      "input_tokens": 12402,
+      "output_tokens": 545,
+      "estimated_cost_usd": 0.003546696,
+      "wall_seconds": 4.848032052999999,
+      "calls": [
+        {
+          "id": "9f27d2e6-64e8-4b25-9927-84bc8c3fb065",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 2920,
+            "output": 138,
+            "cacheRead": 256,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 3314,
+            "cost": {
+              "input": 0.0008759999999999999,
+              "output": 0.0001656,
+              "cacheRead": 0.000001536,
+              "cacheWrite": 0,
+              "total": 0.0010431359999999998,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "fd94a29d-ad1c-4317-8749-9061adcda500",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 2314,
+            "output": 136,
+            "cacheRead": 384,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 2834,
+            "cost": {
+              "input": 0.0006942,
+              "output": 0.00016319999999999998,
+              "cacheRead": 0.000002304,
+              "cacheWrite": 0,
+              "total": 0.0008597039999999999,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "a140dc50-5fd0-4e96-ad85-a01683d069ac",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 2089,
+            "output": 135,
+            "cacheRead": 896,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 3120,
+            "cost": {
+              "input": 0.0006267,
+              "output": 0.00016199999999999998,
+              "cacheRead": 0.000005376,
+              "cacheWrite": 0,
+              "total": 0.000794076,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "0d0e309f-a152-4c45-b25a-943a9f65aca0",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 2263,
+            "output": 136,
+            "cacheRead": 1280,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 3679,
+            "cost": {
+              "input": 0.0006789,
+              "output": 0.00016319999999999998,
+              "cacheRead": 0.00000768,
+              "cacheWrite": 0,
+              "total": 0.00084978,
+              "totalFromProvider": false
+            }
+          }
+        }
+      ],
+      "wire": [
+        {
+          "bytes": 11930,
+          "sha256": "32c8fb1cca0f4080ac04bf55d4cad175a26e4d3550c59442d183e6a2bd218bf8"
+        },
+        {
+          "bytes": 9178,
+          "sha256": "c9f671ace4a8a868dc7931cad07b188ed55457786d1b1dad1bd0324133579c19"
+        },
+        {
+          "bytes": 10226,
+          "sha256": "f76f1e3f68fd5d9d2d7305693f8d3e31fb5d3cc0c5ec9e7918f5838faffeb830"
+        },
+        {
+          "bytes": 11813,
+          "sha256": "474a8f52c86a337c4e774869c7dda2774264a7edac268090f150d6959a6e787c"
+        }
+      ],
+      "traces": [
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 1,
+          "registeredTools": 3,
+          "selectedToolNames": [
+            "read_context_artifact",
+            "search_context_artifact"
+          ],
+          "schemaBytes": 1642,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 6.500677196292427,
+              "schemaBytes": 895
+            },
+            {
+              "name": "search_context_artifact",
+              "score": 3.588506832414626,
+              "schemaBytes": 747
+            }
+          ],
+          "beforeBytes": 24007,
+          "afterBytes": 13576,
+          "spilledResults": [
+            "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63"
+          ],
+          "archivedTurns": [],
+          "retainedHistoryTurns": 1
+        },
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 2,
+          "registeredTools": 3,
+          "selectedToolNames": [
+            "read_context_artifact",
+            "search_context_artifact"
+          ],
+          "schemaBytes": 1642,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 6.500677196292427,
+              "schemaBytes": 895
+            },
+            {
+              "name": "search_context_artifact",
+              "score": 3.588506832414626,
+              "schemaBytes": 747
+            }
+          ],
+          "beforeBytes": 35731,
+          "afterBytes": 9614,
+          "spilledResults": [
+            "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_6f71ec201c978166a545decdd317eb6bec723da392526f6ef165e02c13e6ce0d"
+          ],
+          "retainedHistoryTurns": 0,
+          "indexArtifact": "ctx_history-index_c4a8d4db679d96c4195cc283d9479d4cf00a0190f23271cbef56b2502e5e34f0"
+        },
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 3,
+          "registeredTools": 3,
+          "selectedToolNames": [
+            "read_context_artifact",
+            "search_context_artifact"
+          ],
+          "schemaBytes": 1642,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 6.500677196292427,
+              "schemaBytes": 895
+            },
+            {
+              "name": "search_context_artifact",
+              "score": 3.588506832414626,
+              "schemaBytes": 747
+            }
+          ],
+          "beforeBytes": 46412,
+          "afterBytes": 11236,
+          "spilledResults": [
+            "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "ctx_tool-result_b171ac231ed60998f33a700817d95048a42beb43994783172a418b6a95eccf70"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_6f71ec201c978166a545decdd317eb6bec723da392526f6ef165e02c13e6ce0d"
+          ],
+          "retainedHistoryTurns": 0,
+          "indexArtifact": "ctx_history-index_c4a8d4db679d96c4195cc283d9479d4cf00a0190f23271cbef56b2502e5e34f0"
+        },
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 4,
+          "registeredTools": 3,
+          "selectedToolNames": [
+            "read_context_artifact",
+            "search_context_artifact"
+          ],
+          "schemaBytes": 1642,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 6.500677196292427,
+              "schemaBytes": 895
+            },
+            {
+              "name": "search_context_artifact",
+              "score": 3.588506832414626,
+              "schemaBytes": 747
+            }
+          ],
+          "beforeBytes": 57942,
+          "afterBytes": 13387,
+          "spilledResults": [
+            "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "ctx_tool-result_b171ac231ed60998f33a700817d95048a42beb43994783172a418b6a95eccf70",
+            "ctx_tool-result_fd35492ec98982f477c01e43e81f863baa51ecc7618cb47925fc6b72713e28eb"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_6f71ec201c978166a545decdd317eb6bec723da392526f6ef165e02c13e6ce0d"
+          ],
+          "retainedHistoryTurns": 0,
+          "indexArtifact": "ctx_history-index_c4a8d4db679d96c4195cc283d9479d4cf00a0190f23271cbef56b2502e5e34f0"
+        },
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 5,
+          "registeredTools": 3,
+          "selectedToolNames": [
+            "read_context_artifact",
+            "search_context_artifact"
+          ],
+          "schemaBytes": 1642,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 6.500677196292427,
+              "schemaBytes": 895
+            },
+            {
+              "name": "search_context_artifact",
+              "score": 3.588506832414626,
+              "schemaBytes": 747
+            }
+          ],
+          "beforeBytes": 68611,
+          "afterBytes": 15087,
+          "spilledResults": [
+            "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "ctx_tool-result_b171ac231ed60998f33a700817d95048a42beb43994783172a418b6a95eccf70",
+            "ctx_tool-result_fd35492ec98982f477c01e43e81f863baa51ecc7618cb47925fc6b72713e28eb",
+            "ctx_tool-result_15cd5d0336b533245851321bb017378ac0518fa86859a9555dc36e5b1f7267f2"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_6f71ec201c978166a545decdd317eb6bec723da392526f6ef165e02c13e6ce0d"
+          ],
+          "retainedHistoryTurns": 0,
+          "indexArtifact": "ctx_history-index_c4a8d4db679d96c4195cc283d9479d4cf00a0190f23271cbef56b2502e5e34f0"
+        }
+      ],
+      "new_tool_calls": [
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "json_pointers": [
+              "/dataset",
+              "/evidence"
+            ],
+            "offset": 0,
+            "limit": 4096
+          }
+        },
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "json_pointers": [
+              "/evidence"
+            ],
+            "offset": 4096,
+            "limit": 4096
+          }
+        },
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "json_pointers": [
+              "/evidence"
+            ],
+            "offset": 0,
+            "limit": 4096
+          }
+        },
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "json_pointers": [
+              "/evidence"
+            ],
+            "offset": 4096,
+            "limit": 3300
+          }
+        }
+      ]
+    },
+    {
+      "case": "gross-provenance-after-reference",
+      "variant": "native-search",
+      "shared_input_sha256": "a54be613445d9b855700f45a1672a2914a48cf850901b26f018cefec22a971e4",
+      "expected": {
+        "dataset_id": "ds_1f8144bb8670bcad07cde082",
+        "metric": "gross_sales",
+        "dimension": "country",
+        "baseline_start": "2011-06-01",
+        "current_end": "2011-08-01",
+        "breakdown_result_sha256": "463294ed0cbe5301c28a1a8e9a40353315cb918ae8ce6726b530864edf2f15a4"
+      },
+      "answer": {
+        "dataset_id": "ds_1f8144bb8670bcad07cde082",
+        "metric": "gross_sales",
+        "dimension": "country",
+        "baseline_start": "2011-06-01",
+        "current_end": "2011-08-01",
+        "breakdown_result_sha256": null
+      },
+      "passed": false,
+      "error": "Exact six-field answer mismatch",
+      "requests": 4,
+      "input_tokens": 14832,
+      "output_tokens": 492,
+      "estimated_cost_usd": 0.004174464,
+      "wall_seconds": 4.186668486999999,
+      "calls": [
+        {
+          "id": "e676a271-4bce-4469-8219-3d4168460628",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 3589,
+            "output": 149,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 3738,
+            "cost": {
+              "input": 0.0010766999999999999,
+              "output": 0.00017879999999999998,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0.0012554999999999999,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "3113371b-8e0a-4dc3-bf41-e9958d8f61b5",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 2919,
+            "output": 136,
+            "cacheRead": 640,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 3695,
+            "cost": {
+              "input": 0.0008757,
+              "output": 0.00016319999999999998,
+              "cacheRead": 0.00000384,
+              "cacheWrite": 0,
+              "total": 0.00104274,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "ef625d9c-76fa-4112-8802-9214f6137e95",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 2182,
+            "output": 135,
+            "cacheRead": 1664,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 3981,
+            "cost": {
+              "input": 0.0006546,
+              "output": 0.00016199999999999998,
+              "cacheRead": 0.000009984,
+              "cacheWrite": 0,
+              "total": 0.000826584,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "dcc1a8d8-a265-4b94-a75c-1ae424128d16",
+          "status": "done",
+          "stop": "stop",
+          "error": null,
+          "usage": {
+            "input": 3198,
+            "output": 72,
+            "cacheRead": 640,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 3910,
+            "cost": {
+              "input": 0.0009594,
+              "output": 0.0000864,
+              "cacheRead": 0.00000384,
+              "cacheWrite": 0,
+              "total": 0.00104964,
+              "totalFromProvider": false
+            }
+          }
+        }
+      ],
+      "wire": [
+        {
+          "bytes": 13671,
+          "sha256": "4a73db0901972e273b0a7ea4807694420eabb4a2fec59146d69eb7e41820f284"
+        },
+        {
+          "bytes": 13344,
+          "sha256": "9a36098ffc45e5d59d2e326ab594fe9078d88a4d6e6092b133e9a1852493d9ac"
+        },
+        {
+          "bytes": 14392,
+          "sha256": "b9922c921c657935f17322e99844054088f75bd4f92dc5eacf60460a5318cbf4"
+        },
+        {
+          "bytes": 13216,
+          "sha256": "a6781113338fd5257ca1031b9061f85f82252d3c42cb894940d02ba41f3dbeb3"
+        }
+      ],
+      "traces": [
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 1,
+          "registeredTools": 3,
+          "selectedToolNames": [
+            "read_context_artifact",
+            "search_context_artifact"
+          ],
+          "schemaBytes": 1642,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 6.500677196292427,
+              "schemaBytes": 895
+            },
+            {
+              "name": "search_context_artifact",
+              "score": 3.588506832414626,
+              "schemaBytes": 747
+            }
+          ],
+          "beforeBytes": 34150,
+          "afterBytes": 15650,
+          "spilledResults": [
+            "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_61a42482ca96a7e0022a197efa465574df6012c8ff7353578dc97013363aab02",
+            "ctx_history-turn_a930713a5fbebb7f9de9d6058aaec9ce3bd1177ed3e03312e9f0e35a2625bbbe",
+            "ctx_history-turn_11d471f9b70ac72650aaf63e537d42d7cbb792a63167a0949da03b1128896c13",
+            "ctx_history-turn_c323452b1e9878a814e080fc871badab2ba155e2297189c57e941523801c6b56",
+            "ctx_history-turn_0833310f4ed9018ed3650f77ee4daf43ef7d3e5358456975d3f6a1ebc91ae206"
+          ],
+          "retainedHistoryTurns": 2,
+          "indexArtifact": "ctx_history-index_8b036ef707d229f5fc4acb8a12c2c7f8bbb19a3e90c8a14e67765a4f81e39d3b"
+        },
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 2,
+          "registeredTools": 3,
+          "selectedToolNames": [
+            "read_context_artifact",
+            "search_context_artifact"
+          ],
+          "schemaBytes": 1642,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 6.500677196292427,
+              "schemaBytes": 895
+            },
+            {
+              "name": "search_context_artifact",
+              "score": 3.588506832414626,
+              "schemaBytes": 747
+            }
+          ],
+          "beforeBytes": 45961,
+          "afterBytes": 14696,
+          "spilledResults": [
+            "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_6f71ec201c978166a545decdd317eb6bec723da392526f6ef165e02c13e6ce0d",
+            "ctx_history-turn_61a42482ca96a7e0022a197efa465574df6012c8ff7353578dc97013363aab02",
+            "ctx_history-turn_a930713a5fbebb7f9de9d6058aaec9ce3bd1177ed3e03312e9f0e35a2625bbbe",
+            "ctx_history-turn_11d471f9b70ac72650aaf63e537d42d7cbb792a63167a0949da03b1128896c13"
+          ],
+          "retainedHistoryTurns": 3,
+          "indexArtifact": "ctx_history-index_8b036ef707d229f5fc4acb8a12c2c7f8bbb19a3e90c8a14e67765a4f81e39d3b"
+        },
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 3,
+          "registeredTools": 3,
+          "selectedToolNames": [
+            "read_context_artifact",
+            "search_context_artifact"
+          ],
+          "schemaBytes": 1642,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 6.500677196292427,
+              "schemaBytes": 895
+            },
+            {
+              "name": "search_context_artifact",
+              "score": 3.588506832414626,
+              "schemaBytes": 747
+            }
+          ],
+          "beforeBytes": 56629,
+          "afterBytes": 16305,
+          "spilledResults": [
+            "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "ctx_tool-result_b171ac231ed60998f33a700817d95048a42beb43994783172a418b6a95eccf70"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_6f71ec201c978166a545decdd317eb6bec723da392526f6ef165e02c13e6ce0d",
+            "ctx_history-turn_61a42482ca96a7e0022a197efa465574df6012c8ff7353578dc97013363aab02",
+            "ctx_history-turn_a930713a5fbebb7f9de9d6058aaec9ce3bd1177ed3e03312e9f0e35a2625bbbe",
+            "ctx_history-turn_11d471f9b70ac72650aaf63e537d42d7cbb792a63167a0949da03b1128896c13"
+          ],
+          "retainedHistoryTurns": 3,
+          "indexArtifact": "ctx_history-index_8b036ef707d229f5fc4acb8a12c2c7f8bbb19a3e90c8a14e67765a4f81e39d3b"
+        },
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 4,
+          "registeredTools": 3,
+          "selectedToolNames": [
+            "read_context_artifact",
+            "search_context_artifact"
+          ],
+          "schemaBytes": 1642,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 6.500677196292427,
+              "schemaBytes": 895
+            },
+            {
+              "name": "search_context_artifact",
+              "score": 3.588506832414626,
+              "schemaBytes": 747
+            }
+          ],
+          "beforeBytes": 68160,
+          "afterBytes": 15102,
+          "spilledResults": [
+            "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "ctx_tool-result_b171ac231ed60998f33a700817d95048a42beb43994783172a418b6a95eccf70",
+            "ctx_tool-result_fd35492ec98982f477c01e43e81f863baa51ecc7618cb47925fc6b72713e28eb"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_6f71ec201c978166a545decdd317eb6bec723da392526f6ef165e02c13e6ce0d",
+            "ctx_history-turn_61a42482ca96a7e0022a197efa465574df6012c8ff7353578dc97013363aab02",
+            "ctx_history-turn_a930713a5fbebb7f9de9d6058aaec9ce3bd1177ed3e03312e9f0e35a2625bbbe",
+            "ctx_history-turn_11d471f9b70ac72650aaf63e537d42d7cbb792a63167a0949da03b1128896c13",
+            "ctx_history-turn_c323452b1e9878a814e080fc871badab2ba155e2297189c57e941523801c6b56",
+            "ctx_history-turn_0833310f4ed9018ed3650f77ee4daf43ef7d3e5358456975d3f6a1ebc91ae206"
+          ],
+          "retainedHistoryTurns": 1,
+          "indexArtifact": "ctx_history-index_8b036ef707d229f5fc4acb8a12c2c7f8bbb19a3e90c8a14e67765a4f81e39d3b"
+        }
+      ],
+      "new_tool_calls": [
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "json_pointers": [
+              "/dataset",
+              "/evidence"
+            ],
+            "offset": 0,
+            "limit": 4096
+          }
+        },
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "json_pointers": [
+              "/evidence"
+            ],
+            "offset": 4096,
+            "limit": 4096
+          }
+        },
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "json_pointers": [
+              "/evidence"
+            ],
+            "offset": 0,
+            "limit": 4096
+          }
+        }
+      ]
+    },
+    {
+      "case": "gross-provenance-after-reference",
+      "variant": "native-read",
+      "shared_input_sha256": "a54be613445d9b855700f45a1672a2914a48cf850901b26f018cefec22a971e4",
+      "expected": {
+        "dataset_id": "ds_1f8144bb8670bcad07cde082",
+        "metric": "gross_sales",
+        "dimension": "country",
+        "baseline_start": "2011-06-01",
+        "current_end": "2011-08-01",
+        "breakdown_result_sha256": "463294ed0cbe5301c28a1a8e9a40353315cb918ae8ce6726b530864edf2f15a4"
+      },
+      "answer": null,
+      "passed": false,
+      "error": "Fixed model request budget exhausted; unknown attempts remain charged",
+      "requests": 4,
+      "input_tokens": 14587,
+      "output_tokens": 545,
+      "estimated_cost_usd": 0.0043150919999999995,
+      "wall_seconds": 4.104633480999999,
+      "calls": [
+        {
+          "id": "dfc2e751-fa5a-4f75-bf36-e620a2c32be0",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 3001,
+            "output": 138,
+            "cacheRead": 384,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 3523,
+            "cost": {
+              "input": 0.0009002999999999999,
+              "output": 0.0001656,
+              "cacheRead": 0.000002304,
+              "cacheWrite": 0,
+              "total": 0.001068204,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "b0a1a8cb-829e-43a9-b0e8-08b0acd970ca",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 3162,
+            "output": 136,
+            "cacheRead": 512,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 3810,
+            "cost": {
+              "input": 0.0009486,
+              "output": 0.00016319999999999998,
+              "cacheRead": 0.000003072,
+              "cacheWrite": 0,
+              "total": 0.001114872,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "3d2490a2-0b22-4b62-844d-121a11b7e38f",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 3119,
+            "output": 135,
+            "cacheRead": 512,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 3766,
+            "cost": {
+              "input": 0.0009356999999999999,
+              "output": 0.00016199999999999998,
+              "cacheRead": 0.000003072,
+              "cacheWrite": 0,
+              "total": 0.0011007719999999999,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "9f618e6c-f757-40d4-965d-5aec69fda8a6",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 2873,
+            "output": 136,
+            "cacheRead": 1024,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 4033,
+            "cost": {
+              "input": 0.0008619,
+              "output": 0.00016319999999999998,
+              "cacheRead": 0.000006144,
+              "cacheWrite": 0,
+              "total": 0.001031244,
+              "totalFromProvider": false
+            }
+          }
+        }
+      ],
+      "wire": [
+        {
+          "bytes": 12797,
+          "sha256": "f5f6591605ccbe1ec1e77f52c438307c351c21804419fa0c37ca43ac3c84dd2f"
+        },
+        {
+          "bytes": 13964,
+          "sha256": "50d0eb6b53b151f7d0ee3edb530c44f8fa51a113fd802d55bab2cfff8e077198"
+        },
+        {
+          "bytes": 13459,
+          "sha256": "3d07b0b4ec8ba9270570d6b44df079e4d086e97a3bd5dabbcb899a65cacb4a21"
+        },
+        {
+          "bytes": 13593,
+          "sha256": "5c514d1cba6db33222bf6c283f8918d664ae10410b067764ae24cad8587b25bf"
+        }
+      ],
+      "traces": [
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 1,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact"
+          ],
+          "schemaBytes": 895,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 4.572090080037231,
+              "schemaBytes": 895
+            }
+          ],
+          "beforeBytes": 33402,
+          "afterBytes": 14807,
+          "spilledResults": [
+            "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_61a42482ca96a7e0022a197efa465574df6012c8ff7353578dc97013363aab02",
+            "ctx_history-turn_a930713a5fbebb7f9de9d6058aaec9ce3bd1177ed3e03312e9f0e35a2625bbbe",
+            "ctx_history-turn_11d471f9b70ac72650aaf63e537d42d7cbb792a63167a0949da03b1128896c13",
+            "ctx_history-turn_c323452b1e9878a814e080fc871badab2ba155e2297189c57e941523801c6b56",
+            "ctx_history-turn_0833310f4ed9018ed3650f77ee4daf43ef7d3e5358456975d3f6a1ebc91ae206"
+          ],
+          "retainedHistoryTurns": 2,
+          "indexArtifact": "ctx_history-index_8b036ef707d229f5fc4acb8a12c2c7f8bbb19a3e90c8a14e67765a4f81e39d3b"
+        },
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 2,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact"
+          ],
+          "schemaBytes": 895,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 4.572090080037231,
+              "schemaBytes": 895
+            }
+          ],
+          "beforeBytes": 45116,
+          "afterBytes": 15605,
+          "spilledResults": [
+            "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_6f71ec201c978166a545decdd317eb6bec723da392526f6ef165e02c13e6ce0d",
+            "ctx_history-turn_61a42482ca96a7e0022a197efa465574df6012c8ff7353578dc97013363aab02",
+            "ctx_history-turn_a930713a5fbebb7f9de9d6058aaec9ce3bd1177ed3e03312e9f0e35a2625bbbe"
+          ],
+          "retainedHistoryTurns": 4,
+          "indexArtifact": "ctx_history-index_8b036ef707d229f5fc4acb8a12c2c7f8bbb19a3e90c8a14e67765a4f81e39d3b"
+        },
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 3,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact"
+          ],
+          "schemaBytes": 895,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 4.572090080037231,
+              "schemaBytes": 895
+            }
+          ],
+          "beforeBytes": 55786,
+          "afterBytes": 15367,
+          "spilledResults": [
+            "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "ctx_tool-result_b171ac231ed60998f33a700817d95048a42beb43994783172a418b6a95eccf70"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_6f71ec201c978166a545decdd317eb6bec723da392526f6ef165e02c13e6ce0d",
+            "ctx_history-turn_61a42482ca96a7e0022a197efa465574df6012c8ff7353578dc97013363aab02",
+            "ctx_history-turn_a930713a5fbebb7f9de9d6058aaec9ce3bd1177ed3e03312e9f0e35a2625bbbe",
+            "ctx_history-turn_11d471f9b70ac72650aaf63e537d42d7cbb792a63167a0949da03b1128896c13"
+          ],
+          "retainedHistoryTurns": 3,
+          "indexArtifact": "ctx_history-index_8b036ef707d229f5fc4acb8a12c2c7f8bbb19a3e90c8a14e67765a4f81e39d3b"
+        },
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 4,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact"
+          ],
+          "schemaBytes": 895,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 4.572090080037231,
+              "schemaBytes": 895
+            }
+          ],
+          "beforeBytes": 67337,
+          "afterBytes": 15790,
+          "spilledResults": [
+            "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "ctx_tool-result_b171ac231ed60998f33a700817d95048a42beb43994783172a418b6a95eccf70",
+            "ctx_tool-result_fd35492ec98982f477c01e43e81f863baa51ecc7618cb47925fc6b72713e28eb"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_6f71ec201c978166a545decdd317eb6bec723da392526f6ef165e02c13e6ce0d",
+            "ctx_history-turn_61a42482ca96a7e0022a197efa465574df6012c8ff7353578dc97013363aab02",
+            "ctx_history-turn_a930713a5fbebb7f9de9d6058aaec9ce3bd1177ed3e03312e9f0e35a2625bbbe",
+            "ctx_history-turn_11d471f9b70ac72650aaf63e537d42d7cbb792a63167a0949da03b1128896c13",
+            "ctx_history-turn_0833310f4ed9018ed3650f77ee4daf43ef7d3e5358456975d3f6a1ebc91ae206"
+          ],
+          "retainedHistoryTurns": 2,
+          "indexArtifact": "ctx_history-index_8b036ef707d229f5fc4acb8a12c2c7f8bbb19a3e90c8a14e67765a4f81e39d3b"
+        },
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 5,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact"
+          ],
+          "schemaBytes": 895,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 4.572090080037231,
+              "schemaBytes": 895
+            }
+          ],
+          "beforeBytes": 78008,
+          "afterBytes": 15696,
+          "spilledResults": [
+            "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "ctx_tool-result_b171ac231ed60998f33a700817d95048a42beb43994783172a418b6a95eccf70",
+            "ctx_tool-result_fd35492ec98982f477c01e43e81f863baa51ecc7618cb47925fc6b72713e28eb",
+            "ctx_tool-result_15cd5d0336b533245851321bb017378ac0518fa86859a9555dc36e5b1f7267f2"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_6f71ec201c978166a545decdd317eb6bec723da392526f6ef165e02c13e6ce0d",
+            "ctx_history-turn_61a42482ca96a7e0022a197efa465574df6012c8ff7353578dc97013363aab02",
+            "ctx_history-turn_a930713a5fbebb7f9de9d6058aaec9ce3bd1177ed3e03312e9f0e35a2625bbbe",
+            "ctx_history-turn_11d471f9b70ac72650aaf63e537d42d7cbb792a63167a0949da03b1128896c13",
+            "ctx_history-turn_c323452b1e9878a814e080fc871badab2ba155e2297189c57e941523801c6b56",
+            "ctx_history-turn_0833310f4ed9018ed3650f77ee4daf43ef7d3e5358456975d3f6a1ebc91ae206"
+          ],
+          "retainedHistoryTurns": 1,
+          "indexArtifact": "ctx_history-index_8b036ef707d229f5fc4acb8a12c2c7f8bbb19a3e90c8a14e67765a4f81e39d3b"
+        }
+      ],
+      "new_tool_calls": [
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "json_pointers": [
+              "/dataset",
+              "/evidence"
+            ],
+            "offset": 0,
+            "limit": 4096
+          }
+        },
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "json_pointers": [
+              "/evidence"
+            ],
+            "offset": 4096,
+            "limit": 4096
+          }
+        },
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "json_pointers": [
+              "/evidence"
+            ],
+            "offset": 0,
+            "limit": 4096
+          }
+        },
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_tool-result_f7c6596542305c85c774fb44813ae5227d7d6ae62efef474f9d1f16c7ae48e63",
+            "json_pointers": [
+              "/evidence"
+            ],
+            "offset": 4096,
+            "limit": 4096
+          }
+        }
+      ]
+    },
+    {
+      "case": "gross-provenance-after-reference",
+      "variant": "upstream-full",
+      "shared_input_sha256": "a54be613445d9b855700f45a1672a2914a48cf850901b26f018cefec22a971e4",
+      "expected": {
+        "dataset_id": "ds_1f8144bb8670bcad07cde082",
+        "metric": "gross_sales",
+        "dimension": "country",
+        "baseline_start": "2011-06-01",
+        "current_end": "2011-08-01",
+        "breakdown_result_sha256": "463294ed0cbe5301c28a1a8e9a40353315cb918ae8ce6726b530864edf2f15a4"
+      },
+      "answer": {
+        "dataset_id": "ds_1f8144bb8670bcad07cde082",
+        "metric": "gross_sales",
+        "dimension": "country",
+        "baseline_start": "2011-06-01",
+        "current_end": "2011-08-01",
+        "breakdown_result_sha256": "463294ed0cbe5301c28a1a8e9a40353315cb918ae8ce6726b530864edf2f15a4"
+      },
+      "passed": true,
+      "error": null,
+      "requests": 1,
+      "input_tokens": 6891,
+      "output_tokens": 98,
+      "estimated_cost_usd": 0.000717252,
+      "wall_seconds": 1.4694977429999998,
+      "calls": [
+        {
+          "id": "8098c004-dd38-45d0-b8b2-2e5d5ec9ef2e",
+          "status": "done",
+          "stop": "stop",
+          "error": null,
+          "usage": {
+            "input": 1899,
+            "output": 98,
+            "cacheRead": 4992,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 6989,
+            "cost": {
+              "input": 0.0005697,
+              "output": 0.0001176,
+              "cacheRead": 0.000029952,
+              "cacheWrite": 0,
+              "total": 0.000717252,
+              "totalFromProvider": false
+            }
+          }
+        }
+      ],
+      "wire": [
+        {
+          "bytes": 28478,
+          "sha256": "ab1b69a42e9c22b666c434f82cbb01e40126dd151e38bb7c033d8525f264b6f9"
+        }
+      ],
+      "traces": [],
+      "new_tool_calls": []
+    }
+  ]
+}

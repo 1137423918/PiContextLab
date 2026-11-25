@@ -1,0 +1,54 @@
+{
+  "source_commit": "abd69e28ee05773536b523def5008e90241b8369",
+  "frozen_study_closed": true,
+  "all_actual_requests": 23,
+  "business_requests": 5,
+  "audit_requests": 18,
+  "estimated_cost_usd": 0.020552568,
+  "estimated_not_billed": true,
+  "same_input_hash_verified_per_case": true,
+  "variant_totals": {
+    "upstream-full": {
+      "correct_cases": 2,
+      "cases": 2,
+      "actual_requests": 2,
+      "inclusive_input_tokens": 12007,
+      "search_calls": 0,
+      "read_calls": 0
+    },
+    "native-read": {
+      "correct_cases": 0,
+      "cases": 2,
+      "actual_requests": 8,
+      "inclusive_input_tokens": 26172,
+      "search_calls": 0,
+      "read_calls": 8
+    },
+    "native-search": {
+      "correct_cases": 0,
+      "cases": 2,
+      "actual_requests": 8,
+      "inclusive_input_tokens": 27234,
+      "search_calls": 0,
+      "read_calls": 7
+    }
+  },
+  "observations": [
+    "Both cases with field search available used only read_context_artifact; search_context_artifact was never called.",
+    "The second read response in all four native cases contains the requested checksum, followed by repeated paging.",
+    "Older read responses appear in later spill traces. This co-occurrence does not establish a single cause.",
+    "The first batched evidence read returned 4,069 code points after 27 were used by dataset. Following offset 4,096 leaves a gap of 27 code points. One case used overlap and still failed.",
+    "Three native cases exhausted their quota. One native-search case answered five correct fields and checksum=null, failing the predeclared complete-answer criterion."
+  ],
+  "no_model_calls_for_analysis": true,
+  "GPU_used": false,
+  "release_defaults": {
+    "context_policy": "upstream",
+    "artifact_search": false,
+    "experimental_opt_in": [
+      "METRICLAB_CONTEXT_POLICY=budgeted",
+      "METRICLAB_ARTIFACT_SEARCH=1"
+    ],
+    "real_API_calls_after_default_change": 0
+  }
+}
