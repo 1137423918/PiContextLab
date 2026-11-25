@@ -1,0 +1,9 @@
+{
+  "purpose": "New v2 business integration cases after general fixes. Earlier closed baseline/native/context cases retain their failures and are not rerun for better scores.",
+  "provider": "https://api.deepseek.com", "model": "deepseek-flash", "thinking": "disabled",
+  "limits": { "request_ceiling": 9, "output_token_ceiling": 7680, "max_context_json_bytes": 16384, "request_deadline_ms": 90000, "local_model_deployment": false, "GPU": 0 },
+  "cases": [
+    { "id": "returns-country-august-september", "question": "Compare returns for August 2011 [2011-08-01,2011-09-01) versus September 2011 [2011-09-01,2011-10-01), using calendar_month. Inspect coverage and policy, compare the metric, break down the amount change by country (top 5 plus remainder), and submit an evidence-linked investigation with a short qualitative interpretation and separate hypotheses. Do not infer causality or put numerical claims in the narrative.", "max_calls": 6, "max_output": 1024 },
+    { "id": "customer-count-ambiguous", "question": "帮我看看客户是不是变少了。", "max_calls": 3, "max_output": 512 }
+  ]
+}

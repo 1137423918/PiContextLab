@@ -1,0 +1,11 @@
+{
+  "purpose": "Pi Agent runtime directly calls the user-authorized official DeepSeek API. Two fixed integration cases, not a model accuracy benchmark. Preserve failures and unknown attempts, no automatic retry.",
+  "provider": "https://api.deepseek.com",
+  "model": "deepseek-flash",
+  "thinking": "disabled explicitly",
+  "limits": { "request_ceiling": 9, "output_token_ceiling": 7680, "max_context_json_bytes_per_request": 16384, "request_deadline_ms": 90000, "local_GPU": 0, "local_model_deployment": false },
+  "cases": [
+    { "id": "deepseek-monthly-investigation", "question": "Compare net_sales in October 2011 [2011-10-01,2011-11-01) and November 2011 [2011-11-01,2011-12-01), using calendar_month basis. Inspect coverage and policy first, compare the metric, break down net_sales change by country (top 5 plus remainder), then submit an evidence-linked investigation. Keep interpretation qualitative and separate hypotheses from causal facts.", "max_calls": 6, "max_output": 1024 },
+    { "id": "deepseek-clarification", "question": "最近销售额是不是下降了？请帮我查一下。", "max_calls": 3, "max_output": 512 }
+  ]
+}

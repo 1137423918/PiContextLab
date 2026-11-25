@@ -1,0 +1,18 @@
+{
+  "purpose": "Prospective controlled context ablation on an actual previously sealed retail analysis, using the same official DeepSeek runtime. Not a model accuracy leaderboard or production-user study.",
+  "provider": "https://api.deepseek.com",
+  "model": "deepseek-flash",
+  "thinking": "disabled",
+  "source": "evidence/deepseek-runtime-results.json monthly-investigation actual complete transcript and sealed report; shared input strips display-only details for every variant",
+  "ground_truth": "report ID plus net_sales delta and leading country/delta, taken from the sealed deterministic evidence; never supplied to the model in the current question",
+  "cases": [
+    { "id": "large-sealed-report", "documentation_turns": 0, "max_calls": 3, "max_output": 512, "variant_order": ["upstream-full", "recency-window", "budgeted-native"] },
+    { "id": "report-before-documentation", "documentation_turns": 8, "documentation_codepoints_per_turn": 1000, "max_calls": 4, "max_output": 768, "variant_order": ["budgeted-native", "recency-window", "upstream-full"] }
+  ],
+  "budgets": { "global_max_requests": 21, "global_output_token_ceiling": 13824, "outer_context_json_byte_ceiling": 65536, "compact_context_json_bytes": 16384, "inline_tool_result_bytes": 2048, "max_tools": 2, "schema_bytes": 4096, "per_request_ms": 90000 },
+  "parameters": "BM25k1=1.2,b=.75; history value/size greedy with fixed .15 recency term; no tuning after results",
+  "variants": { "upstream-full": "Original npm Pi1.6.0, identical full transcript and utility tool definitions, no context policy", "recency-window": "Original npm Pi1.6.0 plus whole-user-turn recency window capped at16KiB, no archival manifest", "budgeted-native": "Actual modified Pi core using native request policy, immutable spill/recall, protocol checks and relevance/size history selection capped at16KiB" },
+  "report": ["exact4-field task match", "actual new provider usage only", "cache usage", "estimated cost, not invoice", "wire payload bytes/hash", "context trace and recall calls", "all errors/refusals"],
+  "limits": "No retries for better scores; preserve every charged unknown and failure. Historical transcript messages do not count as new calls or new billed tokens. No local model or GPU.",
+  "dataset_note": "Documentation distraction turns are explicitly controlled benchmark additions from MIT upstream README, not a claim of real customer conversations."
+}

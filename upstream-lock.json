@@ -1,0 +1,27 @@
+{
+  "project": "earendil-works/pi",
+  "url": "https://github.com/earendil-works/pi",
+  "version": "1.6.0",
+  "tag": "v1.6.0",
+  "commit": "faac585884ae2c013a6b1400f3e9e77f10b34bac",
+  "license": "MIT",
+  "files": {
+    "AGENTS.md": "36268f33d502e1ebf256dc6e02b248c3ea9fbe1e83f49311789dd27b1269a8a1",
+    "LICENSE": "0457f5bcec3b3b211605dfb5d1a49042fd638f3686a410fe099c24a25af13c48",
+    "packages/agent/src/agent.ts": "6d0e56bf4443f0cfc5c6a82ce31a3b99f15ff816075bed36403dfa0c95a609c6",
+    "packages/agent/src/agent-loop.ts": "a2c7dc92644bae8655a263e1f5b6ecca6a0d3057002f978e709ed27ec8dd5a92",
+    "packages/agent/src/types.ts": "6ad1a3e1ea6cfa0770421aca9a23726061d8d31fdeb5c17c8acd5d7cea0e74b1",
+    "packages/ai/src/types.ts": "8f6b4b9f443708c567dea650d40d247c547e5f3a36481d86acbee545cd038f22",
+    "packages/ai/src/api/openai-completions.ts": "0a45961174b9be7018bb013f674c24209ee16860d65aa60aad8909c2433b35da",
+    "packages/schema/README.md": "77e8f1a0f58d6993e0ea37c99b45edb028fdb892c8d626679869c0ac0103236c"
+  },
+  "npm_direct_versions": {
+    "@earendil-works/pi-agent-core": "file:vendor/pi-agent-core",
+    "@earendil-works/pi-ai": "1.6.0",
+    "@earendil-works/pi-schema": "1.6.0"
+  },
+  "original_research_clone_modified": false,
+  "vendored_fork_modified": true,
+  "fork_version": "1.6.0-contextlab.3",
+  "unmodified_baseline_alias": "@pi-context-lab/upstream-agent-core@npm:@earendil-works/pi-agent-core@1.6.0"
+}

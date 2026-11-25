@@ -1,0 +1,77 @@
+{
+  "finished": true,
+  "provider": "official DeepSeek API",
+  "local_model_deployment": false,
+  "GPU_used": false,
+  "total_requests": 22,
+  "native_cases": [
+    {
+      "case": "returns-country-august-september",
+      "status": "completed",
+      "requests": 3,
+      "report": true
+    },
+    {
+      "case": "customer-count-ambiguous",
+      "status": "clarification",
+      "requests": 2,
+      "report": false
+    }
+  ],
+  "ablation": [
+    {
+      "case": "returns-report-identities",
+      "variant": "upstream-full",
+      "passed": false,
+      "requests": 3,
+      "input_tokens": 17319,
+      "estimated_cost_usd": 0.0023332199999999996,
+      "error": "Fixed model request budget exhausted; unknown attempts remain charged"
+    },
+    {
+      "case": "returns-report-identities",
+      "variant": "recency-window",
+      "passed": false,
+      "requests": 2,
+      "input_tokens": 1586,
+      "estimated_cost_usd": 0.000371544,
+      "error": null
+    },
+    {
+      "case": "returns-report-identities",
+      "variant": "budgeted-native",
+      "passed": false,
+      "requests": 3,
+      "input_tokens": 8505,
+      "estimated_cost_usd": 0.0021411,
+      "error": "Fixed model request budget exhausted; unknown attempts remain charged"
+    },
+    {
+      "case": "returns-report-before-docs",
+      "variant": "budgeted-native",
+      "passed": false,
+      "requests": 4,
+      "input_tokens": 13913,
+      "estimated_cost_usd": 0.003120396,
+      "error": "Fixed model request budget exhausted; unknown attempts remain charged"
+    },
+    {
+      "case": "returns-report-before-docs",
+      "variant": "recency-window",
+      "passed": false,
+      "requests": 2,
+      "input_tokens": 5551,
+      "estimated_cost_usd": 0.0010597319999999999,
+      "error": null
+    },
+    {
+      "case": "returns-report-before-docs",
+      "variant": "upstream-full",
+      "passed": true,
+      "requests": 3,
+      "input_tokens": 23279,
+      "estimated_cost_usd": 0.0013817159999999998,
+      "error": null
+    }
+  ]
+}

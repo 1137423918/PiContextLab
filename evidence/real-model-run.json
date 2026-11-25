@@ -1,0 +1,32 @@
+{
+  "GPU_used": false,
+  "real_model": true,
+  "request_ceiling": 7,
+  "output_ceiling": 3712,
+  "server_sha256": "89ff842d29d30f8ee1af38c501b4d68bf4802994ef322fa706867f7a83dfb746",
+  "model_sha256": "9f1c9b5bd32d1c37502b525a677b3245a1b91fb7b71c7464f4264647998e7a06",
+  "CPU_affinity": [
+    60,
+    75
+  ],
+  "driver_exit_code": 0,
+  "finished": true,
+  "total_reserved": 3,
+  "cases": [
+    {
+      "id": "explicit-monthly-investigation",
+      "status": "failed",
+      "requests": 1,
+      "report": false
+    },
+    {
+      "id": "ambiguous-period",
+      "status": "failed",
+      "requests": 2,
+      "report": false
+    }
+  ],
+  "terminal": true,
+  "wall_seconds": 206.147,
+  "owned_servers_after": 0
+}

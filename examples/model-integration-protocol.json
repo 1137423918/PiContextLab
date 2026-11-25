@@ -1,0 +1,8 @@
+{
+  "purpose": "New integration case after compacting repeated context and making deadlines explicit. The previous two failed cases stay closed and are not rerun or counted as passes.",
+  "model": "Same pinned Qwen3-4B-Instruct-2507 Q4_K_M / llama.cpp b12576",
+  "resources": { "CPU": 2, "GPU": 0, "host_RSS_cap_GiB": 8, "context": 8192, "request_deadline_ms": 180000, "request_ceiling": 4, "output_token_ceiling": 1536 },
+  "cases": [
+    { "id": "returns-august-september", "question": "Inspect the dataset policy and coverage. Compare returns (absolute eligible negative-quantity line amount, GBP) for August 2011 [2011-08-01,2011-09-01) versus September 2011 [2011-09-01,2011-10-01), using calendar_month. No dimension breakdown is needed. Submit an evidence-linked report with a short qualitative interpretation; do not put numerical claims in the narrative. Do not infer causality.", "max_calls": 4, "max_output": 384 }
+  ]
+}

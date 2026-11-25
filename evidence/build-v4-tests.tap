@@ -1,0 +1,72 @@
+TAP version 13
+# (node:1167338) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: HTTP workflow, strict request validation, origin guard, durable reload, report export and review binding
+ok 1 - HTTP workflow, strict request validation, origin guard, durable reload, report export and review binding
+  ---
+  duration_ms: 366.68088
+  type: 'test'
+  ...
+# (node:1167367) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: exact decimals, rounding, invalid dates and semantic period guards
+ok 2 - exact decimals, rounding, invalid dates and semantic period guards
+  ---
+  duration_ms: 4.967111
+  type: 'test'
+  ...
+# Subtest: business oracle: line grain, unknown customers, returns, exact money, null group and remainder
+ok 3 - business oracle: line grain, unknown customers, returns, exact money, null group and remainder
+  ---
+  duration_ms: 402.068354
+  type: 'test'
+  ...
+# (node:1167430) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: SIGKILL after durable assistant barrier recovers in a new process owner
+ok 4 - SIGKILL after durable assistant barrier recovers in a new process owner
+  ---
+  duration_ms: 719.533169
+  type: 'test'
+  ...
+# Subtest: SIGKILL after durable tool barrier recovers in a new process owner
+ok 5 - SIGKILL after durable tool barrier recovers in a new process owner
+  ---
+  duration_ms: 697.73882
+  type: 'test'
+  ...
+# (node:1167807) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual Pi runtime drives four tools, seals evidence, reuses tools and binds human review
+ok 6 - actual Pi runtime drives four tools, seals evidence, reuses tools and binds human review
+  ---
+  duration_ms: 290.628162
+  type: 'test'
+  ...
+# Subtest: unknown pending request stays charged across connections; stale owner fenced; completed reply reused
+ok 7 - unknown pending request stays charged across connections; stale owner fenced; completed reply reused
+  ---
+  duration_ms: 72.838376
+  type: 'test'
+  ...
+# Subtest: restart reconciles committed assistant tools through Pi with cached results, without an extra provider request
+ok 8 - restart reconciles committed assistant tools through Pi with cached results, without an extra provider request
+  ---
+  duration_ms: 115.471267
+  type: 'test'
+  ...
+# Subtest: cancellation is durable and prevents further provider reservation
+ok 9 - cancellation is durable and prevents further provider reservation
+  ---
+  duration_ms: 63.069405
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4476.968178

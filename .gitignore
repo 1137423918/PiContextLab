@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.metriclab/
+.env
+*.duckdb
+*.duckdb.wal
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+*.xlsx
+data/
+private/
+artifacts/raw/
+
+vendor/pi-agent-core/dist/

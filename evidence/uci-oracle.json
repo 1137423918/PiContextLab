@@ -1,0 +1,218 @@
+{
+  "source": "independent openpyxl/Decimal from original XLSX",
+  "workbook_sha256": "43465a06f2ccf7c8b5bd2892bc7defb52f97487934fe93b16ae4c3936424676d",
+  "frozen_periods": [
+    {
+      "name": "baseline",
+      "start": "2011-10-01T00:00:00",
+      "end": "2011-11-01T00:00:00"
+    },
+    {
+      "name": "current",
+      "start": "2011-11-01T00:00:00",
+      "end": "2011-12-01T00:00:00"
+    }
+  ],
+  "metrics": {
+    "baseline": {
+      "net_sales": "1070704.6700",
+      "gross_sales": "1154979.3000",
+      "returns": "84274.6300",
+      "sales_orders": "2040",
+      "identified_customers": "1364",
+      "avg_order_value": "566.1663"
+    },
+    "current": {
+      "net_sales": "1461756.2500",
+      "gross_sales": "1509496.3300",
+      "returns": "47740.0800",
+      "sales_orders": "2769",
+      "identified_customers": "1664",
+      "avg_order_value": "545.1413"
+    }
+  },
+  "quality": {
+    "rows": 541909,
+    "unknown_customers": 135080,
+    "missing_descriptions": 1454,
+    "nonpositive_prices": 2517,
+    "negative_quantities": 10624,
+    "inconsistent_cancellations": 0
+  },
+  "countries": [
+    {
+      "dimension": "Australia",
+      "baseline": "17150.5300",
+      "current": "6805.9900",
+      "delta": "-10344.5400"
+    },
+    {
+      "dimension": "Austria",
+      "baseline": "1043.7800",
+      "current": "1329.7800",
+      "delta": "286.0000"
+    },
+    {
+      "dimension": "Belgium",
+      "baseline": "5651.3800",
+      "current": "6229.4100",
+      "delta": "578.0300"
+    },
+    {
+      "dimension": "Channel Islands",
+      "baseline": "2623.3200",
+      "current": "1495.1700",
+      "delta": "-1128.1500"
+    },
+    {
+      "dimension": "Cyprus",
+      "baseline": "4216.5200",
+      "current": "460.8900",
+      "delta": "-3755.6300"
+    },
+    {
+      "dimension": "Czech Republic",
+      "baseline": "277.4800",
+      "current": "-61.5100",
+      "delta": "-338.9900"
+    },
+    {
+      "dimension": "Denmark",
+      "baseline": "1438.1100",
+      "current": "2699.5700",
+      "delta": "1261.4600"
+    },
+    {
+      "dimension": "EIRE",
+      "baseline": "23307.6200",
+      "current": "30413.0500",
+      "delta": "7105.4300"
+    },
+    {
+      "dimension": "Finland",
+      "baseline": "2804.1200",
+      "current": "2950.2400",
+      "delta": "146.1200"
+    },
+    {
+      "dimension": "France",
+      "baseline": "25032.0400",
+      "current": "30697.5100",
+      "delta": "5665.4700"
+    },
+    {
+      "dimension": "Germany",
+      "baseline": "30614.2700",
+      "current": "26044.3500",
+      "delta": "-4569.9200"
+    },
+    {
+      "dimension": "Hong Kong",
+      "baseline": "723.5700",
+      "current": "0.0000",
+      "delta": "-723.5700"
+    },
+    {
+      "dimension": "Iceland",
+      "baseline": "1294.3200",
+      "current": "0.0000",
+      "delta": "-1294.3200"
+    },
+    {
+      "dimension": "Israel",
+      "baseline": "138.0300",
+      "current": "0.0000",
+      "delta": "-138.0300"
+    },
+    {
+      "dimension": "Italy",
+      "baseline": "3410.7900",
+      "current": "4243.7500",
+      "delta": "832.9600"
+    },
+    {
+      "dimension": "Japan",
+      "baseline": "1948.0400",
+      "current": "8460.0800",
+      "delta": "6512.0400"
+    },
+    {
+      "dimension": "Malta",
+      "baseline": "0.0000",
+      "current": "582.6200",
+      "delta": "582.6200"
+    },
+    {
+      "dimension": "Netherlands",
+      "baseline": "40708.6500",
+      "current": "25856.0100",
+      "delta": "-14852.6400"
+    },
+    {
+      "dimension": "Norway",
+      "baseline": "3687.2300",
+      "current": "6527.5000",
+      "delta": "2840.2700"
+    },
+    {
+      "dimension": "Poland",
+      "baseline": "0.0000",
+      "current": "1341.8700",
+      "delta": "1341.8700"
+    },
+    {
+      "dimension": "Portugal",
+      "baseline": "5584.6300",
+      "current": "2644.9000",
+      "delta": "-2939.7300"
+    },
+    {
+      "dimension": "RSA",
+      "baseline": "1002.3100",
+      "current": "0.0000",
+      "delta": "-1002.3100"
+    },
+    {
+      "dimension": "Singapore",
+      "baseline": "999.2600",
+      "current": "0.0000",
+      "delta": "-999.2600"
+    },
+    {
+      "dimension": "Spain",
+      "baseline": "5078.6500",
+      "current": "8533.8700",
+      "delta": "3455.2200"
+    },
+    {
+      "dimension": "Sweden",
+      "baseline": "5766.1600",
+      "current": "2612.7100",
+      "delta": "-3153.4500"
+    },
+    {
+      "dimension": "Switzerland",
+      "baseline": "8033.9800",
+      "current": "8116.9600",
+      "delta": "82.9800"
+    },
+    {
+      "dimension": "USA",
+      "baseline": "731.6900",
+      "current": "0.0000",
+      "delta": "-731.6900"
+    },
+    {
+      "dimension": "United Kingdom",
+      "baseline": "877438.1900",
+      "current": "1282805.7800",
+      "delta": "405367.5900"
+    },
+    {
+      "dimension": "Unspecified",
+      "baseline": "0.0000",
+      "current": "965.7500",
+      "delta": "965.7500"
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+TAP version 13
+# (node:1250020) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: HTTP workflow, strict request validation, origin guard, durable reload, report export and review binding
+ok 1 - HTTP workflow, strict request validation, origin guard, durable reload, report export and review binding
+  ---
+  duration_ms: 404.322976
+  type: 'test'
+  ...
+# (node:1250054) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: exact decimals, rounding, invalid dates and semantic period guards
+ok 2 - exact decimals, rounding, invalid dates and semantic period guards
+  ---
+  duration_ms: 9.733762
+  type: 'test'
+  ...
+# Subtest: business oracle: line grain, unknown customers, returns, exact money, null group and remainder
+ok 3 - business oracle: line grain, unknown customers, returns, exact money, null group and remainder
+  ---
+  duration_ms: 520.010018
+  type: 'test'
+  ...
+# (node:1250133) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: intake rejects hidden decimal rounding instead of accepting rounded money
+ok 4 - intake rejects hidden decimal rounding instead of accepting rounded money
+  ---
+  duration_ms: 225.795318
+  type: 'test'
+  ...
+# Subtest: evidence sealing rejects wrong periods, altered SQL and nonexistent references; repeated sealing is idempotent
+ok 5 - evidence sealing rejects wrong periods, altered SQL and nonexistent references; repeated sealing is idempotent
+  ---
+  duration_ms: 228.402118
+  type: 'test'
+  ...
+# Subtest: real Pi OpenAI-compatible adapter sends one HTTP attempt for 503, with retries disabled
+ok 6 - real Pi OpenAI-compatible adapter sends one HTTP attempt for 503, with retries disabled
+  ---
+  duration_ms: 186.718882
+  type: 'test'
+  ...
+# (node:1250176) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: SIGKILL after durable assistant barrier recovers in a new process owner
+ok 7 - SIGKILL after durable assistant barrier recovers in a new process owner
+  ---
+  duration_ms: 1061.125839
+  type: 'test'
+  ...
+# Subtest: SIGKILL after durable tool barrier recovers in a new process owner
+ok 8 - SIGKILL after durable tool barrier recovers in a new process owner
+  ---
+  duration_ms: 832.021702
+  type: 'test'
+  ...
+# (node:1250308) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual Pi runtime drives four tools, seals evidence, reuses tools and binds human review
+ok 9 - actual Pi runtime drives four tools, seals evidence, reuses tools and binds human review
+  ---
+  duration_ms: 438.810566
+  type: 'test'
+  ...
+# Subtest: unknown pending request stays charged across connections; stale owner fenced; completed reply reused
+ok 10 - unknown pending request stays charged across connections; stale owner fenced; completed reply reused
+  ---
+  duration_ms: 113.422244
+  type: 'test'
+  ...
+# Subtest: restart reconciles committed assistant tools through Pi with cached results, without an extra provider request
+ok 11 - restart reconciles committed assistant tools through Pi with cached results, without an extra provider request
+  ---
+  duration_ms: 187.370999
+  type: 'test'
+  ...
+# Subtest: cancellation is durable and prevents further provider reservation
+ok 12 - cancellation is durable and prevents further provider reservation
+  ---
+  duration_ms: 76.153884
+  type: 'test'
+  ...
+# Subtest: graceful shutdown pauses an in-flight request; explicit resume charges the aborted attempt and completes
+ok 13 - graceful shutdown pauses an in-flight request; explicit resume charges the aborted attempt and completes
+  ---
+  duration_ms: 234.394232
+  type: 'test'
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7914.45312

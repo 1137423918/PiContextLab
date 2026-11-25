@@ -1,0 +1,1083 @@
+{
+  "study": "V2: two NEW returns-report audit cases x three variants, not comparable scores withv1 or a model accuracy benchmark",
+  "protocol_sha256": "342bda0c4216cd94b1d3f2f22b07c45573f35d75323b854f80f4c9489f28d17d",
+  "source_sha256": "41efb59bc5c50d8ca9a796df182cbb70f5890900cd21d34d2b4fdf606aa790be",
+  "model": {
+    "id": "deepseek-flash",
+    "name": "Configured OpenAI-compatible model",
+    "api": "openai-completions",
+    "provider": "deepseek",
+    "baseUrl": "https://api.deepseek.com",
+    "reasoning": false,
+    "input": [
+      "text"
+    ],
+    "cost": {
+      "input": 0.3,
+      "output": 1.2,
+      "cacheRead": 0.006,
+      "cacheWrite": 0.3
+    },
+    "contextWindow": 1048576,
+    "maxTokens": 1200
+  },
+  "total_requests": 17,
+  "GPU_used": false,
+  "local_model_deployment": false,
+  "results": [
+    {
+      "case": "returns-report-identities",
+      "variant": "upstream-full",
+      "shared_input_sha256": "a8ed8f3b5f4482b2fe32c339efb0bedb07449f47ac4e11a69eb9bf177239e8a0",
+      "expected": {
+        "report_id": "report_8543930121dae55378e211a3c40722e483537d6d40e63fd6479da64ab018673b",
+        "created_unix_ms": 1795581603712,
+        "comparison_result_sha256": "813cbdd3b14317d32d1481a6ccbdad0540e8a3f2edd0156061da3bc050a3f715",
+        "returns_delta_gbp": "-15431.2000"
+      },
+      "answer": null,
+      "passed": false,
+      "error": "Fixed model request budget exhausted; unknown attempts remain charged",
+      "wall_seconds": 4.260004058,
+      "requests": 3,
+      "input_tokens": 17319,
+      "uncached_input_tokens": 5799,
+      "output_tokens": 437,
+      "cache_read_tokens": 11520,
+      "cache_write_tokens": 0,
+      "estimated_cost_usd": 0.0023332199999999996,
+      "calls": [
+        {
+          "id": "9301196e-0f00-4e81-8b2e-dac5fcd52bea",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 5472,
+            "output": 149,
+            "cacheRead": 128,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 5749,
+            "cost": {
+              "input": 0.0016416,
+              "output": 0.00017879999999999998,
+              "cacheRead": 7.68e-7,
+              "cacheWrite": 0,
+              "total": 0.001821168,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "f3a1f3c9-8b25-4d33-988f-b730e380b907",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 141,
+            "output": 149,
+            "cacheRead": 5632,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 5922,
+            "cost": {
+              "input": 0.0000423,
+              "output": 0.00017879999999999998,
+              "cacheRead": 0.000033792,
+              "cacheWrite": 0,
+              "total": 0.000254892,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "cd4e453d-a0c5-4644-8277-82a44758fc14",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 186,
+            "output": 139,
+            "cacheRead": 5760,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 6085,
+            "cost": {
+              "input": 0.000055799999999999994,
+              "output": 0.0001668,
+              "cacheRead": 0.00003456,
+              "cacheWrite": 0,
+              "total": 0.00025716,
+              "totalFromProvider": false
+            }
+          }
+        }
+      ],
+      "wire": [
+        {
+          "bytes": 21625,
+          "sha256": "4689cae8e580544ff0bff0a8cd02ef089bb4323f0d3a9e2432d58df58901ab8f"
+        },
+        {
+          "bytes": 22157,
+          "sha256": "64092975f7ad88a30922a57c53ae9b13f498a750782161d16081131bf97a54d7"
+        },
+        {
+          "bytes": 22686,
+          "sha256": "2207955a711f7af2a81e26c365e6847c5f9aa8762114aefe612693ab43623c13"
+        }
+      ],
+      "traces": [],
+      "new_tool_calls": [
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "report_8543930121dae55378e211a3c40722e483537d6d40e63fd6479da64ab018673b",
+            "json_pointers": [
+              "/id",
+              "/created",
+              "/evidence/0/result_sha256",
+              "/evidence/0/result/delta"
+            ],
+            "offset": 0,
+            "limit": 200
+          }
+        },
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_8543930121dae55378e211a3c40722e483537d6d40e63fd6479da64ab018673b",
+            "json_pointers": [
+              "/id",
+              "/created",
+              "/evidence/0/result_sha256",
+              "/evidence/0/result/delta"
+            ],
+            "offset": 0,
+            "limit": 200
+          }
+        },
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_8d6125df6ad83a72a4588bd04207be2d934bb68356913b4f38b43787b1b4cab3",
+            "json_pointers": [
+              "/result/delta",
+              "/result_sha256"
+            ],
+            "offset": 0,
+            "limit": 200
+          }
+        }
+      ]
+    },
+    {
+      "case": "returns-report-identities",
+      "variant": "recency-window",
+      "shared_input_sha256": "a8ed8f3b5f4482b2fe32c339efb0bedb07449f47ac4e11a69eb9bf177239e8a0",
+      "expected": {
+        "report_id": "report_8543930121dae55378e211a3c40722e483537d6d40e63fd6479da64ab018673b",
+        "created_unix_ms": 1795581603712,
+        "comparison_result_sha256": "813cbdd3b14317d32d1481a6ccbdad0540e8a3f2edd0156061da3bc050a3f715",
+        "returns_delta_gbp": "-15431.2000"
+      },
+      "answer": null,
+      "passed": false,
+      "error": null,
+      "wall_seconds": 1.9993597939999999,
+      "requests": 2,
+      "input_tokens": 1586,
+      "uncached_input_tokens": 562,
+      "output_tokens": 164,
+      "cache_read_tokens": 1024,
+      "cache_write_tokens": 0,
+      "estimated_cost_usd": 0.000371544,
+      "calls": [
+        {
+          "id": "3abf142d-3cf8-460f-af04-6c7c5052af94",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 343,
+            "output": 108,
+            "cacheRead": 384,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 835,
+            "cost": {
+              "input": 0.0001029,
+              "output": 0.0001296,
+              "cacheRead": 0.000002304,
+              "cacheWrite": 0,
+              "total": 0.00023480400000000002,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "85e47d67-7c59-4ca8-9fb9-2adea1adfead",
+          "status": "done",
+          "stop": "stop",
+          "error": null,
+          "usage": {
+            "input": 219,
+            "output": 56,
+            "cacheRead": 640,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 915,
+            "cost": {
+              "input": 0.0000657,
+              "output": 0.0000672,
+              "cacheRead": 0.00000384,
+              "cacheWrite": 0,
+              "total": 0.00013673999999999997,
+              "totalFromProvider": false
+            }
+          }
+        }
+      ],
+      "wire": [
+        {
+          "bytes": 2414,
+          "sha256": "982929af912220ec833f9951530081301c907466d5495332154326d7f245a075"
+        },
+        {
+          "bytes": 2899,
+          "sha256": "8785092e9141520cbd9bfa1e624491c33522e303f2f72baab15da8352f94bfc9"
+        }
+      ],
+      "traces": [],
+      "new_tool_calls": [
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_placeholder",
+            "json_pointers": [
+              ""
+            ],
+            "offset": 0,
+            "limit": 2000
+          }
+        }
+      ]
+    },
+    {
+      "case": "returns-report-identities",
+      "variant": "budgeted-native",
+      "shared_input_sha256": "a8ed8f3b5f4482b2fe32c339efb0bedb07449f47ac4e11a69eb9bf177239e8a0",
+      "expected": {
+        "report_id": "report_8543930121dae55378e211a3c40722e483537d6d40e63fd6479da64ab018673b",
+        "created_unix_ms": 1795581603712,
+        "comparison_result_sha256": "813cbdd3b14317d32d1481a6ccbdad0540e8a3f2edd0156061da3bc050a3f715",
+        "returns_delta_gbp": "-15431.2000"
+      },
+      "answer": null,
+      "passed": false,
+      "error": "Fixed model request budget exhausted; unknown attempts remain charged",
+      "wall_seconds": 3.0195304880000005,
+      "requests": 3,
+      "input_tokens": 8505,
+      "uncached_input_tokens": 5305,
+      "output_tokens": 442,
+      "cache_read_tokens": 3200,
+      "cache_write_tokens": 0,
+      "estimated_cost_usd": 0.0021411,
+      "calls": [
+        {
+          "id": "810d839a-ecd5-4cbf-954a-99050e6d654b",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 2739,
+            "output": 150,
+            "cacheRead": 256,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 3145,
+            "cost": {
+              "input": 0.0008217,
+              "output": 0.00017999999999999998,
+              "cacheRead": 0.000001536,
+              "cacheWrite": 0,
+              "total": 0.0010032359999999998,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "56276cc4-7e94-4edf-a8d7-2f1df6b7dfb6",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 218,
+            "output": 150,
+            "cacheRead": 2944,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 3312,
+            "cost": {
+              "input": 0.00006539999999999999,
+              "output": 0.00017999999999999998,
+              "cacheRead": 0.000017664,
+              "cacheWrite": 0,
+              "total": 0.00026306400000000003,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "6ab59180-64b0-4312-aaaf-f454612e77e6",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 2348,
+            "output": 142,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 2490,
+            "cost": {
+              "input": 0.0007044,
+              "output": 0.0001704,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0.0008748,
+              "totalFromProvider": false
+            }
+          }
+        }
+      ],
+      "wire": [
+        {
+          "bytes": 11367,
+          "sha256": "6a490e17ee204ce4e10bcaf9ed99e065a791cfefad6aec6924e95ae04fd9568c"
+        },
+        {
+          "bytes": 11844,
+          "sha256": "79176537409be305bdd0ea3c6db4d85a09e3de56673fb8281aa50e53be4fd1cf"
+        },
+        {
+          "bytes": 7631,
+          "sha256": "a0f510bd9af904bafac2f7c8907d8dc00165c9f92fe36a6105abba311846f6f0"
+        }
+      ],
+      "traces": [
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 1,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact"
+          ],
+          "schemaBytes": 895,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 5.962553430220838,
+              "schemaBytes": 895
+            }
+          ],
+          "beforeBytes": 23343,
+          "afterBytes": 13043,
+          "spilledResults": [
+            "ctx_tool-result_0e7cfecb9d953e8ee0e6e10f7ecaf3b173ff8bcf67306c2d6d0b0189397f2659"
+          ],
+          "archivedTurns": [],
+          "retainedHistoryTurns": 1
+        },
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 2,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact"
+          ],
+          "schemaBytes": 895,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 5.962553430220838,
+              "schemaBytes": 895
+            }
+          ],
+          "beforeBytes": 24401,
+          "afterBytes": 14088,
+          "spilledResults": [
+            "ctx_tool-result_0e7cfecb9d953e8ee0e6e10f7ecaf3b173ff8bcf67306c2d6d0b0189397f2659"
+          ],
+          "archivedTurns": [],
+          "retainedHistoryTurns": 1
+        },
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 3,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact"
+          ],
+          "schemaBytes": 895,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 5.962553430220838,
+              "schemaBytes": 895
+            }
+          ],
+          "beforeBytes": 33705,
+          "afterBytes": 8677,
+          "spilledResults": [
+            "ctx_tool-result_0e7cfecb9d953e8ee0e6e10f7ecaf3b173ff8bcf67306c2d6d0b0189397f2659"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_f099455f995dc187d35b79b97742bf1afd6b9c3d27c90dc8a79455b8767f1917"
+          ],
+          "retainedHistoryTurns": 0,
+          "indexArtifact": "ctx_history-index_c2309cce012db7fb4b1d8bde42217cef19b8fae69dce6ef5a419de73728bb5d0"
+        },
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 4,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact"
+          ],
+          "schemaBytes": 895,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 5.962553430220838,
+              "schemaBytes": 895
+            }
+          ],
+          "beforeBytes": 46371,
+          "afterBytes": 12676,
+          "spilledResults": [
+            "ctx_tool-result_0e7cfecb9d953e8ee0e6e10f7ecaf3b173ff8bcf67306c2d6d0b0189397f2659",
+            "ctx_tool-result_6968749eafc21426e429d51a13e11dc25e983e3e60ab708f8b95496c3ac16218"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_f099455f995dc187d35b79b97742bf1afd6b9c3d27c90dc8a79455b8767f1917"
+          ],
+          "retainedHistoryTurns": 0,
+          "indexArtifact": "ctx_history-index_c2309cce012db7fb4b1d8bde42217cef19b8fae69dce6ef5a419de73728bb5d0"
+        }
+      ],
+      "new_tool_calls": [
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_tool-result_0e7cfecb9d953e8ee0e6e10f7ecaf3b173ff8bcf67306c2d6d0b0189397f2659",
+            "json_pointers": [
+              "/source_identity/id",
+              "/created",
+              "/evidence"
+            ],
+            "offset": 0,
+            "limit": 2048
+          }
+        },
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_tool-result_0e7cfecb9d953e8ee0e6e10f7ecaf3b173ff8bcf67306c2d6d0b0189397f2659",
+            "json_pointers": [
+              "/id",
+              "/created",
+              "/evidence",
+              "/job"
+            ],
+            "offset": 0,
+            "limit": 3000
+          }
+        },
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_tool-result_0e7cfecb9d953e8ee0e6e10f7ecaf3b173ff8bcf67306c2d6d0b0189397f2659",
+            "json_pointers": [
+              "/evidence"
+            ],
+            "offset": 3000,
+            "limit": 4096
+          }
+        }
+      ]
+    },
+    {
+      "case": "returns-report-before-docs",
+      "variant": "budgeted-native",
+      "shared_input_sha256": "068a97783943c97b084be1ef72712126c32b15cf4cd0a962dd8962c4499b9a79",
+      "expected": {
+        "report_id": "report_8543930121dae55378e211a3c40722e483537d6d40e63fd6479da64ab018673b",
+        "created_unix_ms": 1795581603712,
+        "comparison_result_sha256": "813cbdd3b14317d32d1481a6ccbdad0540e8a3f2edd0156061da3bc050a3f715",
+        "returns_delta_gbp": "-15431.2000"
+      },
+      "answer": null,
+      "passed": false,
+      "error": "Fixed model request budget exhausted; unknown attempts remain charged",
+      "wall_seconds": 4.206241385999999,
+      "requests": 4,
+      "input_tokens": 13913,
+      "uncached_input_tokens": 7897,
+      "output_tokens": 596,
+      "cache_read_tokens": 6016,
+      "cache_write_tokens": 0,
+      "estimated_cost_usd": 0.003120396,
+      "calls": [
+        {
+          "id": "511ada3b-9fd8-446f-9ef8-20cb220c668b",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 3576,
+            "output": 165,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 3741,
+            "cost": {
+              "input": 0.0010728,
+              "output": 0.000198,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0.0012708,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "44c482aa-05ef-4cda-acf9-a2f456df5cc1",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 708,
+            "output": 152,
+            "cacheRead": 2816,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 3676,
+            "cost": {
+              "input": 0.00021239999999999999,
+              "output": 0.0001824,
+              "cacheRead": 0.000016896,
+              "cacheWrite": 0,
+              "total": 0.00041169599999999997,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "db5303f2-92d6-445a-ae0c-b081a7c17598",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 655,
+            "output": 139,
+            "cacheRead": 2816,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 3610,
+            "cost": {
+              "input": 0.00019649999999999998,
+              "output": 0.0001668,
+              "cacheRead": 0.000016896,
+              "cacheWrite": 0,
+              "total": 0.000380196,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "c8f3b26d-e1ab-4fe2-96f3-f21dcda43afb",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 2958,
+            "output": 140,
+            "cacheRead": 384,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 3482,
+            "cost": {
+              "input": 0.0008874,
+              "output": 0.000168,
+              "cacheRead": 0.000002304,
+              "cacheWrite": 0,
+              "total": 0.001057704,
+              "totalFromProvider": false
+            }
+          }
+        }
+      ],
+      "wire": [
+        {
+          "bytes": 14053,
+          "sha256": "915fba47b35938766610218c0dffa9c7c4f492c34da88ebd105c19c0f4bb5138"
+        },
+        {
+          "bytes": 13461,
+          "sha256": "5a5dacd17a836b67f24d99b9164f77e7c82888be770e92407db72fa5c6874ff7"
+        },
+        {
+          "bytes": 12798,
+          "sha256": "d1d847d8760bd35c9331165edab9b5b875057d0bdaa2a31bd82f0106f6910bf2"
+        },
+        {
+          "bytes": 12547,
+          "sha256": "136c90bf605f8a70d3dab1765c7cdd6d4803ca884367111f475303b96fa54102"
+        }
+      ],
+      "traces": [
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 1,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact"
+          ],
+          "schemaBytes": 895,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 5.962553430220838,
+              "schemaBytes": 895
+            }
+          ],
+          "beforeBytes": 35180,
+          "afterBytes": 16358,
+          "spilledResults": [
+            "ctx_tool-result_0e7cfecb9d953e8ee0e6e10f7ecaf3b173ff8bcf67306c2d6d0b0189397f2659"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_d679c468fb46f269c91216ac2d4fdb28f430fe8e5589398bb664f0dcf1b73873",
+            "ctx_history-turn_1cba90b4e341a1ef0e894f92e49b4cd66f5f42b1e7207eaaa7576814f1b2470d",
+            "ctx_history-turn_f3a4032b0fd4a9ab223fe91055267fcc1a621e96efafec924f4347ec982a2794",
+            "ctx_history-turn_2a66c13a20bf319d3360a816c4480f5acea1e5fd004a69c9447445d7934b7cc7",
+            "ctx_history-turn_88636a8cde6fc0ca5601098817e94fd99d6c5129e7785e5263b41719d93fd0f4",
+            "ctx_history-turn_006f32e7ea4ab1e88a0c3a2c56ad5b3979db75ca73ec0ad48510d1f5f1dfab3a"
+          ],
+          "retainedHistoryTurns": 3,
+          "indexArtifact": "ctx_history-index_9a77e68a9bcfc207599b1623c0be877e40062439cd120179d3074f9ebe1a0e25"
+        },
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 2,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact"
+          ],
+          "schemaBytes": 895,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 5.962553430220838,
+              "schemaBytes": 895
+            }
+          ],
+          "beforeBytes": 36302,
+          "afterBytes": 16027,
+          "spilledResults": [
+            "ctx_tool-result_0e7cfecb9d953e8ee0e6e10f7ecaf3b173ff8bcf67306c2d6d0b0189397f2659"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_d679c468fb46f269c91216ac2d4fdb28f430fe8e5589398bb664f0dcf1b73873",
+            "ctx_history-turn_1cba90b4e341a1ef0e894f92e49b4cd66f5f42b1e7207eaaa7576814f1b2470d",
+            "ctx_history-turn_f3a4032b0fd4a9ab223fe91055267fcc1a621e96efafec924f4347ec982a2794",
+            "ctx_history-turn_2a66c13a20bf319d3360a816c4480f5acea1e5fd004a69c9447445d7934b7cc7",
+            "ctx_history-turn_88636a8cde6fc0ca5601098817e94fd99d6c5129e7785e5263b41719d93fd0f4",
+            "ctx_history-turn_6e6a1f4af780fcca9a5d11749e59cd72a4253ec80029a0b2263c984d9ac89a78",
+            "ctx_history-turn_006f32e7ea4ab1e88a0c3a2c56ad5b3979db75ca73ec0ad48510d1f5f1dfab3a"
+          ],
+          "retainedHistoryTurns": 2,
+          "indexArtifact": "ctx_history-index_9a77e68a9bcfc207599b1623c0be877e40062439cd120179d3074f9ebe1a0e25"
+        },
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 3,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact"
+          ],
+          "schemaBytes": 895,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 5.962553430220838,
+              "schemaBytes": 895
+            }
+          ],
+          "beforeBytes": 37364,
+          "afterBytes": 15635,
+          "spilledResults": [
+            "ctx_tool-result_0e7cfecb9d953e8ee0e6e10f7ecaf3b173ff8bcf67306c2d6d0b0189397f2659"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_d679c468fb46f269c91216ac2d4fdb28f430fe8e5589398bb664f0dcf1b73873",
+            "ctx_history-turn_1cba90b4e341a1ef0e894f92e49b4cd66f5f42b1e7207eaaa7576814f1b2470d",
+            "ctx_history-turn_f3a4032b0fd4a9ab223fe91055267fcc1a621e96efafec924f4347ec982a2794",
+            "ctx_history-turn_2a66c13a20bf319d3360a816c4480f5acea1e5fd004a69c9447445d7934b7cc7",
+            "ctx_history-turn_88636a8cde6fc0ca5601098817e94fd99d6c5129e7785e5263b41719d93fd0f4",
+            "ctx_history-turn_6e6a1f4af780fcca9a5d11749e59cd72a4253ec80029a0b2263c984d9ac89a78",
+            "ctx_history-turn_ff824b043699e87f91c1c89f6af938a846dc9bb484d7f434cda5d962ad162121",
+            "ctx_history-turn_006f32e7ea4ab1e88a0c3a2c56ad5b3979db75ca73ec0ad48510d1f5f1dfab3a"
+          ],
+          "retainedHistoryTurns": 1,
+          "indexArtifact": "ctx_history-index_9a77e68a9bcfc207599b1623c0be877e40062439cd120179d3074f9ebe1a0e25"
+        },
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 4,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact"
+          ],
+          "schemaBytes": 895,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 5.962553430220838,
+              "schemaBytes": 895
+            }
+          ],
+          "beforeBytes": 43894,
+          "afterBytes": 15610,
+          "spilledResults": [
+            "ctx_tool-result_0e7cfecb9d953e8ee0e6e10f7ecaf3b173ff8bcf67306c2d6d0b0189397f2659"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_f099455f995dc187d35b79b97742bf1afd6b9c3d27c90dc8a79455b8767f1917",
+            "ctx_history-turn_1cba90b4e341a1ef0e894f92e49b4cd66f5f42b1e7207eaaa7576814f1b2470d",
+            "ctx_history-turn_f3a4032b0fd4a9ab223fe91055267fcc1a621e96efafec924f4347ec982a2794",
+            "ctx_history-turn_2a66c13a20bf319d3360a816c4480f5acea1e5fd004a69c9447445d7934b7cc7"
+          ],
+          "retainedHistoryTurns": 5,
+          "indexArtifact": "ctx_history-index_9a77e68a9bcfc207599b1623c0be877e40062439cd120179d3074f9ebe1a0e25"
+        },
+        {
+          "policy": "pi-context-lab-v2",
+          "request": 5,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact"
+          ],
+          "schemaBytes": 895,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 5.962553430220838,
+              "schemaBytes": 895
+            }
+          ],
+          "beforeBytes": 56298,
+          "afterBytes": 16371,
+          "spilledResults": [
+            "ctx_tool-result_0e7cfecb9d953e8ee0e6e10f7ecaf3b173ff8bcf67306c2d6d0b0189397f2659",
+            "ctx_tool-result_4c317757210d442804709f668903f5c4ff019b4b6f4ed873638e5cd70b8a471a"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_f099455f995dc187d35b79b97742bf1afd6b9c3d27c90dc8a79455b8767f1917",
+            "ctx_history-turn_d679c468fb46f269c91216ac2d4fdb28f430fe8e5589398bb664f0dcf1b73873",
+            "ctx_history-turn_1cba90b4e341a1ef0e894f92e49b4cd66f5f42b1e7207eaaa7576814f1b2470d",
+            "ctx_history-turn_f3a4032b0fd4a9ab223fe91055267fcc1a621e96efafec924f4347ec982a2794",
+            "ctx_history-turn_2a66c13a20bf319d3360a816c4480f5acea1e5fd004a69c9447445d7934b7cc7",
+            "ctx_history-turn_88636a8cde6fc0ca5601098817e94fd99d6c5129e7785e5263b41719d93fd0f4",
+            "ctx_history-turn_006f32e7ea4ab1e88a0c3a2c56ad5b3979db75ca73ec0ad48510d1f5f1dfab3a"
+          ],
+          "retainedHistoryTurns": 2,
+          "indexArtifact": "ctx_history-index_9a77e68a9bcfc207599b1623c0be877e40062439cd120179d3074f9ebe1a0e25"
+        }
+      ],
+      "new_tool_calls": [
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_tool-result_0e7cfecb9d953e8ee0e6e10f7ecaf3b173ff8bcf67306c2d6d0b0189397f2659",
+            "json_pointers": [
+              "/id",
+              "/created",
+              "/source_identity/id",
+              "/evidence"
+            ],
+            "offset": 0,
+            "limit": 2048
+          }
+        },
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_tool-result_0e7cfecb9d953e8ee0e6e10f7ecaf3b173ff8bcf67306c2d6d0b0189397f2659",
+            "json_pointers": [
+              "/id",
+              "/created",
+              "/source_identity",
+              "/evidence"
+            ],
+            "offset": 0,
+            "limit": 2048
+          }
+        },
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_tool-result_0e7cfecb9d953e8ee0e6e10f7ecaf3b173ff8bcf67306c2d6d0b0189397f2659",
+            "json_pointers": [
+              ""
+            ],
+            "offset": 0,
+            "limit": 2048
+          }
+        },
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ctx_tool-result_0e7cfecb9d953e8ee0e6e10f7ecaf3b173ff8bcf67306c2d6d0b0189397f2659",
+            "json_pointers": [
+              ""
+            ],
+            "offset": 2048,
+            "limit": 4096
+          }
+        }
+      ]
+    },
+    {
+      "case": "returns-report-before-docs",
+      "variant": "recency-window",
+      "shared_input_sha256": "068a97783943c97b084be1ef72712126c32b15cf4cd0a962dd8962c4499b9a79",
+      "expected": {
+        "report_id": "report_8543930121dae55378e211a3c40722e483537d6d40e63fd6479da64ab018673b",
+        "created_unix_ms": 1795581603712,
+        "comparison_result_sha256": "813cbdd3b14317d32d1481a6ccbdad0540e8a3f2edd0156061da3bc050a3f715",
+        "returns_delta_gbp": "-15431.2000"
+      },
+      "answer": null,
+      "passed": false,
+      "error": null,
+      "wall_seconds": 2.2799304409999985,
+      "requests": 2,
+      "input_tokens": 5551,
+      "uncached_input_tokens": 2479,
+      "output_tokens": 248,
+      "cache_read_tokens": 3072,
+      "cache_write_tokens": 0,
+      "estimated_cost_usd": 0.0010597319999999999,
+      "calls": [
+        {
+          "id": "ea0d534b-c6bb-4469-8705-8d2a4178d7b4",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 2328,
+            "output": 88,
+            "cacheRead": 384,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 2800,
+            "cost": {
+              "input": 0.0006984,
+              "output": 0.00010559999999999999,
+              "cacheRead": 0.000002304,
+              "cacheWrite": 0,
+              "total": 0.0008063039999999999,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "643c82ae-6fda-46c5-b1df-9ef072044f79",
+          "status": "done",
+          "stop": "stop",
+          "error": null,
+          "usage": {
+            "input": 151,
+            "output": 160,
+            "cacheRead": 2688,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 2999,
+            "cost": {
+              "input": 0.000045299999999999997,
+              "output": 0.000192,
+              "cacheRead": 0.000016128,
+              "cacheWrite": 0,
+              "total": 0.000253428,
+              "totalFromProvider": false
+            }
+          }
+        }
+      ],
+      "wire": [
+        {
+          "bytes": 11883,
+          "sha256": "cc38885ed1a4df38cd8152b5692f5a6b709c433274da3e84ed3f64974c1248dc"
+        },
+        {
+          "bytes": 12497,
+          "sha256": "656132fb91253c1bbb963e0b1783148da8c34d1225eebfd3ec70410386cc80db"
+        }
+      ],
+      "traces": [],
+      "new_tool_calls": [
+        {
+          "name": "discover_tools",
+          "arguments": {
+            "query": "search archived reports by title or date range, retrieve report metadata and comparison evidence",
+            "limit": 3
+          }
+        }
+      ]
+    },
+    {
+      "case": "returns-report-before-docs",
+      "variant": "upstream-full",
+      "shared_input_sha256": "068a97783943c97b084be1ef72712126c32b15cf4cd0a962dd8962c4499b9a79",
+      "expected": {
+        "report_id": "report_8543930121dae55378e211a3c40722e483537d6d40e63fd6479da64ab018673b",
+        "created_unix_ms": 1795581603712,
+        "comparison_result_sha256": "813cbdd3b14317d32d1481a6ccbdad0540e8a3f2edd0156061da3bc050a3f715",
+        "returns_delta_gbp": "-15431.2000"
+      },
+      "answer": {
+        "report_id": "report_8543930121dae55378e211a3c40722e483537d6d40e63fd6479da64ab018673b",
+        "created_unix_ms": 1795581603712,
+        "comparison_result_sha256": "813cbdd3b14317d32d1481a6ccbdad0540e8a3f2edd0156061da3bc050a3f715",
+        "returns_delta_gbp": "-15431.2000"
+      },
+      "passed": true,
+      "error": null,
+      "wall_seconds": 3.2564484910000027,
+      "requests": 3,
+      "input_tokens": 23279,
+      "uncached_input_tokens": 2543,
+      "output_tokens": 412,
+      "cache_read_tokens": 20736,
+      "cache_write_tokens": 0,
+      "estimated_cost_usd": 0.0013817159999999998,
+      "calls": [
+        {
+          "id": "16311f6b-8f61-4ad1-aa73-440a16599206",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 2081,
+            "output": 155,
+            "cacheRead": 5504,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 7740,
+            "cost": {
+              "input": 0.0006242999999999999,
+              "output": 0.000186,
+              "cacheRead": 0.000033024,
+              "cacheWrite": 0,
+              "total": 0.0008433239999999999,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "ccef9566-1242-4821-8e4c-76465e087321",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 212,
+            "output": 142,
+            "cacheRead": 7552,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 7906,
+            "cost": {
+              "input": 0.0000636,
+              "output": 0.0001704,
+              "cacheRead": 0.000045312,
+              "cacheWrite": 0,
+              "total": 0.000279312,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "261ef34f-6b23-46f0-b6de-370b9d5bd2bc",
+          "status": "done",
+          "stop": "stop",
+          "error": null,
+          "usage": {
+            "input": 250,
+            "output": 115,
+            "cacheRead": 7680,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 8045,
+            "cost": {
+              "input": 0.000075,
+              "output": 0.000138,
+              "cacheRead": 0.00004608,
+              "cacheWrite": 0,
+              "total": 0.00025907999999999997,
+              "totalFromProvider": false
+            }
+          }
+        }
+      ],
+      "wire": [
+        {
+          "bytes": 31094,
+          "sha256": "e1f5e47fecb6ae4ab228f2e0fbfb1bce3d7a6d56db1f270f91b5eef49f2f3628"
+        },
+        {
+          "bytes": 31645,
+          "sha256": "2fd874df94c99bda288257176dc8f262c6d6c1de9ffed632241365a4d9e3ef51"
+        },
+        {
+          "bytes": 32138,
+          "sha256": "e7062f2bfeaa582a87bd0f141209142cf07a1ed7f7f566ec8c49b1c9b6b42115"
+        }
+      ],
+      "traces": [],
+      "new_tool_calls": [
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "report_8543930121dae55378e211a3c40722e483537d6d40e63fd6479da64ab018673b",
+            "json_pointers": [
+              "/id",
+              "/created",
+              "/evidence/0/id",
+              "/evidence/0/result_sha256",
+              "/evidence/0/result/delta"
+            ],
+            "offset": 0,
+            "limit": 600
+          }
+        },
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "artifact_id": "ev_8d6125df6ad83a72a4588bd04207be2d934bb68356913b4f38b43787b1b4cab3",
+            "json_pointers": [
+              "/result/delta",
+              "/result_sha256",
+              "/id"
+            ],
+            "offset": 0,
+            "limit": 300
+          }
+        }
+      ]
+    }
+  ]
+}

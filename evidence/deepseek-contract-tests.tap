@@ -1,0 +1,106 @@
+TAP version 13
+# (node:1280771) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: HTTP workflow, strict request validation, origin guard, durable reload, report export and review binding
+ok 1 - HTTP workflow, strict request validation, origin guard, durable reload, report export and review binding
+  ---
+  duration_ms: 540.044906
+  type: 'test'
+  ...
+# (node:1281124) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: exact decimals, rounding, invalid dates and semantic period guards
+ok 2 - exact decimals, rounding, invalid dates and semantic period guards
+  ---
+  duration_ms: 7.928799
+  type: 'test'
+  ...
+# Subtest: business oracle: line grain, unknown customers, returns, exact money, null group and remainder
+ok 3 - business oracle: line grain, unknown customers, returns, exact money, null group and remainder
+  ---
+  duration_ms: 686.652228
+  type: 'test'
+  ...
+# (node:1281483) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: DeepSeek runtime emits disabled thinking and tool declarations through the real adapter; secrets stay out of model config
+ok 4 - DeepSeek runtime emits disabled thinking and tool declarations through the real adapter; secrets stay out of model config
+  ---
+  duration_ms: 66.739613
+  type: 'test'
+  ...
+# (node:1281503) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: intake rejects hidden decimal rounding instead of accepting rounded money
+ok 5 - intake rejects hidden decimal rounding instead of accepting rounded money
+  ---
+  duration_ms: 225.919396
+  type: 'test'
+  ...
+# Subtest: evidence sealing rejects wrong periods, altered SQL and nonexistent references; repeated sealing is idempotent
+ok 6 - evidence sealing rejects wrong periods, altered SQL and nonexistent references; repeated sealing is idempotent
+  ---
+  duration_ms: 216.626236
+  type: 'test'
+  ...
+# Subtest: real Pi OpenAI-compatible adapter sends one HTTP attempt for 503, with retries disabled
+ok 7 - real Pi OpenAI-compatible adapter sends one HTTP attempt for 503, with retries disabled
+  ---
+  duration_ms: 202.966159
+  type: 'test'
+  ...
+# (node:1281553) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: SIGKILL after durable assistant barrier recovers in a new process owner
+ok 8 - SIGKILL after durable assistant barrier recovers in a new process owner
+  ---
+  duration_ms: 1153.637393
+  type: 'test'
+  ...
+# Subtest: SIGKILL after durable tool barrier recovers in a new process owner
+ok 9 - SIGKILL after durable tool barrier recovers in a new process owner
+  ---
+  duration_ms: 1316.445875
+  type: 'test'
+  ...
+# (node:1281722) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual Pi runtime drives four tools, seals evidence, reuses tools and binds human review
+ok 10 - actual Pi runtime drives four tools, seals evidence, reuses tools and binds human review
+  ---
+  duration_ms: 427.867411
+  type: 'test'
+  ...
+# Subtest: unknown pending request stays charged across connections; stale owner fenced; completed reply reused
+ok 11 - unknown pending request stays charged across connections; stale owner fenced; completed reply reused
+  ---
+  duration_ms: 118.290601
+  type: 'test'
+  ...
+# Subtest: restart reconciles committed assistant tools through Pi with cached results, without an extra provider request
+ok 12 - restart reconciles committed assistant tools through Pi with cached results, without an extra provider request
+  ---
+  duration_ms: 209.219497
+  type: 'test'
+  ...
+# Subtest: cancellation is durable and prevents further provider reservation
+ok 13 - cancellation is durable and prevents further provider reservation
+  ---
+  duration_ms: 94.16254
+  type: 'test'
+  ...
+# Subtest: graceful shutdown pauses an in-flight request; explicit resume charges the aborted attempt and completes
+ok 14 - graceful shutdown pauses an in-flight request; explicit resume charges the aborted attempt and completes
+  ---
+  duration_ms: 315.154087
+  type: 'test'
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10290.53398

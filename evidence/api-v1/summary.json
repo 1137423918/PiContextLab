@@ -1,0 +1,77 @@
+{
+  "finished": true,
+  "provider": "official DeepSeek API",
+  "local_model_deployment": false,
+  "GPU_used": false,
+  "total_requests": 17,
+  "native_cases": [
+    {
+      "case": "deepseek-monthly-investigation",
+      "status": "completed",
+      "requests": 3,
+      "report": true
+    },
+    {
+      "case": "deepseek-clarification",
+      "status": "failed",
+      "requests": 3,
+      "report": false
+    }
+  ],
+  "ablation": [
+    {
+      "case": "large-sealed-report",
+      "variant": "upstream-full",
+      "passed": true,
+      "requests": 1,
+      "input_tokens": 5615,
+      "estimated_cost_usd": 0.0017853,
+      "error": null
+    },
+    {
+      "case": "large-sealed-report",
+      "variant": "recency-window",
+      "passed": false,
+      "requests": 2,
+      "input_tokens": 1491,
+      "estimated_cost_usd": 0.000346644,
+      "error": null
+    },
+    {
+      "case": "large-sealed-report",
+      "variant": "budgeted-native",
+      "passed": false,
+      "requests": 1,
+      "input_tokens": 2968,
+      "estimated_cost_usd": 0.00024096,
+      "error": null
+    },
+    {
+      "case": "report-before-documentation",
+      "variant": "budgeted-native",
+      "passed": false,
+      "requests": 4,
+      "input_tokens": 14156,
+      "estimated_cost_usd": 0.003977232,
+      "error": "Fixed model request budget exhausted; unknown attempts remain charged"
+    },
+    {
+      "case": "report-before-documentation",
+      "variant": "recency-window",
+      "passed": false,
+      "requests": 2,
+      "input_tokens": 5523,
+      "estimated_cost_usd": 0.001050132,
+      "error": null
+    },
+    {
+      "case": "report-before-documentation",
+      "variant": "upstream-full",
+      "passed": true,
+      "requests": 1,
+      "input_tokens": 7600,
+      "estimated_cost_usd": 0.0007626239999999999,
+      "error": null
+    }
+  ]
+}

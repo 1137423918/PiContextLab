@@ -1,0 +1,98 @@
+{
+  "controller_sha256": "005c616b8316c76d56e79474082a49030f663b82c87fb273b4aa78e78c78aac7",
+  "wrapper_sha256": "9d7e401497343f3f99034a897cdf50d88c59d1ef669494a601a2e9cc326f6ff0",
+  "cpu_admission_sha256": "62350c3401c5336ff873d429da29fb4397f114c016bb96a003d5a2b673029fe1",
+  "input_bundle_sha256": "7a15b6cddbc014901d9ab7d6fd81d2b21567cc3a26cc4ea503f567ab020a49b4",
+  "phases": [
+    {
+      "name": "build-native-fork",
+      "argv": [
+        "NODE",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "vendor/pi-agent-core/tsconfig.json"
+      ]
+    },
+    {
+      "name": "native-and-application-check",
+      "argv": [
+        "/tmp/agentlab-deeptutor-setup-stage92-02uddvuy/tools/node/bin/npm",
+        "run",
+        "check"
+      ]
+    },
+    {
+      "name": "build-application",
+      "argv": [
+        "NODE",
+        "node_modules/typescript/bin/tsc"
+      ]
+    },
+    {
+      "name": "framework-and-client-tests",
+      "argv": [
+        "NODE",
+        "--test",
+        "--test-concurrency=1",
+        "dist/test/framework.test.js",
+        "dist/test/business.test.js",
+        "dist/test/runtime.test.js",
+        "dist/test/api.test.js",
+        "dist/test/recovery.test.js",
+        "dist/test/integrity.test.js",
+        "dist/test/deepseek.test.js"
+      ],
+      "cap": 180
+    },
+    {
+      "name": "fetch-pinned-ToolRet-files",
+      "argv": [
+        "/data1/wjz26/agent-lab-20261120/envs/model-request-budget-20261121/bin/python",
+        "scripts/fetch_toolret.py",
+        "toolret",
+        "/tmp/pi-context-toolret-inputs-stage98-v1"
+      ],
+      "cap": 120
+    },
+    {
+      "name": "extract-parquet-on-CPU",
+      "argv": [
+        "NODE",
+        "scripts/extract-toolret.mjs",
+        "toolret"
+      ],
+      "cap": 90
+    },
+    {
+      "name": "normalize-dataset-boundary",
+      "argv": [
+        "/data1/wjz26/agent-lab-20261120/envs/model-request-budget-20261121/bin/python",
+        "scripts/normalize_toolret.py",
+        "toolret"
+      ],
+      "cap": 90
+    },
+    {
+      "name": "full-web-corpus-retrieval-evaluation",
+      "argv": [
+        "NODE",
+        "dist/scripts/eval-toolret.js",
+        "toolret/normalized.json",
+        "toolret-results.json"
+      ],
+      "cap": 360
+    },
+    {
+      "name": "grade-recorded-context-answers",
+      "argv": [
+        "/data1/wjz26/agent-lab-20261120/envs/model-request-budget-20261121/bin/python",
+        "scripts/grade_context.py",
+        "/tmp/pimetriclab-build-stage98-gdxy52ww/source/api-studies/context-ablation/results.json",
+        "context-results-graded.json"
+      ],
+      "cap": 30
+    }
+  ],
+  "framework_install": true,
+  "purpose": "Actual modified Pi Agent Core source, independent original1.6npm baseline alias, no model calls or local model deployment"
+}

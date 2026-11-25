@@ -1,0 +1,82 @@
+{
+  "controller_sha256": "005c616b8316c76d56e79474082a49030f663b82c87fb273b4aa78e78c78aac7",
+  "wrapper_sha256": "9d7e401497343f3f99034a897cdf50d88c59d1ef669494a601a2e9cc326f6ff0",
+  "cpu_admission_sha256": "62350c3401c5336ff873d429da29fb4397f114c016bb96a003d5a2b673029fe1",
+  "input_bundle_sha256": "0d3679241bdde6bc37f274779c19cf21b9a5cce63d2845b3190561d177863e23",
+  "phases": [
+    {
+      "name": "build-native-fork",
+      "argv": [
+        "NODE",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "vendor/pi-agent-core/tsconfig.json"
+      ]
+    },
+    {
+      "name": "native-and-application-check",
+      "argv": [
+        "/tmp/agentlab-deeptutor-setup-stage92-02uddvuy/tools/node/bin/npm",
+        "run",
+        "check"
+      ]
+    },
+    {
+      "name": "build-application",
+      "argv": [
+        "NODE",
+        "node_modules/typescript/bin/tsc"
+      ]
+    },
+    {
+      "name": "framework-and-client-tests",
+      "argv": [
+        "NODE",
+        "--test",
+        "--test-concurrency=1",
+        "dist/test/framework.test.js",
+        "dist/test/business.test.js",
+        "dist/test/runtime.test.js",
+        "dist/test/api.test.js",
+        "dist/test/recovery.test.js",
+        "dist/test/integrity.test.js",
+        "dist/test/deepseek.test.js"
+      ],
+      "cap": 180
+    },
+    {
+      "name": "deepseek-runtime-validation",
+      "argv": [
+        "/data1/wjz26/agent-lab-20261120/envs/model-request-budget-20261121/bin/python",
+        "scripts/run_api_studies_v2.py",
+        "--node",
+        "/tmp/agentlab-deeptutor-setup-stage92-02uddvuy/tools/node/bin/node",
+        "--dataset-root",
+        "/tmp/pimetriclab-build-stage98-whosstp1/source/validation-final/home/datasets",
+        "--output",
+        "api-studies-v2"
+      ],
+      "cap": 720
+    }
+  ],
+  "framework_install": true,
+  "purpose": "Actual modified Pi Agent Core source, independent original1.6npm baseline alias, no model calls or local model deployment",
+  "provider": "deepseek",
+  "environment": {
+    "METRICLAB_MODEL_URL": "https://api.deepseek.com",
+    "METRICLAB_MODEL_ID": "deepseek-flash",
+    "METRICLAB_CONTEXT_WINDOW": "1048576",
+    "METRICLAB_REQUEST_TIMEOUT_MS": "90000",
+    "METRICLAB_MAX_CONTEXT_BYTES": "16384",
+    "METRICLAB_MODEL_PROTOCOL": "examples/native-v2-protocol.json"
+  },
+  "limits": {
+    "native_max_requests": 9,
+    "context_ablation_max_requests": 21,
+    "output_ceiling": 21504,
+    "no_local_model_deployment": true,
+    "GPU": 0,
+    "no_automatic_paid_retry": true,
+    "purpose": "Newv2protocol/newAug-Sepreturnsreport/newauditfields. Closedoldbaseline/v1casesneverrerun. Preserve all failures and unknowns."
+  }
+}

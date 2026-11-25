@@ -1,0 +1,9 @@
+{
+  "purpose": "Two prospectively fixed demonstrations, not an accuracy benchmark. Preserve every failure and charged unknown; no retries for a better score.",
+  "model": "Qwen3-4B-Instruct-2507, pinned existing Q4_K_M, llama.cpp b12576",
+  "resources": { "CPU": 2, "GPU": 0, "context": 8192, "request_deadline_ms": 90000, "global_request_ceiling": 7, "global_output_token_ceiling": 3712 },
+  "cases": [
+    { "id": "explicit-monthly-investigation", "question": "Compare net_sales in October 2011 [2011-10-01,2011-11-01) and November 2011 [2011-11-01,2011-12-01), using calendar_month basis. Inspect coverage and policy first, compare the metric, break down net_sales change by country (top 5 plus remainder), then submit an evidence-linked investigation. Keep interpretation qualitative and separate hypotheses from causal facts.", "max_calls": 5, "max_output": 640 },
+    { "id": "ambiguous-period", "question": "最近销售额是不是下降了？请帮我查一下。", "max_calls": 2, "max_output": 256 }
+  ]
+}

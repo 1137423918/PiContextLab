@@ -1,0 +1,781 @@
+{
+  "study": "Two controlled actual-report context cases \u00d7 three variants; not accuracy benchmark",
+  "protocol_sha256": "9513850ba537213d1360c378913f69ff676a858529991fa9ed988631fda47bf6",
+  "source_sha256": "b5e371762baa1c2fce39757054775b30856790037e66e557de143a89bf6fb9b9",
+  "model": {
+    "id": "deepseek-flash",
+    "name": "Configured OpenAI-compatible model",
+    "api": "openai-completions",
+    "provider": "deepseek",
+    "baseUrl": "https://api.deepseek.com",
+    "reasoning": false,
+    "input": [
+      "text"
+    ],
+    "cost": {
+      "input": 0.3,
+      "output": 1.2,
+      "cacheRead": 0.006,
+      "cacheWrite": 0.3
+    },
+    "contextWindow": 1048576,
+    "maxTokens": 1200
+  },
+  "total_requests": 11,
+  "GPU_used": false,
+  "local_model_deployment": false,
+  "results": [
+    {
+      "case": "large-sealed-report",
+      "variant": "upstream-full",
+      "shared_input_sha256": "de96492f81713d8e69ba54b58fe6d3724f33e5471ac6b42d5bbb01aae9359e25",
+      "expected": {
+        "report_id": "report_5122db8a8b3311b5f6ae32aea3cdebc551430e2afe6cf35838cd3178f44153f8",
+        "net_delta_gbp": "391051.5800",
+        "leading_country": "United Kingdom",
+        "leading_country_delta_gbp": "405367.5900"
+      },
+      "answer": {
+        "report_id": "report_5122db8a8b3311b5f6ae32aea3cdebc551430e2afe6cf35838cd3178f44153f8",
+        "net_delta_gbp": "391051.5800",
+        "leading_country": "United Kingdom",
+        "leading_country_delta_gbp": "405367.5900"
+      },
+      "passed": true,
+      "error": null,
+      "wall_seconds": 1.233821709,
+      "requests": 1,
+      "input_tokens": 5615,
+      "uncached_input_tokens": 5615,
+      "output_tokens": 84,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "estimated_cost_usd": 0.0017853,
+      "calls": [
+        {
+          "id": "c03d9516-a55b-48c2-81ca-73c3a20d89ee",
+          "status": "done",
+          "stop": "stop",
+          "error": null,
+          "usage": {
+            "input": 5615,
+            "output": 84,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 5699,
+            "cost": {
+              "input": 0.0016845,
+              "output": 0.0001008,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0.0017853,
+              "totalFromProvider": false
+            }
+          }
+        }
+      ],
+      "wire": [
+        {
+          "bytes": 21562,
+          "sha256": "1f7c2056ca5d0ff56497f90b2e8e3c841be0fb270fbfe6653ee66818cdb16429"
+        }
+      ],
+      "traces": [],
+      "new_tool_calls": [],
+      "initial_string_only_grade": true
+    },
+    {
+      "case": "large-sealed-report",
+      "variant": "recency-window",
+      "shared_input_sha256": "de96492f81713d8e69ba54b58fe6d3724f33e5471ac6b42d5bbb01aae9359e25",
+      "expected": {
+        "report_id": "report_5122db8a8b3311b5f6ae32aea3cdebc551430e2afe6cf35838cd3178f44153f8",
+        "net_delta_gbp": "391051.5800",
+        "leading_country": "United Kingdom",
+        "leading_country_delta_gbp": "405367.5900"
+      },
+      "answer": null,
+      "passed": false,
+      "error": null,
+      "wall_seconds": 2.135089274,
+      "requests": 2,
+      "input_tokens": 1491,
+      "uncached_input_tokens": 467,
+      "output_tokens": 167,
+      "cache_read_tokens": 1024,
+      "cache_write_tokens": 0,
+      "estimated_cost_usd": 0.000346644,
+      "calls": [
+        {
+          "id": "f4a788ad-4d52-4fb6-b10d-da44291f4f02",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 298,
+            "output": 103,
+            "cacheRead": 384,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 785,
+            "cost": {
+              "input": 8.939999999999999e-05,
+              "output": 0.0001236,
+              "cacheRead": 2.304e-06,
+              "cacheWrite": 0,
+              "total": 0.00021530399999999998,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "d136437f-d4fa-4545-9bf8-e8f81ee505b3",
+          "status": "done",
+          "stop": "stop",
+          "error": null,
+          "usage": {
+            "input": 169,
+            "output": 64,
+            "cacheRead": 640,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 873,
+            "cost": {
+              "input": 5.07e-05,
+              "output": 7.68e-05,
+              "cacheRead": 3.84e-06,
+              "cacheWrite": 0,
+              "total": 0.00013134,
+              "totalFromProvider": false
+            }
+          }
+        }
+      ],
+      "wire": [
+        {
+          "bytes": 2263,
+          "sha256": "2dbfb53226d2406acba99a57f33ec3bedc72f10978683d7f900098e849ea081b"
+        },
+        {
+          "bytes": 2727,
+          "sha256": "8c85adaf4a6f1521f4230d6a4788ecbd850a6dfcc324cda1f4cd1778473fe8a9"
+        }
+      ],
+      "traces": [],
+      "new_tool_calls": [
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "id": "context_manifest",
+            "json_pointer": "",
+            "offset": 0,
+            "limit": 4096
+          }
+        }
+      ],
+      "initial_string_only_grade": false
+    },
+    {
+      "case": "large-sealed-report",
+      "variant": "budgeted-native",
+      "shared_input_sha256": "de96492f81713d8e69ba54b58fe6d3724f33e5471ac6b42d5bbb01aae9359e25",
+      "expected": {
+        "report_id": "report_5122db8a8b3311b5f6ae32aea3cdebc551430e2afe6cf35838cd3178f44153f8",
+        "net_delta_gbp": "391051.5800",
+        "leading_country": "United Kingdom",
+        "leading_country_delta_gbp": "405367.5900"
+      },
+      "answer": {
+        "report_id": "ctx_tool-result_c9df89ec235d7cd4be52b8013bd8cf28d68fbdb99c0982ad007093fcf25e58d9",
+        "net_delta_gbp": "391051.5800",
+        "leading_country": "United Kingdom",
+        "leading_country_delta_gbp": "405367.5900"
+      },
+      "passed": false,
+      "error": null,
+      "wall_seconds": 0.8050053689999995,
+      "requests": 1,
+      "input_tokens": 2968,
+      "uncached_input_tokens": 408,
+      "output_tokens": 86,
+      "cache_read_tokens": 2560,
+      "cache_write_tokens": 0,
+      "estimated_cost_usd": 0.00024096,
+      "calls": [
+        {
+          "id": "16cf705d-3de7-4c08-becf-e9c312fa70b1",
+          "status": "done",
+          "stop": "stop",
+          "error": null,
+          "usage": {
+            "input": 408,
+            "output": 86,
+            "cacheRead": 2560,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 3054,
+            "cost": {
+              "input": 0.0001224,
+              "output": 0.0001032,
+              "cacheRead": 1.536e-05,
+              "cacheWrite": 0,
+              "total": 0.00024096,
+              "totalFromProvider": false
+            }
+          }
+        }
+      ],
+      "wire": [
+        {
+          "bytes": 11306,
+          "sha256": "6282bc285b52bda71d74e098b52a266dd6768cddae49ac3a42eb6e233bec4f3c"
+        }
+      ],
+      "traces": [
+        {
+          "policy": "pi-context-lab-v1",
+          "request": 1,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact",
+            "discover_tools"
+          ],
+          "schemaBytes": 1220,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 11.20134758876428,
+              "schemaBytes": 760
+            },
+            {
+              "name": "discover_tools",
+              "score": 4.265263414577838,
+              "schemaBytes": 460
+            }
+          ],
+          "beforeBytes": 23313,
+          "afterBytes": 12984,
+          "spilledResults": [
+            "ctx_tool-result_c9df89ec235d7cd4be52b8013bd8cf28d68fbdb99c0982ad007093fcf25e58d9"
+          ],
+          "archivedTurns": [],
+          "retainedHistoryTurns": 1
+        }
+      ],
+      "new_tool_calls": [],
+      "initial_string_only_grade": false
+    },
+    {
+      "case": "report-before-documentation",
+      "variant": "budgeted-native",
+      "shared_input_sha256": "c198c8201d42fe080ebb7687d11bbed89d85c6846e284cb30688a1dd49d5b469",
+      "expected": {
+        "report_id": "report_5122db8a8b3311b5f6ae32aea3cdebc551430e2afe6cf35838cd3178f44153f8",
+        "net_delta_gbp": "391051.5800",
+        "leading_country": "United Kingdom",
+        "leading_country_delta_gbp": "405367.5900"
+      },
+      "answer": null,
+      "passed": false,
+      "error": "Fixed model request budget exhausted; unknown attempts remain charged",
+      "wall_seconds": 4.598811663,
+      "requests": 4,
+      "input_tokens": 14156,
+      "uncached_input_tokens": 11084,
+      "output_tokens": 528,
+      "cache_read_tokens": 3072,
+      "cache_write_tokens": 0,
+      "estimated_cost_usd": 0.003977232,
+      "calls": [
+        {
+          "id": "ecfc5c88-2069-4e0a-8a99-060e2d542a0d",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 3559,
+            "output": 141,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 3700,
+            "cost": {
+              "input": 0.0010677,
+              "output": 0.0001692,
+              "cacheRead": 0,
+              "cacheWrite": 0,
+              "total": 0.0012369,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "18b73e46-0180-4ce3-84f0-b5d8508eed3f",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 3282,
+            "output": 129,
+            "cacheRead": 512,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 3923,
+            "cost": {
+              "input": 0.0009846,
+              "output": 0.0001548,
+              "cacheRead": 3.072e-06,
+              "cacheWrite": 0,
+              "total": 0.001142472,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "6221f96c-959b-40f5-98dc-4946e05b2ede",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 3144,
+            "output": 129,
+            "cacheRead": 512,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 3785,
+            "cost": {
+              "input": 0.0009431999999999999,
+              "output": 0.0001548,
+              "cacheRead": 3.072e-06,
+              "cacheWrite": 0,
+              "total": 0.001101072,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "d2c82e29-a71b-48a5-bb92-55fddd505abf",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 1099,
+            "output": 129,
+            "cacheRead": 2048,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 3276,
+            "cost": {
+              "input": 0.0003297,
+              "output": 0.0001548,
+              "cacheRead": 1.2288e-05,
+              "cacheWrite": 0,
+              "total": 0.000496788,
+              "totalFromProvider": false
+            }
+          }
+        }
+      ],
+      "wire": [
+        {
+          "bytes": 13992,
+          "sha256": "26a23603152361aa5c6ae3aec0bc6a7c82c02d682dfb3d75802783bc0e662b43"
+        },
+        {
+          "bytes": 14463,
+          "sha256": "fccbf751892b1f86a18d1eeede832f78b6794c65e579a094a029c301761f8f0a"
+        },
+        {
+          "bytes": 13600,
+          "sha256": "7a8d1d741af2d373b18072930cfe9efdfd5b17450a5a7ea264594c7637db5dfb"
+        },
+        {
+          "bytes": 12405,
+          "sha256": "66dbafe20ebbbfa31fc7d60459c54da1cefb56cd1a81639cc997bb55a1b71b0c"
+        }
+      ],
+      "traces": [
+        {
+          "policy": "pi-context-lab-v1",
+          "request": 1,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact",
+            "discover_tools"
+          ],
+          "schemaBytes": 1220,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 11.20134758876428,
+              "schemaBytes": 760
+            },
+            {
+              "name": "discover_tools",
+              "score": 4.265263414577838,
+              "schemaBytes": 460
+            }
+          ],
+          "beforeBytes": 35150,
+          "afterBytes": 16299,
+          "spilledResults": [
+            "ctx_tool-result_c9df89ec235d7cd4be52b8013bd8cf28d68fbdb99c0982ad007093fcf25e58d9"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_d679c468fb46f269c91216ac2d4fdb28f430fe8e5589398bb664f0dcf1b73873",
+            "ctx_history-turn_1cba90b4e341a1ef0e894f92e49b4cd66f5f42b1e7207eaaa7576814f1b2470d",
+            "ctx_history-turn_f3a4032b0fd4a9ab223fe91055267fcc1a621e96efafec924f4347ec982a2794",
+            "ctx_history-turn_2a66c13a20bf319d3360a816c4480f5acea1e5fd004a69c9447445d7934b7cc7",
+            "ctx_history-turn_88636a8cde6fc0ca5601098817e94fd99d6c5129e7785e5263b41719d93fd0f4",
+            "ctx_history-turn_006f32e7ea4ab1e88a0c3a2c56ad5b3979db75ca73ec0ad48510d1f5f1dfab3a"
+          ],
+          "retainedHistoryTurns": 3,
+          "indexArtifact": "ctx_history-index_95733877d9d2f985a69a7bccf76cc67d7dd952b14c8a5684c8a951a37ac0d2e3"
+        },
+        {
+          "policy": "pi-context-lab-v1",
+          "request": 2,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact",
+            "discover_tools"
+          ],
+          "schemaBytes": 1220,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 11.20134758876428,
+              "schemaBytes": 760
+            },
+            {
+              "name": "discover_tools",
+              "score": 4.265263414577838,
+              "schemaBytes": 460
+            }
+          ],
+          "beforeBytes": 46375,
+          "afterBytes": 16372,
+          "spilledResults": [
+            "ctx_tool-result_c9df89ec235d7cd4be52b8013bd8cf28d68fbdb99c0982ad007093fcf25e58d9"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_7ca5a8b8010468f562454c0928c77edf8ce5972aab16a18a1725c23939ceb76e",
+            "ctx_history-turn_f3a4032b0fd4a9ab223fe91055267fcc1a621e96efafec924f4347ec982a2794",
+            "ctx_history-turn_2a66c13a20bf319d3360a816c4480f5acea1e5fd004a69c9447445d7934b7cc7",
+            "ctx_history-turn_006f32e7ea4ab1e88a0c3a2c56ad5b3979db75ca73ec0ad48510d1f5f1dfab3a"
+          ],
+          "retainedHistoryTurns": 5,
+          "indexArtifact": "ctx_history-index_95733877d9d2f985a69a7bccf76cc67d7dd952b14c8a5684c8a951a37ac0d2e3"
+        },
+        {
+          "policy": "pi-context-lab-v1",
+          "request": 3,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact",
+            "discover_tools"
+          ],
+          "schemaBytes": 1220,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 11.20134758876428,
+              "schemaBytes": 760
+            },
+            {
+              "name": "discover_tools",
+              "score": 4.265263414577838,
+              "schemaBytes": 460
+            }
+          ],
+          "beforeBytes": 58446,
+          "afterBytes": 15468,
+          "spilledResults": [
+            "ctx_tool-result_c9df89ec235d7cd4be52b8013bd8cf28d68fbdb99c0982ad007093fcf25e58d9",
+            "ctx_tool-result_8bbbc8764d05d53c4ee23f6022dce9ec4106721f2ba6d02ca9872db13770cb1f"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_7ca5a8b8010468f562454c0928c77edf8ce5972aab16a18a1725c23939ceb76e",
+            "ctx_history-turn_d679c468fb46f269c91216ac2d4fdb28f430fe8e5589398bb664f0dcf1b73873",
+            "ctx_history-turn_f3a4032b0fd4a9ab223fe91055267fcc1a621e96efafec924f4347ec982a2794",
+            "ctx_history-turn_2a66c13a20bf319d3360a816c4480f5acea1e5fd004a69c9447445d7934b7cc7",
+            "ctx_history-turn_88636a8cde6fc0ca5601098817e94fd99d6c5129e7785e5263b41719d93fd0f4",
+            "ctx_history-turn_006f32e7ea4ab1e88a0c3a2c56ad5b3979db75ca73ec0ad48510d1f5f1dfab3a"
+          ],
+          "retainedHistoryTurns": 3,
+          "indexArtifact": "ctx_history-index_95733877d9d2f985a69a7bccf76cc67d7dd952b14c8a5684c8a951a37ac0d2e3"
+        },
+        {
+          "policy": "pi-context-lab-v1",
+          "request": 4,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact",
+            "discover_tools"
+          ],
+          "schemaBytes": 1220,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 11.20134758876428,
+              "schemaBytes": 760
+            },
+            {
+              "name": "discover_tools",
+              "score": 4.265263414577838,
+              "schemaBytes": 460
+            }
+          ],
+          "beforeBytes": 62919,
+          "afterBytes": 15428,
+          "spilledResults": [
+            "ctx_tool-result_c9df89ec235d7cd4be52b8013bd8cf28d68fbdb99c0982ad007093fcf25e58d9",
+            "ctx_tool-result_8bbbc8764d05d53c4ee23f6022dce9ec4106721f2ba6d02ca9872db13770cb1f",
+            "ctx_tool-result_25d624e31453d91862aa24eeffbb6afe4580b5ea1366a59c60cfae28380dcf8e"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_7ca5a8b8010468f562454c0928c77edf8ce5972aab16a18a1725c23939ceb76e",
+            "ctx_history-turn_f3a4032b0fd4a9ab223fe91055267fcc1a621e96efafec924f4347ec982a2794",
+            "ctx_history-turn_2a66c13a20bf319d3360a816c4480f5acea1e5fd004a69c9447445d7934b7cc7",
+            "ctx_history-turn_006f32e7ea4ab1e88a0c3a2c56ad5b3979db75ca73ec0ad48510d1f5f1dfab3a"
+          ],
+          "retainedHistoryTurns": 5,
+          "indexArtifact": "ctx_history-index_95733877d9d2f985a69a7bccf76cc67d7dd952b14c8a5684c8a951a37ac0d2e3"
+        },
+        {
+          "policy": "pi-context-lab-v1",
+          "request": 5,
+          "registeredTools": 2,
+          "selectedToolNames": [
+            "read_context_artifact",
+            "discover_tools"
+          ],
+          "schemaBytes": 1220,
+          "ranking": [
+            {
+              "name": "read_context_artifact",
+              "score": 11.20134758876428,
+              "schemaBytes": 760
+            },
+            {
+              "name": "discover_tools",
+              "score": 4.265263414577838,
+              "schemaBytes": 460
+            }
+          ],
+          "beforeBytes": 69739,
+          "afterBytes": 15111,
+          "spilledResults": [
+            "ctx_tool-result_c9df89ec235d7cd4be52b8013bd8cf28d68fbdb99c0982ad007093fcf25e58d9",
+            "ctx_tool-result_8bbbc8764d05d53c4ee23f6022dce9ec4106721f2ba6d02ca9872db13770cb1f",
+            "ctx_tool-result_25d624e31453d91862aa24eeffbb6afe4580b5ea1366a59c60cfae28380dcf8e"
+          ],
+          "archivedTurns": [
+            "ctx_history-turn_7ca5a8b8010468f562454c0928c77edf8ce5972aab16a18a1725c23939ceb76e",
+            "ctx_history-turn_d679c468fb46f269c91216ac2d4fdb28f430fe8e5589398bb664f0dcf1b73873",
+            "ctx_history-turn_1cba90b4e341a1ef0e894f92e49b4cd66f5f42b1e7207eaaa7576814f1b2470d",
+            "ctx_history-turn_f3a4032b0fd4a9ab223fe91055267fcc1a621e96efafec924f4347ec982a2794",
+            "ctx_history-turn_2a66c13a20bf319d3360a816c4480f5acea1e5fd004a69c9447445d7934b7cc7",
+            "ctx_history-turn_88636a8cde6fc0ca5601098817e94fd99d6c5129e7785e5263b41719d93fd0f4",
+            "ctx_history-turn_006f32e7ea4ab1e88a0c3a2c56ad5b3979db75ca73ec0ad48510d1f5f1dfab3a"
+          ],
+          "retainedHistoryTurns": 2,
+          "indexArtifact": "ctx_history-index_95733877d9d2f985a69a7bccf76cc67d7dd952b14c8a5684c8a951a37ac0d2e3"
+        }
+      ],
+      "new_tool_calls": [
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "id": "ctx_tool-result_c9df89ec235d7cd4be52b8013bd8cf28d68fbdb99c0982ad007093fcf25e58d9",
+            "json_pointer": "",
+            "offset": 0,
+            "limit": 4096
+          }
+        },
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "id": "ctx_tool-result_c9df89ec235d7cd4be52b8013bd8cf28d68fbdb99c0982ad007093fcf25e58d9",
+            "json_pointer": "",
+            "offset": 4096,
+            "limit": 4096
+          }
+        },
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "id": "ctx_tool-result_c9df89ec235d7cd4be52b8013bd8cf28d68fbdb99c0982ad007093fcf25e58d9",
+            "json_pointer": "",
+            "offset": 8192,
+            "limit": 1483
+          }
+        },
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "id": "ctx_tool-result_c9df89ec235d7cd4be52b8013bd8cf28d68fbdb99c0982ad007093fcf25e58d9",
+            "json_pointer": "",
+            "offset": 6000,
+            "limit": 2192
+          }
+        }
+      ],
+      "initial_string_only_grade": false
+    },
+    {
+      "case": "report-before-documentation",
+      "variant": "recency-window",
+      "shared_input_sha256": "c198c8201d42fe080ebb7687d11bbed89d85c6846e284cb30688a1dd49d5b469",
+      "expected": {
+        "report_id": "report_5122db8a8b3311b5f6ae32aea3cdebc551430e2afe6cf35838cd3178f44153f8",
+        "net_delta_gbp": "391051.5800",
+        "leading_country": "United Kingdom",
+        "leading_country_delta_gbp": "405367.5900"
+      },
+      "answer": null,
+      "passed": false,
+      "error": null,
+      "wall_seconds": 2.124146073,
+      "requests": 2,
+      "input_tokens": 5523,
+      "uncached_input_tokens": 2451,
+      "output_tokens": 247,
+      "cache_read_tokens": 3072,
+      "cache_write_tokens": 0,
+      "estimated_cost_usd": 0.001050132,
+      "calls": [
+        {
+          "id": "f7fa297d-a674-4cb7-b74c-860766665dcd",
+          "status": "done",
+          "stop": "toolUse",
+          "error": null,
+          "usage": {
+            "input": 2283,
+            "output": 165,
+            "cacheRead": 384,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 2832,
+            "cost": {
+              "input": 0.0006849,
+              "output": 0.000198,
+              "cacheRead": 2.304e-06,
+              "cacheWrite": 0,
+              "total": 0.000885204,
+              "totalFromProvider": false
+            }
+          }
+        },
+        {
+          "id": "13f05145-1592-4142-8ae0-c05f3a8aff2e",
+          "status": "done",
+          "stop": "stop",
+          "error": null,
+          "usage": {
+            "input": 168,
+            "output": 82,
+            "cacheRead": 2688,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 2938,
+            "cost": {
+              "input": 5.04e-05,
+              "output": 9.839999999999999e-05,
+              "cacheRead": 1.6128e-05,
+              "cacheWrite": 0,
+              "total": 0.00016492799999999998,
+              "totalFromProvider": false
+            }
+          }
+        }
+      ],
+      "wire": [
+        {
+          "bytes": 11732,
+          "sha256": "140b9ef55477070c20bcdefc2954b975649a8019ef3ec362169637b261f348b6"
+        },
+        {
+          "bytes": 12503,
+          "sha256": "df64090cecdf9dade9caca7eef7acdc3bd029ce86bd0d0a5efc49c9e3e307e25"
+        }
+      ],
+      "traces": [],
+      "new_tool_calls": [
+        {
+          "name": "read_context_artifact",
+          "arguments": {
+            "id": "sealed_report",
+            "json_pointer": "",
+            "offset": 0,
+            "limit": 4096
+          }
+        }
+      ],
+      "initial_string_only_grade": false
+    },
+    {
+      "case": "report-before-documentation",
+      "variant": "upstream-full",
+      "shared_input_sha256": "c198c8201d42fe080ebb7687d11bbed89d85c6846e284cb30688a1dd49d5b469",
+      "expected": {
+        "report_id": "report_5122db8a8b3311b5f6ae32aea3cdebc551430e2afe6cf35838cd3178f44153f8",
+        "net_delta_gbp": "391051.5800",
+        "leading_country": "United Kingdom",
+        "leading_country_delta_gbp": "405367.5900"
+      },
+      "answer": {
+        "report_id": "report_5122db8a8b3311b5f6ae32aea3cdebc551430e2afe6cf35838cd3178f44153f8",
+        "net_delta_gbp": "391051.5800",
+        "leading_country": "United Kingdom",
+        "leading_country_delta_gbp": "405367.5900"
+      },
+      "passed": true,
+      "error": null,
+      "wall_seconds": 0.7829944510000005,
+      "requests": 1,
+      "input_tokens": 7600,
+      "uncached_input_tokens": 2096,
+      "output_tokens": 84,
+      "cache_read_tokens": 5504,
+      "cache_write_tokens": 0,
+      "estimated_cost_usd": 0.0007626239999999999,
+      "calls": [
+        {
+          "id": "b9de42f2-041d-4768-94f1-d18c66271c36",
+          "status": "done",
+          "stop": "stop",
+          "error": null,
+          "usage": {
+            "input": 2096,
+            "output": 84,
+            "cacheRead": 5504,
+            "cacheWrite": 0,
+            "reasoning": 0,
+            "totalTokens": 7684,
+            "cost": {
+              "input": 0.0006288,
+              "output": 0.0001008,
+              "cacheRead": 3.3024e-05,
+              "cacheWrite": 0,
+              "total": 0.0007626239999999999,
+              "totalFromProvider": false
+            }
+          }
+        }
+      ],
+      "wire": [
+        {
+          "bytes": 31031,
+          "sha256": "a700c74f47b12a62e86f85e92fc1336c64be6557a7b691b42eff7c08febfc191"
+        }
+      ],
+      "traces": [],
+      "new_tool_calls": [],
+      "initial_string_only_grade": true
+    }
+  ],
+  "grading": "Exact semantic4-field match; decimal strings and JSON numbers both accepted. Original string-only grades preserved. No requests rerun. Rule clarified from the output contract before inspecting answers.",
+  "recorded_source_sha256": "10f68c513cf7092b9900d17ef1d46c4a1920aa5ad6fa8d49838053896e1aae49"
+}

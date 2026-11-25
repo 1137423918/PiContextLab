@@ -1,0 +1,16 @@
+{
+  "upstream": "earendil-works/pi",
+  "tag": "v1.6.0",
+  "commit": "faac585884ae2c013a6b1400f3e9e77f10b34bac",
+  "package": "@earendil-works/pi-agent-core",
+  "upstream_version": "1.6.0",
+  "unofficial_fork": true,
+  "original_files": {
+    "src/stream-fn.ts": "1f9dee101a5ce1052558458d9ce47e53e05187224e879217899059a80d90bc45",
+    "src/agent.ts": "6d0e56bf4443f0cfc5c6a82ce31a3b99f15ff816075bed36403dfa0c95a609c6",
+    "src/types.ts": "6ad1a3e1ea6cfa0770421aca9a23726061d8d31fdeb5c17c8acd5d7cea0e74b1",
+    "src/proxy.ts": "fc4fc6bceee46361c0ec5b54430f8a633f5ed75d9b9a8fcd54656e94307b075e",
+    "src/index.ts": "8bec36d174aee7e4326b1bfa61b4d7c6ac19dd659439e70f91d2d448794cc892",
+    "src/agent-loop.ts": "a2c7dc92644bae8655a263e1f5b6ecca6a0d3057002f978e709ed27ec8dd5a92"
+  }
+}

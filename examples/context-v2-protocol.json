@@ -1,0 +1,14 @@
+{
+  "purpose": "Separate prospectively frozen v2 study on a NEW returns report and NEW audit fields. Do not combine with or revise failed v1 scores.",
+  "provider": "https://api.deepseek.com", "model": "deepseek-flash", "thinking": "disabled",
+  "source": "Actual newly sealed August/September returns-country report produced by native-v2-protocol, identical content-only history for every variant",
+  "ground_truth": "Exact report_id, created_unix_ms, comparison_result_sha256 and returns_delta_gbp from the sealed report; no expected values in the current model question",
+  "cases": [
+    { "id": "returns-report-identities", "documentation_turns": 0, "max_calls": 3, "max_output": 512, "variant_order": ["upstream-full", "recency-window", "budgeted-native"] },
+    { "id": "returns-report-before-docs", "documentation_turns": 8, "documentation_codepoints_per_turn": 1000, "max_calls": 4, "max_output": 768, "variant_order": ["budgeted-native", "recency-window", "upstream-full"] }
+  ],
+  "budgets": { "global_max_requests": 21, "global_output_token_ceiling": 13824, "outer_context_json_byte_ceiling": 65536, "compact_context_json_bytes": 16384, "inline_tool_result_bytes": 2048, "max_tools": 2, "schema_bytes": 4096, "per_request_ms": 90000 },
+  "variants": { "upstream-full": "Unmodified npm Pi1.6.0 with full history", "recency-window": "Original Pi plus whole-turn recency window16KiB", "budgeted-native": "Actual native fork1.6.0-contextlab.2: on-demand utilities, exact source-identity sketch, batched bounded recall, history packing16KiB" },
+  "report": ["completed exact4-field answer", "per-request normalized JSON bytes separately from actual input tokens", "new provider usage including cached input", "estimated cost, not invoice", "all failures and unknowns"],
+  "controls": "The documentation additions are explicitly controlled MIT upstream README turns, not real customer history. No LLM training, local model deployment or GPU. Fixed parameters; no paid retries for better scores."
+}

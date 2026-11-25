@@ -1,0 +1,13 @@
+{
+  "purpose": "Prospectively frozen CPU-only retrieval evaluation of the framework lexical ranker, not live API execution or the full ToolRet leaderboard.",
+  "queries": { "repo": "mangopy/ToolRet-Queries", "revision": "b8c76ad3349ff17497b6bdb28bb5b8f61a0f6445", "file": "apibank/queries-00000-of-00001.parquet", "sha256": "1e91b9c4f7e0b38946bf5c3272e15af73f0b446e4d546c52e09179b3a9709d3b", "selection": "all101queries in the official API-Bank subset, sorted by ID" },
+  "corpus": { "repo": "mangopy/ToolRet-Tools", "revision": "e06c38c75612b6536bd959e08cdd345894aba6a7", "file": "web/tools-00000-of-00001.parquet", "sha256": "57faceebd778b2cb74571dca0e71e8bc8078c11ba05dce0efc562e818d3950e6", "selection": "entire official web corpus37292tools, sorted by ID; no label-based candidate filtering" },
+  "query_text": "original query only; never use instruction or labels as ranker input",
+  "variants": ["name-only BM25", "raw-document BM25", "framework field BM25: name twice + description + parameters"],
+  "parameters": { "k1": 1.2, "b": 0.75, "top_k": [1,3,5,10], "budgeted_max_tools": 8, "budgeted_schema_bytes": 8192 },
+  "metrics": ["mean per-query Recall@K", "all-positive coverage@K", "MRR@10", "budgeted coverage", "selected schema bytes", "CPU wall time"],
+  "licenses": "Dataset card has no license field; raw data is downloaded into private experiment storage and not redistributed in this repository. Publish only code, source revisions, hashes and aggregate/ID-based results.",
+  "GPU": false,
+  "model_calls": 0,
+  "retuning": "Keep initial results including losses. Do not tune on these101labels and rerun for a better score."
+}

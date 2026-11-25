@@ -1,0 +1,12 @@
+{
+  "queries": {
+    "url": "https://huggingface.co/datasets/mangopy/ToolRet-Queries/resolve/b8c76ad3349ff17497b6bdb28bb5b8f61a0f6445/apibank/queries-00000-of-00001.parquet",
+    "bytes": 45023,
+    "sha256": "1e91b9c4f7e0b38946bf5c3272e15af73f0b446e4d546c52e09179b3a9709d3b"
+  },
+  "corpus": {
+    "url": "https://huggingface.co/datasets/mangopy/ToolRet-Tools/resolve/e06c38c75612b6536bd959e08cdd345894aba6a7/web/tools-00000-of-00001.parquet",
+    "bytes": 8143446,
+    "sha256": "57faceebd778b2cb74571dca0e71e8bc8078c11ba05dce0efc562e818d3950e6"
+  }
+}
