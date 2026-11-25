@@ -20,6 +20,9 @@ test('HTTP workflow, strict request validation, origin guard, durable reload, re
     assert.equal((await post(`/api/jobs/${job.id}/review`,{report_id:'stale-version',decision:'accepted',note:'TEST review'})).status,400);
     assert.equal((await post(`/api/jobs/${job.id}/review`,{report_id:snapshot.report.id,decision:'accepted',note:'TEST FIXTURE human route, no real human review claim'})).status,200);
     const state=await (await fetch(`${url}/api/jobs/${job.id}`)).json() as {review:{decision:string}};assert.equal(state.review.decision,'accepted');
+    for(let i=0;i<510;i++)f.store.event(job.id,'control_noise',{i});
+    const longHistory=await (await fetch(`${url}/api/jobs/${job.id}`)).json() as {events:{kind:string}[];context_policy:{selectedToolNames:string[]}};
+    assert.equal(longHistory.events.length,500);assert.ok(longHistory.events.every(e=>e.kind==='control_noise'));assert.ok(longHistory.context_policy.selectedToolNames.includes('submit_investigation'));
     const ctl=new AbortController();const events=await fetch(`${url}/api/jobs/${job.id}/events?after=0`,{signal:ctl.signal});const reader=events.body?.getReader();assert.ok(reader);const chunk=await reader.read();assert.ok(new TextDecoder().decode(chunk.value).includes('id: '));ctl.abort();
   } finally {await new Promise<void>(resolve=>server.close(()=>resolve()));f.store.close();await rm(f.root,{recursive:true,force:true});}
 });

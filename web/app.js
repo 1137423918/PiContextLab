@@ -31,11 +31,12 @@ async function render() {
   $('empty').hidden = true; $('detail').hidden = false; text('job-question', job.question); text('status', job.status); text('job-error', job.error);
   text('budget', `模型请求已预留 ${data.calls.length} / ${job.max_calls} · 单次输出上限 ${job.max_output} tokens · 未知尝试计入原额度`);
   const policies=events.filter(e=>e.kind==='context_prepared');
+  const latestPolicy=data.context_policy??policies.at(-1)?.payload;
   const panel=$('context-policy');panel.replaceChildren();
-  if(policies.length){const latest=policies.at(-1).payload;panel.append(element('h2','上下文与工具策略'));const facts=element('div',undefined,'facts');
+  if(latestPolicy){const latest=latestPolicy;panel.append(element('h2','上下文与工具策略'));const facts=element('div',undefined,'facts');
     for(const [label,value] of [['整理前 JSON 字节',latest.beforeBytes],['整理后 JSON 字节',latest.afterBytes],['本轮工具 / 注册工具',`${latest.selectedToolNames.length} / ${latest.registeredTools}`]]){const f=element('div',undefined,'fact');f.append(element('span',label),element('strong',String(value)));facts.append(f);}panel.append(facts,element('p',`已暴露：${latest.selectedToolNames.join(' · ')}`,'muted'),element('p',`外置结果 ${latest.spilledResults.length} 项 · 归档历史 ${latest.archivedTurns.length} 轮。这里是上下文 JSON 字节，实际 token 见供应商 usage。`,'muted'));
     const usage=data.calls.filter(c=>c.usage).reduce((a,c)=>({input:a.input+c.usage.input+c.usage.cacheRead+c.usage.cacheWrite,output:a.output+c.usage.output,cost:a.cost+c.usage.cost.total}),{input:0,output:0,cost:0});panel.append(element('p',`本任务实际输入 ${usage.input} tokens · 输出 ${usage.output} tokens · 估计费用 $${usage.cost.toFixed(6)}（非账单）`,'muted'));
-    const details=element('details'),summary=element('summary','逐请求策略记录');details.append(summary,pre(policies.map(e=>e.payload)));panel.append(details);panel.hidden=false;
+    const details=element('details'),summary=element('summary','最近事件中的策略记录');details.append(summary,pre(policies.length?policies.map(e=>e.payload):[latest]));panel.append(details);panel.hidden=false;
   }else panel.hidden=true;
   $('cancel').hidden = ['completed','failed','cancelled','clarification'].includes(job.status); $('resume').hidden = !['paused','running','queued'].includes(job.status);
   $('events').replaceChildren(...events.slice(-70).map(ev => { const li = document.createElement('li'); const labels = { claimed:'取得任务写入权', model_reserved:'预留一次模型请求', tool_committed:'工具结果已持久化', report_sealed:'报告已封存', human_review:'人工审核已记录', clarification:'需要澄清', settled:'本轮结束', tool_execution_start:'开始执行工具', tool_execution_end:'工具执行完成', turn_end:'Pi 轮次结束' }; li.textContent = `${new Date(ev.created).toLocaleTimeString()} · ${labels[ev.kind] ?? ev.kind}${ev.payload.toolName ? ` · ${ev.payload.toolName}` : ''}`; if (ev.kind === 'clarification') li.textContent += `：${ev.payload.question}`; return li; }));

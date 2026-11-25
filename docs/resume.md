@@ -6,7 +6,7 @@
 
 技术栈：TypeScript、Pi Agent Core、DeepSeek API、BM25、DuckDB、SQLite。
 
-- 基于 Pi 1.6.0 派生 Agent Core，新增请求级 `ModelContextPolicy`，将模型可见工具声明与本轮执行白名单绑定；实现工具依赖闭包、数量/schema 双预算选择和漏召回发现，支持持久化后恢复原轮次执行集合。
+- 基于 Pi 1.6.0 派生 Agent Core，新增请求级 `ModelContextPolicy`，将模型可见工具声明与本轮执行白名单绑定；实现工具依赖闭包、数量/schema 双预算选择和漏召回发现，将工具集合与请求及响应身份持久绑定，恢复时拒绝未绑定调用。
 - 实现按完整 user turn 打包的上下文策略，将大工具结果按 SHA256 外置并保留来源身份，支持会话隔离、完整性校验和批量 JSON pointer 限量回查；保留权威历史，预算不足时在请求前拒绝。
 - 构建原版/最近窗口/改造核心的 DeepSeek API 小样本对照，以及 101 条公开查询对 37,292 个工具的检索评测，记录任务结果、累计 token、schema 开销和失败轨迹；根据身份混淆、分页耗尽及批量路径错误完善接口。
 

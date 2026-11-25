@@ -9,6 +9,13 @@ export interface Job { id: string; dataset: string; question: string; status: St
 export interface Claim { id: string; owner: string; epoch: number; }
 export interface Report { id: string; job: string; dataset: string; title: string; evidence: Evidence[]; interpretation: string; hypotheses: string[]; created: number; }
 interface SqlJob extends Omit<Job, 'messages'> { messages: string; }
+function assistantIdentity(reply: unknown): string {
+  // Pi annotates this field after the provider reply is persisted. It is not response identity.
+  if (reply !== null && typeof reply === 'object' && !Array.isArray(reply)) {
+    const { thinkingLevel: _thinking, ...content } = reply as Record<string,unknown>; return hash(content);
+  }
+  return hash(reply);
+}
 export class Store {
   readonly db: DatabaseSync;
   constructor(path: string) {
@@ -23,6 +30,9 @@ export class Store {
     this.db.exec('CREATE TABLE IF NOT EXISTS runtime_configs(job TEXT PRIMARY KEY,fingerprint TEXT NOT NULL,payload TEXT NOT NULL)');
     this.db.exec('CREATE TABLE IF NOT EXISTS context_artifacts(job TEXT NOT NULL,id TEXT NOT NULL,payload TEXT NOT NULL,PRIMARY KEY(job,id))');
     this.db.exec('CREATE TABLE IF NOT EXISTS job_intents(job TEXT PRIMARY KEY,payload TEXT NOT NULL)');
+    this.db.exec('CREATE TABLE IF NOT EXISTS call_tool_sets(call_id TEXT PRIMARY KEY,job TEXT NOT NULL,tool_names TEXT NOT NULL,assistant_hash TEXT)');
+    this.db.exec('CREATE INDEX IF NOT EXISTS call_tool_sets_reply ON call_tool_sets(job,assistant_hash)');
+    this.db.exec('CREATE INDEX IF NOT EXISTS events_by_kind ON events(job,kind,seq)');
   }
   close(): void { this.db.close(); }
   transaction<T>(fn: () => T): T { this.db.exec('BEGIN IMMEDIATE'); try { const result = fn(); this.db.exec('COMMIT'); return result; } catch (e) { this.db.exec('ROLLBACK'); throw e; } }
@@ -57,23 +67,40 @@ export class Store {
   bindRuntime(claim: Claim, config: unknown): void { this.transaction(()=>{this.assert(claim);const fingerprint=hash(config);const existing=this.db.prepare('SELECT fingerprint FROM runtime_configs WHERE job=?').get(claim.id);if(existing && existing.fingerprint!==fingerprint)throw new Error('Runtime configuration changed; create a new investigation');this.db.prepare('INSERT OR IGNORE INTO runtime_configs VALUES(?,?,?)').run(claim.id,fingerprint,JSON.stringify(config));}); }
   event(job: string, kind: string, payload: unknown): void { this.db.prepare('INSERT INTO events(job,kind,payload,created) VALUES(?,?,?,?)').run(job, kind, JSON.stringify(payload), Date.now()); }
   events(job: string, after = 0): unknown[] { return this.db.prepare('SELECT * FROM events WHERE job=? AND seq>? ORDER BY seq LIMIT 500').all(job, after).map(r => ({ ...r, payload: JSON.parse(String(r.payload)) as unknown })); }
+  recentEvents(job: string): unknown[] { return this.db.prepare('SELECT * FROM events WHERE job=? ORDER BY seq DESC LIMIT 500').all(job).reverse().map(r=>({...r,payload:JSON.parse(String(r.payload)) as unknown})); }
+  latestEvent(job: string, kind: string): unknown | null { const row=this.db.prepare('SELECT payload FROM events WHERE job=? AND kind=? ORDER BY seq DESC LIMIT 1').get(job,kind);return row?JSON.parse(String(row.payload)) as unknown:null; }
+  needsClarification(job: string): boolean { return this.db.prepare("SELECT 1 FROM events WHERE job=? AND kind='clarification' LIMIT 1").get(job)!==undefined; }
+  toolsForAssistant(claim: Claim, assistant: AgentMessage): string[] {
+    this.assert(claim);
+    const rows=this.db.prepare('SELECT tool_names FROM call_tool_sets WHERE job=? AND assistant_hash=?').all(claim.id,assistantIdentity(assistant));
+    if(rows.length===0)throw new Error('Missing request-bound tool selection for saved assistant; create a new investigation');
+    const selections=[...new Set(rows.map(r=>String(r.tool_names)))];
+    if(selections.length!==1)throw new Error('Ambiguous request-bound tool selection for saved assistant');
+    return JSON.parse(selections[0]!) as string[];
+  }
   messages(claim: Claim, messages: AgentMessage[]): void { this.transaction(() => { this.assert(claim); this.db.prepare('UPDATE jobs SET messages=? WHERE id=?').run(JSON.stringify(messages), claim.id); }); }
   finish(claim: Claim, status: Status, error: string | null = null): void {
     this.transaction(() => { const j = this.job(claim.id); if (j.owner !== claim.owner || j.epoch !== claim.epoch) return;
       this.db.prepare('UPDATE jobs SET status=?,error=?,owner=NULL,lease=0 WHERE id=?').run(j.cancel ? 'cancelled' : status, error, claim.id); this.event(claim.id, 'settled', { status: j.cancel ? 'cancelled' : status, error }); });
   }
   cancel(id: string): void { this.transaction(() => { const job=this.job(id); if (job.status==='cancelled') return; if (['completed','failed','clarification'].includes(job.status)) throw new Error('Settled job cannot be cancelled'); this.db.prepare("UPDATE jobs SET cancel=1,status='cancelled' WHERE id=?").run(id); this.event(id, 'cancelled', {}); }); }
-  reserve(claim: Claim, requestHash: string): { id: string; reply: unknown | null } {
+  reserve(claim: Claim, requestHash: string, selectedTools?: readonly string[]): { id: string; reply: unknown | null } {
     return this.transaction(() => {
       const job = this.assert(claim);
+      if(selectedTools && (selectedTools.some(name=>typeof name!=='string'||name.length===0)||new Set(selectedTools).size!==selectedTools.length))throw new Error('Invalid request-bound tool selection');
       const cached = this.db.prepare("SELECT id,reply FROM calls WHERE job=? AND request_hash=? AND status='done' AND coalesce(json_extract(reply,'$.stopReason'),'stop') NOT IN ('error','aborted') ORDER BY created LIMIT 1").get(job.id, requestHash);
-      if (cached) return { id: String(cached.id), reply: JSON.parse(String(cached.reply)) as unknown };
+      if (cached) {
+        if(selectedTools){const binding=this.db.prepare('SELECT tool_names FROM call_tool_sets WHERE call_id=? AND job=?').get(String(cached.id),job.id);if(!binding||binding.tool_names!==JSON.stringify(selectedTools))throw new Error('Cached reply execution tool selection differs from the current request');}
+        return { id: String(cached.id), reply: JSON.parse(String(cached.reply)) as unknown };
+      }
       const n = this.db.prepare('SELECT count(*) n FROM calls WHERE job=?').get(job.id);
       if (Number(n?.n) >= job.max_calls) throw new Error('Fixed model request budget exhausted; unknown attempts remain charged');
-      const id = randomUUID(); this.db.prepare("INSERT INTO calls VALUES(?,?,?,'pending',NULL,?)").run(id, job.id, requestHash, Date.now()); this.event(job.id, 'model_reserved', { id, ceiling: job.max_output }); return { id, reply: null };
+      const id = randomUUID(); this.db.prepare("INSERT INTO calls VALUES(?,?,?,'pending',NULL,?)").run(id, job.id, requestHash, Date.now());
+      if(selectedTools)this.db.prepare('INSERT INTO call_tool_sets(call_id,job,tool_names) VALUES(?,?,?)').run(id,job.id,JSON.stringify(selectedTools));
+      this.event(job.id, 'model_reserved', { id, ceiling: job.max_output }); return { id, reply: null };
     });
   }
-  reply(claim: Claim, id: string, reply: unknown): void { this.transaction(() => { this.assert(claim); this.db.prepare("UPDATE calls SET status='done',reply=? WHERE id=? AND job=? AND status='pending'").run(JSON.stringify(reply), id, claim.id); }); }
+  reply(claim: Claim, id: string, reply: unknown): void { this.transaction(() => { this.assert(claim); const saved=this.db.prepare("UPDATE calls SET status='done',reply=? WHERE id=? AND job=? AND status='pending'").run(JSON.stringify(reply), id, claim.id);if(saved.changes)this.db.prepare('UPDATE call_tool_sets SET assistant_hash=? WHERE call_id=? AND job=?').run(assistantIdentity(reply),id,claim.id); }); }
   calls(job: string): unknown[] { return this.db.prepare("SELECT id,request_hash,status,created,json_extract(reply,'$.usage') usage,json_extract(reply,'$.stopReason') stop_reason FROM calls WHERE job=? ORDER BY created").all(job).map(row=>({...row,usage:row.usage?JSON.parse(String(row.usage)) as unknown:null})); }
   cachedTool(claim: Claim, id: string, request: unknown): unknown | undefined {
     this.assert(claim); const row = this.db.prepare('SELECT request_hash,result FROM tools WHERE job=? AND call_id=?').get(claim.id, id);

@@ -1,0 +1,15 @@
+{
+  "kind": "synthetic engineering counterexample, not model accuracy",
+  "source": "/tmp/pimetriclab-build-stage98-ha_mpc6c/source",
+  "initial_event_page": 500,
+  "event_count": 524,
+  "selected_on_response": [
+    "request_clarification"
+  ],
+  "recovered_query_rejected": true,
+  "query_evidence_written": 0,
+  "provider_requests": 1,
+  "real_API_calls": 0,
+  "GPU_used": false,
+  "status": "clarification"
+}

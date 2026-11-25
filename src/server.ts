@@ -37,7 +37,7 @@ export function app(store: Store, warehouse: Warehouse, runner: Runner | null, m
     }
     if (parts[0] === 'api' && parts[1] === 'jobs' && parts[2]) {
       const id = parts[2]; const job = store.job(id);
-      if (req.method === 'GET' && parts.length === 3) { const report = store.report(id); send(res, 200, { job,intent:store.intent(id), calls: store.calls(id), evidence: store.evidence(id), report, review: report ? store.reviewFor(report.id) : null, events: store.events(id) }); return; }
+      if (req.method === 'GET' && parts.length === 3) { const report = store.report(id); send(res, 200, { job,intent:store.intent(id), calls: store.calls(id), evidence: store.evidence(id), report, review: report ? store.reviewFor(report.id) : null, events: store.recentEvents(id),context_policy:store.latestEvent(id,'context_prepared') }); return; }
       if (req.method === 'GET' && parts[3] === 'events') {
         const after = Number(req.headers['last-event-id'] ?? url.searchParams.get('after') ?? '0'); if (!Number.isSafeInteger(after) || after < 0) throw new Error('Invalid event cursor');
         res.writeHead(200, { 'Content-Type': 'text/event-stream', Connection: 'keep-alive' }); let cursor = after;

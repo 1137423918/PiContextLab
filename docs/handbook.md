@@ -183,7 +183,7 @@ SQLite 使用 WAL、`synchronous=FULL` 和短事务。任务状态包括 queued�
 1. 完整 assistant/toolCall 已持久化，工具尚未执行，进程被 SIGKILL。
 2. 只读查询结果及工具缓存已提交，Pi 的 toolResult 消息尚未追加，进程被 SIGKILL。
 
-新 owner 等旧租约过期后认领，检查最后一批 assistant 调用。已有 toolResult 的跳过；有相同 call ID 与参数哈希的工具缓存则复用；尚未执行的只读查询经 Pi `runToolCall` 校验后执行。每补一条工具结果就提交消息，然后调用 `continue()`。
+新 owner 等旧租约过期后认领，检查最后一批 assistant 调用，并按该保存响应的内容身份读取生成请求的工具集合；不从最新事件或事件分页推测。已有 toolResult 的跳过；有相同 call ID 与参数哈希的工具缓存则复用；尚未执行的只读查询经 Pi `runToolCall` 校验后执行。每补一条工具结果就提交消息，然后调用 `continue()`。
 
 工具结果和查询证据在同一事务保存。只读查询若在计算中途死亡，可重算；报告写入有内容身份和单任务唯一性，即使在工具结果提交前死亡，也不会生成第二份不同的封存报告。
 
@@ -315,3 +315,11 @@ node dist/scripts/validate-uci.js /path/to/retail-data /path/to/oracle.json /pat
 真实 API：v1 方案在 `context-evaluation-protocol.json`，修订 v2 在 `context-v2-protocol.json`；两者分别绑定不同业务报告和审计字段。`run_api_studies_v2.py --node /path/to/node --dataset-root /path/to/datasets --output /path/to/fresh-output` 先运行新业务案例，再以新报告生成同输入、三策略对照。输出目录必须全新，失败和 unknown 也入账。输入 token 对每个请求累加并包括缓存 token，不能只比较第一轮。
 
 这些小样本是集成诊断，ToolRet 子集是检索评测，金额 oracle 是业务核对；三者不能合并成一个模型准确率。
+
+## 23. 为什么工具选择需要绑定具体请求
+
+工具发现会改变后续轮次可见集合。崩溃恢复时，“最近一次策略记录”只是时间顺序，不能自动证明它属于当前待执行响应。当前宿主在请求预留事务中同时保存工具名称，响应与完整内容身份关联；核心正常路径用该次 prepare 返回的工具对象，恢复路径用持久绑定后再走 Pi 的 `runToolCall`。
+
+一个工程反例包含超过 500 条事件、一次只允许澄清却返回比较工具的响应，以及无关的较新策略记录。旧版从前 500 条事件取到允许比较的旧集合；新版本按响应绑定拒绝比较，查询证据保持为零。这个反例是合成协议控制，不是 DeepSeek 准确率。另有无绑定暂停、缓存集合不一致拒绝、已澄清不追加推理的回归。
+
+运行配置加入 `request_binding: v1`，旧任务不静默迁移。当前只读计算可重放；如果未来加入外部写操作，还需要单独的幂等键、结果对账与明确副作用协议。

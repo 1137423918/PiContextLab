@@ -32,6 +32,7 @@ test('restart reconciles committed assistant tools through Pi with cached result
     const assistant=message(runner.model,[{type:'toolCall',id:'recovered-compare',name:'compare_metric',arguments:comparison}], 'toolUse');
     f.store.messages(c,[{role:'user',content:job.question,timestamp:Date.now()},assistant]);
     f.store.event(job.id,'context_prepared',{selectedToolNames:tools.map(t=>t.name)});
+    const reserved=f.store.reserve(c,'controlled-before-crash',tools.map(t=>t.name));f.store.reply(c,reserved.id,assistant);
     const e=await f.warehouse.compare(f.dataset.id,comparison);const output={content:[{type:'text',text:JSON.stringify({id:e.id,result:e.result})}],details:{id:e.id}};
     f.store.commitTool(c,'recovered-compare',{name:'compare_metric',input:comparison},output,e);
     f.store.db.prepare('UPDATE jobs SET lease=0 WHERE id=?').run(job.id);
