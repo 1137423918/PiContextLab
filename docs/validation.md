@@ -417,3 +417,21 @@ core7只修复压力模式的候选过滤：按大小优先、净节省才替换
 [6行原始比较及投影](../evidence/result-headroom/results.json) · [80项测试](../evidence/result-headroom/tests.tap) · [冻结core9身份](../evidence/result-headroom/baseline-source.json) · [源码包](../evidence/result-headroom/source-snapshot.tar.gz) · [逐文件清单](../evidence/result-headroom/snapshot-manifest.json) · [87文件核对](../evidence/result-headroom/source-verification.json) · [服务器lock](../evidence/result-headroom/package-lock.json) · [完整数据核对](../evidence/result-headroom/uci-validation.json) · [浏览器](../evidence/result-headroom/browser-result.json) · [准入/失败/资源](../evidence/result-headroom/runs/)。冻结输入的root lock随后在服务器更新为10版，复现用旁边服务器lock；发布文档/补丁在验证后补写，旧冻结包不改。
 
 只规划纯回读/定位批次，256字节余量不约束任意hook、usage、transform、外部消息或后续工具集合。下一轮正常policy和硬字节检查仍必要；投影打包可能做幂等artifact写入，最后trace不等于所有中间写次数。SDK默认关闭、真实入口默认full，原89次关闭模型请求和失败结论不变；真实效果需独立新任务及冻结方案。
+
+## 结构化业务事实：运行前方案与无密钥预检
+
+新[机器协议](../examples/brief-study-protocol.json)固定两个新问题族：六月/七月订单量与客单价、九月/十月退货对净额的影响。每个任务三项指标比较、两项Top20贡献分解；模型需提交五个证据身份、三项带来源数值/方向、两个最大绝对贡献组，以及平均值或净额勾稽值。叙述与因果质量另列、不评分。不把同一旧工作流仅换月份作为效果改善证据，也不重新评分关闭任务。
+
+实验客户端继承正常Pi宿主、SQLite额度及恢复；九个实际可执行业务操作包含四个有界只读元数据操作，预算模式最多八个工具。结构化提交仍经过原3,000字符序列化interpretation限制；默认Web客户端仍沿用原报告，不把新增实验入口称为生产部署。
+
+完整64KiB与预算20KiB各一次，两任务顺序交错，每任务最多8请求/每请求1,536输出tokens，全局最多32请求；官方DeepSeek、thinking关闭、自动重试0。独立Python CSV/Decimal/set oracle检查指标、分组、模型事实和勾稽，答案不进入模型输入。不同上下文上限、固定顺序、缓存和样本仅两任务均限制推论；无普遍准确率、成本或单一机制因果结论。
+
+沿用原宿主的完整分支，provider边界context可能保留展示details；预算policy会去掉details。这个JSON字节统计不是原始HTTP请求或token数，不能把两者的字节差归因于压缩/规划单一因素；供应商usage另计。此实验比较完整配置，不是对core10规划做独立因果消融。
+
+先做无密钥预检，四个实际Pi脚本控制均需评分通过，且至少一个预算任务出现真实pressure外置；没有这些证据就不发送付费请求，也不修改任务/预算来制造成功。脚本控制仅从当前provider视图读取事实，必要记忆必须明确写在assistant记录中，不读取Store或oracle补答案。预检、来源提交及后续结果将分开记录；本段是前置方案，不是成功声明。
+
+实际预检保留v1/v2双CPU准入不足、v3两个类型推断错误、v4完整控制通过而预算控制拒绝。资源改为单逻辑CPU/nice19，准入采样最低70%非执行比例、RSS4GiB/900秒硬限；任务与评分不变。v5修复core10通用回退目标未保留最低内容空间的问题，并仅在预算必要时用紧凑回读元数据，全部85项测试、14项浏览器及完整UCI通过。原core10方案与case/budget/grader未变的核对单独保存，不把旧失败抹掉。
+
+core11新CPU控制中两个完整分支各4次脚本请求，两个预算分支各5次；四个均核对三项事实/两个优先组，两个问题分别逐行验证2,974与3,108个国家/商品组。预算分支均有2次pressure准备、2次回读、1个持久预算方案，最大20,438与20,390字节。spill计数为成功准备中出现次数，不等于精确存储写次数；搜索规划也可能多次幂等写入。所有这些都是脚本控制，真实模型请求仍为0。
+
+[85项预检](../evidence/structured-brief/preflight-tests.tap) · [独立CSV oracle](../evidence/structured-brief/oracle.json.gz) · [core10原失败](../evidence/structured-brief/controls/core10/summary.json) · [core11控制](../evidence/structured-brief/controls/core11/summary.json) · [原任务等价核对](../evidence/structured-brief/task-equivalence.json) · [源码与资源](../evidence/structured-brief/runs/)。真实请求必须在源码先行公开后单独执行，结果另记；既有89次生成请求及关闭研究保持原样。

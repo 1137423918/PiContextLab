@@ -1,0 +1,123 @@
+{
+  "purpose": "Prospective structured business facts under real context pressure; two new question families, not a repeat of closed monthly9evidence or source-audit studies and not a general accuracy benchmark.",
+  "core_version": "1.6.0-contextlab.10",
+  "provider": "https://api.deepseek.com",
+  "model": "deepseek-flash",
+  "thinking": "disabled",
+  "temperature": 0,
+  "retries": 0,
+  "cases": [
+    {
+      "id": "summer-order-value",
+      "intent": {
+        "metric": "gross_sales",
+        "baseline": {
+          "start": "2011-06-01",
+          "end": "2011-07-01"
+        },
+        "current": {
+          "start": "2011-07-01",
+          "end": "2011-08-01"
+        },
+        "basis": "calendar_month"
+      },
+      "metrics": [
+        "gross_sales",
+        "sales_orders",
+        "avg_order_value"
+      ],
+      "breakdowns": [
+        {
+          "id": "gross-country",
+          "metric": "gross_sales",
+          "dimension": "country",
+          "limit": 20
+        },
+        {
+          "id": "gross-products",
+          "metric": "gross_sales",
+          "dimension": "stock_code",
+          "limit": 20
+        }
+      ],
+      "check": "gross_per_order",
+      "question": "Produce a structured operating brief for baseline [2011-06-01,2011-07-01) and current [2011-07-01,2011-08-01), calendar_month. Inspect coverage and metric policy first. Compare each of gross_sales, sales_orders, avg_order_value. Obtain gross_sales by country top20 plus OTHER and gross_sales by stock_code top20 plus OTHER. Seal exactly five distinct evidence IDs (three comparisons and two breakdowns). In brief.facts record each metric baseline/current/delta exactly as decimal strings, direction and its comparison evidence ID. In brief.priorities record the largest absolute-change group for each requested breakdown, its signed delta and correct evidence ID. Check gross_sales/sales_orders equals avg_order_value in each period, rounded four decimals half away from zero; check name gross_per_order. The check must cite all three comparison evidence IDs. Descriptive note <=600 characters; hypotheses separate, no causal or human-review claim. Use ev_ source IDs, never ctx_ handles. If necessary recall precise omitted fields. You may keep concise source-derived working notes in your assistant text before further tool calls. Do not guess missing numbers, skip evidence or invent facts.",
+      "variant_order": [
+        "full",
+        "budgeted"
+      ]
+    },
+    {
+      "id": "autumn-return-offset",
+      "intent": {
+        "metric": "net_sales",
+        "baseline": {
+          "start": "2011-09-01",
+          "end": "2011-10-01"
+        },
+        "current": {
+          "start": "2011-10-01",
+          "end": "2011-11-01"
+        },
+        "basis": "calendar_month"
+      },
+      "metrics": [
+        "net_sales",
+        "gross_sales",
+        "returns"
+      ],
+      "breakdowns": [
+        {
+          "id": "gross-country",
+          "metric": "gross_sales",
+          "dimension": "country",
+          "limit": 20
+        },
+        {
+          "id": "returns-products",
+          "metric": "returns",
+          "dimension": "stock_code",
+          "limit": 20
+        }
+      ],
+      "check": "gross_minus_returns",
+      "question": "Produce a structured operating brief for baseline [2011-09-01,2011-10-01) and current [2011-10-01,2011-11-01), calendar_month. Inspect coverage and metric policy first. Compare each of net_sales, gross_sales, returns. Obtain gross_sales by country top20 plus OTHER and returns by stock_code top20 plus OTHER. Seal exactly five distinct evidence IDs (three comparisons and two breakdowns). In brief.facts record each metric baseline/current/delta exactly as decimal strings, direction and its comparison evidence ID. In brief.priorities record the largest absolute-change group for each requested breakdown, its signed delta and correct evidence ID. Check gross_sales minus returns equals net_sales in each period; check name gross_minus_returns. The check must cite all three comparison evidence IDs. Descriptive note <=600 characters; hypotheses separate, no causal or human-review claim. Use ev_ source IDs, never ctx_ handles. If necessary recall precise omitted fields. You may keep concise source-derived working notes in your assistant text before further tool calls. Do not guess missing numbers, skip evidence or invent facts.",
+      "variant_order": [
+        "budgeted",
+        "full"
+      ]
+    }
+  ],
+  "variants": {
+    "full": {
+      "contextMode": "upstream",
+      "maxContextBytes": 65536,
+      "artifactSearch": false
+    },
+    "budgeted": {
+      "contextMode": "budgeted",
+      "maxContextBytes": 20480,
+      "artifactSearch": false
+    }
+  },
+  "max_calls_per_job": 8,
+  "max_output_per_call": 1536,
+  "global_max_requests": 32,
+  "global_output_token_ceiling": 49152,
+  "request_timeout_ms": 20000,
+  "dataset_csv_sha256": "1f8144bb8670bcad07cde08205532fc6322d99e96c6ac8e8b5c979f169852065",
+  "catalog": "Nine executable real read-only analytics/report operations: original5 plus bounded dataset_quality/snapshot_provenance/list_saved_evidence/metric_definition. Budgeted max8 means some schemas may be omitted; no fake unavailable APIs or arbitrary SQL/shell. Report tool is a structured wrapper preserving original<=3000 serialized interpretation gate.",
+  "grader": "Exactly five valid evidence identities; all3 metric totals and model fact values/directions/source IDs match independent Python CSV Decimal/set oracle; both requested Top20/OTHER/totals and all saved SQL group/period rows reconciled; priority is max absolute group delta with tie any correct group; independent average or net check values with all3 sources. Narrative/hypothesis quality ungraded.",
+  "preflight": "Allfour source-view-only scripted native host jobs must gradecorrect, nine actual registered tools/max8budgeted checked, at least one budgeted job must have successful pressure/spill and all prepared contexts within20KiB. CPU controller may write explicit source-derived notes into assistant transcript, never retain hidden facts outside each provider view or read Store/oracle for answers. If control fails or no pressure, preserve outcome and do not pay or retune cases/budget to force success.",
+  "stopping": "Publish prospective source+protocol+CPU evidence before first paidcall. Eachcase/variant exactlyonce, no retries/topups or schema/grader changes after outputs. Missing/timeout/unknown attempts retained and charged to caps; one failure does not cancel remaining fixed jobs. Models choose own scheduling. Preserve actual no-pressure if observed; no old studies reopened.",
+  "report": [
+    "complete provider-boundary context/usage/reservations",
+    "actual source/argument hashes and all errors",
+    "task facts separate from narrative",
+    "real vs scripted calls",
+    "spills/recalls/result budget plans/selected tools",
+    "different context budgets and fixedorder/cache caveats"
+  ],
+  "GPU": false,
+  "local_model_deployment": false
+}

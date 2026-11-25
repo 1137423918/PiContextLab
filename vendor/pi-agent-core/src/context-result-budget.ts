@@ -11,7 +11,9 @@ export interface ContextResultBudgetTrace {
 	projectedContextBytes: number;
 	envelopeMarginBytes: number;
 	targetProjectionBytes: number;
-	fellBackToHardLimit: boolean;
+	usedFallbackSearch: boolean;
+	selectedProjectionTargetBytes: number;
+	projectionAttempts: { targetBytes: number; ok: boolean; afterBytes?: number }[];
 	packing: ContextPackingTrace;
 }
 
@@ -31,11 +33,26 @@ export async function planContextResultBudget(input: ToolResultBudgetInput, opti
 	const user = [...input.context.messages].reverse().find(message => message.role === "user");
 	const query = user ? typeof user.content === "string" ? user.content : user.content.filter(part => part.type === "text").map(part => part.type === "text" ? part.text : "").join("\n") : "";
 	const pack = (maxContextBytes: number) => packModelContext(projected, input.tools, query, { ...options, maxContextBytes }, signal);
-	let packed: Awaited<ReturnType<typeof pack>>, fallback = false;
-	try { packed = await pack(target); }
-	catch (error) {
-		if (!(error instanceof ContextPackingLimitError)) throw error;
-		fallback = true; packed = await pack(options.maxContextBytes);
+	const attempts: ContextResultBudgetTrace["projectionAttempts"] = [];
+	const attempt = async (bytes: number) => {
+		try { const result = await pack(bytes); attempts.push({ targetBytes: bytes, ok: true, afterBytes: contextBytes(result.context) }); return result; }
+		catch (error) { if (!(error instanceof ContextPackingLimitError)) throw error; attempts.push({ targetBytes: bytes, ok: false }); return undefined; }
+	};
+	let packed = await attempt(target), fallback = false, selectedTarget = target;
+	if (!packed) {
+		fallback = true;
+		// Even the fallback must reserve the batch minimum and ordinary envelope margin.
+		let low = target, high = options.maxContextBytes - minimum - margin + 2 * calls.length;
+		if (high < 1024 || high < low) throw new ContextPackingLimitError("Recall batch cannot reserve its minimum result bytes within the context ceiling; no calls executed");
+		packed = await attempt(high);
+		if (!packed) throw new ContextPackingLimitError("Recall batch minimum has no feasible projected context; no calls executed");
+		selectedTarget = high;
+		// Bounded feasible-target search; retain only measured successful projections, not an asserted optimum.
+		for (let step = 0; step < 16 && high - low > 1; step++) {
+			const middle = Math.floor((low + high) / 2), candidate = await attempt(middle);
+			if (candidate) { high = middle; selectedTarget = middle; packed = candidate; }
+			else low = middle;
+		}
 	}
 	const projectedBytes = contextBytes(packed.context);
 	const available = options.maxContextBytes - projectedBytes + 2 * calls.length - margin;
@@ -43,5 +60,5 @@ export async function planContextResultBudget(input: ToolResultBudgetInput, opti
 	if (allocated < minimum) throw new ContextPackingLimitError("Recall batch cannot reserve its minimum result bytes within the context ceiling; no calls executed");
 	const budgets = Object.freeze({ ...input.budgets, [group]: allocated });
 	allocateToolResultBudgets(calls, input.tools, budgets);
-	return { budgets, trace: { hardLimitBytes: options.maxContextBytes, configuredContentBytes: input.budgets[group], allocatedContentBytes: allocated, projectedContextBytes: projectedBytes, envelopeMarginBytes: margin, targetProjectionBytes: target, fellBackToHardLimit: fallback, packing: packed.trace } };
+	return { budgets, trace: { hardLimitBytes: options.maxContextBytes, configuredContentBytes: input.budgets[group], allocatedContentBytes: allocated, projectedContextBytes: projectedBytes, envelopeMarginBytes: margin, targetProjectionBytes: target, usedFallbackSearch: fallback, selectedProjectionTargetBytes: selectedTarget, projectionAttempts: attempts, packing: packed.trace } };
 }

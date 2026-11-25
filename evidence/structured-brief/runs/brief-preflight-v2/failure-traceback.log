@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/data1/wjz26/agent-lab-20261120/outputs/pi-metriclab-stage98-brief-preflight-v2/run_cpu.py", line 89, in <module>
+    report['CPU_admission']=measure_compute_headroom(os.sched_getaffinity(0),interval_seconds=5,count=2,minimum=.8);save();assert len(report['CPU_admission']['selected_cpus'])==2,'No two CPUs meet the fixed headroom requirement';os.sched_setaffinity(0,report['CPU_admission']['selected_cpus']);save()
+                                                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: No two CPUs meet the fixed headroom requirement

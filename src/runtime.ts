@@ -1,4 +1,4 @@
-import { Agent, BudgetedContextPolicy, runToolCall, allocateToolResultBudgets, restrictToolResultBudgets, CONTEXT_RECALL_BUDGET_GROUP, type AgentTool, type AgentToolResult, type StreamFn } from '@earendil-works/pi-agent-core';
+import { Agent, BudgetedContextPolicy, runToolCall, allocateToolResultBudgets, restrictToolResultBudgets, CONTEXT_RECALL_BUDGET_GROUP, type ExecutableTools, type AgentTool, type AgentToolResult, type StreamFn } from '@earendil-works/pi-agent-core';
 import { createAssistantMessageEventStream, normalizeContext, type Api, type AssistantMessage, type Model } from '@earendil-works/pi-ai';
 import { streamSimple } from '@earendil-works/pi-ai/api/openai-completions';
 import { obj, str, type Static } from '@earendil-works/pi-schema';
@@ -44,7 +44,7 @@ export class Runner {
   private readonly tasks = new Set<Promise<void>>();
   private readonly pausing = new Set<string>();
   constructor(readonly store: Store, readonly warehouse: Warehouse, readonly base: StreamFn, readonly model: Model<Api> = scriptedControlModel, readonly requestTimeoutMs = 90000, readonly maxContextBytes=65536,readonly contextMode:'budgeted'|'upstream'='upstream',readonly artifactSearch=false) { if (!Number.isSafeInteger(requestTimeoutMs) || requestTimeoutMs<1000 || requestTimeoutMs>300000) throw new Error('Invalid request deadline');if(!Number.isSafeInteger(maxContextBytes)||maxContextBytes<4096||maxContextBytes>262144)throw new Error('Invalid context byte ceiling'); }
-  tools(claim: Claim) {
+  tools(claim: Claim): ExecutableTools {
     const dataset = this.store.job(claim.id).dataset;
     const intent=this.store.intent(claim.id);
     const permitted=(comparison:Comparison)=>intent!==null&&hash({baseline:comparison.baseline,current:comparison.current,basis:comparison.basis})===hash({baseline:intent.baseline,current:intent.current,basis:intent.basis});
@@ -85,7 +85,7 @@ export class Runner {
     try {
       const intent=this.store.intent(id);
       if(intent){const dataset=await this.warehouse.dataset(job.dataset);try{validateComparison(intent,dataset.min_time,dataset.max_time);}catch(e){this.store.clarify(claim,e instanceof Error?e.message:String(e));this.store.finish(claim,'clarification');return;}}
-      this.store.bindRuntime(claim,{model:this.model,policy:POLICY,Pi:'1.6.0-contextlab.10',recall_result_budget:policy?'post-response-v1':null,request_binding:'v1',tool_validation_feedback:'bounded-2048-v1',tool_result_budgets:policy?RECALL_RESULT_BUDGETS:null,intent:this.store.intent(id),contextMode:this.contextMode,artifactSearch:this.artifactSearch,prompt_version:'v2-compact-context',requestTimeoutMs:this.requestTimeoutMs,maxContextBytes:this.maxContextBytes,tools:agent.state.tools.map(t=>({name:t.name,parameters:t.parameters,resultBudget:t.resultBudget}))});
+      this.store.bindRuntime(claim,{model:this.model,policy:POLICY,Pi:'1.6.0-contextlab.11',recall_result_budget:policy?'post-response-v2':null,request_binding:'v1',tool_validation_feedback:'bounded-2048-v1',tool_result_budgets:policy?RECALL_RESULT_BUDGETS:null,intent:this.store.intent(id),contextMode:this.contextMode,artifactSearch:this.artifactSearch,prompt_version:'v2-compact-context',requestTimeoutMs:this.requestTimeoutMs,maxContextBytes:this.maxContextBytes,tools:agent.state.tools.map(t=>({name:t.name,parameters:t.parameters,resultBudget:t.resultBudget}))});
       // An assistant tool batch may have been committed before a process died. Reconcile through Pi's own validator/executor.
       const messages = [...agent.state.messages]; let index = messages.length - 1;
       const interrupted = messages.at(-1);

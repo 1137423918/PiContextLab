@@ -1,0 +1,8 @@
+{
+  "unchanged_case_questions_budgets_order_grader": true,
+  "original_core": "1.6.0-contextlab.10",
+  "current_core": "1.6.0-contextlab.11",
+  "changes": "Generic feasible-target fallback and optional compact read metadata; original failed controls preserved; zero paid calls before revision",
+  "original_protocol_sha256": "3774ef6eea40a0fd08cb380549ddd2d068ebaf0756fea6ce6a37279046767574",
+  "current_protocol_sha256": "2dcda87fe4304e6079b77783691e1825330c9f9a4e47ad7774ba45a8d00a7565"
+}

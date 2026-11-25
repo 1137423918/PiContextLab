@@ -1,0 +1,21 @@
+(node:2594167) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"case":"summer-order-value","variant":"full","status":"completed","error":null,"wall_seconds":1.155193278,"grade":{"passed":true,"error":null,"model_facts_checked":3,"priorities_checked":2,"raw_groups_checked":2974},"reserved":4,"input_tokens_including_cache":0,"output_tokens":0,"estimated_cost_usd":0,"usage_missing":0,"pressure_preparations":0,"spill_occurrences":0,"max_prepared_JSON_bytes":0,"recall_calls":0,"result_budget_plans":0,"business_tool_names":["inspect_dataset","compare_metric","breakdown_change","request_clarification","submit_investigation","dataset_quality","snapshot_provenance","list_saved_evidence","metric_definition"]}
+{"case":"summer-order-value","variant":"budgeted","status":"failed","error":"Recall batch cannot reserve its minimum result bytes within the context ceiling; no calls executed","wall_seconds":0.5739128569999998,"grade":{"passed":false,"error":"No sealed report","model_facts_checked":0,"priorities_checked":0,"raw_groups_checked":0},"reserved":4,"input_tokens_including_cache":0,"output_tokens":0,"estimated_cost_usd":0,"usage_missing":0,"pressure_preparations":1,"spill_occurrences":3,"max_prepared_JSON_bytes":19669,"recall_calls":0,"result_budget_plans":0,"business_tool_names":["inspect_dataset","compare_metric","breakdown_change","request_clarification","submit_investigation","dataset_quality","snapshot_provenance","list_saved_evidence","metric_definition"]}
+{"case":"autumn-return-offset","variant":"budgeted","status":"failed","error":"Recall batch cannot reserve its minimum result bytes within the context ceiling; no calls executed","wall_seconds":0.5160432270000002,"grade":{"passed":false,"error":"No sealed report","model_facts_checked":0,"priorities_checked":0,"raw_groups_checked":0},"reserved":4,"input_tokens_including_cache":0,"output_tokens":0,"estimated_cost_usd":0,"usage_missing":0,"pressure_preparations":1,"spill_occurrences":3,"max_prepared_JSON_bytes":19604,"recall_calls":0,"result_budget_plans":0,"business_tool_names":["inspect_dataset","compare_metric","breakdown_change","request_clarification","submit_investigation","dataset_quality","snapshot_provenance","list_saved_evidence","metric_definition"]}
+{"case":"autumn-return-offset","variant":"full","status":"completed","error":null,"wall_seconds":0.8573819669999998,"grade":{"passed":true,"error":null,"model_facts_checked":3,"priorities_checked":2,"raw_groups_checked":3108},"reserved":4,"input_tokens_including_cache":0,"output_tokens":0,"estimated_cost_usd":0,"usage_missing":0,"pressure_preparations":0,"spill_occurrences":0,"max_prepared_JSON_bytes":0,"recall_calls":0,"result_budget_plans":0,"business_tool_names":["inspect_dataset","compare_metric","breakdown_change","request_clarification","submit_investigation","dataset_quality","snapshot_provenance","list_saved_evidence","metric_definition"]}
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Allfour source-view-only CPU clients must gradecorrect
+    at file:///tmp/pimetriclab-build-stage98-hyfkg4hp/source/dist/scripts/run-brief-study.js:86:12 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v22.23.5

@@ -65,7 +65,7 @@ export function createContextReadTool(store: ContextArtifactStore): AgentTool<ty
 				fields.push({ pointer, points: Array.from(text) });
 				} catch (error) { fields.push({ pointer, error: error instanceof Error ? error.message : "Invalid JSON pointer" }); }
 			}
-			const render = (pointLimit: number, byteLimited: boolean) => {
+			const render = (pointLimit: number, byteLimited: boolean, compact = false) => {
 				let remaining = pointLimit;
 				const values = fields.map(field => {
 				const pointer = field.pointer;
@@ -76,14 +76,19 @@ export function createContextReadTool(store: ContextArtifactStore): AgentTool<ty
 				const hasMore = nextOffset < points.length;
 				const nextRead: ContextReadContinuation | null = hasMore ? { artifact_id: artifact.id, json_pointers: [pointer], offset: nextOffset, limit: args.limit } : null;
 				remaining -= slice.length;
-				return { json_pointer: pointer, offset: args.offset, total_codepoints: points.length, text: slice.join(""), returned_codepoints: slice.length, next_offset: nextOffset, next_read: nextRead, has_more: hasMore };
+				return { json_pointer: pointer, ...(compact ? {} : { offset: args.offset, total_codepoints: points.length }), text: slice.join(""), returned_codepoints: slice.length, next_offset: nextOffset, next_read: nextRead, has_more: hasMore };
 				});
-				const payload = { artifact_id: artifact.id, sha256: artifact.sha256, values, codepoints_used: pointLimit - remaining, source_identity_note: "The ctx_ handle identifies stored bytes, not the source report or document.", ...(execution ? { byte_limited: byteLimited, response_budget_bytes: execution.resultBudgetBytes } : {}) };
+				const flags = execution ? { byte_limited: byteLimited, response_budget_bytes: execution.resultBudgetBytes } : {};
+				const payload = compact
+					? { artifact_id: artifact.id, compact_metadata: true, values, codepoints_used: pointLimit - remaining, ...flags }
+					: { artifact_id: artifact.id, sha256: artifact.sha256, values, codepoints_used: pointLimit - remaining, source_identity_note: "The ctx_ handle identifies stored bytes, not the source report or document.", ...flags };
 				return { content: [{ type: "text" as const, text: JSON.stringify(payload) }], details: payload };
 			};
 			const full = render(args.limit, false);
 			if (!execution || contentJsonBytes(full.content) <= execution.resultBudgetBytes) return full;
-			const empty = render(0, true);
+			const compactFull = render(args.limit, false, true);
+			if (contentJsonBytes(compactFull.content) <= execution.resultBudgetBytes) return compactFull;
+			const empty = render(0, true, true);
 			if (contentJsonBytes(empty.content) > execution.resultBudgetBytes) {
 				const payload = { status: "deferred", reason: "batch_byte_budget", retry: "Retry original arguments in another batch with fewer paths.", codepoints_used: 0 };
 				return { content: [{ type: "text", text: JSON.stringify(payload) }], details: payload };
@@ -91,11 +96,11 @@ export function createContextReadTool(store: ContextArtifactStore): AgentTool<ty
 			let low = 0, high = args.limit;
 			while (low < high) {
 				const middle = Math.ceil((low + high) / 2);
-				if (contentJsonBytes(render(middle, true).content) <= execution.resultBudgetBytes) low = middle;
+				if (contentJsonBytes(render(middle, true, true).content) <= execution.resultBudgetBytes) low = middle;
 				else high = middle - 1;
 			}
 			signal?.throwIfAborted();
-			return render(low, true);
+			return render(low, true, true);
 		},
 	};
 }

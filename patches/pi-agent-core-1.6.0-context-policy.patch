@@ -453,7 +453,7 @@
 +import type { ToolResultBudgetInput } from "./model-context.ts";
 +
 +export interface BudgetedPolicyTrace extends ContextPackingTrace {
-+	policy: "pi-context-lab-v10";
++	policy: "pi-context-lab-v11";
 +	request: number;
 +	registeredTools: number;
 +	selectedToolNames: string[];
@@ -554,14 +554,14 @@
 +		const eager = this.options.spillMode === "threshold" && input.context.messages.some(message => message.role === "toolResult" && contextBytes(message.content) > this.options.inlineToolResultBytes);
 +		const decision = exceedsBudget || eager ? select([reader, ...(this.options.artifactSearch ? [this.tools[2]] : [])]) : initial;
 +		const packed = await packModelContext(input.context, decision.tools, query, { maxContextBytes: this.options.maxContextBytes, inlineToolResultBytes: this.options.inlineToolResultBytes, store: this.options.artifacts, artifactSearch: this.options.artifactSearch, spillMode: this.options.spillMode }, signal);
-+		const trace: BudgetedPolicyTrace = { policy: "pi-context-lab-v10", request: this.request, registeredTools: input.tools.length, selectedToolNames: decision.tools.map((t) => t.name), schemaBytes: decision.schemaBytes, ranking: decision.ranked, routingCache: this.routingIndex.stats, ...packed.trace };
++		const trace: BudgetedPolicyTrace = { policy: "pi-context-lab-v11", request: this.request, registeredTools: input.tools.length, selectedToolNames: decision.tools.map((t) => t.name), schemaBytes: decision.schemaBytes, ranking: decision.ranked, routingCache: this.routingIndex.stats, ...packed.trace };
 +		await this.options.onPrepared?.(trace);
 +		return { context: packed.context, tools: decision.tools };
 +	}
 +}
 --- /dev/null
 +++ b/src/context-artifacts.ts
-@@ -0,0 +1,101 @@
+@@ -0,0 +1,106 @@
 +/** Immutable text artifacts and bounded, explicit recall for provider-context views. */
 +import type { AgentTool } from "./types.ts";
 +import { arr, int, obj, str } from "@earendil-works/pi-schema";
@@ -629,7 +629,7 @@
 +				fields.push({ pointer, points: Array.from(text) });
 +				} catch (error) { fields.push({ pointer, error: error instanceof Error ? error.message : "Invalid JSON pointer" }); }
 +			}
-+			const render = (pointLimit: number, byteLimited: boolean) => {
++			const render = (pointLimit: number, byteLimited: boolean, compact = false) => {
 +				let remaining = pointLimit;
 +				const values = fields.map(field => {
 +				const pointer = field.pointer;
@@ -640,14 +640,19 @@
 +				const hasMore = nextOffset < points.length;
 +				const nextRead: ContextReadContinuation | null = hasMore ? { artifact_id: artifact.id, json_pointers: [pointer], offset: nextOffset, limit: args.limit } : null;
 +				remaining -= slice.length;
-+				return { json_pointer: pointer, offset: args.offset, total_codepoints: points.length, text: slice.join(""), returned_codepoints: slice.length, next_offset: nextOffset, next_read: nextRead, has_more: hasMore };
++				return { json_pointer: pointer, ...(compact ? {} : { offset: args.offset, total_codepoints: points.length }), text: slice.join(""), returned_codepoints: slice.length, next_offset: nextOffset, next_read: nextRead, has_more: hasMore };
 +				});
-+				const payload = { artifact_id: artifact.id, sha256: artifact.sha256, values, codepoints_used: pointLimit - remaining, source_identity_note: "The ctx_ handle identifies stored bytes, not the source report or document.", ...(execution ? { byte_limited: byteLimited, response_budget_bytes: execution.resultBudgetBytes } : {}) };
++				const flags = execution ? { byte_limited: byteLimited, response_budget_bytes: execution.resultBudgetBytes } : {};
++				const payload = compact
++					? { artifact_id: artifact.id, compact_metadata: true, values, codepoints_used: pointLimit - remaining, ...flags }
++					: { artifact_id: artifact.id, sha256: artifact.sha256, values, codepoints_used: pointLimit - remaining, source_identity_note: "The ctx_ handle identifies stored bytes, not the source report or document.", ...flags };
 +				return { content: [{ type: "text" as const, text: JSON.stringify(payload) }], details: payload };
 +			};
 +			const full = render(args.limit, false);
 +			if (!execution || contentJsonBytes(full.content) <= execution.resultBudgetBytes) return full;
-+			const empty = render(0, true);
++			const compactFull = render(args.limit, false, true);
++			if (contentJsonBytes(compactFull.content) <= execution.resultBudgetBytes) return compactFull;
++			const empty = render(0, true, true);
 +			if (contentJsonBytes(empty.content) > execution.resultBudgetBytes) {
 +				const payload = { status: "deferred", reason: "batch_byte_budget", retry: "Retry original arguments in another batch with fewer paths.", codepoints_used: 0 };
 +				return { content: [{ type: "text", text: JSON.stringify(payload) }], details: payload };
@@ -655,11 +660,11 @@
 +			let low = 0, high = args.limit;
 +			while (low < high) {
 +				const middle = Math.ceil((low + high) / 2);
-+				if (contentJsonBytes(render(middle, true).content) <= execution.resultBudgetBytes) low = middle;
++				if (contentJsonBytes(render(middle, true, true).content) <= execution.resultBudgetBytes) low = middle;
 +				else high = middle - 1;
 +			}
 +			signal?.throwIfAborted();
-+			return render(low, true);
++			return render(low, true, true);
 +		},
 +	};
 +}
@@ -905,7 +910,7 @@
 +}
 --- /dev/null
 +++ b/src/context-result-budget.ts
-@@ -0,0 +1,47 @@
+@@ -0,0 +1,64 @@
 +/** Post-response admission for a pure recall batch; uses the actual response and a complete projected transaction. */
 +import { normalizeContext } from "@earendil-works/pi-ai";
 +import { ContextPackingLimitError, contextBytes, packModelContext, type ContextPackingOptions, type ContextPackingTrace } from "./context-budget.ts";
@@ -919,7 +924,9 @@
 +	projectedContextBytes: number;
 +	envelopeMarginBytes: number;
 +	targetProjectionBytes: number;
-+	fellBackToHardLimit: boolean;
++	usedFallbackSearch: boolean;
++	selectedProjectionTargetBytes: number;
++	projectionAttempts: { targetBytes: number; ok: boolean; afterBytes?: number }[];
 +	packing: ContextPackingTrace;
 +}
 +
@@ -939,11 +946,26 @@
 +	const user = [...input.context.messages].reverse().find(message => message.role === "user");
 +	const query = user ? typeof user.content === "string" ? user.content : user.content.filter(part => part.type === "text").map(part => part.type === "text" ? part.text : "").join("\n") : "";
 +	const pack = (maxContextBytes: number) => packModelContext(projected, input.tools, query, { ...options, maxContextBytes }, signal);
-+	let packed: Awaited<ReturnType<typeof pack>>, fallback = false;
-+	try { packed = await pack(target); }
-+	catch (error) {
-+		if (!(error instanceof ContextPackingLimitError)) throw error;
-+		fallback = true; packed = await pack(options.maxContextBytes);
++	const attempts: ContextResultBudgetTrace["projectionAttempts"] = [];
++	const attempt = async (bytes: number) => {
++		try { const result = await pack(bytes); attempts.push({ targetBytes: bytes, ok: true, afterBytes: contextBytes(result.context) }); return result; }
++		catch (error) { if (!(error instanceof ContextPackingLimitError)) throw error; attempts.push({ targetBytes: bytes, ok: false }); return undefined; }
++	};
++	let packed = await attempt(target), fallback = false, selectedTarget = target;
++	if (!packed) {
++		fallback = true;
++		// Even the fallback must reserve the batch minimum and ordinary envelope margin.
++		let low = target, high = options.maxContextBytes - minimum - margin + 2 * calls.length;
++		if (high < 1024 || high < low) throw new ContextPackingLimitError("Recall batch cannot reserve its minimum result bytes within the context ceiling; no calls executed");
++		packed = await attempt(high);
++		if (!packed) throw new ContextPackingLimitError("Recall batch minimum has no feasible projected context; no calls executed");
++		selectedTarget = high;
++		// Bounded feasible-target search; retain only measured successful projections, not an asserted optimum.
++		for (let step = 0; step < 16 && high - low > 1; step++) {
++			const middle = Math.floor((low + high) / 2), candidate = await attempt(middle);
++			if (candidate) { high = middle; selectedTarget = middle; packed = candidate; }
++			else low = middle;
++		}
 +	}
 +	const projectedBytes = contextBytes(packed.context);
 +	const available = options.maxContextBytes - projectedBytes + 2 * calls.length - margin;
@@ -951,7 +973,7 @@
 +	if (allocated < minimum) throw new ContextPackingLimitError("Recall batch cannot reserve its minimum result bytes within the context ceiling; no calls executed");
 +	const budgets = Object.freeze({ ...input.budgets, [group]: allocated });
 +	allocateToolResultBudgets(calls, input.tools, budgets);
-+	return { budgets, trace: { hardLimitBytes: options.maxContextBytes, configuredContentBytes: input.budgets[group], allocatedContentBytes: allocated, projectedContextBytes: projectedBytes, envelopeMarginBytes: margin, targetProjectionBytes: target, fellBackToHardLimit: fallback, packing: packed.trace } };
++	return { budgets, trace: { hardLimitBytes: options.maxContextBytes, configuredContentBytes: input.budgets[group], allocatedContentBytes: allocated, projectedContextBytes: projectedBytes, envelopeMarginBytes: margin, targetProjectionBytes: target, usedFallbackSearch: fallback, selectedProjectionTargetBytes: selectedTarget, projectionAttempts: attempts, packing: packed.trace } };
 +}
 --- /dev/null
 +++ b/src/context-search.ts

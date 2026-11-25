@@ -1,0 +1,153 @@
+{
+  "kind": "Two new structured brief scenarios; independent factual grading, not a general accuracy benchmark",
+  "control": true,
+  "source_commit": null,
+  "protocol_sha256": "1254130e3990d77e8385f3e8d7b0c192739e901e1a578e370f7797aae8c174cf",
+  "actual_provider_attempts": 18,
+  "real_model_calls": 0,
+  "total_reserved": 18,
+  "cases": [
+    {
+      "case": "summer-order-value",
+      "variant": "full",
+      "status": "completed",
+      "error": null,
+      "wall_seconds": 0.9549180020000001,
+      "grade": {
+        "passed": true,
+        "error": null,
+        "model_facts_checked": 3,
+        "priorities_checked": 2,
+        "raw_groups_checked": 2974
+      },
+      "reserved": 4,
+      "input_tokens_including_cache": 0,
+      "output_tokens": 0,
+      "estimated_cost_usd": 0,
+      "usage_missing": 0,
+      "pressure_preparations": 0,
+      "spill_occurrences": 0,
+      "max_prepared_JSON_bytes": 0,
+      "recall_calls": 0,
+      "result_budget_plans": 0,
+      "business_tool_names": [
+        "inspect_dataset",
+        "compare_metric",
+        "breakdown_change",
+        "request_clarification",
+        "submit_investigation",
+        "dataset_quality",
+        "snapshot_provenance",
+        "list_saved_evidence",
+        "metric_definition"
+      ]
+    },
+    {
+      "case": "summer-order-value",
+      "variant": "budgeted",
+      "status": "completed",
+      "error": null,
+      "wall_seconds": 0.8359995590000001,
+      "grade": {
+        "passed": true,
+        "error": null,
+        "model_facts_checked": 3,
+        "priorities_checked": 2,
+        "raw_groups_checked": 2974
+      },
+      "reserved": 5,
+      "input_tokens_including_cache": 0,
+      "output_tokens": 0,
+      "estimated_cost_usd": 0,
+      "usage_missing": 0,
+      "pressure_preparations": 2,
+      "spill_occurrences": 8,
+      "max_prepared_JSON_bytes": 20438,
+      "recall_calls": 2,
+      "result_budget_plans": 1,
+      "business_tool_names": [
+        "inspect_dataset",
+        "compare_metric",
+        "breakdown_change",
+        "request_clarification",
+        "submit_investigation",
+        "dataset_quality",
+        "snapshot_provenance",
+        "list_saved_evidence",
+        "metric_definition"
+      ]
+    },
+    {
+      "case": "autumn-return-offset",
+      "variant": "budgeted",
+      "status": "completed",
+      "error": null,
+      "wall_seconds": 1.1456268719999998,
+      "grade": {
+        "passed": true,
+        "error": null,
+        "model_facts_checked": 3,
+        "priorities_checked": 2,
+        "raw_groups_checked": 3108
+      },
+      "reserved": 5,
+      "input_tokens_including_cache": 0,
+      "output_tokens": 0,
+      "estimated_cost_usd": 0,
+      "usage_missing": 0,
+      "pressure_preparations": 2,
+      "spill_occurrences": 8,
+      "max_prepared_JSON_bytes": 20390,
+      "recall_calls": 2,
+      "result_budget_plans": 1,
+      "business_tool_names": [
+        "inspect_dataset",
+        "compare_metric",
+        "breakdown_change",
+        "request_clarification",
+        "submit_investigation",
+        "dataset_quality",
+        "snapshot_provenance",
+        "list_saved_evidence",
+        "metric_definition"
+      ]
+    },
+    {
+      "case": "autumn-return-offset",
+      "variant": "full",
+      "status": "completed",
+      "error": null,
+      "wall_seconds": 0.9245333,
+      "grade": {
+        "passed": true,
+        "error": null,
+        "model_facts_checked": 3,
+        "priorities_checked": 2,
+        "raw_groups_checked": 3108
+      },
+      "reserved": 4,
+      "input_tokens_including_cache": 0,
+      "output_tokens": 0,
+      "estimated_cost_usd": 0,
+      "usage_missing": 0,
+      "pressure_preparations": 0,
+      "spill_occurrences": 0,
+      "max_prepared_JSON_bytes": 0,
+      "recall_calls": 0,
+      "result_budget_plans": 0,
+      "business_tool_names": [
+        "inspect_dataset",
+        "compare_metric",
+        "breakdown_change",
+        "request_clarification",
+        "submit_investigation",
+        "dataset_quality",
+        "snapshot_provenance",
+        "list_saved_evidence",
+        "metric_definition"
+      ]
+    }
+  ],
+  "GPU_used": false,
+  "not_an_invoice": true
+}

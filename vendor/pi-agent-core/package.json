@@ -1,6 +1,6 @@
 {
   "name": "@earendil-works/pi-agent-core",
-  "version": "1.6.0-contextlab.10",
+  "version": "1.6.0-contextlab.11",
   "description": "Unofficial PiContextLab fork: request-scoped tool routing and auditable bounded context",
   "type": "module",
   "main": "./dist/index.js",

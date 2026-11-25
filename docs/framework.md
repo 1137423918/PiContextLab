@@ -4,7 +4,7 @@
 
 ## 改动位置与已有能力
 
-固定 Pi 1.6.0 的完整 Agent Core 源码保留在 [vendor/pi-agent-core](../vendor/pi-agent-core)，原文件哈希见 [UPSTREAM.json](../vendor/pi-agent-core/UPSTREAM.json)，MIT 原许可一并保留。派生版本为 `1.6.0-contextlab.10`，不是上游发布或已合入 PR。原研究克隆保持不变。
+固定 Pi 1.6.0 的完整 Agent Core 源码保留在 [vendor/pi-agent-core](../vendor/pi-agent-core)，原文件哈希见 [UPSTREAM.json](../vendor/pi-agent-core/UPSTREAM.json)，MIT 原许可一并保留。派生版本为 `1.6.0-contextlab.11`，不是上游发布或已合入 PR。原研究克隆保持不变。
 
 上游已有 `transformContext`、工具调用屏障、完整的 `pi-durable` 持久化 Harness、摘要压缩，以及部分工具输出限制。本项目不把这些已有能力说成原创。
 
@@ -264,3 +264,13 @@ PiMetricLab在budgeted模式显式开启；full仍不启用。`result_budget_pla
 这不是任意后续请求的空间证明：256字节余量只面向通常内建回读包装，不约束任意hook的usage/元数据、自定义transform、后续工具集合变化或外部消息；混合批次仍静态。精确投影可能为较小目标写入artifact后失败，再走硬上限投影，这些幂等存储不能仅按最后packing trace声称精确写入次数。两个投影均不调用模型。保留下一轮硬上限、完整原文及错误状态，不提供token或模型成功保证。
 
 新合成控制中静态版压力回读后拒绝，规划版以5,996字节回读生成23,660/24,576字节下一轮；空间充足时两版相同，无法容纳时新版工具开始数为0。80项工程控制、正常宿主持久化和重启复用见[完整证据](../evidence/result-headroom/)，未重试关闭的DeepSeek研究。
+
+## contextlab.11：可行目标搜索和紧预算元数据
+
+新的结构化业务预检（尚未调用模型）暴露core10的不足：期望8KiB回读对应的投影目标过小，退回硬上限时打包器刚放得下就停止外置，可能没有给最低内容和包装余量留空间。它会提前拒绝本可通过更多外置容纳的调用，不能仅用“未执行工具”说明目标已达成。
+
+core11保持同样任务、20KiB上下文/8KiB静态组上限和评分，修复通用规划：期望目标失败后，先尝试`H-minimum-256N+2N`，这个回退也必须保证整批最低配额。若可行，在已知失败与已知成功目标之间最多二分16次，仅保留实际测量成功的投影；由最终P重算配额，不把上下文放到H再期待自己有余额。`projectionAttempts`记录目标、成功与字节，`usedFallbackSearch`和`selectedProjectionTargetBytes`解释最终选择。上界不足仍执行前拒绝，存储/取消/事务错误不被当作大小错误吞掉。不声称全局最优、token保证或任意插件下下一轮必然容纳。
+
+紧预算读取先尝试完整旧格式；放不下才试`compact_metadata: true`。精确artifact_id、每路径text、returned_codepoints、next_offset、完整next_read及has_more都保留，仅省去重复的sha256、来源身份提醒、已知请求offset与total_codepoints；完整性仍在返回前验证，artifact_id本身含全hash。原文、参数及游标计算不改，ctx不能冒充ev的规则仍在工具声明里。若紧凑完整内容可放下就不截断；否则仍按code points限量，连空元数据都放不下则明确deferred。未配置字节预算时旧字段和序列化顺序保持原样。
+
+原core10两个完整控制通过，两个预算控制在回读前拒绝；这些记录保留。core11四个控制均通过，预算实例各有两次pressure准备、两次原生回读与一次持久方案，最大视图20,438与20,390/20,480字节。它们是从当前provider视图读取事实、显式写assistant工作笔记的脚本，不是大模型准确率。85项工程测试及新独立CSV事实核对通过；真实API需先行发布固定源码后单独运行，见[前置证据](../evidence/structured-brief/)。
