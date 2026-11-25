@@ -1,0 +1,31 @@
+{
+  "input_sha256": "6df9522be82fde66701f3247ad2146d3762fae046909f8391635ae9ed9f6b278",
+  "rows": [
+    {
+      "case": "linux-duckdb-deployment",
+      "variant": "retained",
+      "passed": true,
+      "error": null
+    },
+    {
+      "case": "linux-duckdb-deployment",
+      "variant": "control",
+      "passed": true,
+      "error": null
+    },
+    {
+      "case": "pi-alias-and-local-fork",
+      "variant": "control",
+      "passed": true,
+      "error": null
+    },
+    {
+      "case": "pi-alias-and-local-fork",
+      "variant": "retained",
+      "passed": true,
+      "error": null
+    }
+  ],
+  "all_original_grades_match": true,
+  "model_calls_added": 0
+}

@@ -1,0 +1,106 @@
+{
+  "kind": "Real pinned project deployment-manifest source audit; not security/installability validation or general accuracy benchmark",
+  "control": false,
+  "source_commit": "3a111d8590406701e973131d7dbd15de9016985d",
+  "input_sha256": "6df9522be82fde66701f3247ad2146d3762fae046909f8391635ae9ed9f6b278",
+  "protocol_sha256": "64121fc0ce4b28eb161f03dc28a040745aba82db35e5676e7a30b32bc5fbf068",
+  "actual_provider_attempts": 12,
+  "real_model_calls": 12,
+  "total_reserved": 12,
+  "cases": [
+    {
+      "case": "linux-duckdb-deployment",
+      "variant": "retained",
+      "status": "completed",
+      "error": null,
+      "wall_seconds": 5.105843147000001,
+      "grade": {
+        "passed": true,
+        "error": null,
+        "complete_records": 3
+      },
+      "reserved": 3,
+      "input_tokens_including_cache": 4967,
+      "output_tokens": 1061,
+      "estimated_cost_usd": 0.002161188,
+      "usage_missing": 0,
+      "pressure_preparations": 2,
+      "spill_occurrences": 2,
+      "retained_slice_occurrences": 6,
+      "max_prepared_JSON_bytes": 9284,
+      "recall_calls": 1,
+      "corruption_checks": 0
+    },
+    {
+      "case": "linux-duckdb-deployment",
+      "variant": "control",
+      "status": "completed",
+      "error": null,
+      "wall_seconds": 5.394479127,
+      "grade": {
+        "passed": true,
+        "error": null,
+        "complete_records": 3
+      },
+      "reserved": 3,
+      "input_tokens_including_cache": 4491,
+      "output_tokens": 1098,
+      "estimated_cost_usd": 0.001836996,
+      "usage_missing": 0,
+      "pressure_preparations": 2,
+      "spill_occurrences": 2,
+      "retained_slice_occurrences": 0,
+      "max_prepared_JSON_bytes": 9051,
+      "recall_calls": 1,
+      "corruption_checks": 0
+    },
+    {
+      "case": "pi-alias-and-local-fork",
+      "variant": "control",
+      "status": "completed",
+      "error": null,
+      "wall_seconds": 4.040552993000001,
+      "grade": {
+        "passed": true,
+        "error": null,
+        "complete_records": 3
+      },
+      "reserved": 3,
+      "input_tokens_including_cache": 4116,
+      "output_tokens": 736,
+      "estimated_cost_usd": 0.001402992,
+      "usage_missing": 0,
+      "pressure_preparations": 2,
+      "spill_occurrences": 2,
+      "retained_slice_occurrences": 0,
+      "max_prepared_JSON_bytes": 8330,
+      "recall_calls": 1,
+      "corruption_checks": 0
+    },
+    {
+      "case": "pi-alias-and-local-fork",
+      "variant": "retained",
+      "status": "completed",
+      "error": null,
+      "wall_seconds": 4.347721483000001,
+      "grade": {
+        "passed": true,
+        "error": null,
+        "complete_records": 3
+      },
+      "reserved": 3,
+      "input_tokens_including_cache": 4967,
+      "output_tokens": 743,
+      "estimated_cost_usd": 0.001365636,
+      "usage_missing": 0,
+      "pressure_preparations": 2,
+      "spill_occurrences": 2,
+      "retained_slice_occurrences": 6,
+      "max_prepared_JSON_bytes": 9864,
+      "recall_calls": 1,
+      "corruption_checks": 0
+    }
+  ],
+  "GPU_used": false,
+  "not_an_invoice": true
+}

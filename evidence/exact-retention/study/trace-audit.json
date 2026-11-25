@@ -1,0 +1,115 @@
+{
+  "kind": "Post-study descriptive trace audit, no regrading/model calls",
+  "source_commit": "3a111d8590406701e973131d7dbd15de9016985d",
+  "actual_calls": 12,
+  "all_input_tokens": 18541,
+  "all_output_tokens": 3638,
+  "known_peak_estimated_usd": 0.0067668120000000005,
+  "not_an_invoice": true,
+  "control_input_tokens": 8607,
+  "retained_input_tokens": 9934,
+  "rows": [
+    {
+      "case": "linux-duckdb-deployment",
+      "variant": "retained",
+      "retention": [
+        {
+          "paths": [
+            "/packages/node_modules~1@duckdb~1node-api",
+            "/packages/node_modules~1@duckdb~1node-bindings-linux-x64",
+            "/packages/node_modules~1typescript/optionalDependencies/@typescript~1typescript-linux-x64"
+          ],
+          "added_bytes": 1350
+        },
+        {
+          "paths": [
+            "/packages/node_modules~1@duckdb~1node-api",
+            "/packages/node_modules~1@duckdb~1node-bindings-linux-x64",
+            "/packages/node_modules~1typescript/optionalDependencies/@typescript~1typescript-linux-x64"
+          ],
+          "added_bytes": 1350
+        }
+      ],
+      "actual_recall_arguments": [
+        {
+          "artifact_id": "ctx_tool-result_6df9522be82fde66701f3247ad2146d3762fae046909f8391635ae9ed9f6b278",
+          "json_pointers": [
+            "/packages/node_modules~1@duckdb~1node-bindings"
+          ],
+          "offset": 0,
+          "limit": 4096
+        }
+      ]
+    },
+    {
+      "case": "linux-duckdb-deployment",
+      "variant": "control",
+      "retention": [],
+      "actual_recall_arguments": [
+        {
+          "artifact_id": "ctx_tool-result_6df9522be82fde66701f3247ad2146d3762fae046909f8391635ae9ed9f6b278",
+          "json_pointers": [
+            "/packages/node_modules~1@duckdb~1node-api",
+            "/packages/node_modules~1@duckdb~1node-bindings",
+            "/packages/node_modules~1@duckdb~1node-bindings-linux-x64"
+          ],
+          "offset": 0,
+          "limit": 4096
+        }
+      ]
+    },
+    {
+      "case": "pi-alias-and-local-fork",
+      "variant": "control",
+      "retention": [],
+      "actual_recall_arguments": [
+        {
+          "artifact_id": "ctx_tool-result_6df9522be82fde66701f3247ad2146d3762fae046909f8391635ae9ed9f6b278",
+          "json_pointers": [
+            "/packages/node_modules~1@earendil-works~1pi-agent-core",
+            "/packages/vendor~1pi-agent-core",
+            "/packages/node_modules~1@pi-context-lab~1upstream-agent-core"
+          ],
+          "offset": 0,
+          "limit": 4096
+        }
+      ]
+    },
+    {
+      "case": "pi-alias-and-local-fork",
+      "variant": "retained",
+      "retention": [
+        {
+          "paths": [
+            "/packages/node_modules~1@earendil-works~1pi-agent-core",
+            "/packages/",
+            "/packages/vendor~1pi-agent-core"
+          ],
+          "added_bytes": 1397
+        },
+        {
+          "paths": [
+            "/packages/node_modules~1@earendil-works~1pi-agent-core",
+            "/packages/",
+            "/packages/vendor~1pi-agent-core"
+          ],
+          "added_bytes": 1397
+        }
+      ],
+      "actual_recall_arguments": [
+        {
+          "artifact_id": "ctx_tool-result_6df9522be82fde66701f3247ad2146d3762fae046909f8391635ae9ed9f6b278",
+          "json_pointers": [
+            "/packages/node_modules~1@earendil-works~1pi-agent-core",
+            "/packages/vendor~1pi-agent-core",
+            "/packages/node_modules~1@pi-context-lab~1upstream-agent-core"
+          ],
+          "offset": 0,
+          "limit": 4096
+        }
+      ]
+    }
+  ],
+  "model_calls_added": 0,
+  "original_grades_unchanged": true
+}

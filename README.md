@@ -100,3 +100,5 @@ core11在新的结构化业务预检中修复回退目标未留最低内容空�
 项目采用 MIT；派生核心保留 [上游来源与文件哈希](vendor/pi-agent-core/UPSTREAM.json)、[原许可](vendor/pi-agent-core/LICENSE) 和 [可移植源码补丁](patches/)。精确依赖见 [package-lock.json](package-lock.json)。
 
 core12增加默认关闭的查询相关精确子树保留，完整原文仍可回查、审计历史不改。新的集中度预检因没有压力而关闭，未改预算重跑；另一个固定部署锁文件工作负载的四个CPU原生Agent控制通过，开启保留仍各需一次回读，不据此宣称模型收益。先行[新方案](examples/dependency-audit-protocol.json)与[全部预检证据](evidence/exact-retention/)公开后才运行真实API。
+
+该先行方案随后实际执行12次DeepSeek请求：开/关各两项均核对正确，每项3请求/1回读；DuckDB开启时回读路径3条缩到1条，但输入token总体更多，没有请求或效率收益。173个执行输入与先行提交一致，原始轨迹及[独立来源检查](evidence/exact-retention/study/independent-source-check.json)公开；研究关闭，不追加余量重试。

@@ -28,7 +28,8 @@
     "contextlab.4",
     "contextlab.6",
     "contextlab.7",
-    "contextlab.11"
+    "contextlab.11",
+    "contextlab.12"
   ],
   "v4_validation": "Preregistered real DeepSeek study atabd69e2:23requests;full2/2,native-read/search0/2. Post-study configuredAPI/Runner defaultfull, experiments opt-in.37engineering tests; no claimed performance improvement.",
   "v5_validation": "44 engineering tests,14 browser checks, full UCI16KiB scripted control; three new synthetic mechanism comparisons against frozen core4. No additional real model requests; default full context preserved.",
@@ -39,5 +40,5 @@
   "v10_validation": "80tests/14browser/fullUCI; new3synthetic native cases compare static9 vs post-response headroom10. Pressure: static8192contentcap rejected nextview; new5996content/23660of24576contextbytes completes. Roomy unchanged; unfittable beforeanytool. Reply-bound immutable plans saved before execution and reused on recovery. No real model calls or universal fit/token/quality claim.",
   "v11_preflight": "85Node/14browser/fullUCI; old10 structured business controls fullpass/budgetreject, unchanged tasks/budgets/grader aftergeneric11fallbacksearch+compactmetadata fix all4CPUcontrolspass. Budgeted2pressure/2recalls/1plan percase, max20438/20390of20480. Independent3facts/2priorities plus2974/3108fullgroups. No paid calls before prospective source release.",
   "v11_real_validation": "Once-only preregistered302cf1d structured brief2familiesx2configs,16DeepSeekcalls,full2/2factualpass,budgeted0/2; bothbudgetedpressure, onefailsbefore4recalls and othersealedwrongprioritieswithoutrecall. No outputreservation/modelquality gain claim.151executedinputs matchpreregisteredcommit; no retries.",
-  "v12_status": "101 server tests/14browser/fullUCI passed; four fresh deployment CPU controls pass, same3calls/1recall each, no model gain. Closed concentration preflight correct but0pressure/0paid. New24request API study not yet launched."
+  "v12_status": "101Node/14browser/fullUCI,113 tested execution/protocol files match. Concentration CPU4correct/no pressure/closed unpaid. Dependency CPU4correct; actual once12DeepSeekrequests after3a111d8,173 inputs byteverified. Retained/control both2/2correct, each3requests/1recall. DuckDBrecall3paths->1 but retained totalinput9934>control8607, no efficiency gain. Study closed with all raw records."
 }
