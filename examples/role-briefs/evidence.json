@@ -1,0 +1,282 @@
+{
+  "version": 2,
+  "source_commits": {
+    "PiContextLab": "ddb8175528bced2c07fae5c8b35aef4e3bc1fb70",
+    "AgentReliabilityLab": "583eb16e0a22e14ce6d815f5632a5559db2dfd85"
+  },
+  "files": {
+    "examples/role-briefs/source-inputs/pi-core-0.txt": {
+      "sha256": "c97a691bf8a4ee22b232bdfbc875581047f5c9105e4cfa0a9bafca847050e4ec",
+      "bytes": 37600,
+      "repository": "PiContextLab",
+      "commit": "ddb8175528bced2c07fae5c8b35aef4e3bc1fb70",
+      "original_path": "docs/framework.md",
+      "url": "https://github.com/1137423918/PiContextLab/blob/ddb8175528bced2c07fae5c8b35aef4e3bc1fb70/docs/framework.md"
+    },
+    "examples/role-briefs/source-inputs/pi-core-1.txt": {
+      "sha256": "96d8dc455c2f333208228004f3dc5604c4ca9a6b839da28d599bca929ed3d02d",
+      "bytes": 1562,
+      "repository": "PiContextLab",
+      "commit": "ddb8175528bced2c07fae5c8b35aef4e3bc1fb70",
+      "original_path": "vendor/pi-agent-core/src/model-context.ts",
+      "url": "https://github.com/1137423918/PiContextLab/blob/ddb8175528bced2c07fae5c8b35aef4e3bc1fb70/vendor/pi-agent-core/src/model-context.ts"
+    },
+    "examples/role-briefs/source-inputs/pi-core-2.txt": {
+      "sha256": "855816370339fb7c9b5736742b4e06c4dc8d0abb2ef84c33bc376b1b57462b26",
+      "bytes": 8767,
+      "repository": "PiContextLab",
+      "commit": "ddb8175528bced2c07fae5c8b35aef4e3bc1fb70",
+      "original_path": "vendor/pi-agent-core/src/tool-router.ts",
+      "url": "https://github.com/1137423918/PiContextLab/blob/ddb8175528bced2c07fae5c8b35aef4e3bc1fb70/vendor/pi-agent-core/src/tool-router.ts"
+    },
+    "examples/role-briefs/source-inputs/pi-context-0.txt": {
+      "sha256": "49b7f4ede3aee077c251fd491d8dd8a946d4292c785f804e0703c866431b654a",
+      "bytes": 15619,
+      "repository": "PiContextLab",
+      "commit": "ddb8175528bced2c07fae5c8b35aef4e3bc1fb70",
+      "original_path": "vendor/pi-agent-core/src/context-budget.ts",
+      "url": "https://github.com/1137423918/PiContextLab/blob/ddb8175528bced2c07fae5c8b35aef4e3bc1fb70/vendor/pi-agent-core/src/context-budget.ts"
+    },
+    "examples/role-briefs/source-inputs/pi-context-1.txt": {
+      "sha256": "f837a893a7c4f0a8e69b72ee59c07d704ae13533f805a741d18fbb934fb63853",
+      "bytes": 5233,
+      "repository": "PiContextLab",
+      "commit": "ddb8175528bced2c07fae5c8b35aef4e3bc1fb70",
+      "original_path": "vendor/pi-agent-core/src/context-result-budget.ts",
+      "url": "https://github.com/1137423918/PiContextLab/blob/ddb8175528bced2c07fae5c8b35aef4e3bc1fb70/vendor/pi-agent-core/src/context-result-budget.ts"
+    },
+    "examples/role-briefs/source-inputs/pi-context-2.txt": {
+      "sha256": "32b21e7d06fe807520e81d20ae48977ba82fecffcb1f35bda5f631f1aa893237",
+      "bytes": 4677,
+      "repository": "PiContextLab",
+      "commit": "ddb8175528bced2c07fae5c8b35aef4e3bc1fb70",
+      "original_path": "vendor/pi-agent-core/src/context-retention.ts",
+      "url": "https://github.com/1137423918/PiContextLab/blob/ddb8175528bced2c07fae5c8b35aef4e3bc1fb70/vendor/pi-agent-core/src/context-retention.ts"
+    },
+    "examples/role-briefs/source-inputs/pi-runtime-0.txt": {
+      "sha256": "4147bc1780728ef29ca8c6e4d05e47784dc8cd89029d9234aa3e48d21745667f",
+      "bytes": 19398,
+      "repository": "PiContextLab",
+      "commit": "ddb8175528bced2c07fae5c8b35aef4e3bc1fb70",
+      "original_path": "src/runtime.ts",
+      "url": "https://github.com/1137423918/PiContextLab/blob/ddb8175528bced2c07fae5c8b35aef4e3bc1fb70/src/runtime.ts"
+    },
+    "examples/role-briefs/source-inputs/pi-runtime-1.txt": {
+      "sha256": "b65b9ec870183b9e8618750f44564b02bba8b51f02efe7c011c47ad5b1e8cc62",
+      "bytes": 18899,
+      "repository": "PiContextLab",
+      "commit": "ddb8175528bced2c07fae5c8b35aef4e3bc1fb70",
+      "original_path": "src/store.ts",
+      "url": "https://github.com/1137423918/PiContextLab/blob/ddb8175528bced2c07fae5c8b35aef4e3bc1fb70/src/store.ts"
+    },
+    "examples/role-briefs/source-inputs/pi-runtime-2.txt": {
+      "sha256": "3b63ee20118726999a10b4649973cea2f1ca358a6e5f1af1063aeeec8694c33f",
+      "bytes": 11358,
+      "repository": "PiContextLab",
+      "commit": "ddb8175528bced2c07fae5c8b35aef4e3bc1fb70",
+      "original_path": "src/brief-proof.ts",
+      "url": "https://github.com/1137423918/PiContextLab/blob/ddb8175528bced2c07fae5c8b35aef4e3bc1fb70/src/brief-proof.ts"
+    },
+    "examples/role-briefs/source-inputs/pi-tests-0.txt": {
+      "sha256": "4d7be15612dc4e31df58dbce7192baa38c24434354f2e119fe87c104c744f72f",
+      "bytes": 30269,
+      "repository": "PiContextLab",
+      "commit": "ddb8175528bced2c07fae5c8b35aef4e3bc1fb70",
+      "original_path": "evidence/exact-retention/tests.tap",
+      "url": "https://github.com/1137423918/PiContextLab/blob/ddb8175528bced2c07fae5c8b35aef4e3bc1fb70/evidence/exact-retention/tests.tap"
+    },
+    "examples/role-briefs/source-inputs/pi-tests-1.txt": {
+      "sha256": "6b672e1fe02baa131dd671243f408e4039e7dca13759d5fa31ac9879946c2185",
+      "bytes": 786,
+      "repository": "PiContextLab",
+      "commit": "ddb8175528bced2c07fae5c8b35aef4e3bc1fb70",
+      "original_path": "evidence/exact-retention/browser-result.json",
+      "url": "https://github.com/1137423918/PiContextLab/blob/ddb8175528bced2c07fae5c8b35aef4e3bc1fb70/evidence/exact-retention/browser-result.json"
+    },
+    "examples/role-briefs/source-inputs/pi-uci-0.txt": {
+      "sha256": "1830f72d2b13e09c4fdc727178f943f80cb53802813a6f87796b68bb4485b5db",
+      "bytes": 94614,
+      "repository": "PiContextLab",
+      "commit": "ddb8175528bced2c07fae5c8b35aef4e3bc1fb70",
+      "original_path": "evidence/exact-retention/uci-validation.json",
+      "url": "https://github.com/1137423918/PiContextLab/blob/ddb8175528bced2c07fae5c8b35aef4e3bc1fb70/evidence/exact-retention/uci-validation.json"
+    },
+    "examples/role-briefs/source-inputs/pi-api-0.txt": {
+      "sha256": "4743e8e03f7fbe7c2f15b6a22eeccf4ee02bc982bda27652567609fa989d2f0b",
+      "bytes": 3071,
+      "repository": "PiContextLab",
+      "commit": "ddb8175528bced2c07fae5c8b35aef4e3bc1fb70",
+      "original_path": "evidence/exact-retention/study/summary.json",
+      "url": "https://github.com/1137423918/PiContextLab/blob/ddb8175528bced2c07fae5c8b35aef4e3bc1fb70/evidence/exact-retention/study/summary.json"
+    },
+    "examples/role-briefs/source-inputs/paper-0.txt": {
+      "sha256": "61237fc1fe936261c340860e844636e76a4563ceeed0818e6d89b359c1c945ff",
+      "bytes": 372,
+      "repository": "AgentReliabilityLab",
+      "commit": "583eb16e0a22e14ce6d815f5632a5559db2dfd85",
+      "original_path": "portfolio/citation.bib",
+      "url": "https://github.com/1137423918/AgentReliabilityLab/blob/583eb16e0a22e14ce6d815f5632a5559db2dfd85/portfolio/citation.bib"
+    },
+    "examples/role-briefs/source-inputs/scifact-0.txt": {
+      "sha256": "f4ae90c8b8d896ca4ed26ca7b329d561138a1fd626b3bd66d63b5982c8bfb0b8",
+      "bytes": 481182,
+      "repository": "AgentReliabilityLab",
+      "commit": "583eb16e0a22e14ce6d815f5632a5559db2dfd85",
+      "original_path": "evidence/research-batch/metrics.json",
+      "url": "https://github.com/1137423918/AgentReliabilityLab/blob/583eb16e0a22e14ce6d815f5632a5559db2dfd85/evidence/research-batch/metrics.json"
+    },
+    "examples/role-briefs/source-inputs/scifact-1.txt": {
+      "sha256": "a01fb91f45d2118df2d9b2cd74ce90f3f6c3b56feb3d6af71f8a0df838c687b1",
+      "bytes": 2262,
+      "repository": "AgentReliabilityLab",
+      "commit": "583eb16e0a22e14ce6d815f5632a5559db2dfd85",
+      "original_path": "evidence/research-batch/trec-verification.json",
+      "url": "https://github.com/1137423918/AgentReliabilityLab/blob/583eb16e0a22e14ce6d815f5632a5559db2dfd85/evidence/research-batch/trec-verification.json"
+    },
+    "examples/role-briefs/source-inputs/scifact-2.txt": {
+      "sha256": "c25cab5eb2f59ed6303b462f406b6a9f2e2dba3d0eeac9e53a65fa5d8dbed8d0",
+      "bytes": 7190,
+      "repository": "AgentReliabilityLab",
+      "commit": "583eb16e0a22e14ce6d815f5632a5559db2dfd85",
+      "original_path": "evidence/research-batch/README.md",
+      "url": "https://github.com/1137423918/AgentReliabilityLab/blob/583eb16e0a22e14ce6d815f5632a5559db2dfd85/evidence/research-batch/README.md"
+    },
+    "examples/role-briefs/source-inputs/retrieval-0.txt": {
+      "sha256": "0d70ccb42f3363e7fb78ed7a02bef86579bf0c1ef2ebf8a8538f24b4c710ef17",
+      "bytes": 4886,
+      "repository": "AgentReliabilityLab",
+      "commit": "583eb16e0a22e14ce6d815f5632a5559db2dfd85",
+      "original_path": "docs/research-batch.md",
+      "url": "https://github.com/1137423918/AgentReliabilityLab/blob/583eb16e0a22e14ce6d815f5632a5559db2dfd85/docs/research-batch.md"
+    },
+    "examples/role-briefs/source-inputs/retrieval-1.txt": {
+      "sha256": "0ec47b7bee720b522d3d5ad44941529e822c49500317dbeb1457bb42f0dcd70d",
+      "bytes": 3833,
+      "repository": "AgentReliabilityLab",
+      "commit": "583eb16e0a22e14ce6d815f5632a5559db2dfd85",
+      "original_path": "docs/research-batch-recovery.md",
+      "url": "https://github.com/1137423918/AgentReliabilityLab/blob/583eb16e0a22e14ce6d815f5632a5559db2dfd85/docs/research-batch-recovery.md"
+    },
+    "examples/role-briefs/source-inputs/paper-library-0.txt": {
+      "sha256": "0aea7b35142c8a509a16775b2738c607b56f14ade8ec1c2167115ef48096155d",
+      "bytes": 3341,
+      "repository": "AgentReliabilityLab",
+      "commit": "583eb16e0a22e14ce6d815f5632a5559db2dfd85",
+      "original_path": "docs/frontier-reading.md",
+      "url": "https://github.com/1137423918/AgentReliabilityLab/blob/583eb16e0a22e14ce6d815f5632a5559db2dfd85/docs/frontier-reading.md"
+    },
+    "examples/role-briefs/source-inputs/paper-library-1.txt": {
+      "sha256": "c3ca0bf3b4b5e08924a86be4ee559482428bd8753b5b0914f2ca3fbb619d0382",
+      "bytes": 4769,
+      "repository": "AgentReliabilityLab",
+      "commit": "583eb16e0a22e14ce6d815f5632a5559db2dfd85",
+      "original_path": "docs/research-source-review.md",
+      "url": "https://github.com/1137423918/AgentReliabilityLab/blob/583eb16e0a22e14ce6d815f5632a5559db2dfd85/docs/research-source-review.md"
+    },
+    "examples/role-briefs/source-inputs/dependency-0.txt": {
+      "sha256": "9523989f5cdaa676ca443eaa9ec387382d5ef6888c5d41e5176606503a5b3bfe",
+      "bytes": 5031,
+      "repository": "AgentReliabilityLab",
+      "commit": "583eb16e0a22e14ce6d815f5632a5559db2dfd85",
+      "original_path": "docs/dependency-workbench.md",
+      "url": "https://github.com/1137423918/AgentReliabilityLab/blob/583eb16e0a22e14ce6d815f5632a5559db2dfd85/docs/dependency-workbench.md"
+    },
+    "examples/role-briefs/source-inputs/dependency-1.txt": {
+      "sha256": "08efe024e14f8155356d9b51df31940f26fd0966fb56f962068789ed61c972f3",
+      "bytes": 5094,
+      "repository": "AgentReliabilityLab",
+      "commit": "583eb16e0a22e14ce6d815f5632a5559db2dfd85",
+      "original_path": "docs/dependency-upgrade.md",
+      "url": "https://github.com/1137423918/AgentReliabilityLab/blob/583eb16e0a22e14ce6d815f5632a5559db2dfd85/docs/dependency-upgrade.md"
+    },
+    "examples/role-briefs/source-inputs/dependency-2.txt": {
+      "sha256": "ef8d1eb9dec95d50a142ea3abb63c3967cee64bf9b4ddd917ec8d5a090f9935e",
+      "bytes": 5164,
+      "repository": "AgentReliabilityLab",
+      "commit": "583eb16e0a22e14ce6d815f5632a5559db2dfd85",
+      "original_path": "docs/lightrag-dependency-upgrade.md",
+      "url": "https://github.com/1137423918/AgentReliabilityLab/blob/583eb16e0a22e14ce6d815f5632a5559db2dfd85/docs/lightrag-dependency-upgrade.md"
+    },
+    "examples/role-briefs/source-inputs/deeptutor-0.txt": {
+      "sha256": "0f80396030016a4084f960d97869602fdebe725db798403bfeb2d25236b8449f",
+      "bytes": 1682,
+      "repository": "AgentReliabilityLab",
+      "commit": "583eb16e0a22e14ce6d815f5632a5559db2dfd85",
+      "original_path": "docs/deeptutor-mcp-pagination.md",
+      "url": "https://github.com/1137423918/AgentReliabilityLab/blob/583eb16e0a22e14ce6d815f5632a5559db2dfd85/docs/deeptutor-mcp-pagination.md"
+    },
+    "examples/role-briefs/source-inputs/deeptutor-1.txt": {
+      "sha256": "a422aad0f5963b3cd1bdef59be88339b699cb786553a67f670c39c9d9b0c0e8a",
+      "bytes": 56674,
+      "repository": "AgentReliabilityLab",
+      "commit": "583eb16e0a22e14ce6d815f5632a5559db2dfd85",
+      "original_path": "evidence/deeptutor-mcp-pagination/validation.json",
+      "url": "https://github.com/1137423918/AgentReliabilityLab/blob/583eb16e0a22e14ce6d815f5632a5559db2dfd85/evidence/deeptutor-mcp-pagination/validation.json"
+    },
+    "examples/role-briefs/source-inputs/pr-status.json": {
+      "sha256": "4c6e5f481734d2cc5d2c3f6e0795e725e47907ff228b173efdbcb2ebdc343b2e",
+      "bytes": 3707,
+      "url": "https://github.com/HKUDS/DeepTutor/pull/2930",
+      "observed_utc": "2026-11-25T11:54:31.912479+00:00",
+      "kind": "Time-specific authenticated GitHub GraphQL observation; not a merge/CI guarantee"
+    }
+  },
+  "claims": {
+    "pi-core": [
+      "examples/role-briefs/source-inputs/pi-core-0.txt",
+      "examples/role-briefs/source-inputs/pi-core-1.txt",
+      "examples/role-briefs/source-inputs/pi-core-2.txt"
+    ],
+    "pi-context": [
+      "examples/role-briefs/source-inputs/pi-context-0.txt",
+      "examples/role-briefs/source-inputs/pi-context-1.txt",
+      "examples/role-briefs/source-inputs/pi-context-2.txt"
+    ],
+    "pi-runtime": [
+      "examples/role-briefs/source-inputs/pi-runtime-0.txt",
+      "examples/role-briefs/source-inputs/pi-runtime-1.txt",
+      "examples/role-briefs/source-inputs/pi-runtime-2.txt"
+    ],
+    "pi-tests": [
+      "examples/role-briefs/source-inputs/pi-tests-0.txt",
+      "examples/role-briefs/source-inputs/pi-tests-1.txt"
+    ],
+    "pi-uci": [
+      "examples/role-briefs/source-inputs/pi-uci-0.txt"
+    ],
+    "pi-api": [
+      "examples/role-briefs/source-inputs/pi-api-0.txt"
+    ],
+    "paper": [
+      "examples/role-briefs/source-inputs/paper-0.txt"
+    ],
+    "scifact": [
+      "examples/role-briefs/source-inputs/scifact-0.txt",
+      "examples/role-briefs/source-inputs/scifact-1.txt",
+      "examples/role-briefs/source-inputs/scifact-2.txt"
+    ],
+    "retrieval": [
+      "examples/role-briefs/source-inputs/retrieval-0.txt",
+      "examples/role-briefs/source-inputs/retrieval-1.txt"
+    ],
+    "paper-library": [
+      "examples/role-briefs/source-inputs/paper-library-0.txt",
+      "examples/role-briefs/source-inputs/paper-library-1.txt"
+    ],
+    "dependency": [
+      "examples/role-briefs/source-inputs/dependency-0.txt",
+      "examples/role-briefs/source-inputs/dependency-1.txt",
+      "examples/role-briefs/source-inputs/dependency-2.txt"
+    ],
+    "deeptutor": [
+      "examples/role-briefs/source-inputs/deeptutor-0.txt",
+      "examples/role-briefs/source-inputs/deeptutor-1.txt"
+    ],
+    "pr-status": [
+      "examples/role-briefs/source-inputs/pr-status.json"
+    ]
+  },
+  "paper_primary_url": "https://ieeexplore.ieee.org/abstract/document/11020690",
+  "paper_primary_metadata_checked": "2026-11-25; IEEE source search resolved title/journal/volume/year/DOI, no new performance claims added",
+  "scope": "Read-only fixed source copies and live PR status; no new experiments, homepage/old portfolio unchanged."
+}

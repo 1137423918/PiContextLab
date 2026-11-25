@@ -1,0 +1,9 @@
+@article{wang2025lsdetr,
+  author  = {Junzhe Wang and Xinke Chen and Anbang Dai and Yan Liu and Guanying Huo},
+  title   = {{LS-DETR}: Lightweight Transformer for Object Detection in Forward-Looking Sonar Images},
+  journal = {IEEE Geoscience and Remote Sensing Letters},
+  volume  = {22},
+  pages   = {1--5},
+  year    = {2025},
+  doi     = {10.1109/LGRS.2025.3575615}
+}

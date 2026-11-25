@@ -1,5 +1,7 @@
 # 简历与面试材料
 
+最新[两类岗位PDF与可编辑正文](../examples/role-briefs/)已加入Pi项目，[当前项目总表](resume-portfolio.md)给出两项优先组合。
+
 先读[简明项目说明与展示路线](project-brief.md)，独立复现SDK见[接入说明](integration.md)。
 
 项目名：**PiContextLab — Pi Agent Core 上下文预算与工具选择改造**。个人开源工程项目；PiMetricLab 是真实数据验证客户端，不拆成两个相互独立的履历成果。

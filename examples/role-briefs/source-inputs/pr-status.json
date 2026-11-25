@@ -1,0 +1,126 @@
+{
+  "observed_utc": "2026-11-25T11:54:31.912479+00:00",
+  "read_only": true,
+  "prs": [
+    {
+      "repo": "OpenHands/software-agent-sdk",
+      "number": 7032,
+      "url": "https://github.com/OpenHands/software-agent-sdk/pull/7032",
+      "state": "OPEN",
+      "draft": false,
+      "merged_at": null,
+      "head": "79f85dc34152a7234878bcc658ffdb6e4c31d6f4",
+      "unresolved_threads": 0
+    },
+    {
+      "repo": "OpenHands/software-agent-sdk",
+      "number": 7050,
+      "url": "https://github.com/OpenHands/software-agent-sdk/pull/7050",
+      "state": "OPEN",
+      "draft": false,
+      "merged_at": null,
+      "head": "74012ad7ef6e68d174f61bc1f4dc2fb106e33e69",
+      "unresolved_threads": 0
+    },
+    {
+      "repo": "google/adk-python",
+      "number": 8278,
+      "url": "https://github.com/google/adk-python/pull/8278",
+      "state": "OPEN",
+      "draft": false,
+      "merged_at": null,
+      "head": "90815ad147fc652aa0cfeca7b1ec214903ae3089",
+      "unresolved_threads": 0
+    },
+    {
+      "repo": "microsoft/semantic-kernel",
+      "number": 14845,
+      "url": "https://github.com/microsoft/semantic-kernel/pull/14845",
+      "state": "OPEN",
+      "draft": false,
+      "merged_at": null,
+      "head": "891744aad21d1778c842426f49d0c84da46a9a2d",
+      "unresolved_threads": 0
+    },
+    {
+      "repo": "microsoft/semantic-kernel",
+      "number": 14853,
+      "url": "https://github.com/microsoft/semantic-kernel/pull/14853",
+      "state": "OPEN",
+      "draft": false,
+      "merged_at": null,
+      "head": "9eadf24486464a146f3168035769cc071a8182bf",
+      "unresolved_threads": 0
+    },
+    {
+      "repo": "microsoft/agent-lightning",
+      "number": 707,
+      "url": "https://github.com/microsoft/agent-lightning/pull/707",
+      "state": "OPEN",
+      "draft": false,
+      "merged_at": null,
+      "head": "5d3342c07d849d4ce9c836e14d62d1ae8d91d9c9",
+      "unresolved_threads": 0
+    },
+    {
+      "repo": "assafelovic/gpt-researcher",
+      "number": 2367,
+      "url": "https://github.com/assafelovic/gpt-researcher/pull/2367",
+      "state": "OPEN",
+      "draft": false,
+      "merged_at": null,
+      "head": "973514b3737a0befd4b27f54685db485793ffa74",
+      "unresolved_threads": 0
+    },
+    {
+      "repo": "browser-use/browser-use",
+      "number": 6521,
+      "url": "https://github.com/browser-use/browser-use/pull/6521",
+      "state": "OPEN",
+      "draft": false,
+      "merged_at": null,
+      "head": "a4473544a95100b2b750cdf28e0b7f121be9c46e",
+      "unresolved_threads": 0
+    },
+    {
+      "repo": "VoltAgent/voltagent",
+      "number": 1562,
+      "url": "https://github.com/VoltAgent/voltagent/pull/1562",
+      "state": "OPEN",
+      "draft": false,
+      "merged_at": null,
+      "head": "44cbec5791030c9aef2e47bd30df0b240e145b33",
+      "unresolved_threads": 0
+    },
+    {
+      "repo": "HKUDS/LightRAG",
+      "number": 4647,
+      "url": "https://github.com/HKUDS/LightRAG/pull/4647",
+      "state": "OPEN",
+      "draft": false,
+      "merged_at": null,
+      "head": "3c4e90508d7e9f3404b76bb54b96350354bc1341",
+      "unresolved_threads": 0
+    },
+    {
+      "repo": "infiniflow/ragflow",
+      "number": 22752,
+      "url": "https://github.com/infiniflow/ragflow/pull/22752",
+      "state": "OPEN",
+      "draft": false,
+      "merged_at": null,
+      "head": "e26909ee6cc0946fe2dfbbfc8bbabf6311bc1b5a",
+      "unresolved_threads": 0
+    },
+    {
+      "repo": "HKUDS/DeepTutor",
+      "number": 2930,
+      "url": "https://github.com/HKUDS/DeepTutor/pull/2930",
+      "state": "OPEN",
+      "draft": false,
+      "merged_at": null,
+      "head": "be11576d26d0ccdc59130cba1c69857d56756a95",
+      "unresolved_threads": 0
+    }
+  ]
+}

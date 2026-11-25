@@ -4,7 +4,7 @@
 
 这项项目的主体是对固定 **Pi 1.6.0** 核心的 MIT 派生实现 `1.6.0-contextlab.12`，不是只换 prompt 或套 SDK。原始版本以独立 npm 别名保留作对照；尚未向上游提交或合入。
 
-[项目说明与展示](docs/project-brief.md) · [独立SDK接入](docs/integration.md) · [完整中文讲解](docs/handbook.md) · [框架改动与算法](docs/framework.md) · [实验结果](docs/validation.md) · [DeepSeek 接入](docs/deepseek.md) · [简历与面试](docs/resume.md) · [研究来源](docs/references.md)
+[岗位项目附件](examples/role-briefs/) · [项目说明与展示](docs/project-brief.md) · [独立SDK接入](docs/integration.md) · [完整中文讲解](docs/handbook.md) · [框架改动与算法](docs/framework.md) · [实验结果](docs/validation.md) · [DeepSeek 接入](docs/deepseek.md) · [简历与面试](docs/resume.md) · [研究来源](docs/references.md)
 
 ## 核心改进
 

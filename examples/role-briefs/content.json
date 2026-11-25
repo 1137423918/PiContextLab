@@ -1,0 +1,232 @@
+{
+  "version": 2,
+  "name": "Junzhe Wang",
+  "date": "2026-11-25",
+  "pr_snapshot": "2026-11-25 19:54 (UTC+8)",
+  "github": "https://github.com/1137423918",
+  "project_url": "https://github.com/1137423918/PiContextLab",
+  "paper": {
+    "label": "第一作者论文",
+    "title": "LS-DETR: Lightweight Transformer for Object Detection in Forward-Looking Sonar Images",
+    "detail": "IEEE Geoscience and Remote Sensing Letters, vol. 22, 2025 | 前视声纳图像轻量化目标检测",
+    "url": "https://doi.org/10.1109/LGRS.2025.3575615",
+    "doi": "10.1109/LGRS.2025.3575615",
+    "claims": [
+      "paper"
+    ]
+  },
+  "footer": "PiContextLab与Agent Reliability Lab分别列示；Lab内条目为模块。Codex辅助实现与验证，请按实际承担和掌握内容使用。",
+  "roles": [
+    {
+      "id": "algorithm",
+      "filename": "algorithm-project-experience-pi-2026-11-25",
+      "heading": "算法与模型研发",
+      "summary": "项目经历参考 | Agent框架改造、检索算法、受控评测与误差分析",
+      "projects": [
+        {
+          "id": "picontextlab",
+          "title": "PiContextLab - Agent上下文预算与工具选择改造",
+          "stack": "TypeScript / Pi Agent Core / DeepSeek API / BM25 / SQLite / DuckDB",
+          "bullets": [
+            {
+              "text": "派生Pi 1.6.0核心，在规范化请求边界同时约束模型可见声明和执行工具；实现依赖闭包、数量/schema双预算及元数据失效的有界索引复用。",
+              "claims": [
+                "pi-core"
+              ]
+            },
+            {
+              "text": "实现完整轮次打包、SHA来源外置、批量JSON pointer精确续读和共享回读预算；根据实际响应规划空间，保留超53位整数等数值原字面。",
+              "claims": [
+                "pi-context"
+              ]
+            },
+            {
+              "text": "增加查询相关完整JSON子树保留，保持权威历史；101项工程测试通过，使用真实DeepSeek对照记录来源保真、请求/token与失败轨迹。",
+              "claims": [
+                "pi-context",
+                "pi-tests",
+                "pi-api"
+              ]
+            }
+          ],
+          "result": {
+            "text": "新12请求审计四项均正确；保留策略未减少请求、输入token更多，不宣称成功率或效率提升。",
+            "claims": [
+              "pi-api"
+            ]
+          },
+          "links": [
+            {
+              "label": "核心设计与源码",
+              "url": "https://github.com/1137423918/PiContextLab/blob/ddb8175528bced2c07fae5c8b35aef4e3bc1fb70/docs/framework.md"
+            },
+            {
+              "label": "真实对照与边界",
+              "url": "https://github.com/1137423918/PiContextLab/blob/ddb8175528bced2c07fae5c8b35aef4e3bc1fb70/evidence/exact-retention/README.md"
+            }
+          ]
+        },
+        {
+          "id": "research-retrieval",
+          "title": "研究资料检索与版本引用服务（Lab模块）",
+          "stack": "LlamaIndex / LangGraph / SQLite / MCP / multilingual-e5-small",
+          "bullets": [
+            {
+              "text": "实现 BM25、E5 语义及 RRF 融合检索，构建跨文档批处理与版本快照；同题语义/融合排序共享查询向量。",
+              "claims": [
+                "retrieval"
+              ]
+            },
+            {
+              "text": "完整 SciFact 5,183篇摘要/300题/339相关对固定评测：BM25/E5/RRF 的 nDCG@10 为0.6409/0.6479/0.7040；NIST 核对18,060个指标值。",
+              "claims": [
+                "scifact"
+              ]
+            },
+            {
+              "text": "接入三篇论文52页/240片段，新增92片段复用原148向量；引用绑定 PDF 页、哈希与历史版本，支持恢复和离线核查。",
+              "claims": [
+                "paper-library"
+              ]
+            }
+          ],
+          "result": {
+            "text": "摘要相关性评测与全文阅读分开；不将检索分数当作问答正确率或公开 BEIR 榜单成绩。",
+            "claims": [
+              "scifact"
+            ]
+          },
+          "links": [
+            {
+              "label": "完整检索证据",
+              "url": "https://github.com/1137423918/AgentReliabilityLab/blob/583eb16e0a22e14ce6d815f5632a5559db2dfd85/evidence/research-batch/README.md"
+            },
+            {
+              "label": "研究助手",
+              "url": "https://github.com/1137423918/AgentReliabilityLab/blob/583eb16e0a22e14ce6d815f5632a5559db2dfd85/docs/research-assistant.md"
+            }
+          ]
+        }
+      ],
+      "contribution": {
+        "title": "DeepTutor - MCP 工具分页发现修复",
+        "text": "统一 MCP 连接/probe 分页，覆盖空页、过滤、游标循环、后页错误与超时；真实 SDK/HTTP 同组10项：原版9失败，修复全部通过。",
+        "status": "正式提交 PR #2930，尚未合并；相关服务器验证不代替完整上游 CI。",
+        "claims": [
+          "deeptutor",
+          "pr-status"
+        ],
+        "url": "https://github.com/HKUDS/DeepTutor/pull/2930",
+        "evidence_url": "https://github.com/1137423918/AgentReliabilityLab/blob/583eb16e0a22e14ce6d815f5632a5559db2dfd85/docs/deeptutor-mcp-pagination.md"
+      }
+    },
+    {
+      "id": "agent-app",
+      "filename": "agent-app-project-experience-pi-2026-11-25",
+      "heading": "Agent 应用开发",
+      "summary": "项目经历参考 | 领域工具、持久工作流、来源核查与可审阅交付",
+      "projects": [
+        {
+          "id": "picontextlab",
+          "title": "PiContextLab - Agent上下文预算与工具选择改造",
+          "stack": "TypeScript / Pi Agent Core / DeepSeek API / BM25 / SQLite / DuckDB",
+          "bullets": [
+            {
+              "text": "基于Pi/DeepSeek实现经营指标调查：先澄清口径与期间，再比较六类指标、拆解国家/商品贡献，绑定SQL证据并导出报告；工具不接受任意SQL或shell。",
+              "claims": [
+                "pi-runtime",
+                "pi-uci"
+              ]
+            },
+            {
+              "text": "用SQLite维护owner/epoch写入归属、固定请求额度、完整回复和工具缓存；将执行集合、响应与回读方案绑定，恢复复用原批次，未知尝试仍扣额。",
+              "claims": [
+                "pi-runtime"
+              ]
+            },
+            {
+              "text": "在同一封存事务中核对结构化声明的数值、方向、贡献组及来源；独立程序核对541,909行数据上的12个指标值和29个国家分组。",
+              "claims": [
+                "pi-runtime",
+                "pi-uci"
+              ]
+            }
+          ],
+          "result": {
+            "text": "101项工程测试、14项浏览器检查通过；来源一致不等于因果或人工审核，报告复核单列。",
+            "claims": [
+              "pi-tests",
+              "pi-runtime"
+            ]
+          },
+          "links": [
+            {
+              "label": "应用与框架实现",
+              "url": "https://github.com/1137423918/PiContextLab/blob/ddb8175528bced2c07fae5c8b35aef4e3bc1fb70/docs/project-brief.md"
+            },
+            {
+              "label": "真实对照与边界",
+              "url": "https://github.com/1137423918/PiContextLab/blob/ddb8175528bced2c07fae5c8b35aef4e3bc1fb70/evidence/exact-retention/README.md"
+            }
+          ]
+        },
+        {
+          "id": "dependency-review",
+          "title": "依赖升级审查工作台（Lab模块）",
+          "stack": "LangGraph / MCP / LlamaIndex FunctionAgent / SQLite / OSV-Scanner / uv",
+          "bullets": [
+            {
+              "text": "固定真实仓库源码、依赖锁和漏洞库，串联扫描、候选解析与复扫；按八项事实条件输出带字段引用和来源哈希的升级审查报告。",
+              "claims": [
+                "dependency"
+              ]
+            },
+            {
+              "text": "基于 LangGraph/SQLite 实现批量处理与断点恢复，绑定 JUnit 测试 ID、源码清单及锁文件身份，避免候选版本与兼容证据错配。",
+              "claims": [
+                "dependency"
+              ]
+            },
+            {
+              "text": "覆盖 Browser Use、FastMCP、LightRAG 三个固定快照；工作台12项测试与 SIGKILL 后新进程恢复通过，LightRAG 锁文件升级已提交正式 PR。",
+              "claims": [
+                "dependency"
+              ]
+            }
+          ],
+          "result": {
+            "text": "工作台是确定性证据流程；既有模型接入另列。不宣称模型自主完成升级、漏洞全部清零或已获发布批准。",
+            "claims": [
+              "dependency"
+            ]
+          },
+          "links": [
+            {
+              "label": "工作台与恢复证据",
+              "url": "https://github.com/1137423918/AgentReliabilityLab/blob/583eb16e0a22e14ce6d815f5632a5559db2dfd85/docs/dependency-workbench.md"
+            },
+            {
+              "label": "实际升级候选",
+              "url": "https://github.com/1137423918/AgentReliabilityLab/blob/583eb16e0a22e14ce6d815f5632a5559db2dfd85/docs/lightrag-dependency-upgrade.md"
+            }
+          ]
+        }
+      ],
+      "contribution": {
+        "title": "DeepTutor - MCP 工具分页发现修复",
+        "text": "统一 MCP 连接/probe 分页，覆盖空页、过滤、游标循环、后页错误与超时；真实 SDK/HTTP 同组10项：原版9失败，修复全部通过。",
+        "status": "正式提交 PR #2930，尚未合并；相关服务器验证不代替完整上游 CI。",
+        "claims": [
+          "deeptutor",
+          "pr-status"
+        ],
+        "url": "https://github.com/HKUDS/DeepTutor/pull/2930",
+        "evidence_url": "https://github.com/1137423918/AgentReliabilityLab/blob/583eb16e0a22e14ce6d815f5632a5559db2dfd85/docs/deeptutor-mcp-pagination.md"
+      }
+    }
+  ],
+  "source_commits": {
+    "PiContextLab": "ddb8175528bced2c07fae5c8b35aef4e3bc1fb70",
+    "AgentReliabilityLab": "583eb16e0a22e14ce6d815f5632a5559db2dfd85"
+  }
+}

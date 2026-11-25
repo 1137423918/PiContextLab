@@ -1,0 +1,1705 @@
+{
+  "tested_source_sha256": {
+    "deeptutor/services/mcp/manager.py": "0db657d5ad31b97afbc87cbf4160129093d12912db03cab43dd6bdd37e77207e",
+    "tests/services/mcp/test_tool_pagination.py": "fe58db98bb52699f7fe56c84356f6d48b4f4be9fd05b01c134487fefa480df7d",
+    "tests/api/test_space_mcp.py": "a226bb1e8d4ddee081ee3c3eaa23747fc5d5801256dad57e0ab9ff2f7554d06a"
+  },
+  "baseline_production_sha256": "4181c9eba3a8c1ac3b0f39b38801a9b9980dd85ce6b976ffbf62eef1870a2f8e",
+  "same_test_bytes_in_both_variants": true,
+  "formatting_AST_unchanged": true,
+  "identity_baseline": {
+    "owner_file": "<task-root>/baseline/deeptutor/services/mcp/manager.py",
+    "owner_sha256": "4181c9eba3a8c1ac3b0f39b38801a9b9980dd85ce6b976ffbf62eef1870a2f8e",
+    "versions": {
+      "deeptutor": "1.7.4",
+      "mcp": "1.30.0",
+      "httpx": "0.28.1",
+      "pytest": "9.2.0",
+      "pytest-asyncio": "1.5.0"
+    }
+  },
+  "identity_candidate": {
+    "owner_file": "<task-root>/candidate/deeptutor/services/mcp/manager.py",
+    "owner_sha256": "0db657d5ad31b97afbc87cbf4160129093d12912db03cab43dd6bdd37e77207e",
+    "versions": {
+      "deeptutor": "1.7.4",
+      "mcp": "1.30.0",
+      "httpx": "0.28.1",
+      "pytest": "9.2.0",
+      "pytest-asyncio": "1.5.0"
+    }
+  },
+  "baseline_new_regression": {
+    "cases": 10,
+    "passed": 1,
+    "failed": 9,
+    "errors": 0,
+    "skipped": 0,
+    "rows": [
+      {
+        "name": "test_later_page_tools_are_registered_and_callable",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "failed",
+        "failure": "tests/services/mcp/test_tool_pagination.py:158: in test_later_page_tools_are_registered_and_callable\n    assert [tool.name for tool in conn.adapters] == [\nE   AssertionError: assert ['mcp_paged_first'] == ['mcp_paged_f...aged_blocked']\nE     \nE     Right contains 2 more items, first extra item: 'mcp_paged_later'\nE     Use -v to get more diff"
+      },
+      {
+        "name": "test_probe_reports_tools_from_every_page",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "failed",
+        "failure": "tests/services/mcp/test_tool_pagination.py:176: in test_probe_reports_tools_from_every_page\n    assert [tool[\"name\"] for tool in result[\"tools\"]] == [\"first\", \"later\", \"blocked\"]\nE   AssertionError: assert ['first'] == ['first', 'later', 'blocked']\nE     \nE     Right contains 2 more items, first extra item: 'later'\nE     Use -v to get more diff"
+      },
+      {
+        "name": "test_tool_filters_also_apply_to_later_pages",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "failed",
+        "failure": "tests/services/mcp/test_tool_pagination.py:191: in test_tool_filters_also_apply_to_later_pages\n    assert [tool.name for tool in conn.adapters] == [\"mcp_paged_later\"]\nE   AssertionError: assert [] == ['mcp_paged_later']\nE     \nE     Right contains one more item: 'mcp_paged_later'\nE     Use -v to get more diff"
+      },
+      {
+        "name": "test_single_page_servers_need_no_extra_request",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_incomplete_listing_does_not_publish_partial_tools[error-manager]",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "failed",
+        "failure": "tests/services/mcp/test_tool_pagination.py:233: in test_incomplete_listing_does_not_publish_partial_tools\n    assert conn.status == \"error\"\nE   AssertionError: assert 'connected' == 'error'\nE     \nE     - error\nE     + connected"
+      },
+      {
+        "name": "test_incomplete_listing_does_not_publish_partial_tools[error-probe]",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "failed",
+        "failure": "tests/services/mcp/test_tool_pagination.py:225: in test_incomplete_listing_does_not_publish_partial_tools\n    assert result[\"ok\"] is False\nE   assert True is False"
+      },
+      {
+        "name": "test_incomplete_listing_does_not_publish_partial_tools[cycle-manager]",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "failed",
+        "failure": "tests/services/mcp/test_tool_pagination.py:233: in test_incomplete_listing_does_not_publish_partial_tools\n    assert conn.status == \"error\"\nE   AssertionError: assert 'connected' == 'error'\nE     \nE     - error\nE     + connected"
+      },
+      {
+        "name": "test_incomplete_listing_does_not_publish_partial_tools[cycle-probe]",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "failed",
+        "failure": "tests/services/mcp/test_tool_pagination.py:225: in test_incomplete_listing_does_not_publish_partial_tools\n    assert result[\"ok\"] is False\nE   assert True is False"
+      },
+      {
+        "name": "test_slow_later_page_stays_within_the_discovery_timeout[manager]",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "failed",
+        "failure": "tests/services/mcp/test_tool_pagination.py:264: in test_slow_later_page_stays_within_the_discovery_timeout\n    assert conn.status == \"error\"\nE   AssertionError: assert 'connected' == 'error'\nE     \nE     - error\nE     + connected"
+      },
+      {
+        "name": "test_slow_later_page_stays_within_the_discovery_timeout[probe]",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "failed",
+        "failure": "tests/services/mcp/test_tool_pagination.py:256: in test_slow_later_page_stays_within_the_discovery_timeout\n    assert result[\"ok\"] is False\nE   assert True is False"
+      }
+    ]
+  },
+  "candidate_new_regression": {
+    "cases": 10,
+    "passed": 10,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "rows": [
+      {
+        "name": "test_later_page_tools_are_registered_and_callable",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_probe_reports_tools_from_every_page",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_tool_filters_also_apply_to_later_pages",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_single_page_servers_need_no_extra_request",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_incomplete_listing_does_not_publish_partial_tools[error-manager]",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_incomplete_listing_does_not_publish_partial_tools[error-probe]",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_incomplete_listing_does_not_publish_partial_tools[cycle-manager]",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_incomplete_listing_does_not_publish_partial_tools[cycle-probe]",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_slow_later_page_stays_within_the_discovery_timeout[manager]",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_slow_later_page_stays_within_the_discovery_timeout[probe]",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "passed",
+        "failure": null
+      }
+    ]
+  },
+  "MCP_regression": {
+    "cases": 192,
+    "passed": 192,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "rows": [
+      {
+        "name": "test_rotating_a_secret_changes_the_connection_signature",
+        "class": "tests.services.mcp.test_call_failures",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_signature_never_carries_the_credential",
+        "class": "tests.services.mcp.test_call_failures",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_config_without_references_keeps_its_plain_signature",
+        "class": "tests.services.mcp.test_call_failures",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_reload_reconnects_a_server_whose_secret_changed",
+        "class": "tests.services.mcp.test_call_failures",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_dead_connection_is_reported_as_itself_not_as_a_timeout",
+        "class": "tests.services.mcp.test_call_failures",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_live_connection_still_lets_a_call_time_out",
+        "class": "tests.services.mcp.test_call_failures",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_cancelling_the_turn_does_not_orphan_the_call",
+        "class": "tests.services.mcp.test_call_failures",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_credential_in_the_url_never_reaches_the_caller",
+        "class": "tests.services.mcp.test_call_failures",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_redaction_keeps_a_plain_url_readable",
+        "class": "tests.services.mcp.test_call_failures",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_userinfo_credentials_are_redacted",
+        "class": "tests.services.mcp.test_call_failures",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_config_without_references_is_fingerprinted_without_touching_disk",
+        "class": "tests.services.mcp.test_call_failures",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_every_vendored_entry_parses",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_vendored_entry_count_is_stable",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_entry_ids_are_unique_and_well_formed",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_every_stdio_entry_is_admin_only",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_remote_entries_carry_a_url_and_no_command",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_every_credential_field_declares_a_reachable_target",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_required_credentials_are_secret_and_labelled",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_descriptions_are_bilingual",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_no_third_party_logo_urls",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_categories_and_tiers_stay_inside_the_closed_enums",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_normalize_transport_collapses_every_streamable_spelling[streamableHttp]",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_normalize_transport_collapses_every_streamable_spelling[streamable-http]",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_normalize_transport_collapses_every_streamable_spelling[streamable_http]",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_normalize_transport_collapses_every_streamable_spelling[http]",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_normalize_transport_collapses_every_streamable_spelling[  HTTP  ]",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_normalize_transport_passes_through_stdio_and_sse",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_normalize_transport_rejects_junk[]",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_normalize_transport_rejects_junk[websocket]",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_normalize_transport_rejects_junk[grpc]",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_normalize_transport_rejects_junk[streamable]",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_normalize_transport_rejects_junk[http2]",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_localized_text_degrades_to_english",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_build_puts_a_header_credential_at_its_declared_header",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_build_puts_a_url_param_credential_in_the_query_string",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_build_replaces_an_existing_url_param_rather_than_duplicating_it",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_build_puts_env_and_arg_credentials_on_a_stdio_entry",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_build_never_leaks_a_raw_secret_into_the_config",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_secret_reference_form_matches_the_resolver_the_manager_uses",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_value_template_is_a_store_time_rule_not_a_config_time_one",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_build_inlines_a_non_secret_value_with_its_template",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_build_skips_an_empty_optional_field_and_refuses_an_empty_required_one",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_build_does_not_mutate_the_shared_template",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_real_bearer_entry_builds_a_resolvable_config",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_stdio_entry_cannot_be_self_service",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_declared_transport_must_match_its_server_template",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_an_env_credential_is_refused_on_a_remote_entry",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_entry_id_pattern_is_enforced[Probe]",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_entry_id_pattern_is_enforced[-probe]",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_entry_id_pattern_is_enforced[pro be]",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_entry_id_pattern_is_enforced[pro.be]",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_entry_id_pattern_is_enforced[xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_entry_id_pattern_is_enforced[]",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_duplicate_credential_keys_are_refused",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_value_template_without_a_placeholder_is_refused",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_search_matches_display_name_and_description",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_search_is_case_insensitive_and_can_miss",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_category_filter_returns_only_that_category",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_tier_filter_separates_curated_from_registry",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_self_service_filter_hides_every_stdio_entry",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_cursor_pagination_walks_the_whole_catalog_exactly_once",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_cursor_pagination_respects_an_active_filter",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_junk_cursor_serves_the_first_page_instead_of_failing",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_limit_is_clamped",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_get_entry_is_exact_match_only",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_malformed_entry_is_skipped_not_fatal",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_duplicate_id_keeps_the_first_entry",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_an_unreadable_catalog_yields_an_empty_store",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_the_catalog_is_parsed_once",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_query_parameter_entry_resolves_end_to_end[amap]",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_query_parameter_entry_resolves_end_to_end[baidu-maps]",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_query_parameter_entry_resolves_end_to_end[browserbase]",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_query_parameter_entry_resolves_end_to_end[exa]",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_query_parameter_entry_resolves_end_to_end[linkup]",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_query_parameter_entry_resolves_end_to_end[tavily]",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_query_parameter_entry_resolves_end_to_end[tencent-maps]",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_every_vendored_secret_resolves_wherever_it_was_targeted",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_category_counts_can_exclude_admin_only_entries",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_remote_entry_carrying_a_command_is_refused",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_stdio_entry_without_a_command_is_refused",
+        "class": "tests.services.mcp.test_catalog",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_two_owners_with_the_same_server_name_stay_separate",
+        "class": "tests.services.mcp.test_manager_scopes",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_owner_tools_never_enter_the_process_registry",
+        "class": "tests.services.mcp.test_manager_scopes",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_stdio_entry_in_a_users_file_is_never_connected",
+        "class": "tests.services.mcp.test_manager_scopes",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_reload_scope_applies_a_change_immediately",
+        "class": "tests.services.mcp.test_manager_scopes",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_removing_a_server_disconnects_it",
+        "class": "tests.services.mcp.test_manager_scopes",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_the_shared_scope_does_not_read_a_users_file",
+        "class": "tests.services.mcp.test_manager_scopes",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_an_idle_scope_is_dropped_when_another_arrives",
+        "class": "tests.services.mcp.test_manager_scopes",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_the_scope_count_is_bounded",
+        "class": "tests.services.mcp.test_manager_scopes",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_one_owners_slow_connect_does_not_serialise_another",
+        "class": "tests.services.mcp.test_manager_scopes",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_shutdown_closes_every_scope",
+        "class": "tests.services.mcp.test_manager_scopes",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_resolved_type_stdio",
+        "class": "tests.services.mcp.test_mcp_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_resolved_type_sse_vs_http",
+        "class": "tests.services.mcp.test_mcp_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_resolved_type_explicit_wins",
+        "class": "tests.services.mcp.test_mcp_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_resolved_type_none_when_empty",
+        "class": "tests.services.mcp.test_mcp_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_tool_allowed_wildcard",
+        "class": "tests.services.mcp.test_mcp_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_tool_allowed_explicit_raw_and_wrapped",
+        "class": "tests.services.mcp.test_mcp_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_invalid_server_name_rejected",
+        "class": "tests.services.mcp.test_mcp_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_connection_signature_changes_with_config",
+        "class": "tests.services.mcp.test_mcp_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_server_config_strips_string_fields",
+        "class": "tests.services.mcp.test_mcp_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_tool_timeout_bounds_are_enforced",
+        "class": "tests.services.mcp.test_mcp_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_wrapped_tool_name_sanitizes",
+        "class": "tests.services.mcp.test_mcp_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_ssrf_blocks_metadata_address",
+        "class": "tests.services.mcp.test_mcp_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_ssrf_rejects_non_http_scheme",
+        "class": "tests.services.mcp.test_mcp_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_ssrf_allows_public_host",
+        "class": "tests.services.mcp.test_mcp_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_missing_mcp_package_reports_real_cause_without_waiting_out_timeout",
+        "class": "tests.services.mcp.test_missing_mcp_dependency",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_issuer_provenance_survives_restart[True-False]",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_issuer_provenance_survives_restart[False-False]",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_issuer_provenance_survives_restart[True-True]",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_refresh_metadata_keeps_sdk_redirect_policy[False]",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_refresh_metadata_keeps_sdk_redirect_policy[True]",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_the_store_is_outside_every_sandbox_mounted_tree",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_the_store_file_is_owner_only",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_one_accounts_grant_is_invisible_to_another",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_two_servers_for_one_account_do_not_share_a_grant",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_an_unsafe_server_name_cannot_address_a_file[../escape]",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_an_unsafe_server_name_cannot_address_a_file[a/b]",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_an_unsafe_server_name_cannot_address_a_file[]",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_an_unsafe_server_name_cannot_address_a_file[.hidden]",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_an_unsafe_server_name_cannot_address_a_file[xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_state_reports_presence_and_never_the_token",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_torn_store_reads_as_unauthorized",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_token_and_a_client_registration_share_one_file",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_forget_drops_the_registration_with_the_tokens",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_forgetting_an_unsafe_name_is_a_no_op",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_an_unknown_state_completes_nothing",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_state_cannot_be_replayed",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_completing_a_flow_hands_the_code_to_its_own_waiter",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_the_non_interactive_form_refuses_to_open_a_consent",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_build_auth_produces_an_httpx_auth",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_the_refusal_names_the_server_that_needs_authorizing",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_needs_auth_failure_is_not_classified_as_broken",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_the_redirect_uri_follows_the_browsing_origin",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_an_operator_who_states_the_public_url_wins",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_the_client_registration_declares_exactly_one_redirect",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_completed_consent_reconnects_only_its_owner_and_refresh_stays_stable",
+        "class": "tests.services.mcp.test_oauth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_counted_step_renders_as_a_percentage",
+        "class": "tests.services.mcp.test_progress_reporting",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_numbers_with_no_message_still_say_something",
+        "class": "tests.services.mcp.test_progress_reporting",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_message_with_no_total_is_passed_through_verbatim",
+        "class": "tests.services.mcp.test_progress_reporting",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_bare_tick_reports_its_counter",
+        "class": "tests.services.mcp.test_progress_reporting",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_total_of_zero_does_not_divide_by_it",
+        "class": "tests.services.mcp.test_progress_reporting",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_progress_beyond_the_total_is_clamped",
+        "class": "tests.services.mcp.test_progress_reporting",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_failing_sink_cannot_fail_the_tool_call",
+        "class": "tests.services.mcp.test_progress_reporting",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_call_with_a_sub_trace_asks_the_server_for_progress",
+        "class": "tests.services.mcp.test_progress_reporting",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_call_with_nowhere_to_publish_does_not_ask",
+        "class": "tests.services.mcp.test_progress_reporting",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_the_sink_never_reaches_the_server_as_an_argument",
+        "class": "tests.services.mcp.test_progress_reporting",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_progress_reaches_the_sink_end_to_end",
+        "class": "tests.services.mcp.test_progress_reporting",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_image_content_is_omitted_without_serializing_base64",
+        "class": "tests.services.mcp.test_progress_reporting",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_wrapped_transport_failure_reports_the_real_cause",
+        "class": "tests.services.mcp.test_progress_reporting",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_nested_groups_are_flattened",
+        "class": "tests.services.mcp.test_progress_reporting",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_the_same_cause_repeated_is_said_once",
+        "class": "tests.services.mcp.test_progress_reporting",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_several_distinct_causes_are_all_reported_but_bounded",
+        "class": "tests.services.mcp.test_progress_reporting",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_plain_exception_is_passed_through",
+        "class": "tests.services.mcp.test_progress_reporting",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_an_empty_group_still_says_something",
+        "class": "tests.services.mcp.test_progress_reporting",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_values_land_outside_every_sandbox_mounted_tree",
+        "class": "tests.services.mcp.test_secrets",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_the_secrets_file_is_owner_only",
+        "class": "tests.services.mcp.test_secrets",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_configured_fields_reports_presence_not_values",
+        "class": "tests.services.mcp.test_secrets",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_partial_edit_does_not_clear_the_other_fields",
+        "class": "tests.services.mcp.test_secrets",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_an_empty_string_clears_a_field",
+        "class": "tests.services.mcp.test_secrets",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_references_resolve_at_every_depth_a_credential_is_injected",
+        "class": "tests.services.mcp.test_secrets",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_one_owners_reference_cannot_read_anothers_value",
+        "class": "tests.services.mcp.test_secrets",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_missing_value_resolves_empty_rather_than_leaking_the_reference",
+        "class": "tests.services.mcp.test_secrets",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_non_reference_strings_pass_through_untouched",
+        "class": "tests.services.mcp.test_secrets",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_query_parameter_credential_resolves",
+        "class": "tests.services.mcp.test_secrets",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_url_resolution_preserves_the_other_query_parameters",
+        "class": "tests.services.mcp.test_secrets",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_token_needing_escaping_is_encoded_into_the_query",
+        "class": "tests.services.mcp.test_secrets",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_url_without_references_is_returned_unchanged",
+        "class": "tests.services.mcp.test_secrets",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_url_reference_cannot_read_another_owners_value",
+        "class": "tests.services.mcp.test_secrets",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_delete_removes_the_whole_store",
+        "class": "tests.services.mcp.test_secrets",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_an_unsafe_server_name_cannot_escape_the_secrets_directory",
+        "class": "tests.services.mcp.test_secrets",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_later_page_tools_are_registered_and_callable",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_probe_reports_tools_from_every_page",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_tool_filters_also_apply_to_later_pages",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_single_page_servers_need_no_extra_request",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_incomplete_listing_does_not_publish_partial_tools[error-manager]",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_incomplete_listing_does_not_publish_partial_tools[error-probe]",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_incomplete_listing_does_not_publish_partial_tools[cycle-manager]",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_incomplete_listing_does_not_publish_partial_tools[cycle-probe]",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_slow_later_page_stays_within_the_discovery_timeout[manager]",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_slow_later_page_stays_within_the_discovery_timeout[probe]",
+        "class": "tests.services.mcp.test_tool_pagination",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_config_lives_outside_every_sandbox_mounted_tree",
+        "class": "tests.services.mcp.test_user_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_stdio_is_refused_on_write",
+        "class": "tests.services.mcp.test_user_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_stdio_in_a_hand_edited_file_is_dropped_and_reported",
+        "class": "tests.services.mcp.test_user_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_reserved_tool_name_prefixes_are_refused",
+        "class": "tests.services.mcp.test_user_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_url_pointing_back_at_the_deployment_is_refused",
+        "class": "tests.services.mcp.test_user_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_saving_one_server_preserves_the_others",
+        "class": "tests.services.mcp.test_user_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_fields_the_editor_does_not_model_survive_a_save",
+        "class": "tests.services.mcp.test_user_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_owners_are_isolated_from_each_other",
+        "class": "tests.services.mcp.test_user_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_two_owners_may_use_the_same_server_name",
+        "class": "tests.services.mcp.test_user_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_name_colliding_with_a_deployment_server_is_refused",
+        "class": "tests.services.mcp.test_user_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_the_per_owner_limit_is_enforced",
+        "class": "tests.services.mcp.test_user_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_delete_removes_only_that_server",
+        "class": "tests.services.mcp.test_user_config",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_an_unreadable_file_reads_as_empty_rather_than_crashing",
+        "class": "tests.services.mcp.test_user_config",
+        "status": "passed",
+        "failure": null
+      }
+    ]
+  },
+  "API_regression": {
+    "cases": 28,
+    "passed": 28,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "rows": [
+      {
+        "name": "test_a_server_is_visible_only_to_its_owner",
+        "class": "tests.api.test_space_mcp",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_one_account_cannot_write_into_anothers_config",
+        "class": "tests.api.test_space_mcp",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_stdio_server_is_refused",
+        "class": "tests.api.test_space_mcp",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_url_aimed_at_the_deployment_is_refused",
+        "class": "tests.api.test_space_mcp",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_credential_is_stored_apart_and_never_echoed",
+        "class": "tests.api.test_space_mcp",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_deleting_a_server_also_drops_its_credentials",
+        "class": "tests.api.test_space_mcp",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_the_catalog_hides_admin_only_entries",
+        "class": "tests.api.test_space_mcp",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_every_category_chip_opens_to_something",
+        "class": "tests.api.test_space_mcp",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_installing_an_admin_only_entry_is_refused",
+        "class": "tests.api.test_space_mcp",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_installing_an_unknown_entry_is_a_404",
+        "class": "tests.api.test_space_mcp",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_installing_without_a_required_credential_is_refused",
+        "class": "tests.api.test_space_mcp",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_installing_a_catalog_entry_stores_its_credential_out_of_the_config",
+        "class": "tests.api.test_space_mcp",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_an_entry_installed_under_a_custom_name_still_reads_as_installed",
+        "class": "tests.api.test_space_mcp",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_hand_written_server_is_not_credited_to_a_catalog_entry",
+        "class": "tests.api.test_space_mcp",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_an_entry_installed_before_provenance_existed_still_reads_as_installed",
+        "class": "tests.api.test_space_mcp",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_name_taken_by_a_deployment_server_is_refused",
+        "class": "tests.api.test_space_mcp",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_header_typed_into_the_form_is_not_stored_or_echoed_in_plaintext",
+        "class": "tests.api.test_space_mcp",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_resaving_a_server_keeps_a_credential_it_did_not_re_enter",
+        "class": "tests.api.test_space_mcp",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_the_servers_list_warms_connections_so_status_is_real",
+        "class": "tests.api.test_space_mcp",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_testing_a_draft_writes_nothing",
+        "class": "tests.api.test_space_mcp",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_an_authorized_oauth_server_tests_successfully_under_its_saved_name",
+        "class": "tests.api.test_space_mcp",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_an_unauthorized_oauth_server_reports_that_it_needs_authorization",
+        "class": "tests.api.test_space_mcp",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_an_unnamed_oauth_draft_reports_needs_auth_not_a_store_refusal",
+        "class": "tests.api.test_space_mcp",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_a_non_oauth_draft_is_probed_exactly_as_before",
+        "class": "tests.api.test_space_mcp",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_every_route_is_admin_gated",
+        "class": "tests.api.test_mcp_settings_auth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_single_server_put_preserves_the_other_entries",
+        "class": "tests.api.test_mcp_settings_auth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_single_server_delete_removes_only_that_entry",
+        "class": "tests.api.test_mcp_settings_auth",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_an_invalid_server_name_is_refused",
+        "class": "tests.api.test_mcp_settings_auth",
+        "status": "passed",
+        "failure": null
+      }
+    ]
+  },
+  "registry_regression": {
+    "cases": 31,
+    "passed": 31,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "rows": [
+      {
+        "name": "test_manifest_groups_by_server",
+        "class": "tests.runtime.registry.test_deferred_tools",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_manifest_empty",
+        "class": "tests.runtime.registry.test_deferred_tools",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_loader_appends_to_live_schemas",
+        "class": "tests.runtime.registry.test_deferred_tools",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_loader_rejects_unknown_and_non_deferred",
+        "class": "tests.runtime.registry.test_deferred_tools",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_loader_initial_schemas_drops_stale",
+        "class": "tests.runtime.registry.test_deferred_tools",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_manifest_frames_provider_text_as_data_not_instructions",
+        "class": "tests.runtime.registry.test_deferred_tools",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_manifest_flattens_a_description_that_tries_to_forge_structure",
+        "class": "tests.runtime.registry.test_deferred_tools",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_manifest_caps_a_long_description",
+        "class": "tests.runtime.registry.test_deferred_tools",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_cli_apps_share_one_header_and_carry_their_provider_id",
+        "class": "tests.runtime.registry.test_deferred_tools",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_provider_id_takes_precedence_over_legacy_server_name",
+        "class": "tests.runtime.registry.test_deferred_tools",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_tool_without_provider_metadata_lands_in_other",
+        "class": "tests.runtime.registry.test_deferred_tools",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_registry_deferred_tools_filter",
+        "class": "tests.runtime.registry.test_deferred_tools",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_lookup_reads_through_to_the_base",
+        "class": "tests.runtime.registry.test_scoped_registry",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_overlay_tools_are_visible_without_touching_the_base",
+        "class": "tests.runtime.registry.test_scoped_registry",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_overlay_never_shadows_a_shared_tool",
+        "class": "tests.runtime.registry.test_scoped_registry",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_deferred_tools_are_allowlist_filtered",
+        "class": "tests.runtime.registry.test_scoped_registry",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_execute_refuses_a_provider_tool_outside_the_allowlist",
+        "class": "tests.runtime.registry.test_scoped_registry",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_execute_refuses_an_off_list_overlay_tool",
+        "class": "tests.runtime.registry.test_scoped_registry",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_execute_allows_builtins_regardless_of_the_allowlist",
+        "class": "tests.runtime.registry.test_scoped_registry",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_execute_runs_an_authorised_overlay_tool",
+        "class": "tests.runtime.registry.test_scoped_registry",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_execute_preserves_base_alias_resolution",
+        "class": "tests.runtime.registry.test_scoped_registry",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_build_prompt_text_covers_overlay_tools",
+        "class": "tests.runtime.registry.test_scoped_registry",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_openai_schemas_come_from_the_merged_view",
+        "class": "tests.runtime.registry.test_scoped_registry",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_admin_stays_unrestricted",
+        "class": "tests.runtime.providers.test_authorize",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_ungranted_user_fails_closed",
+        "class": "tests.runtime.providers.test_authorize",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_owned_servers_are_authorised_by_ownership_not_by_grant",
+        "class": "tests.runtime.providers.test_authorize",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_partner_is_governed_by_its_own_filter_not_the_user_grant",
+        "class": "tests.runtime.providers.test_authorize",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_partner_with_empty_filter_gets_nothing",
+        "class": "tests.runtime.providers.test_authorize",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_partner_with_explicit_none_filter_is_unrestricted",
+        "class": "tests.runtime.providers.test_authorize",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_exclusive_capability_suppresses_every_configured_mcp_tool",
+        "class": "tests.runtime.providers.test_authorize",
+        "status": "passed",
+        "failure": null
+      },
+      {
+        "name": "test_caller_filter_narrows_a_granted_user",
+        "class": "tests.runtime.providers.test_authorize",
+        "status": "passed",
+        "failure": null
+      }
+    ]
+  },
+  "model_calls": 0,
+  "GPU_used": false
+}

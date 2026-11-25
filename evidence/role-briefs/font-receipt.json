@@ -1,0 +1,13 @@
+{
+  "ready": true,
+  "source_font_sha256": "2c76254f6fc379fddfce0a7e84fb5385bb135d3e399294f6eeb6680d0365b74b",
+  "derived_font_sha256": "6dcb36543ce2cbd1ce896715f39ea7849d6120f77eb1f6e188ea470e985805c9",
+  "fonttools": "4.61.1",
+  "retain_gids": true,
+  "renamed_private_face": "Agent Lab Resume CJK",
+  "Unicode_characters": 443,
+  "needed_characters_covered": 442,
+  "remaining_glyph_Unicode_aliases": [],
+  "original_font_unchanged": true,
+  "font_file_publicly_distributed": false
+}

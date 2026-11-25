@@ -1,0 +1,41 @@
+{
+  "reviewed_utc": "2026-11-25T12:09:12.165985+00:00",
+  "reviewer": "assistant visual QA, not human business/report approval",
+  "pages": [
+    {
+      "file": "images/agent-app-project-experience-pi-2026-11-25-poppler.png",
+      "sha256": "ec5893bf03e6015d0b8ee7e35a3b44512d3ff69e62014c2ae39d694e0939ac62",
+      "no_clipping_or_overlap": true,
+      "Chinese_glyphs_match_source": true,
+      "headers_footers_and_spacing_readable": true
+    },
+    {
+      "file": "images/agent-app-project-experience-pi-2026-11-25-pymupdf.png",
+      "sha256": "da8f970927aaf72e5515375ff4651f2ef388ee48c58b58e2e9791bea99751d23",
+      "no_clipping_or_overlap": true,
+      "Chinese_glyphs_match_source": true,
+      "headers_footers_and_spacing_readable": true
+    },
+    {
+      "file": "images/algorithm-project-experience-pi-2026-11-25-poppler.png",
+      "sha256": "21f153a3973dfe405197e28d0e7b344bf3794d396e577f45e473af628dbca5a3",
+      "no_clipping_or_overlap": true,
+      "Chinese_glyphs_match_source": true,
+      "headers_footers_and_spacing_readable": true
+    },
+    {
+      "file": "images/algorithm-project-experience-pi-2026-11-25-pymupdf.png",
+      "sha256": "7e28b6692c97cd3f8549f134fa823df4c588cbe9ef786843ad9db0d73d37a72a",
+      "no_clipping_or_overlap": true,
+      "Chinese_glyphs_match_source": true,
+      "headers_footers_and_spacing_readable": true
+    }
+  ],
+  "all_latest_pages_inspected": true,
+  "renderer_count": 2,
+  "PDFs": 2,
+  "A4_pages_each": 1,
+  "visual_review_pending": false,
+  "new_model_calls": 0,
+  "GPU_used": false
+}

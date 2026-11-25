@@ -1,0 +1,2045 @@
+{
+  "ready": true,
+  "PDFs": [
+    {
+      "pages": 1,
+      "A4": true,
+      "source_phrases_preserved": 30,
+      "links_verified": 9,
+      "expected_unique_links": 9,
+      "fonts": [
+        {
+          "resource": "/F7",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 65,
+          "embedded_bytes": 16739,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F53",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 8739,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F87",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 1580,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F43",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 6,
+          "embedded_bytes": 3550,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F21",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 6,
+          "embedded_bytes": 4184,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F13",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 5063,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F44",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 6,
+          "embedded_bytes": 4378,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F91",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 1302,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F106",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 1776,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F105",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 1188,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F64",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 6,
+          "embedded_bytes": 3240,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F103",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 986,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F41",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 18347,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F119",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 547,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F52",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1641,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F10",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 5,
+          "embedded_bytes": 6589,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F35",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 2627,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F123",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 514,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F98",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 6830,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F70",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 1831,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F12",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 11990,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F49",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 710,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F108",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 1763,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F48",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 6,
+          "embedded_bytes": 5378,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F56",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 11374,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F88",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 5,
+          "embedded_bytes": 2662,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F58",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 7351,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F23",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 384,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F86",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1139,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F71",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 1730,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F101",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 6708,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F107",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 835,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F79",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 10262,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F104",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 3123,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F110",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 5,
+          "embedded_bytes": 2420,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F24",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1078,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F113",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 1553,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F85",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 3033,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F65",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 6,
+          "embedded_bytes": 3734,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F63",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 610,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F89",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 7,
+          "embedded_bytes": 3648,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F29",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 9,
+          "embedded_bytes": 2556,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F34",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 2318,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F96",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 8062,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F32",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 6,
+          "embedded_bytes": 3762,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F60",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 8,
+          "embedded_bytes": 3924,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F50",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 5,
+          "embedded_bytes": 2336,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F111",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 1889,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F16",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 5,
+          "embedded_bytes": 2222,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F37",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 10334,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F92",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 7,
+          "embedded_bytes": 4291,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F118",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 574,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F73",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 5,
+          "embedded_bytes": 3050,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F94",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 4022,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F40",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 8927,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F127",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1068,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F102",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1429,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F95",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 9670,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F9",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 7285,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F55",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 4208,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F76",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 8065,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F68",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 1832,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F28",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 9,
+          "embedded_bytes": 5739,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F33",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 12,
+          "embedded_bytes": 7793,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F45",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 5,
+          "embedded_bytes": 2984,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F14",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 13718,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F11",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 8413,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F109",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 948,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F38",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 4007,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F72",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 5,
+          "embedded_bytes": 3182,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F4",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 26,
+          "embedded_bytes": 56716,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F77",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 9669,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F27",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 6,
+          "embedded_bytes": 4767,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F90",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1213,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F112",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1110,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F22",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 842,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F54",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 4566,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F115",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 1834,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F124",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1207,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F20",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 5,
+          "embedded_bytes": 3088,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F122",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1112,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F116",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 1797,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F18",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 13,
+          "embedded_bytes": 7001,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F5",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 748,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F78",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 8761,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F31",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 1791,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F69",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 1156,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F82",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 6817,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F114",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1043,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F8",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 8495,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F126",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1268,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F99",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 6503,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F17",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 10,
+          "embedded_bytes": 9643,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F25",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 5,
+          "embedded_bytes": 4155,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F84",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 8667,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F47",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1362,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F74",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1044,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F117",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 934,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F59",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 734,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F19",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 711,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F93",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 9714,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F51",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 17825,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F100",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 9774,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F97",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 6476,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F6",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 8,
+          "embedded_bytes": 6592,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F36",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 6,
+          "embedded_bytes": 4539,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F75",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 6,
+          "embedded_bytes": 4727,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F81",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 12887,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F30",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 5,
+          "embedded_bytes": 3519,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F57",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 8042,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F125",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1086,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F83",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 4850,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F39",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 4492,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F120",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 753,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F61",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 2301,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F67",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 8,
+          "embedded_bytes": 3194,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F42",
+          "font": "/CAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 31,
+          "embedded_bytes": 7846,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F66",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 6,
+          "embedded_bytes": 3438,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F121",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 697,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F26",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 2420,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F15",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 5,
+          "embedded_bytes": 3000,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F46",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 6,
+          "embedded_bytes": 2562,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F62",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 969,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F80",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 7331,
+          "ToUnicode": true
+        }
+      ],
+      "extracted_text_sha256": "6b46b5c5eb930acdbb0bd38bafe7546b6383b975f0b899beca0271452c68c168",
+      "filename": "algorithm-project-experience-pi-2026-11-25.pdf",
+      "sha256": "0b1f266c746aba949940a994ca773f38bfdb02c6bb0ff5fe00dcd4be958b214e",
+      "bytes": 520885,
+      "role": "algorithm",
+      "html_sha256": "d80932b679c956ee4cc3b4257d63b61190d3c3a1e7d99d40ee46d4ce0420596f"
+    },
+    {
+      "pages": 1,
+      "A4": true,
+      "source_phrases_preserved": 30,
+      "links_verified": 9,
+      "expected_unique_links": 9,
+      "fonts": [
+        {
+          "resource": "/F7",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 65,
+          "embedded_bytes": 16357,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F53",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 4566,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F87",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 1910,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F43",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 7,
+          "embedded_bytes": 3028,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F21",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 6,
+          "embedded_bytes": 4539,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F13",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 5,
+          "embedded_bytes": 2222,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F44",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1362,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F91",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 9714,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F106",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 562,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F105",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 1461,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F64",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 1730,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F103",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 5,
+          "embedded_bytes": 3635,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F41",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 3082,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F119",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 2074,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F52",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 8495,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F10",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 2824,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F35",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 12021,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F123",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 574,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F98",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 9774,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F70",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 2043,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F12",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 6,
+          "embedded_bytes": 4212,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F49",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 17825,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F108",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 969,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F48",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 2546,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F56",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 8042,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F88",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1201,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F58",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 1831,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F23",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 5,
+          "embedded_bytes": 2678,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F86",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 2198,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F71",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 9,
+          "embedded_bytes": 6160,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F101",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 5,
+          "embedded_bytes": 3220,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F107",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 1308,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F79",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 5934,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F104",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 2044,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F110",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1110,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F24",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 5,
+          "embedded_bytes": 3670,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F113",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 631,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F85",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 2597,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F65",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 10,
+          "embedded_bytes": 6690,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F63",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1018,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F89",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 1834,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F29",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 1962,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F34",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 5,
+          "embedded_bytes": 6589,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F96",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 6830,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F32",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 1343,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F60",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 7,
+          "embedded_bytes": 5583,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F50",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1641,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F111",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 492,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F16",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 711,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F37",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 8927,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F92",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 4022,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F118",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 886,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F73",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 9323,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F94",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 8062,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F40",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 2410,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F127",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 896,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F102",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 1999,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F95",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 6476,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F9",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 4850,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F55",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 11374,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F76",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 4471,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F68",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 6,
+          "embedded_bytes": 3464,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F28",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 8,
+          "embedded_bytes": 4213,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F33",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 10334,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F45",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 5,
+          "embedded_bytes": 4659,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F14",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 10,
+          "embedded_bytes": 9543,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F11",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 17830,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F109",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 1353,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F38",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 10674,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F72",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1044,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F4",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 26,
+          "embedded_bytes": 56716,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F77",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 3033,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F27",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 6,
+          "embedded_bytes": 3764,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F90",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 2618,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F112",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 815,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F22",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 14,
+          "embedded_bytes": 4849,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F54",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 4208,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F115",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 1593,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F124",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 644,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F20",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 384,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F122",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 734,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F116",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 817,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F18",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 6,
+          "embedded_bytes": 2738,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F5",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 748,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F129",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 657,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F130",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1032,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F78",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 8413,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F128",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 576,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F31",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 1977,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F69",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 2311,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F82",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1043,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F114",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1285,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F8",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 5209,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F126",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 411,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F99",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 6708,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F17",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 2497,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F25",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 11,
+          "embedded_bytes": 7590,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F84",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 11,
+          "embedded_bytes": 5372,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F47",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 1626,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F74",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 3836,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F117",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1560,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F59",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 1156,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F19",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 547,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F93",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 9670,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F51",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 19353,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F100",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 542,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F97",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 6503,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F6",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 7,
+          "embedded_bytes": 5595,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F36",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 4492,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F75",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 4077,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F81",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 1580,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F30",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 10,
+          "embedded_bytes": 5076,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F57",
+          "font": "/AAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 7351,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F125",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 753,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F83",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 5,
+          "embedded_bytes": 4070,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F39",
+          "font": "/CAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 31,
+          "embedded_bytes": 7846,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F120",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 1050,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F61",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 610,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F67",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 7,
+          "embedded_bytes": 3530,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F42",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 2026,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F66",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 6,
+          "embedded_bytes": 2692,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F121",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 957,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F26",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 4,
+          "embedded_bytes": 3195,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F15",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 15,
+          "embedded_bytes": 7755,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F46",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 2,
+          "embedded_bytes": 710,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F62",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 3,
+          "embedded_bytes": 1396,
+          "ToUnicode": true
+        },
+        {
+          "resource": "/F80",
+          "font": "/BAAAAA+AgentLabResumeCJK-Regular",
+          "representation": "embedded-Type3-glyph-programs",
+          "glyph_programs": 5,
+          "embedded_bytes": 2925,
+          "ToUnicode": true
+        }
+      ],
+      "extracted_text_sha256": "58a8c765551ff4be18f2e3a72bcd9a30bbaa718de64bd95f109aa2aaa2533279",
+      "filename": "agent-app-project-experience-pi-2026-11-25.pdf",
+      "sha256": "280fe04d960c38df8e2aefbddf206888e7c7a5a19412b9bb3b7a069ebbee27d3",
+      "bytes": 513885,
+      "role": "agent-app",
+      "html_sha256": "af3dae0e6a22044f0cd1851b617e84dbf92dcd63db3683fe1838d043b14a09c8"
+    }
+  ],
+  "visual_review_pending": true,
+  "same_editable_HTML_and_PDF_content": true
+}

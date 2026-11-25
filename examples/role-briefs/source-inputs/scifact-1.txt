@@ -1,0 +1,61 @@
+{
+  "verified": true,
+  "reference_binary_sha256": "d033d877656616876eaf30a2db8e1dbfeefe940f137a8c8287ceb4ee7e7716ca",
+  "values_compared": 18060,
+  "maximum_absolute_difference": 4.93931079048604e-05,
+  "tolerance": 5.1e-05,
+  "reason_for_tolerance": "Unmodified trec_eval prints four decimal places.",
+  "runs": {
+    "lexical@1": {
+      "stdout_sha256": "520888914d6cb5fac156789103531fd87fbff4e0bf1f2c451b7da5302c298d6d",
+      "reference_output_rows": 1505
+    },
+    "lexical@3": {
+      "stdout_sha256": "6cd9cdc1c04f547f5c8b9a363ade7ea1b6729ed988eea87b0323f5435cdd3605",
+      "reference_output_rows": 1505
+    },
+    "lexical@5": {
+      "stdout_sha256": "e5839199bbd5722f2e8fa072e7c806734fc44d51a16e6445da27dc806ab4b809",
+      "reference_output_rows": 1505
+    },
+    "lexical@10": {
+      "stdout_sha256": "55b93e96bd7ed53e8681b95d348fd731cbf82d53debf35b11bd44362e366f295",
+      "reference_output_rows": 1505
+    },
+    "semantic@1": {
+      "stdout_sha256": "ff0729e25f9eb521b827737678c71afd9c7c4d5e67c24088ca097a1932a76a52",
+      "reference_output_rows": 1505
+    },
+    "semantic@3": {
+      "stdout_sha256": "5b3b300251d6f81b2ad4ebb9fe3195515b98aace0e50e6f48a415f37a55f087d",
+      "reference_output_rows": 1505
+    },
+    "semantic@5": {
+      "stdout_sha256": "aa5c1851070f142a5c60fe21cf9ca8ef9ef640ff651049c183eb48a7fa162dda",
+      "reference_output_rows": 1505
+    },
+    "semantic@10": {
+      "stdout_sha256": "96d3f4e7431077ea3379df7ec6b649f0e96426e16b17aa20d5b31a951ce1e664",
+      "reference_output_rows": 1505
+    },
+    "hybrid@1": {
+      "stdout_sha256": "105927d3e8688d3efc5081355d0ee3464ae9336aef9b5112a8c85ffa9d195f57",
+      "reference_output_rows": 1505
+    },
+    "hybrid@3": {
+      "stdout_sha256": "e1034bdcaaa662c2a2e758c7a41186292e1559f3d4127abee8105766b0073457",
+      "reference_output_rows": 1505
+    },
+    "hybrid@5": {
+      "stdout_sha256": "b986f5abe0d8cda69acb8ae1e7a23cfed20ae0bf337d3fe02d4dc1839e673b8e",
+      "reference_output_rows": 1505
+    },
+    "hybrid@10": {
+      "stdout_sha256": "b81b9667e9b3c1e5be9cd42c8d0d7a62a01516fd5d75aa95a31ec51feb1f4f0a",
+      "reference_output_rows": 1505
+    }
+  },
+  "ordinal_run_scores_preserve_application_order": true,
+  "new_model_calls": 0,
+  "GPU_used": false
+}
