@@ -1,0 +1,148 @@
+{
+  "attempts": 16,
+  "real_model_calls": 16,
+  "control": false,
+  "source_commit": "302cf1d888288ee1d2893c010517f3eea7677d43",
+  "completed": [
+    {
+      "case": "summer-order-value",
+      "variant": "full",
+      "status": "completed",
+      "error": null,
+      "wall_seconds": 10.044824302,
+      "grade": {
+        "passed": true,
+        "error": null,
+        "model_facts_checked": 3,
+        "priorities_checked": 2,
+        "raw_groups_checked": 2974
+      },
+      "reserved": 4,
+      "input_tokens_including_cache": 16488,
+      "output_tokens": 2061,
+      "estimated_cost_usd": 0.004070351999999999,
+      "usage_missing": 0,
+      "pressure_preparations": 0,
+      "spill_occurrences": 0,
+      "max_prepared_JSON_bytes": 0,
+      "recall_calls": 0,
+      "result_budget_plans": 0,
+      "business_tool_names": [
+        "inspect_dataset",
+        "compare_metric",
+        "breakdown_change",
+        "request_clarification",
+        "submit_investigation",
+        "dataset_quality",
+        "snapshot_provenance",
+        "list_saved_evidence",
+        "metric_definition"
+      ]
+    },
+    {
+      "case": "summer-order-value",
+      "variant": "budgeted",
+      "status": "failed",
+      "error": "Recall batch minimum has no feasible projected context; no calls executed",
+      "wall_seconds": 6.281650910999999,
+      "grade": {
+        "passed": false,
+        "error": "No sealed report",
+        "model_facts_checked": 0,
+        "priorities_checked": 0,
+        "raw_groups_checked": 0
+      },
+      "reserved": 4,
+      "input_tokens_including_cache": 15164,
+      "output_tokens": 1323,
+      "estimated_cost_usd": 0.003427296,
+      "usage_missing": 0,
+      "pressure_preparations": 1,
+      "spill_occurrences": 5,
+      "max_prepared_JSON_bytes": 20409,
+      "recall_calls": 0,
+      "result_budget_plans": 0,
+      "business_tool_names": [
+        "inspect_dataset",
+        "compare_metric",
+        "breakdown_change",
+        "request_clarification",
+        "submit_investigation",
+        "dataset_quality",
+        "snapshot_provenance",
+        "list_saved_evidence",
+        "metric_definition"
+      ]
+    },
+    {
+      "case": "autumn-return-offset",
+      "variant": "budgeted",
+      "status": "completed",
+      "error": null,
+      "wall_seconds": 10.176543682,
+      "grade": {
+        "passed": false,
+        "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 963891280n\n- 418985380n\n",
+        "model_facts_checked": 0,
+        "priorities_checked": 0,
+        "raw_groups_checked": 0
+      },
+      "reserved": 4,
+      "input_tokens_including_cache": 15195,
+      "output_tokens": 2149,
+      "estimated_cost_usd": 0.0042020040000000005,
+      "usage_missing": 0,
+      "pressure_preparations": 1,
+      "spill_occurrences": 6,
+      "max_prepared_JSON_bytes": 19887,
+      "recall_calls": 0,
+      "result_budget_plans": 0,
+      "business_tool_names": [
+        "inspect_dataset",
+        "compare_metric",
+        "breakdown_change",
+        "request_clarification",
+        "submit_investigation",
+        "dataset_quality",
+        "snapshot_provenance",
+        "list_saved_evidence",
+        "metric_definition"
+      ]
+    },
+    {
+      "case": "autumn-return-offset",
+      "variant": "full",
+      "status": "completed",
+      "error": null,
+      "wall_seconds": 10.465555092000002,
+      "grade": {
+        "passed": true,
+        "error": null,
+        "model_facts_checked": 3,
+        "priorities_checked": 2,
+        "raw_groups_checked": 3108
+      },
+      "reserved": 4,
+      "input_tokens_including_cache": 16484,
+      "output_tokens": 2149,
+      "estimated_cost_usd": 0.003798432,
+      "usage_missing": 0,
+      "pressure_preparations": 0,
+      "spill_occurrences": 0,
+      "max_prepared_JSON_bytes": 0,
+      "recall_calls": 0,
+      "result_budget_plans": 0,
+      "business_tool_names": [
+        "inspect_dataset",
+        "compare_metric",
+        "breakdown_change",
+        "request_clarification",
+        "submit_investigation",
+        "dataset_quality",
+        "snapshot_provenance",
+        "list_saved_evidence",
+        "metric_definition"
+      ]
+    }
+  ]
+}

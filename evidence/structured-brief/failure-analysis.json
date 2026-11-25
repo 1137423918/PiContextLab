@@ -1,0 +1,834 @@
+{
+  "kind": "Post-study source/error accounting only, no rerun or new grade",
+  "cases": [
+    {
+      "case": "summer-order-value",
+      "variant": "full",
+      "grade_unchanged": {
+        "passed": true,
+        "error": null,
+        "model_facts_checked": 3,
+        "priorities_checked": 2,
+        "raw_groups_checked": 2974
+      },
+      "mismatches": [],
+      "assistant_tool_batches": [
+        [
+          {
+            "name": "inspect_dataset",
+            "id": "call_00_IYUoN5A0CFeSoe0fK6rU0981",
+            "arguments": {}
+          },
+          {
+            "name": "metric_definition",
+            "id": "call_01_SStlCneanr8lXcag2eMU0123",
+            "arguments": {
+              "metric": "gross_sales"
+            }
+          },
+          {
+            "name": "metric_definition",
+            "id": "call_02_U7mEDFvFSJI693LHUA8k9207",
+            "arguments": {
+              "metric": "sales_orders"
+            }
+          },
+          {
+            "name": "metric_definition",
+            "id": "call_03_sJ2lbUip6kXDOXgNi3mr2260",
+            "arguments": {
+              "metric": "avg_order_value"
+            }
+          }
+        ],
+        [
+          {
+            "name": "compare_metric",
+            "id": "call_00_MWh9z8V2UpTuz6mmiicQ7831",
+            "arguments": {
+              "metric": "gross_sales",
+              "baseline": {
+                "start": "2011-06-01",
+                "end": "2011-07-01"
+              },
+              "current": {
+                "start": "2011-07-01",
+                "end": "2011-08-01"
+              },
+              "basis": "calendar_month"
+            }
+          },
+          {
+            "name": "compare_metric",
+            "id": "call_01_Dun77bUfAu4MnpdNeov87315",
+            "arguments": {
+              "metric": "sales_orders",
+              "baseline": {
+                "start": "2011-06-01",
+                "end": "2011-07-01"
+              },
+              "current": {
+                "start": "2011-07-01",
+                "end": "2011-08-01"
+              },
+              "basis": "calendar_month"
+            }
+          },
+          {
+            "name": "compare_metric",
+            "id": "call_02_jEl38kgws33SvVpucS9A0440",
+            "arguments": {
+              "metric": "avg_order_value",
+              "baseline": {
+                "start": "2011-06-01",
+                "end": "2011-07-01"
+              },
+              "current": {
+                "start": "2011-07-01",
+                "end": "2011-08-01"
+              },
+              "basis": "calendar_month"
+            }
+          }
+        ],
+        [
+          {
+            "name": "breakdown_change",
+            "id": "call_00_pkxDlIcGYYUawlIGF1gK4063",
+            "arguments": {
+              "comparison": {
+                "metric": "gross_sales",
+                "baseline": {
+                  "start": "2011-06-01",
+                  "end": "2011-07-01"
+                },
+                "current": {
+                  "start": "2011-07-01",
+                  "end": "2011-08-01"
+                },
+                "basis": "calendar_month"
+              },
+              "dimension": "country",
+              "limit": 20
+            }
+          },
+          {
+            "name": "breakdown_change",
+            "id": "call_01_qnSDofaNkUDzQJ09s1Wj3140",
+            "arguments": {
+              "comparison": {
+                "metric": "gross_sales",
+                "baseline": {
+                  "start": "2011-06-01",
+                  "end": "2011-07-01"
+                },
+                "current": {
+                  "start": "2011-07-01",
+                  "end": "2011-08-01"
+                },
+                "basis": "calendar_month"
+              },
+              "dimension": "stock_code",
+              "limit": 20
+            }
+          }
+        ],
+        [
+          {
+            "name": "submit_investigation",
+            "id": "call_00_9R6xg6Y6BW6uGpGI7cXu2122",
+            "arguments": {
+              "title": "June\u2192July 2011 gross sales, orders and AOV decline; Netherlands and stock 22502 lead the drop",
+              "evidence_ids": [
+                "ev_84fbe292e98b27c0c7e1ef0b4afa9d78828f60ddbaf4c05eb7f9084c43a17da0",
+                "ev_939ad06f48bb990460570dcce984061816ae905d1c64dbcfe81a07eea6af50a5",
+                "ev_0813739db56a93ddeaeb2ef8715219a71bd89812c509765171dcdd66d57bf11d",
+                "ev_7971b0130bce890ac81d397ca643c72412183d9193e65efa208f101b2819eef0",
+                "ev_ff0bbec5b6ac964e932c6345a3812dc80968fe79924b9ecb001171c060d9e819"
+              ],
+              "brief": {
+                "facts": [
+                  {
+                    "metric": "gross_sales",
+                    "evidence_id": "ev_84fbe292e98b27c0c7e1ef0b4afa9d78828f60ddbaf4c05eb7f9084c43a17da0",
+                    "baseline": "761739.9000",
+                    "current": "719221.1910",
+                    "delta": "-42518.7090",
+                    "direction": "decrease"
+                  },
+                  {
+                    "metric": "sales_orders",
+                    "evidence_id": "ev_939ad06f48bb990460570dcce984061816ae905d1c64dbcfe81a07eea6af50a5",
+                    "baseline": "1533",
+                    "current": "1475",
+                    "delta": "-58.0000",
+                    "direction": "decrease"
+                  },
+                  {
+                    "metric": "avg_order_value",
+                    "evidence_id": "ev_0813739db56a93ddeaeb2ef8715219a71bd89812c509765171dcdd66d57bf11d",
+                    "baseline": "496.8949",
+                    "current": "487.6076",
+                    "delta": "-9.2873",
+                    "direction": "decrease"
+                  }
+                ],
+                "priorities": [
+                  {
+                    "metric": "gross_sales",
+                    "dimension": "country",
+                    "evidence_id": "ev_7971b0130bce890ac81d397ca643c72412183d9193e65efa208f101b2819eef0",
+                    "group": "Netherlands",
+                    "delta": "-26832.0700"
+                  },
+                  {
+                    "metric": "gross_sales",
+                    "dimension": "stock_code",
+                    "evidence_id": "ev_ff0bbec5b6ac964e932c6345a3812dc80968fe79924b9ecb001171c060d9e819",
+                    "group": "22502",
+                    "delta": "-40180.2400"
+                  }
+                ],
+                "check": {
+                  "name": "gross_per_order",
+                  "source_evidence_ids": [
+                    "ev_84fbe292e98b27c0c7e1ef0b4afa9d78828f60ddbaf4c05eb7f9084c43a17da0",
+                    "ev_939ad06f48bb990460570dcce984061816ae905d1c64dbcfe81a07eea6af50a5",
+                    "ev_0813739db56a93ddeaeb2ef8715219a71bd89812c509765171dcdd66d57bf11d"
+                  ],
+                  "baseline": "496.8949",
+                  "current": "487.6076"
+                },
+                "note": "Descriptive only: gross sales, distinct sales orders and gross sales per order all fell from June to July 2011. Both breakdowns reconcile to the gross_sales total. The largest country decline was Netherlands and the largest stock_code decline was 22502; EIRE and stock_code M were the largest increases. Bookkeeping and return adjustments remain in source; no causal attribution is made."
+              },
+              "hypotheses": [
+                "The Netherlands and Australia declines may reflect a small number of large one-off orders present in June but absent in July; invoice-level review would be needed to confirm.",
+                "The stock_code 22502 drop from a large June base to a small July figure may indicate a bulk or clearance purchase in June rather than a change in underlying demand.",
+                "Because both order count and gross sales per order fell, the decline may be partly a mix effect (fewer large orders) rather than purely lower order volume.",
+                "EIRE and stock_code M increases may offset part of the decline; a country-by-stock_code cross-tab would test whether these are the same orders."
+              ]
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "case": "summer-order-value",
+      "variant": "budgeted",
+      "grade_unchanged": {
+        "passed": false,
+        "error": "No sealed report",
+        "model_facts_checked": 0,
+        "priorities_checked": 0,
+        "raw_groups_checked": 0
+      },
+      "mismatches": [],
+      "assistant_tool_batches": [
+        [
+          {
+            "name": "inspect_dataset",
+            "id": "call_00_K59WI46IaMORxvoeCpFZ9408",
+            "arguments": {}
+          },
+          {
+            "name": "metric_definition",
+            "id": "call_01_B9mrJjpokhjtCG8KIH6M2039",
+            "arguments": {
+              "metric": "gross_sales"
+            }
+          },
+          {
+            "name": "metric_definition",
+            "id": "call_02_ttZL0zu0USKBOobx2qQ62147",
+            "arguments": {
+              "metric": "sales_orders"
+            }
+          },
+          {
+            "name": "metric_definition",
+            "id": "call_03_HUHRtVlZX1m1QcZmM9Xi5720",
+            "arguments": {
+              "metric": "avg_order_value"
+            }
+          }
+        ],
+        [
+          {
+            "name": "compare_metric",
+            "id": "call_00_6dxWQGhO2Uf4Auc0D2cc6434",
+            "arguments": {
+              "metric": "gross_sales",
+              "baseline": {
+                "start": "2011-06-01",
+                "end": "2011-07-01"
+              },
+              "current": {
+                "start": "2011-07-01",
+                "end": "2011-08-01"
+              },
+              "basis": "calendar_month"
+            }
+          },
+          {
+            "name": "compare_metric",
+            "id": "call_01_n8kVj9tNDPGYHkDkYBhb6672",
+            "arguments": {
+              "metric": "sales_orders",
+              "baseline": {
+                "start": "2011-06-01",
+                "end": "2011-07-01"
+              },
+              "current": {
+                "start": "2011-07-01",
+                "end": "2011-08-01"
+              },
+              "basis": "calendar_month"
+            }
+          },
+          {
+            "name": "compare_metric",
+            "id": "call_02_2Rff7pEOpgORNE4wZfoq4183",
+            "arguments": {
+              "metric": "avg_order_value",
+              "baseline": {
+                "start": "2011-06-01",
+                "end": "2011-07-01"
+              },
+              "current": {
+                "start": "2011-07-01",
+                "end": "2011-08-01"
+              },
+              "basis": "calendar_month"
+            }
+          }
+        ],
+        [
+          {
+            "name": "breakdown_change",
+            "id": "call_00_1xMQG9hwCo9CeTUmWCJP5465",
+            "arguments": {
+              "comparison": {
+                "metric": "gross_sales",
+                "baseline": {
+                  "start": "2011-06-01",
+                  "end": "2011-07-01"
+                },
+                "current": {
+                  "start": "2011-07-01",
+                  "end": "2011-08-01"
+                },
+                "basis": "calendar_month"
+              },
+              "dimension": "country",
+              "limit": 20
+            }
+          },
+          {
+            "name": "breakdown_change",
+            "id": "call_01_qHX6CEnrVj6hIfB9YJwT6072",
+            "arguments": {
+              "comparison": {
+                "metric": "gross_sales",
+                "baseline": {
+                  "start": "2011-06-01",
+                  "end": "2011-07-01"
+                },
+                "current": {
+                  "start": "2011-07-01",
+                  "end": "2011-08-01"
+                },
+                "basis": "calendar_month"
+              },
+              "dimension": "stock_code",
+              "limit": 20
+            }
+          }
+        ],
+        [
+          {
+            "name": "read_context_artifact",
+            "id": "call_00_m4psmM9dmPzQ5xUe99Yj6946",
+            "arguments": {
+              "artifact_id": "ctx_tool-result_c616c43ca6d1b4cf159ff4994dc3579a7f8ce08ac5a830721d747e1911f14670",
+              "json_pointers": [
+                "/result"
+              ],
+              "offset": 0,
+              "limit": 1200
+            }
+          },
+          {
+            "name": "read_context_artifact",
+            "id": "call_01_DUXYYXLEHZcGdnMlQswf2535",
+            "arguments": {
+              "artifact_id": "ctx_tool-result_9b2f31936044434342e453c708c219dfb350a575077436c234849402ff98460e",
+              "json_pointers": [
+                "/result"
+              ],
+              "offset": 0,
+              "limit": 1200
+            }
+          },
+          {
+            "name": "read_context_artifact",
+            "id": "call_02_QckJmvNGWTKQwWvkfEnD4338",
+            "arguments": {
+              "artifact_id": "ctx_tool-result_ce2bfb1733677eeae07ad7636ad9d35932c5753f89284123f4b47df9288cea38",
+              "json_pointers": [
+                "/result"
+              ],
+              "offset": 0,
+              "limit": 2400
+            }
+          },
+          {
+            "name": "read_context_artifact",
+            "id": "call_03_gwmr8gjY5Q5YL0ddRL6z1273",
+            "arguments": {
+              "artifact_id": "ctx_tool-result_ab59a53a63d6315681588b2038109c5173cef71154ed8d1a9f4de894ccfaa8dc",
+              "json_pointers": [
+                "/result"
+              ],
+              "offset": 0,
+              "limit": 2400
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "case": "autumn-return-offset",
+      "variant": "budgeted",
+      "grade_unchanged": {
+        "passed": false,
+        "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 963891280n\n- 418985380n\n",
+        "model_facts_checked": 0,
+        "priorities_checked": 0,
+        "raw_groups_checked": 0
+      },
+      "mismatches": [
+        {
+          "field": "priority.gross_sales.country",
+          "model_group": "United Kingdom",
+          "model_delta": "96389.1280",
+          "oracle_delta_for_group": "41898.5380"
+        },
+        {
+          "field": "priority.returns.stock_code",
+          "model_group": "23843",
+          "model_delta": "45372.0800",
+          "oracle_delta_for_group": null
+        }
+      ],
+      "assistant_tool_batches": [
+        [
+          {
+            "name": "inspect_dataset",
+            "id": "call_00_zGqSMdHrVxE9BJJnbRgB1528",
+            "arguments": {}
+          },
+          {
+            "name": "metric_definition",
+            "id": "call_01_Ne3vEOp82p6pscCn3FJH1732",
+            "arguments": {
+              "metric": "net_sales"
+            }
+          },
+          {
+            "name": "metric_definition",
+            "id": "call_02_s4kS5ilkzmZ0hlsVPZa49874",
+            "arguments": {
+              "metric": "gross_sales"
+            }
+          },
+          {
+            "name": "metric_definition",
+            "id": "call_03_QMfmreO2qN0p9m6Hklou3015",
+            "arguments": {
+              "metric": "returns"
+            }
+          }
+        ],
+        [
+          {
+            "name": "compare_metric",
+            "id": "call_00_LPFvER6zRwCwzFn84Ywk2585",
+            "arguments": {
+              "metric": "net_sales",
+              "baseline": {
+                "start": "2011-09-01",
+                "end": "2011-10-01"
+              },
+              "current": {
+                "start": "2011-10-01",
+                "end": "2011-11-01"
+              },
+              "basis": "calendar_month"
+            }
+          },
+          {
+            "name": "compare_metric",
+            "id": "call_01_dW7Wp8AR7vIS6ALC7KNL1348",
+            "arguments": {
+              "metric": "gross_sales",
+              "baseline": {
+                "start": "2011-09-01",
+                "end": "2011-10-01"
+              },
+              "current": {
+                "start": "2011-10-01",
+                "end": "2011-11-01"
+              },
+              "basis": "calendar_month"
+            }
+          },
+          {
+            "name": "compare_metric",
+            "id": "call_02_WJQV8DmDOJijX9NRQxzu4973",
+            "arguments": {
+              "metric": "returns",
+              "baseline": {
+                "start": "2011-09-01",
+                "end": "2011-10-01"
+              },
+              "current": {
+                "start": "2011-10-01",
+                "end": "2011-11-01"
+              },
+              "basis": "calendar_month"
+            }
+          }
+        ],
+        [
+          {
+            "name": "breakdown_change",
+            "id": "call_00_GoaOAdmNhuWSX6OkOYuT0295",
+            "arguments": {
+              "comparison": {
+                "metric": "gross_sales",
+                "baseline": {
+                  "start": "2011-09-01",
+                  "end": "2011-10-01"
+                },
+                "current": {
+                  "start": "2011-10-01",
+                  "end": "2011-11-01"
+                },
+                "basis": "calendar_month"
+              },
+              "dimension": "country",
+              "limit": 20
+            }
+          },
+          {
+            "name": "breakdown_change",
+            "id": "call_01_MNL41xbxRCcZbFQIUiYT1461",
+            "arguments": {
+              "comparison": {
+                "metric": "returns",
+                "baseline": {
+                  "start": "2011-09-01",
+                  "end": "2011-10-01"
+                },
+                "current": {
+                  "start": "2011-10-01",
+                  "end": "2011-11-01"
+                },
+                "basis": "calendar_month"
+              },
+              "dimension": "stock_code",
+              "limit": 20
+            }
+          }
+        ],
+        [
+          {
+            "name": "submit_investigation",
+            "id": "call_00_eFif4LSU16x9oSFWksBO5115",
+            "arguments": {
+              "title": "Sep\u2192Oct 2011 operating brief: net_sales up, gross_sales up, returns up sharply",
+              "evidence_ids": [
+                "ev_46913377ffa4770d7aab6127ef72e6dabfc1139a74808ae94336b6a7008d26ef",
+                "ev_cb9a510de1f193d6f7e4ab163d7438ff3d7274b3150b3cc71ebb81fe18d42f36",
+                "ev_8fc3cfa5e972543fe330c01e80b882e23d67f2dfe4f3e251c807f892c7583b7e",
+                "ev_1d9b691957a81624cfb9a094e2630fa71fa7244cf580b98389142d0e3ca06741",
+                "ev_eaf96a76148f911f51344b4384a6fa8b98456b1577bc8f249d14dd0131c13e73"
+              ],
+              "brief": {
+                "facts": [
+                  {
+                    "metric": "net_sales",
+                    "evidence_id": "ev_46913377ffa4770d7aab6127ef72e6dabfc1139a74808ae94336b6a7008d26ef",
+                    "baseline": "1019687.6220",
+                    "current": "1070704.6700",
+                    "delta": "51017.0480",
+                    "direction": "increase"
+                  },
+                  {
+                    "metric": "gross_sales",
+                    "evidence_id": "ev_cb9a510de1f193d6f7e4ab163d7438ff3d7274b3150b3cc71ebb81fe18d42f36",
+                    "baseline": "1058590.1720",
+                    "current": "1154979.3000",
+                    "delta": "96389.1280",
+                    "direction": "increase"
+                  },
+                  {
+                    "metric": "returns",
+                    "evidence_id": "ev_8fc3cfa5e972543fe330c01e80b882e23d67f2dfe4f3e251c807f892c7583b7e",
+                    "baseline": "38902.5500",
+                    "current": "84274.6300",
+                    "delta": "45372.0800",
+                    "direction": "increase"
+                  }
+                ],
+                "priorities": [
+                  {
+                    "metric": "gross_sales",
+                    "dimension": "country",
+                    "evidence_id": "ev_1d9b691957a81624cfb9a094e2630fa71fa7244cf580b98389142d0e3ca06741",
+                    "group": "United Kingdom",
+                    "delta": "96389.1280"
+                  },
+                  {
+                    "metric": "returns",
+                    "dimension": "stock_code",
+                    "evidence_id": "ev_eaf96a76148f911f51344b4384a6fa8b98456b1577bc8f249d14dd0131c13e73",
+                    "group": "23843",
+                    "delta": "45372.0800"
+                  }
+                ],
+                "check": {
+                  "name": "gross_minus_returns",
+                  "source_evidence_ids": [
+                    "ev_46913377ffa4770d7aab6127ef72e6dabfc1139a74808ae94336b6a7008d26ef",
+                    "ev_cb9a510de1f193d6f7e4ab163d7438ff3d7274b3150b3cc71ebb81fe18d42f36",
+                    "ev_8fc3cfa5e972543fe330c01e80b882e23d67f2dfe4f3e251c807f892c7583b7e"
+                  ],
+                  "baseline": "1019687.6220",
+                  "current": "1070704.6700"
+                },
+                "note": "Descriptive only: gross_sales rose more than net_sales because returns rose faster in absolute terms; gross_sales minus returns reconciles exactly to net_sales in both periods. The country breakdown attributes the entire gross_sales change to United Kingdom and the stock_code breakdown attributes the entire returns change to code 23843, with all other groups flat."
+              },
+              "hypotheses": [
+                "A single high-value stock code (23843) may account for the entire returns increase, consistent with a concentrated return event rather than broad-based deterioration.",
+                "Because the country breakdown shows the whole gross_sales change in United Kingdom, the sales increase and the returns increase may share the same customer/order cluster.",
+                "The gap between gross_sales growth and net_sales growth may widen further if the returns level persists into November."
+              ]
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "case": "autumn-return-offset",
+      "variant": "full",
+      "grade_unchanged": {
+        "passed": true,
+        "error": null,
+        "model_facts_checked": 3,
+        "priorities_checked": 2,
+        "raw_groups_checked": 3108
+      },
+      "mismatches": [],
+      "assistant_tool_batches": [
+        [
+          {
+            "name": "inspect_dataset",
+            "id": "call_00_YapcfgyKp9ISJvr00MU98671",
+            "arguments": {}
+          },
+          {
+            "name": "metric_definition",
+            "id": "call_01_YkGlU4OKwMYKTIgBWqQv5026",
+            "arguments": {
+              "metric": "net_sales"
+            }
+          },
+          {
+            "name": "metric_definition",
+            "id": "call_02_Jrlcj0HW4w9odPRVf8Rv1967",
+            "arguments": {
+              "metric": "gross_sales"
+            }
+          },
+          {
+            "name": "metric_definition",
+            "id": "call_03_YZxICYzcCBxKy2YPknW67912",
+            "arguments": {
+              "metric": "returns"
+            }
+          }
+        ],
+        [
+          {
+            "name": "compare_metric",
+            "id": "call_00_hTkNMjnkn3ogKk2nZB4i1484",
+            "arguments": {
+              "metric": "net_sales",
+              "baseline": {
+                "start": "2011-09-01",
+                "end": "2011-10-01"
+              },
+              "current": {
+                "start": "2011-10-01",
+                "end": "2011-11-01"
+              },
+              "basis": "calendar_month"
+            }
+          },
+          {
+            "name": "compare_metric",
+            "id": "call_01_AqYfh19zYokhvVZY5chh8001",
+            "arguments": {
+              "metric": "gross_sales",
+              "baseline": {
+                "start": "2011-09-01",
+                "end": "2011-10-01"
+              },
+              "current": {
+                "start": "2011-10-01",
+                "end": "2011-11-01"
+              },
+              "basis": "calendar_month"
+            }
+          },
+          {
+            "name": "compare_metric",
+            "id": "call_02_3cJ9HuZOrBCYm1fVPa8A9527",
+            "arguments": {
+              "metric": "returns",
+              "baseline": {
+                "start": "2011-09-01",
+                "end": "2011-10-01"
+              },
+              "current": {
+                "start": "2011-10-01",
+                "end": "2011-11-01"
+              },
+              "basis": "calendar_month"
+            }
+          }
+        ],
+        [
+          {
+            "name": "breakdown_change",
+            "id": "call_00_uMKOD9iZ3u2toES5ojad1103",
+            "arguments": {
+              "comparison": {
+                "metric": "gross_sales",
+                "baseline": {
+                  "start": "2011-09-01",
+                  "end": "2011-10-01"
+                },
+                "current": {
+                  "start": "2011-10-01",
+                  "end": "2011-11-01"
+                },
+                "basis": "calendar_month"
+              },
+              "dimension": "country",
+              "limit": 20
+            }
+          },
+          {
+            "name": "breakdown_change",
+            "id": "call_01_9Yl12SynyULD19qILV7e2643",
+            "arguments": {
+              "comparison": {
+                "metric": "returns",
+                "baseline": {
+                  "start": "2011-09-01",
+                  "end": "2011-10-01"
+                },
+                "current": {
+                  "start": "2011-10-01",
+                  "end": "2011-11-01"
+                },
+                "basis": "calendar_month"
+              },
+              "dimension": "stock_code",
+              "limit": 20
+            }
+          }
+        ],
+        [
+          {
+            "name": "submit_investigation",
+            "id": "call_00_fzODCiQVz9jAf8dRwN8Q9665",
+            "arguments": {
+              "title": "Oct 2011 vs Sep 2011 (calendar month): net_sales, gross_sales, returns",
+              "evidence_ids": [
+                "ev_46913377ffa4770d7aab6127ef72e6dabfc1139a74808ae94336b6a7008d26ef",
+                "ev_cb9a510de1f193d6f7e4ab163d7438ff3d7274b3150b3cc71ebb81fe18d42f36",
+                "ev_8fc3cfa5e972543fe330c01e80b882e23d67f2dfe4f3e251c807f892c7583b7e",
+                "ev_1d9b691957a81624cfb9a094e2630fa71fa7244cf580b98389142d0e3ca06741",
+                "ev_eaf96a76148f911f51344b4384a6fa8b98456b1577bc8f249d14dd0131c13e73"
+              ],
+              "brief": {
+                "facts": [
+                  {
+                    "metric": "net_sales",
+                    "evidence_id": "ev_46913377ffa4770d7aab6127ef72e6dabfc1139a74808ae94336b6a7008d26ef",
+                    "baseline": "1019687.6220",
+                    "current": "1070704.6700",
+                    "delta": "51017.0480",
+                    "direction": "increase"
+                  },
+                  {
+                    "metric": "gross_sales",
+                    "evidence_id": "ev_cb9a510de1f193d6f7e4ab163d7438ff3d7274b3150b3cc71ebb81fe18d42f36",
+                    "baseline": "1058590.1720",
+                    "current": "1154979.3000",
+                    "delta": "96389.1280",
+                    "direction": "increase"
+                  },
+                  {
+                    "metric": "returns",
+                    "evidence_id": "ev_8fc3cfa5e972543fe330c01e80b882e23d67f2dfe4f3e251c807f892c7583b7e",
+                    "baseline": "38902.5500",
+                    "current": "84274.6300",
+                    "delta": "45372.0800",
+                    "direction": "increase"
+                  }
+                ],
+                "priorities": [
+                  {
+                    "metric": "gross_sales",
+                    "dimension": "country",
+                    "evidence_id": "ev_1d9b691957a81624cfb9a094e2630fa71fa7244cf580b98389142d0e3ca06741",
+                    "group": "United Kingdom",
+                    "delta": "41898.5380"
+                  },
+                  {
+                    "metric": "returns",
+                    "dimension": "stock_code",
+                    "evidence_id": "ev_eaf96a76148f911f51344b4384a6fa8b98456b1577bc8f249d14dd0131c13e73",
+                    "group": "M",
+                    "delta": "15868.9600"
+                  }
+                ],
+                "check": {
+                  "name": "gross_minus_returns",
+                  "source_evidence_ids": [
+                    "ev_cb9a510de1f193d6f7e4ab163d7438ff3d7274b3150b3cc71ebb81fe18d42f36",
+                    "ev_8fc3cfa5e972543fe330c01e80b882e23d67f2dfe4f3e251c807f892c7583b7e",
+                    "ev_46913377ffa4770d7aab6127ef72e6dabfc1139a74808ae94336b6a7008d26ef"
+                  ],
+                  "baseline": "1019687.6220",
+                  "current": "1070704.6700"
+                },
+                "note": "Descriptive only. Gross sales rose more than net sales because returns rose faster in absolute terms; gross minus returns reconciles exactly to net sales in both months. Country breakdown reconciles to the gross_sales total; stock_code breakdown reconciles to the returns total. Largest gross_sales country change is United Kingdom; largest returns stock_code change is M. Bookkeeping and return adjustments remain in source."
+              },
+              "hypotheses": [
+                "The returns increase may be concentrated in a small number of stock codes (M and several numeric codes with zero baseline), consistent with specific product or cancellation events rather than broad-based return-rate drift.",
+                "The United Kingdom gross_sales increase may reflect a mix of higher order volume and larger basket size; sales_orders and avg_order_value comparisons would be needed to separate these.",
+                "The EIRE gross_sales decline may offset part of the United Kingdom gain; a country-level order-count check could test whether this is volume or price driven.",
+                "Returns rising faster than gross sales could reflect timing of cancellations booked in October against September sales; invoice-level timing analysis would be needed."
+              ]
+            }
+          }
+        ]
+      ]
+    }
+  ]
+}

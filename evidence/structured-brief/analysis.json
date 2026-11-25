@@ -1,0 +1,166 @@
+{
+  "kind": "Post-study accounting only; no grader/source/budget changes or new requests",
+  "preregistered_commit": "302cf1d888288ee1d2893c010517f3eea7677d43",
+  "cases": [
+    {
+      "case": "summer-order-value",
+      "variant": "full",
+      "actual_grade": {
+        "passed": true,
+        "error": null,
+        "model_facts_checked": 3,
+        "priorities_checked": 2,
+        "raw_groups_checked": 2974
+      },
+      "job_status": "completed",
+      "stored_usage_absent_or_zero": [],
+      "unknown_or_error_calls": [],
+      "all_selected_tool_sets": [],
+      "plans": [],
+      "recall_final_content_bytes": [],
+      "compact_reply_count": 0,
+      "original_intermediate_write_count_claimed": false
+    },
+    {
+      "case": "summer-order-value",
+      "variant": "budgeted",
+      "actual_grade": {
+        "passed": false,
+        "error": "No sealed report",
+        "model_facts_checked": 0,
+        "priorities_checked": 0,
+        "raw_groups_checked": 0
+      },
+      "job_status": "failed",
+      "stored_usage_absent_or_zero": [],
+      "unknown_or_error_calls": [],
+      "all_selected_tool_sets": [
+        [
+          "inspect_dataset",
+          "compare_metric",
+          "breakdown_change",
+          "request_clarification",
+          "submit_investigation",
+          "list_saved_evidence",
+          "metric_definition",
+          "discover_tools"
+        ],
+        [
+          "inspect_dataset",
+          "compare_metric",
+          "breakdown_change",
+          "request_clarification",
+          "submit_investigation",
+          "list_saved_evidence",
+          "metric_definition",
+          "discover_tools"
+        ],
+        [
+          "inspect_dataset",
+          "compare_metric",
+          "breakdown_change",
+          "request_clarification",
+          "submit_investigation",
+          "list_saved_evidence",
+          "metric_definition",
+          "discover_tools"
+        ],
+        [
+          "inspect_dataset",
+          "compare_metric",
+          "breakdown_change",
+          "request_clarification",
+          "submit_investigation",
+          "metric_definition",
+          "read_context_artifact",
+          "discover_tools"
+        ]
+      ],
+      "plans": [],
+      "recall_final_content_bytes": [],
+      "compact_reply_count": 0,
+      "original_intermediate_write_count_claimed": false
+    },
+    {
+      "case": "autumn-return-offset",
+      "variant": "budgeted",
+      "actual_grade": {
+        "passed": false,
+        "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 963891280n\n- 418985380n\n",
+        "model_facts_checked": 0,
+        "priorities_checked": 0,
+        "raw_groups_checked": 0
+      },
+      "job_status": "completed",
+      "stored_usage_absent_or_zero": [],
+      "unknown_or_error_calls": [],
+      "all_selected_tool_sets": [
+        [
+          "inspect_dataset",
+          "compare_metric",
+          "breakdown_change",
+          "request_clarification",
+          "submit_investigation",
+          "list_saved_evidence",
+          "metric_definition",
+          "discover_tools"
+        ],
+        [
+          "inspect_dataset",
+          "compare_metric",
+          "breakdown_change",
+          "request_clarification",
+          "submit_investigation",
+          "list_saved_evidence",
+          "metric_definition",
+          "discover_tools"
+        ],
+        [
+          "inspect_dataset",
+          "compare_metric",
+          "breakdown_change",
+          "request_clarification",
+          "submit_investigation",
+          "list_saved_evidence",
+          "metric_definition",
+          "discover_tools"
+        ],
+        [
+          "inspect_dataset",
+          "compare_metric",
+          "breakdown_change",
+          "request_clarification",
+          "submit_investigation",
+          "metric_definition",
+          "read_context_artifact",
+          "discover_tools"
+        ]
+      ],
+      "plans": [],
+      "recall_final_content_bytes": [],
+      "compact_reply_count": 0,
+      "original_intermediate_write_count_claimed": false
+    },
+    {
+      "case": "autumn-return-offset",
+      "variant": "full",
+      "actual_grade": {
+        "passed": true,
+        "error": null,
+        "model_facts_checked": 3,
+        "priorities_checked": 2,
+        "raw_groups_checked": 3108
+      },
+      "job_status": "completed",
+      "stored_usage_absent_or_zero": [],
+      "unknown_or_error_calls": [],
+      "all_selected_tool_sets": [],
+      "plans": [],
+      "recall_final_content_bytes": [],
+      "compact_reply_count": 0,
+      "original_intermediate_write_count_claimed": false
+    }
+  ],
+  "usage_note": "Zero/missing usage and errors explicitly listed. Cost is known usage estimate at frozen peak prices, not invoice or a guarantee no charge on unknown attempts.",
+  "not_general_accuracy": true
+}

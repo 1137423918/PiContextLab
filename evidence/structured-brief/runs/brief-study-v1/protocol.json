@@ -1,0 +1,103 @@
+{
+  "source_snapshot_sha256": "f587940019bd329f5f23dc09eb380075c99b01124062469698a6bdd96bea79d0",
+  "source_snapshot_format": "source-only-v1",
+  "controller_sha256": "36ae983ea63e67fd113895a4b8f373520f109496e99fe6481fde4e445eb7ff11",
+  "wrapper_sha256": "9d7e401497343f3f99034a897cdf50d88c59d1ef669494a601a2e9cc326f6ff0",
+  "cpu_admission_sha256": "62350c3401c5336ff873d429da29fb4397f114c016bb96a003d5a2b673029fe1",
+  "input_bundle_sha256": "59370c750e58253573e3a16c54d3f7a280c05e795f11afed2fc84ae9439d0861",
+  "phases": [
+    {
+      "name": "numeric-source-runtime-capability",
+      "argv": [
+        "NODE",
+        "-e",
+        "JSON.parse('9007199254740993',(_k,v,c)=>{if(c?.source!=='9007199254740993')throw Error('JSON.parse source unsupported');return v;});console.log('exact numeric source available')"
+      ]
+    },
+    {
+      "name": "source-snapshot-boundaries",
+      "argv": [
+        "/data1/wjz26/agent-lab-20261120/envs/model-request-budget-20261121/bin/python",
+        "scripts/check_source_snapshot.py"
+      ],
+      "cap": 30
+    },
+    {
+      "name": "build-native-fork",
+      "argv": [
+        "NODE",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "vendor/pi-agent-core/tsconfig.json"
+      ]
+    },
+    {
+      "name": "native-and-application-check",
+      "argv": [
+        "/tmp/agentlab-deeptutor-setup-stage92-02uddvuy/tools/node/bin/npm",
+        "run",
+        "check"
+      ]
+    },
+    {
+      "name": "build-application",
+      "argv": [
+        "NODE",
+        "node_modules/typescript/bin/tsc"
+      ]
+    },
+    {
+      "name": "independent-structured-brief-oracle",
+      "argv": [
+        "/data1/wjz26/agent-lab-20261120/envs/model-request-budget-20261121/bin/python",
+        "scripts/oracle_brief.py",
+        "/tmp/pimetriclab-intake-stage98-_jz6nfyq/dataset/transactions.csv",
+        "examples/brief-study-protocol.json",
+        "brief-oracle.json"
+      ],
+      "cap": 90
+    },
+    {
+      "name": "preregistered-execution-source-unchanged",
+      "argv": [
+        "/data1/wjz26/agent-lab-20261120/envs/model-request-budget-20261121/bin/python",
+        "-c",
+        "from pathlib import Path;import json,hashlib;m=json.loads(Path('snapshot-manifest.json').read_text());names=[n for n in m['files'] if n!='package-lock.json'];bad=[n for n in names if hashlib.sha256(Path(n).read_bytes()).hexdigest()!=m['files'][n]];assert not bad,bad;print(json.dumps({'verified_source_files':len(names),'source_mutations':0,'root_lock_sha256':hashlib.sha256(Path('package-lock.json').read_bytes()).hexdigest()}))"
+      ],
+      "cap": 30
+    },
+    {
+      "name": "deepseek-runtime-validation",
+      "argv": [
+        "NODE",
+        "dist/scripts/run-brief-study.js",
+        "/tmp/pimetriclab-build-stage98-whosstp1/source/validation-final/home/datasets",
+        "brief-oracle.json",
+        "brief-study"
+      ],
+      "cap": 700
+    }
+  ],
+  "framework_install": true,
+  "purpose": "Once-only structured-fact business study; source302cf1d published and verified before API. Fourfixed jobs,32global maxrequests/1536output each, no retries/topups/GPU/oldstudyreruns.",
+  "mode": "cpu",
+  "environment": {
+    "METRICLAB_MODEL_URL": "https://api.deepseek.com",
+    "METRICLAB_MODEL_ID": "deepseek-flash",
+    "METRICLAB_MAX_CONTEXT_BYTES": "65536",
+    "METRICLAB_CONTEXT_POLICY": "upstream",
+    "METRICLAB_ARTIFACT_SEARCH": "0",
+    "METRICLAB_BRIEF_SOURCE_COMMIT": "302cf1d888288ee1d2893c010517f3eea7677d43"
+  },
+  "cpu_count": 1,
+  "cpu_min_headroom": 0.7,
+  "provider": "deepseek",
+  "model_count_evidence_path": "brief-study/checkpoint.json",
+  "model_count_ceiling": 32,
+  "expected_source_commit": "302cf1d888288ee1d2893c010517f3eea7677d43",
+  "commit_source_verification": {
+    "commit": "302cf1d888288ee1d2893c010517f3eea7677d43",
+    "files": 151,
+    "all_committed_input_bytes_match": true
+  }
+}

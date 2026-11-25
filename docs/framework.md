@@ -273,4 +273,4 @@ core11保持同样任务、20KiB上下文/8KiB静态组上限和评分，修复�
 
 紧预算读取先尝试完整旧格式；放不下才试`compact_metadata: true`。精确artifact_id、每路径text、returned_codepoints、next_offset、完整next_read及has_more都保留，仅省去重复的sha256、来源身份提醒、已知请求offset与total_codepoints；完整性仍在返回前验证，artifact_id本身含全hash。原文、参数及游标计算不改，ctx不能冒充ev的规则仍在工具声明里。若紧凑完整内容可放下就不截断；否则仍按code points限量，连空元数据都放不下则明确deferred。未配置字节预算时旧字段和序列化顺序保持原样。
 
-原core10两个完整控制通过，两个预算控制在回读前拒绝；这些记录保留。core11四个控制均通过，预算实例各有两次pressure准备、两次原生回读与一次持久方案，最大视图20,438与20,390/20,480字节。它们是从当前provider视图读取事实、显式写assistant工作笔记的脚本，不是大模型准确率。85项工程测试及新独立CSV事实核对通过；真实API需先行发布固定源码后单独运行，见[前置证据](../evidence/structured-brief/)。
+原core10两个完整控制通过，两个预算控制在回读前拒绝；这些记录保留。core11四个控制均通过，预算实例各有两次pressure准备、两次原生回读与一次持久方案，最大视图20,438与20,390/20,480字节。它们是从当前provider视图读取事实、显式写assistant工作笔记的脚本，不是大模型准确率。85项工程测试及新独立CSV事实核对通过；先行源码公开后又完成16次真实API请求，完整2/2通过、预算0/2；实际预算实例没有产生回读结果或compact回复，不能据CPU控制声称模型收益，见[全部记录](../evidence/structured-brief/)。

@@ -435,3 +435,26 @@ core7只修复压力模式的候选过滤：按大小优先、净节省才替换
 core11新CPU控制中两个完整分支各4次脚本请求，两个预算分支各5次；四个均核对三项事实/两个优先组，两个问题分别逐行验证2,974与3,108个国家/商品组。预算分支均有2次pressure准备、2次回读、1个持久预算方案，最大20,438与20,390字节。spill计数为成功准备中出现次数，不等于精确存储写次数；搜索规划也可能多次幂等写入。所有这些都是脚本控制，真实模型请求仍为0。
 
 [85项预检](../evidence/structured-brief/preflight-tests.tap) · [独立CSV oracle](../evidence/structured-brief/oracle.json.gz) · [core10原失败](../evidence/structured-brief/controls/core10/summary.json) · [core11控制](../evidence/structured-brief/controls/core11/summary.json) · [原任务等价核对](../evidence/structured-brief/task-equivalence.json) · [源码与资源](../evidence/structured-brief/runs/)。真实请求必须在源码先行公开后单独执行，结果另记；既有89次生成请求及关闭研究保持原样。
+
+## core11 结构化经营复盘的真实模型结果
+
+[先行源码302cf1d](https://github.com/1137423918/PiContextLab/commit/302cf1d888288ee1d2893c010517f3eea7677d43)及全部预检先公开，随后一次执行四个既定实例。151个实际输入文件逐一与该提交核对，API前源码校验通过。共16次DeepSeek请求/16持久预留，未用完32上限也不追加；无缺失或零usage。现已关闭，原问题、预算与评分未改。
+
+| 新问题 | 配置 | 请求 | 累计输入tokens含cache | 累计输出tokens | 原定事实评分 |
+|---|---|---:|---:|---:|---|
+| 六月/七月订单与客单价 | 完整64KiB | 4 | 16,488 | 2,061 | 通过 |
+| 同任务 | 预算20KiB | 4 | 15,164 | 1,323 | 无报告，未通过 |
+| 九月/十月退货与净额 | 预算20KiB | 4 | 15,195 | 2,149 | 已封存但贡献事实错误，未通过 |
+| 同任务 | 完整64KiB | 4 | 16,484 | 2,149 | 通过 |
+
+两个完整实例检查全部五个来源身份、三项模型填写的指标事实/方向、两项优先组和平均值/净额勾稽；原始分组分别2,974与3,108组通过。它们补充真实API结构化事实验证，不能据两项任务声称总体准确率或生产质量。报告解释和因果假设未评分，也没有人工审核记录。
+
+订单任务预算实例在第4次请求前准备中记录pressure/5次外置出现，最大已发送准备视图20,409/20,480字节。模型随后同批请求四个/result（limit分别1,200、1,200、2,400、2,400），规划器无法为该批最低结果留可行投影，在任何回读开始前拒绝；没有第5次API请求、没有报告。这是已观察轨迹，不是全局不可压缩或某单因子的消融证明。
+
+退货任务预算实例记录pressure/6次外置出现，最大准备视图19,887字节。模型没有调用回读就封存：三项指标事实及净额勾稽与oracle一致，但英国gross_sales贡献写成96,389.1280，实际为41,898.5380，所填值恰等于全局gross_sales增量；商品23843不在该期间的oracle分组中，所填45,372.0800也等于整体returns增量。相关假设没有额外评分；仅这些明确数值/来源错误已足以按原规则判失败。不能把job.status=completed当作通过。
+
+因此实际模型两个预算实例均0项成功回读、0个持久结果预算方案、0条compact回复。core11的程序修复通过CPU控制，但尚未得到真实任务压力收益证明；完整配置两项通过、预算配置0/2的负结论保留。不同预算、展示details处理、固定顺序、缓存和样本复用均不支持通用准确率、token、成本或规划单一因果结论。
+
+全体已知usage输入63,331、输出7,682 tokens，按冻结峰时单价估计约$0.0155，非供应商账单；错误/未知及usage缺失额外列在分析中，本次均为0。最终owned0、GPU0。包括之前关闭研究，总真实生成请求为105次；不重开任何剩余额度。
+
+[原始四实例与评分](../evidence/structured-brief/study/results.json.gz) · [逐例汇总](../evidence/structured-brief/study/summary.json) · [完整边界输入](../evidence/structured-brief/study/wire-transcripts.json.gz) · [151文件来源验证](../evidence/structured-brief/study-source-verification.json) · [配额/工具与usage分析](../evidence/structured-brief/analysis.json) · [原始调用与错误字段](../evidence/structured-brief/failure-analysis.json) · [新订单报告](../evidence/structured-brief/study/summer-order-value-full.html) · [新退货报告](../evidence/structured-brief/study/autumn-return-offset-full.html) · [资源及执行日志](../evidence/structured-brief/runs/brief-study-v1/)。原错误报告亦完整保留，分析不改评分或发出新请求。

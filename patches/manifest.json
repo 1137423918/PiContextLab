@@ -26,7 +26,8 @@
     "contextlab.2",
     "contextlab.4",
     "contextlab.6",
-    "contextlab.7"
+    "contextlab.7",
+    "contextlab.11"
   ],
   "v4_validation": "Preregistered real DeepSeek study atabd69e2:23requests;full2/2,native-read/search0/2. Post-study configuredAPI/Runner defaultfull, experiments opt-in.37engineering tests; no claimed performance improvement.",
   "v5_validation": "44 engineering tests,14 browser checks, full UCI16KiB scripted control; three new synthetic mechanism comparisons against frozen core4. No additional real model requests; default full context preserved.",
@@ -35,5 +36,6 @@
   "v8_validation": "62tests/14browser/fullUCI; four new frozen-core7 vs opt-in8 CPU feedback cases12152->584,6305->2048,9112->478,11352->582bytes; bothreject/noexec/inputunchanged. Native sequential/parallel/recovery covered. No model calls; no claimed task correction gain.",
   "v9_validation": "71tests/14browser/fullUCI; native4parallel source recall CPU comparison31262->8187contentJSONbytes within8192sharedcap. Deterministic serial/parallel/original-batch recovery, exactUnicodepagination, explicitdeferral, infeasible admission settles streams. No model calls; not whole-context/token/success improvement.",
   "v10_validation": "80tests/14browser/fullUCI; new3synthetic native cases compare static9 vs post-response headroom10. Pressure: static8192contentcap rejected nextview; new5996content/23660of24576contextbytes completes. Roomy unchanged; unfittable beforeanytool. Reply-bound immutable plans saved before execution and reused on recovery. No real model calls or universal fit/token/quality claim.",
-  "v11_preflight": "85Node/14browser/fullUCI; old10 structured business controls fullpass/budgetreject, unchanged tasks/budgets/grader aftergeneric11fallbacksearch+compactmetadata fix all4CPUcontrolspass. Budgeted2pressure/2recalls/1plan percase, max20438/20390of20480. Independent3facts/2priorities plus2974/3108fullgroups. No paid calls before prospective source release."
+  "v11_preflight": "85Node/14browser/fullUCI; old10 structured business controls fullpass/budgetreject, unchanged tasks/budgets/grader aftergeneric11fallbacksearch+compactmetadata fix all4CPUcontrolspass. Budgeted2pressure/2recalls/1plan percase, max20438/20390of20480. Independent3facts/2priorities plus2974/3108fullgroups. No paid calls before prospective source release.",
+  "v11_real_validation": "Once-only preregistered302cf1d structured brief2familiesx2configs,16DeepSeekcalls,full2/2factualpass,budgeted0/2; bothbudgetedpressure, onefailsbefore4recalls and othersealedwrongprioritieswithoutrecall. No outputreservation/modelquality gain claim.151executedinputs matchpreregisteredcommit; no retries."
 }
