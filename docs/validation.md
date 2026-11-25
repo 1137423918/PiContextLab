@@ -352,7 +352,7 @@ core7只修复压力模式的候选过滤：按大小优先、净节省才替换
 
 因此，core7累计中等结果的程序缺陷已在CPU控制中修复，实际模型也使用了四次该类外置；**真实任务完成仍未成立**。脚本只需要来源ID，模型为叙述又读取结果，二者行为不同。不能用脚本通过代替模型成功，更不能由失败任务少用token推导成本收益。不同预算、单一工作流及固定顺序也不支持泛化准确率结论。
 
-总冻结单价估计约$0.0132，不是供应商账单。owned进程最终0，GPU0。默认真实入口仍为完整上下文。后续可研究有界schema错误反馈、请求前输出空间预留与跨并行读取的总响应预算；这些尚未实现或被模型验证，不写作成果，也不以本任务重试挑分。
+总冻结单价估计约$0.0132，不是供应商账单。owned进程最终0，GPU0。默认真实入口仍为完整上下文。该研究关闭时有界schema反馈、输出空间预留及共享回读预算尚未实现；随后core8/core9只验证前后两项程序机制，见后文。输出预留仍待研究，原模型结果不变，不以本任务重试挑分。
 
 [逐配置汇总](../evidence/pressure-business/summary.json) · [完整压缩原记录](../evidence/pressure-business/results.json.gz) · [Pi边界输入](../evidence/pressure-business/wire-transcripts.json.gz) · [外置与调用分析](../evidence/pressure-business/analysis.json) · [离线错误诊断](../evidence/pressure-business/failure-analysis.json) · [执行源码](../evidence/pressure-business/source-sha256.json) · [128文件提交核对](../evidence/pressure-business/commit-verification.json) · [资源](../evidence/pressure-business/runs/)。gzip格式只压缩保存字节，不改原始JSON内容；Pi边界输入不是原始HTTP body，费用不作账单陈述。
 
@@ -375,3 +375,25 @@ core7只修复压力模式的候选过滤：按大小优先、净节省才替换
 最终服务器通过62项测试、14项浏览器检查及完整UCI/16KiB控制，owned进程0。新增模型请求0、GPU0。保留初版v1检查与v2比较；v3修正了“JSON解析失败原文位于argumentsError”的来源提示并加断言。最终v4补充独立辅助函数的isError标记并断言。四个案例和上限不变，旧比较结果一并保留；没有调模型或重复已关闭研究。
 
 [固定CPU方案](../examples/validation-feedback-cpu-protocol.json) · [四项逐例输出](../evidence/validation-feedback/results.json) · [62项测试](../evidence/validation-feedback/tests.tap) · [实际源码清单](../evidence/validation-feedback/snapshot-manifest.json) · [冻结core7来源](../evidence/validation-feedback/baseline-source.json) · [全量核对](../evidence/validation-feedback/uci-validation.json) · [浏览器检查](../evidence/validation-feedback/browser-result.json) · [资源及各版结果](../evidence/validation-feedback/runs/)。实际模型是否更容易改正、能否避免原多指标任务失败，都尚未验证；原研究保持失败。
+
+## contextlab.9：共享回读内容预算的CPU控制
+
+使用新的[固定方案](../examples/recall-budget-cpu-protocol.json)，四份当次冻结的本项目源码文件作为不可变JSON text artifact；旧core8与新core9在实际原生Agent中各并行读取一次，参数均为/text、offset0、limit4096。输入路径、SHA、字节数和冻结旧版身份记录在[结果](../evidence/recall-budget/results.json)。这是工程字节记账诊断，不是原压力模型任务重跑、检索质量评测或完整上下文可容纳证明。
+
+| 同一四次读取 | 旧core8 | core9共享8,192字节 |
+|---|---:|---:|
+| README content JSON | 7,886 | 2,048 |
+| framework content JSON | 8,833 | 2,046 |
+| handbook content JSON | 8,585 | 2,046 |
+| lock content JSON | 5,958 | 2,047 |
+| 总content JSON字节 | 31,262 | 8,187 |
+
+新版第一页分别返回686、642、572和1,004个code points，逐项游标等于这些实际值。旧版README在当次来源上读到EOF，其余三项只取前4,096个。新版较短第一页保留后续读取能力，不能比较成相同数据量的无损压缩率。独立Unicode分页回归逐页重建完全一致的原文；并行/串行、每批重新分配、元数据延后、搜索命中不能容纳、最终hook越额、无效schema、执行前拒绝、两种低层stream结束及中断后原整批分配均有覆盖。
+
+服务器最终通过71项Node测试、14项浏览器检查及完整UCI核对。84个当前执行源码/配置文件与实际测试snapshot哈希一致。最终任务47.382秒，峰值RSS与两逻辑CPU准入记录留存，owned进程0。本轮实际模型请求0、GPU0；两次scripted provider调用不是模型推理。
+
+保留v1搜索局部变量声明位置的编译错误、v2测试类型错误、v3通过70项测试；v4增加低层stream终止控制和首次四文件对照，71项通过。案例、配额和源文件选择未按结果调优，诊断已关闭，不重跑挑数字。冻结包内root lock是归档时版本；服务器随后按core9重新冻结，严格复现应使用旁边保存的[服务器lock](../evidence/recall-budget/package-lock.json)。发布文档在跑完后补写，不能把文档SHA当成已经测试的输入；当次比较文件身份以results为准。
+
+[71项测试](../evidence/recall-budget/tests.tap) · [逐文件清单](../evidence/recall-budget/snapshot-manifest.json) · [84文件核对](../evidence/recall-budget/source-verification.json) · [冻结core8身份](../evidence/recall-budget/baseline-source.json) · [源码包](../evidence/recall-budget/source-snapshot.tar.gz) · [全量核对](../evidence/recall-budget/uci-validation.json) · [浏览器](../evidence/recall-budget/browser-result.json) · [所有阶段及失败](../evidence/recall-budget/runs/)。
+
+只约束参与组的最终content，不含ToolResult包装、details或其他消息，未按下一轮剩余空间预留，也没有真实模型成功/token/费用收益证据。默认full不变，原已关闭研究结果与89次真实生成请求总数不变。

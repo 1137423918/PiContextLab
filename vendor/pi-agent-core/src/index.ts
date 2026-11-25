@@ -11,3 +11,4 @@ export * from "./budgeted-policy.ts";
 export * from "./context-json.ts";
 export * from "./context-search.ts";
 export * from "./validation-feedback.ts";
+export * from "./tool-result-budget.ts";

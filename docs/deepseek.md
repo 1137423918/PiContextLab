@@ -59,6 +59,8 @@ export METRICLAB_CONTEXT_POLICY=budgeted
 export METRICLAB_ARTIFACT_SEARCH=0  # 设为1另行开启字段定位
 ```
 
-未知枚举值及在upstream模式单独启用字段定位会拒绝。模型配置、contextMode和artifactSearch绑定任务，旧任务不会静默切换配置。`--scripted-control`显式使用预算策略演示工程路径，不调用模型。当前37项控制包含完整上下文路径和显式预算恢复；没有为默认值调整追加付费模型请求。
+未知枚举值及在upstream模式单独启用字段定位会拒绝。模型配置、contextMode和artifactSearch绑定任务，旧任务不会静默切换配置。`--scripted-control`显式使用预算策略演示工程路径，不调用模型。当时37项控制包含完整上下文路径和显式预算恢复；没有为默认值调整追加付费模型请求。
+
+当前core9在budgeted模式另外配置同一assistant批次共享8,192内容JSON字节的回读/字段定位预算；正常执行与恢复按原整批分配。upstream模式不启用该组预算。它只约束该组最终content，尚未预留完整下一轮空间，不是token上限或模型成功保证。schema拒绝的有界反馈在两种模式都显式开启；当前71项工程控制及CPU对照见[验证记录](validation.md)。预算配置及工具元数据也进入任务指纹，旧任务不自动切换。
 
 严格复现v4研究请检出原始abd69e2提交，使用冻结协议和全新输出目录；当前默认值已变，不能直接用当前入口重跑后声称复现原条件。既有23请求原结果保持关闭。

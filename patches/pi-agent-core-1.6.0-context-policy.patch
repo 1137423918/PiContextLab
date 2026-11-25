@@ -8,16 +8,79 @@
  	getCurrentTools,
  	getToolStateChanges,
  	mergeClientIdentity,
-@@ -19,6 +20,8 @@
+@@ -19,6 +20,9 @@
  	validateToolArguments,
  } from "@earendil-works/pi-ai";
  import { getDefaultStreamFn } from "./stream-fn.ts";
 +import { boundedToolValidationError } from "./validation-feedback.ts";
++import { allocateToolResultBudgets, enforceToolResultBudget } from "./tool-result-budget.ts";
 +import type { ExecutableTools } from "./model-context.ts";
  import type {
  	AgentContext,
  	AgentEvent,
-@@ -248,7 +251,8 @@
+@@ -52,19 +56,21 @@
+ 	streamFn: StreamFn,
+ ): EventStream<AgentEvent, AgentMessage[]> {
+ 	const stream = createAgentStream();
++	const emitted: AgentMessage[] = [];
+ 
+ 	void runAgentLoop(
+ 		prompts,
+ 		context,
+ 		config,
+ 		async (event) => {
++			if (event.type === "message_end") emitted.push(event.message);
+ 			stream.push(event);
+ 		},
+ 		signal,
+ 		streamFn,
+ 	).then((messages) => {
+ 		stream.end(messages);
+-	});
++	}, error => endFailedAgentStream(stream, emitted, config, error));
+ 
+ 	return stream;
+ }
+@@ -92,18 +98,20 @@
+ 	}
+ 
+ 	const stream = createAgentStream();
++	const emitted: AgentMessage[] = [];
+ 
+ 	void runAgentLoopContinue(
+ 		context,
+ 		config,
+ 		async (event) => {
++			if (event.type === "message_end") emitted.push(event.message);
+ 			stream.push(event);
+ 		},
+ 		signal,
+ 		streamFn,
+ 	).then((messages) => {
+ 		stream.end(messages);
+-	});
++	}, error => endFailedAgentStream(stream, emitted, config, error));
+ 
+ 	return stream;
+ }
+@@ -164,6 +172,16 @@
+ 		(event: AgentEvent) => event.type === "agent_end",
+ 		(event: AgentEvent) => (event.type === "agent_end" ? event.messages : []),
+ 	);
++}
++
++/** An opt-in batch admission failure must settle stream consumers as well as Agent.prompt(). */
++function endFailedAgentStream(stream: EventStream<AgentEvent, AgentMessage[]>, emitted: AgentMessage[], config: AgentLoopConfig, error: unknown): void {
++	const failure: AssistantMessage = { role: "assistant", content: [], api: config.model.api, provider: config.model.provider, model: config.model.id,
++		stopReason: "error", errorMessage: error instanceof Error ? error.message : String(error), timestamp: Date.now(),
++		usage: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, totalTokens: 0, cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, total: 0 } } };
++	stream.push({ type: "message_start", message: failure }); stream.push({ type: "message_end", message: failure });
++	const messages = [...emitted, failure];
++	stream.push({ type: "turn_end", message: failure, toolResults: [] }); stream.push({ type: "agent_end", messages }); stream.end(messages);
+ }
+ 
+ /**
+@@ -248,7 +266,8 @@
  			}
  
  			// Stream assistant response
@@ -27,18 +90,26 @@
  			newMessages.push(message);
  
  			if (message.stopReason === "error" || message.stopReason === "aborted") {
-@@ -276,7 +280,9 @@
+@@ -270,13 +289,16 @@
+ 			const toolResults: ToolResultMessage[] = [];
+ 			hasMoreToolCalls = false;
+ 			if (toolCalls.length > 0) {
++				const allocations = allocateToolResultBudgets(toolCalls, preparedResponse.tools, config.toolResultBudgets);
+ 				// A "length" stop means the output was cut off by the token limit, so
+ 				// every tool call in the message may carry truncated arguments. Fail
+ 				// them all instead of executing potentially borked calls.
  				const executedToolBatch =
  					message.stopReason === "length"
- 						? await failToolCallsFromTruncatedMessage(toolCalls, emit)
+-						? await failToolCallsFromTruncatedMessage(toolCalls, emit)
 -						: await executeToolCalls(currentContext, message, config, signal, emit);
++						? await failToolCallsFromTruncatedMessage(toolCalls, emit, allocations)
 +						: await executeToolCalls(
-+							{ ...currentContext, tools: preparedResponse.tools }, message, config, signal, emit,
++								{ ...currentContext, tools: preparedResponse.tools }, message, config, signal, emit, allocations,
 +						);
  				toolResults.push(...executedToolBatch.messages);
  				hasMoreToolCalls = !executedToolBatch.terminate;
  
-@@ -393,7 +399,7 @@
+@@ -393,7 +415,7 @@
  	signal: AbortSignal | undefined,
  	emit: AgentEventSink,
  	streamFunction: StreamFn,
@@ -47,7 +118,7 @@
  	// Apply context transform if configured (AgentMessage[] → AgentMessage[])
  	let messages = context.messages;
  	if (config.transformContext) {
-@@ -403,7 +409,19 @@
+@@ -403,7 +425,19 @@
  	// Convert to LLM-compatible messages (AgentMessage[] → Message[])
  	const llmMessages = await config.convertToLlm(messages);
  
@@ -68,7 +139,7 @@
  
  	// Resolve API key (important for expiring tokens)
  	const resolvedApiKey =
-@@ -462,7 +480,7 @@
+@@ -462,7 +496,7 @@
  					await emit({ type: "message_start", message: { ...finalMessage } });
  				}
  				await emit({ type: "message_end", message: finalMessage });
@@ -77,7 +148,7 @@
  			}
  		}
  	}
-@@ -475,7 +493,7 @@
+@@ -475,7 +509,7 @@
  		await emit({ type: "message_start", message: { ...finalMessage } });
  	}
  	await emit({ type: "message_end", message: finalMessage });
@@ -86,7 +157,126 @@
  }
  
  /**
-@@ -681,7 +699,7 @@
+@@ -488,6 +522,7 @@
+ async function failToolCallsFromTruncatedMessage(
+ 	toolCalls: AgentToolCall[],
+ 	emit: AgentEventSink,
++	allocations: ReadonlyMap<string, number>,
+ ): Promise<ExecutedToolCallBatch> {
+ 	const messages: ToolResultMessage[] = [];
+ 	for (const toolCall of toolCalls) {
+@@ -497,13 +532,13 @@
+ 			toolName: toolCall.name,
+ 			args: toolCall.arguments,
+ 		});
+-		const finalized: FinalizedToolCallOutcome = {
++		const finalized: FinalizedToolCallOutcome = enforceToolResultBudget({
+ 			toolCall,
+ 			result: createErrorToolResult(
+ 				`Tool call "${toolCall.name}" was not executed: the response hit the output token limit, so its arguments may be truncated. Re-issue the tool call with complete arguments.`,
+ 			),
+ 			isError: true,
+-		};
++		}, allocations.get(toolCall.id));
+ 		await emitToolExecutionEnd(finalized, emit);
+ 		const toolResultMessage = createToolResultMessage(finalized);
+ 		await emitToolResultMessage(toolResultMessage, emit);
+@@ -521,15 +556,16 @@
+ 	config: AgentLoopConfig,
+ 	signal: AbortSignal | undefined,
+ 	emit: AgentEventSink,
++	allocations: ReadonlyMap<string, number>,
+ ): Promise<ExecutedToolCallBatch> {
+ 	const toolCalls = assistantMessage.content.filter((c) => c.type === "toolCall");
+ 	const hasSequentialToolCall = toolCalls.some(
+ 		(tc) => currentContext.tools?.find((t) => t.name === tc.name)?.executionMode === "sequential",
+ 	);
+ 	if (config.toolExecution === "sequential" || hasSequentialToolCall) {
+-		return executeToolCallsSequential(currentContext, assistantMessage, toolCalls, config, signal, emit);
+-	}
+-	return executeToolCallsParallel(currentContext, assistantMessage, toolCalls, config, signal, emit);
++		return executeToolCallsSequential(currentContext, assistantMessage, toolCalls, config, signal, emit, allocations);
++	}
++	return executeToolCallsParallel(currentContext, assistantMessage, toolCalls, config, signal, emit, allocations);
+ }
+ 
+ type ExecutedToolCallBatch = {
+@@ -544,6 +580,7 @@
+ 	config: AgentLoopConfig,
+ 	signal: AbortSignal | undefined,
+ 	emit: AgentEventSink,
++	allocations: ReadonlyMap<string, number>,
+ ): Promise<ExecutedToolCallBatch> {
+ 	const finalizedCalls: FinalizedToolCallOutcome[] = [];
+ 	const messages: ToolResultMessage[] = [];
+@@ -556,7 +593,7 @@
+ 			args: toolCall.arguments,
+ 		});
+ 
+-		const preparation = await prepareToolCall(currentContext, assistantMessage, toolCall, config, signal);
++		const preparation = await prepareToolCall(currentContext, assistantMessage, toolCall, config, signal, currentContext.tools, allocations.get(toolCall.id));
+ 		let finalized: FinalizedToolCallOutcome;
+ 		if (preparation.kind === "immediate") {
+ 			finalized = {
+@@ -576,6 +613,7 @@
+ 			);
+ 		}
+ 
++		finalized = enforceToolResultBudget(finalized, allocations.get(toolCall.id));
+ 		await emitToolExecutionEnd(finalized, emit);
+ 		const toolResultMessage = createToolResultMessage(finalized);
+ 		await emitToolResultMessage(toolResultMessage, emit);
+@@ -596,6 +634,7 @@
+ 	config: AgentLoopConfig,
+ 	signal: AbortSignal | undefined,
+ 	emit: AgentEventSink,
++	allocations: ReadonlyMap<string, number>,
+ ): Promise<ExecutedToolCallBatch> {
+ 	const finalizedCalls: FinalizedToolCallEntry[] = [];
+ 
+@@ -607,13 +646,13 @@
+ 			args: toolCall.arguments,
+ 		});
+ 
+-		const preparation = await prepareToolCall(currentContext, assistantMessage, toolCall, config, signal);
++		const preparation = await prepareToolCall(currentContext, assistantMessage, toolCall, config, signal, currentContext.tools, allocations.get(toolCall.id));
+ 		if (preparation.kind === "immediate") {
+-			const finalized = {
++			const finalized = enforceToolResultBudget({
+ 				toolCall,
+ 				result: preparation.result,
+ 				isError: preparation.isError,
+-			} satisfies FinalizedToolCallOutcome;
++			} satisfies FinalizedToolCallOutcome, allocations.get(toolCall.id));
+ 			await emitToolExecutionEnd(finalized, emit);
+ 			finalizedCalls.push(finalized);
+ 			continue;
+@@ -630,14 +669,14 @@
+ 				return finalized;
+ 			}
+ 			const executed = await executePreparedToolCall(preparation, signal, emitToolExecutionUpdate(toolCall, emit));
+-			const finalized = await finalizeExecutedToolCall(
++			const finalized = enforceToolResultBudget(await finalizeExecutedToolCall(
+ 				currentContext,
+ 				assistantMessage,
+ 				preparation,
+ 				executed,
+ 				config,
+ 				signal,
+-			);
++			), allocations.get(toolCall.id));
+ 			await emitToolExecutionEnd(finalized, emit);
+ 			return finalized;
+ 		});
+@@ -660,6 +699,7 @@
+ }
+ 
+ type PreparedToolCall = {
++	resultBudgetBytes?: number;
+ 	kind: "prepared";
+ 	toolCall: AgentToolCall;
+ 	tool: AgentTool<any>;
+@@ -681,7 +721,7 @@
  type FinalizedToolCallOutcome = AgentToolCallOutcome;
  
  /** The `beforeToolCall` and `afterToolCall` hooks of {@link AgentLoopConfig}. */
@@ -95,7 +285,15 @@
  
  type ToolUpdateSink = (partialResult: AgentToolResult<any>) => Promise<void> | void;
  
-@@ -733,7 +751,19 @@
+@@ -712,6 +752,7 @@
+ 	config: ToolCallHooks,
+ 	signal: AbortSignal | undefined,
+ 	tools: readonly AgentTool<any>[] = currentContext.tools ?? [],
++	resultBudgetBytes?: number,
+ ): Promise<PreparedToolCall | ImmediateToolCallOutcome> {
+ 	// Once aborted, skip preparation and the hooks; callers still record this result, so no call
+ 	// is left without one (#9986).
+@@ -733,7 +774,19 @@
  
  	try {
  		const preparedToolCall = prepareToolCallArguments(tool, toolCall);
@@ -116,41 +314,89 @@
  		if (config.beforeToolCall) {
  			const beforeResult = await config.beforeToolCall(
  				{
+@@ -768,6 +821,7 @@
+ 			toolCall,
+ 			tool,
+ 			args: validatedArgs,
++			resultBudgetBytes,
+ 		};
+ 	} catch (error) {
+ 		return {
+@@ -791,6 +845,8 @@
+ 
+ /** Options for {@link runToolCall}. */
+ export interface RunToolCallOptions extends ToolCallHooks {
++	/** Use a precomputed original-batch allocation for replay; never allocate a new pool per pending call. */
++	resultBudgetBytes?: number;
+ 	/** Tools the call resolves against. */
+ 	tools: readonly AgentTool<any>[];
+ 	/** Passed to the hooks as the message that issued the call. */
+@@ -813,12 +869,13 @@
+  */
+ export async function runToolCall(toolCall: AgentToolCall, options: RunToolCallOptions): Promise<AgentToolCallOutcome> {
+ 	const { assistantMessage, context, signal } = options;
+-	const preparation = await prepareToolCall(context, assistantMessage, toolCall, options, signal, options.tools);
++	if (options.resultBudgetBytes !== undefined && (!Number.isSafeInteger(options.resultBudgetBytes) || options.resultBudgetBytes < 256)) throw new RangeError("Invalid tool result allocation");
++	const preparation = await prepareToolCall(context, assistantMessage, toolCall, options, signal, options.tools, options.resultBudgetBytes);
+ 	if (preparation.kind === "immediate") {
+-		return { toolCall, result: preparation.result, isError: preparation.isError };
++		return enforceToolResultBudget({ toolCall, result: preparation.result, isError: preparation.isError }, options.resultBudgetBytes);
+ 	}
+ 	const executed = await executePreparedToolCall(preparation, signal, options.onUpdate ?? (() => {}));
+-	return finalizeExecutedToolCall(context, assistantMessage, preparation, executed, options, signal);
++	return enforceToolResultBudget(await finalizeExecutedToolCall(context, assistantMessage, preparation, executed, options, signal), options.resultBudgetBytes);
+ }
+ 
+ async function executePreparedToolCall(
+@@ -840,6 +897,7 @@
+ 				if (!acceptingUpdates) return;
+ 				updateEvents.push(Promise.resolve(onUpdate(partialResult)));
+ 			},
++			prepared.resultBudgetBytes === undefined ? undefined : { resultBudgetBytes: prepared.resultBudgetBytes },
+ 		);
+ 		const durationMs = elapsed();
+ 		acceptingUpdates = false;
 --- a/src/agent.ts
 +++ b/src/agent.ts
-@@ -13,6 +13,7 @@
+@@ -13,7 +13,9 @@
  	toToolDeclaration,
  } from "@earendil-works/pi-ai";
  import { runAgentLoop, runAgentLoopContinue } from "./agent-loop.ts";
 +import type { ModelContextPolicy } from "./model-context.ts";
  import { getDefaultStreamFn } from "./stream-fn.ts";
++import { allocateToolResultBudgets } from "./tool-result-budget.ts";
  import type {
  	AfterToolCallContext,
-@@ -114,6 +115,8 @@
+ 	AfterToolCallResult,
+@@ -114,6 +116,9 @@
  /** Options for constructing an {@link Agent}. */
  export interface AgentOptions {
  	initialState?: AgentInitialState;
 +	modelContextPolicy?: ModelContextPolicy;
 +	toolValidationFeedback?: "bounded";
++	toolResultBudgets?: Readonly<Record<string, number>>;
  	convertToLlm?: (messages: AgentMessage[]) => Message[] | Promise<Message[]>;
  	transformContext?: (messages: AgentMessage[], signal?: AbortSignal) => Promise<AgentMessage[]>;
  	streamFn: StreamFn;
-@@ -192,6 +195,9 @@
+@@ -192,6 +197,10 @@
   * and exposes queueing APIs for steering and follow-up messages.
   */
  export class Agent {
 +	/** Native request policy; does not replace or prune authoritative state.messages. */
 +	public readonly modelContextPolicy?: ModelContextPolicy;
 +	public toolValidationFeedback?: "bounded";
++	public readonly toolResultBudgets?: Readonly<Record<string, number>>;
  	private _state: MutableAgentState;
  	private readonly listeners = new Set<(event: AgentEvent, signal: AbortSignal) => Promise<void> | void>();
  	private readonly steeringQueue: PendingMessageQueue;
-@@ -239,6 +245,17 @@
+@@ -239,6 +248,19 @@
  		// Older compiled consumers may omit options or streamFn even though the current API requires them.
  		const runtimeOptions: Partial<AgentOptions> = options ?? {};
  		this._state = createMutableAgentState(runtimeOptions.initialState);
 +		this.modelContextPolicy = runtimeOptions.modelContextPolicy;
 +		this.toolValidationFeedback = runtimeOptions.toolValidationFeedback;
++		this.toolResultBudgets = runtimeOptions.toolResultBudgets ? Object.freeze({ ...runtimeOptions.toolResultBudgets }) : undefined;
++		allocateToolResultBudgets([], [], this.toolResultBudgets);
 +		if (this.modelContextPolicy) {
 +			const registered = new Set(this._state.tools.map((tool) => tool.name));
 +			for (const tool of this.modelContextPolicy.tools) {
@@ -163,7 +409,7 @@
  		this.convertToLlm = runtimeOptions.convertToLlm ?? defaultConvertToLlm;
  		this.transformContext = runtimeOptions.transformContext;
  		this.streamFunction = runtimeOptions.streamFn ?? getDefaultStreamFn();
-@@ -477,6 +494,7 @@
+@@ -477,6 +499,7 @@
  		let skipInitialSteeringPoll = options.skipInitialSteeringPoll === true;
  		return {
  			model: this._state.model,
@@ -171,11 +417,12 @@
  			reasoning: this._state.thinkingLevel === "off" ? undefined : this._state.thinkingLevel,
  			sessionId: this.sessionId,
  			onPayload: this.onPayload,
-@@ -488,6 +506,7 @@
+@@ -488,6 +511,8 @@
  			identity: this.identity,
  			toolExecution: this.toolExecution,
  			beforeToolCall: this.beforeToolCall,
 +			toolValidationFeedback: this.toolValidationFeedback,
++			toolResultBudgets: this.toolResultBudgets,
  			afterToolCall: this.afterToolCall,
  			finishTurn: this.finishTurn,
  			prepareRequest: this.prepareRequest,
@@ -192,7 +439,7 @@
 +import { routeTools, ToolRoutingIndexCache, type RankedTool, type ToolRoutingCacheStats, type ToolRoutingOptions } from "./tool-router.ts";
 +
 +export interface BudgetedPolicyTrace extends ContextPackingTrace {
-+	policy: "pi-context-lab-v8";
++	policy: "pi-context-lab-v9";
 +	request: number;
 +	registeredTools: number;
 +	selectedToolNames: string[];
@@ -282,18 +529,19 @@
 +		const eager = this.options.spillMode === "threshold" && input.context.messages.some(message => message.role === "toolResult" && contextBytes(message.content) > this.options.inlineToolResultBytes);
 +		const decision = exceedsBudget || eager ? select([reader, ...(this.options.artifactSearch ? [this.tools[2]] : [])]) : initial;
 +		const packed = await packModelContext(input.context, decision.tools, query, { maxContextBytes: this.options.maxContextBytes, inlineToolResultBytes: this.options.inlineToolResultBytes, store: this.options.artifacts, artifactSearch: this.options.artifactSearch, spillMode: this.options.spillMode }, signal);
-+		const trace: BudgetedPolicyTrace = { policy: "pi-context-lab-v8", request: this.request, registeredTools: input.tools.length, selectedToolNames: decision.tools.map((t) => t.name), schemaBytes: decision.schemaBytes, ranking: decision.ranked, routingCache: this.routingIndex.stats, ...packed.trace };
++		const trace: BudgetedPolicyTrace = { policy: "pi-context-lab-v9", request: this.request, registeredTools: input.tools.length, selectedToolNames: decision.tools.map((t) => t.name), schemaBytes: decision.schemaBytes, ranking: decision.ranked, routingCache: this.routingIndex.stats, ...packed.trace };
 +		await this.options.onPrepared?.(trace);
 +		return { context: packed.context, tools: decision.tools };
 +	}
 +}
 --- /dev/null
 +++ b/src/context-artifacts.ts
-@@ -0,0 +1,80 @@
+@@ -0,0 +1,101 @@
 +/** Immutable text artifacts and bounded, explicit recall for provider-context views. */
 +import type { AgentTool } from "./types.ts";
 +import { arr, int, obj, str } from "@earendil-works/pi-schema";
 +import { parseContextJson, resolveContextPointer } from "./context-json.ts";
++import { contentJsonBytes, CONTEXT_RECALL_BUDGET_GROUP } from "./tool-result-budget.ts";
 +
 +export interface ContextArtifact {
 +	id: string;
@@ -336,10 +584,11 @@
 +	return {
 +		name: "read_context_artifact",
 +		label: "Recall context artifact",
-+		description: "Read exact archived context data by artifact ID and JSON pointer. Use this when a context reference omitted required facts; never guess omitted values. For paging, copy that value's next_read object verbatim. The limit is shared across all values, so do not calculate the next offset from the requested limit.",
++		description: "Read exact archived context data by artifact ID and JSON pointer. Use this when a context reference omitted required facts; never guess omitted values. For paging, copy that value's next_read object verbatim. The limit is shared across all values, so do not calculate the next offset from the requested limit. A host batch byte budget may shorten or defer a reply; deferred is not EOF. Retry deferred calls in smaller batches.",
 +		parameters: readSchema,
++		resultBudget: { group: CONTEXT_RECALL_BUDGET_GROUP, minBytes: 256, maxBytes: 8192 },
 +		replay: "safe",
-+		async execute(_callId, args, signal) {
++		async execute(_callId, args, signal, _update, execution) {
 +			signal?.throwIfAborted();
 +			if (!Number.isSafeInteger(args.offset) || args.offset < 0 || !Number.isSafeInteger(args.limit) || args.limit < 1 || args.limit > 4096) throw new RangeError("Read offset and limit must be bounded safe integers");
 +			const artifact = await store.get(args.artifact_id);
@@ -347,26 +596,45 @@
 +			const verified = await contextArtifact(artifact.text, artifact.kind);
 +			if (verified.id !== args.artifact_id || verified.sha256 !== artifact.sha256 || verified.bytes !== artifact.bytes) throw new Error("Context artifact integrity mismatch");
 +			const parsed = args.json_pointers.some((pointer) => pointer !== "") ? parseContextJson(artifact.text) : null;
-+			let remaining = args.limit;
-+			const values = [];
++			const fields: { pointer: string; points?: string[]; error?: string }[] = [];
 +			for (const pointer of args.json_pointers) {
 +				try {
 +				const field = pointer === "" ? null : resolveContextPointer(parsed!, pointer);
 +				const text = field ? parsed!.text(field.value, field.parent, field.key) : artifact.text;
-+				const points = Array.from(text);
++				fields.push({ pointer, points: Array.from(text) });
++				} catch (error) { fields.push({ pointer, error: error instanceof Error ? error.message : "Invalid JSON pointer" }); }
++			}
++			const render = (pointLimit: number, byteLimited: boolean) => {
++				let remaining = pointLimit;
++				const values = fields.map(field => {
++				const pointer = field.pointer;
++				if (!field.points) return { json_pointer: pointer, error: field.error };
++				const points = field.points;
 +				const slice = points.slice(args.offset, args.offset + remaining);
 +				const nextOffset = args.offset + slice.length;
 +				const hasMore = nextOffset < points.length;
 +				const nextRead: ContextReadContinuation | null = hasMore ? { artifact_id: artifact.id, json_pointers: [pointer], offset: nextOffset, limit: args.limit } : null;
-+				values.push({ json_pointer: pointer, offset: args.offset, total_codepoints: points.length, text: slice.join(""), returned_codepoints: slice.length, next_offset: nextOffset, next_read: nextRead, has_more: hasMore });
 +				remaining -= slice.length;
-+				} catch (error) {
-+					// One wrong path must not discard other exact values in the same bounded read.
-+					values.push({ json_pointer: pointer, error: error instanceof Error ? error.message : "Invalid JSON pointer" });
-+				}
++				return { json_pointer: pointer, offset: args.offset, total_codepoints: points.length, text: slice.join(""), returned_codepoints: slice.length, next_offset: nextOffset, next_read: nextRead, has_more: hasMore };
++				});
++				const payload = { artifact_id: artifact.id, sha256: artifact.sha256, values, codepoints_used: pointLimit - remaining, source_identity_note: "The ctx_ handle identifies stored bytes, not the source report or document.", ...(execution ? { byte_limited: byteLimited, response_budget_bytes: execution.resultBudgetBytes } : {}) };
++				return { content: [{ type: "text" as const, text: JSON.stringify(payload) }], details: payload };
++			};
++			const full = render(args.limit, false);
++			if (!execution || contentJsonBytes(full.content) <= execution.resultBudgetBytes) return full;
++			const empty = render(0, true);
++			if (contentJsonBytes(empty.content) > execution.resultBudgetBytes) {
++				const payload = { status: "deferred", reason: "batch_byte_budget", retry: "Retry original arguments in another batch with fewer paths.", codepoints_used: 0 };
++				return { content: [{ type: "text", text: JSON.stringify(payload) }], details: payload };
 +			}
-+			const payload = { artifact_id: artifact.id, sha256: artifact.sha256, values, codepoints_used: args.limit - remaining, source_identity_note: "The ctx_ handle identifies stored bytes, not the source report or document." };
-+			return { content: [{ type: "text", text: JSON.stringify(payload) }], details: payload };
++			let low = 0, high = args.limit;
++			while (low < high) {
++				const middle = Math.ceil((low + high) / 2);
++				if (contentJsonBytes(render(middle, true).content) <= execution.resultBudgetBytes) low = middle;
++				else high = middle - 1;
++			}
++			signal?.throwIfAborted();
++			return render(low, true);
 +		},
 +	};
 +}
@@ -609,13 +877,14 @@
 +}
 --- /dev/null
 +++ b/src/context-search.ts
-@@ -0,0 +1,71 @@
+@@ -0,0 +1,81 @@
 +/** Bounded lexical field location in exact archived JSON; no code execution or model request. */
 +import { int, obj, str } from "@earendil-works/pi-schema";
 +import type { AgentTool } from "./types.ts";
 +import { contextArtifact, type ContextArtifactStore } from "./context-artifacts.ts";
 +import { parseContextJson } from "./context-json.ts";
 +import { ContextLexicalIndex, contextTerms } from "./tool-router.ts";
++import { contentJsonBytes, CONTEXT_RECALL_BUDGET_GROUP } from "./tool-result-budget.ts";
 +
 +export const CONTEXT_FIELD_LIMITS = { maxSourceBytes: 8 * 1024 * 1024, maxNodes: 20000, maxDepth: 32, maxFields: 4096, maxPath: 512, responseBytes: 8192, previewCodepoints: 256 } as const;
 +interface Field { json_pointer: string; text: string; type: string; document: string; }
@@ -658,9 +927,10 @@
 +export function createContextSearchTool(store: ContextArtifactStore): AgentTool<typeof searchSchema, unknown> {
 +	return {
 +		name: "search_context_artifact", label: "Locate archived JSON fields",
-+		description: "Locate exact JSON pointers and bounded source values in an archived artifact when paths are unknown. Search is lexical and may be incomplete; never treat no matches as proof of absence. Use read_context_artifact for longer values. No code or SQL is executed.",
++		description: "Locate exact JSON pointers and bounded source values in an archived artifact when paths are unknown. Search is lexical and may be incomplete; never treat no matches as proof of absence. Use read_context_artifact for longer values. No code or SQL is executed. A host shared byte budget may defer a reply; deferred does not mean no matches.",
 +		parameters: searchSchema, replay: "safe",
-+		async execute(_id, args, signal) {
++		resultBudget: { group: CONTEXT_RECALL_BUDGET_GROUP, minBytes: 256, maxBytes: 8192 },
++		async execute(_id, args, signal, _update, execution) {
 +			signal?.throwIfAborted();
 +			const artifact = await store.get(args.artifact_id);
 +			if (!artifact) throw new Error("Artifact does not belong to this conversation or does not exist");
@@ -668,7 +938,7 @@
 +			if (verified.id !== args.artifact_id || verified.sha256 !== artifact.sha256 || verified.bytes !== artifact.bytes) throw new Error("Context artifact integrity mismatch");
 +			const found = searchContextFields(artifact.text, args.query, args.limit);
 +			const matches: { json_pointer: string; text: string; type: string; has_more: boolean; score: number }[] = [];
-+			const payload = { artifact_id: artifact.id, sha256: artifact.sha256, matches, scan: found.scan, response_byte_limit: CONTEXT_FIELD_LIMITS.responseBytes, results_truncated: false };
++			const payload = { artifact_id: artifact.id, sha256: artifact.sha256, matches, scan: found.scan, response_byte_limit: CONTEXT_FIELD_LIMITS.responseBytes, results_truncated: false, ...(execution ? { response_budget_bytes: execution.resultBudgetBytes } : {}) };
 +			for (const row of found.ranked) {
 +				if (matches.length >= args.limit) { payload.results_truncated = true; break; }
 +				const field = found.fields[row.i];
@@ -677,13 +947,21 @@
 +				if (new TextEncoder().encode(JSON.stringify(payload)).length > CONTEXT_FIELD_LIMITS.responseBytes - 8) { matches.pop(); payload.results_truncated = true; break; }
 +			}
 +			signal?.throwIfAborted();
++			if (execution) {
++				const content = () => [{ type: "text" as const, text: JSON.stringify(payload) }];
++				while (matches.length > 0 && contentJsonBytes(content()) > execution.resultBudgetBytes) { matches.pop(); payload.results_truncated = true; }
++				if (contentJsonBytes(content()) > execution.resultBudgetBytes || found.ranked.length > 0 && matches.length === 0) {
++					const deferred = { status: "deferred", reason: "batch_byte_budget", retry: "Retry the original search alone or with fewer results; no absence conclusion." };
++					return { content: [{ type: "text", text: JSON.stringify(deferred) }], details: deferred };
++				}
++			}
 +			return { content: [{ type: "text", text: JSON.stringify(payload) }], details: payload };
 +		},
 +	};
 +}
 --- a/src/index.ts
 +++ b/src/index.ts
-@@ -3,3 +3,11 @@
+@@ -3,3 +3,12 @@
  export * from "./proxy.ts";
  export { setDefaultStreamFn } from "./stream-fn.ts";
  export * from "./types.ts";
@@ -695,6 +973,7 @@
 +export * from "./context-json.ts";
 +export * from "./context-search.ts";
 +export * from "./validation-feedback.ts";
++export * from "./tool-result-budget.ts";
 --- /dev/null
 +++ b/src/model-context.ts
 @@ -0,0 +1,26 @@
@@ -723,6 +1002,63 @@
 +	/** Bind normal registry lookup before a recovered utility call can execute. */
 +	register?(tools: ExecutableTools): void;
 +	prepare(input: ModelContextPolicyInput, signal?: AbortSignal): Promise<PreparedModelContext>;
++}
+--- /dev/null
++++ b/src/tool-result-budget.ts
+@@ -0,0 +1,54 @@
++/** Deterministic per-assistant-batch budgets for cooperating bounded-result tools. */
++import type { ExecutableTools } from "./model-context.ts";
++import type { AgentToolCall, AgentToolCallOutcome } from "./types.ts";
++
++export const CONTEXT_RECALL_BUDGET_GROUP = "context-recall";
++export const contentJsonBytes = (content: unknown): number => new TextEncoder().encode(JSON.stringify(content)).length;
++
++export function allocateToolResultBudgets(
++	calls: readonly AgentToolCall[], tools: readonly ExecutableTools[number][],
++	budgets?: Readonly<Record<string, number>>,
++): ReadonlyMap<string, number> {
++	const allocations = new Map<string, number>();
++	if (!budgets || Object.keys(budgets).length === 0) return allocations;
++	for (const value of Object.values(budgets)) if (!Number.isSafeInteger(value) || value < 256) throw new RangeError("Tool result group budgets must be safe integers >=256");
++	if (new Set(calls.map(call => call.id)).size !== calls.length) throw new Error("Result budget cannot bind repeated tool-call IDs");
++	const groups = new Map<string, { id: string; min: number; max: number }[]>();
++	for (const call of calls) {
++		const spec = tools.find(tool => tool.name === call.name)?.resultBudget;
++		if (!spec || !Object.hasOwn(budgets, spec.group)) continue;
++		if (!Number.isSafeInteger(spec.minBytes) || spec.minBytes < 256 || !Number.isSafeInteger(spec.maxBytes) || spec.maxBytes < spec.minBytes) throw new RangeError("Invalid tool result budget metadata");
++		const group = groups.get(spec.group) ?? [];
++		group.push({ id: call.id, min: spec.minBytes, max: spec.maxBytes }); groups.set(spec.group, group);
++	}
++	for (const [name, group] of groups) {
++		let remaining = budgets[name] - group.reduce((n, call) => n + call.min, 0);
++		if (remaining < 0) throw new Error("Tool result batch minimum exceeds group budget; no calls executed");
++		for (const call of group) allocations.set(call.id, call.min);
++		let active = group.filter(call => call.max > call.min);
++		while (remaining > 0 && active.length > 0) {
++			const share = Math.max(1, Math.floor(remaining / active.length));
++			for (const call of active) {
++				const current = allocations.get(call.id)!;
++				const extra = Math.min(share, call.max - current, remaining);
++				allocations.set(call.id, current + extra); remaining -= extra;
++			}
++			active = active.filter(call => allocations.get(call.id)! < call.max);
++		}
++	}
++	return allocations;
++}
++
++/** Final enforcement includes validation failures and afterToolCall overrides. */
++export function enforceToolResultBudget(outcome: AgentToolCallOutcome, limit?: number): AgentToolCallOutcome {
++	if (limit === undefined) return outcome;
++	if (!Number.isSafeInteger(limit) || limit < 256) throw new RangeError("Tool result allocation must be a safe integer >=256");
++	const actual = contentJsonBytes(outcome.result.content ?? []);
++	if (actual <= limit) return outcome;
++	return { ...outcome, isError: true, result: {
++		content: [{ type: "text", text: JSON.stringify({ error: "TOOL_RESULT_BUDGET_EXCEEDED", retry: "Request fewer calls or less output. Original arguments remain in the assistant call." }) }],
++		details: { allocated_bytes: limit, rejected_content_bytes: actual }, isError: true,
++		...(outcome.result.terminate === undefined ? {} : { terminate: outcome.result.terminate }),
++		...(outcome.result.usage === undefined ? {} : { usage: outcome.result.usage }),
++	} };
 +}
 --- /dev/null
 +++ b/src/tool-router.ts
@@ -927,16 +1263,19 @@
  
  /**
   * Stream function used by the agent loop. `Models.streamSimple` satisfies
-@@ -192,6 +193,8 @@
+@@ -191,7 +192,11 @@
+ export interface PrepareNextTurnContext extends AgentTurnContext {}
  
  export interface AgentLoopConfig extends SimpleStreamOptions {
++	/** Shared serialized-content bytes per result group for one assistant tool batch. Opt in explicitly. */
++	toolResultBudgets?: Readonly<Record<string, number>>;
  	model: Model<any>;
 +	/** Prepare a bounded provider view and enforce its tool allowlist for the resulting response. */
 +	modelContextPolicy?: ModelContextPolicy;
  
  	/**
  	 * Converts AgentMessage[] to LLM-compatible Message[] before each LLM call.
-@@ -324,6 +327,8 @@
+@@ -324,6 +329,8 @@
  	 * The hook receives the agent abort signal and is responsible for honoring it.
  	 */
  	beforeToolCall?: (context: BeforeToolCallContext, signal?: AbortSignal) => Promise<BeforeToolCallResult | undefined>;
@@ -945,6 +1284,23 @@
  
  	/**
  	 * Called after a tool finishes executing, before `tool_execution_end` and tool-result message events are emitted.
+@@ -476,6 +483,8 @@
+  * the type `execute` receives.
+  */
+ export interface AgentTool<TParameters extends object = object, TDetails = any> extends Tool<TParameters> {
++	/** Result-size contract; ignored unless its group has an explicit runtime budget. */
++	resultBudget?: { readonly group: string; readonly minBytes: number; readonly maxBytes: number };
+ 	/** Human-readable label for UI display. */
+ 	label: string;
+ 	/**
+@@ -497,6 +506,7 @@
+ 		params: AgentToolParams<TParameters>,
+ 		signal?: AbortSignal,
+ 		onUpdate?: AgentToolUpdateCallback<TDetails>,
++		execution?: { readonly resultBudgetBytes: number },
+ 	) => Promise<AgentToolResult<TDetails>>;
+ 	/** Recovery policy for an effect whose durable intent exists but whose outcome is unknown. */
+ 	replay?: "never" | "safe";
 --- /dev/null
 +++ b/src/validation-feedback.ts
 @@ -0,0 +1,74 @@

@@ -2,6 +2,7 @@
 import type { AgentTool } from "./types.ts";
 import { arr, int, obj, str } from "@earendil-works/pi-schema";
 import { parseContextJson, resolveContextPointer } from "./context-json.ts";
+import { contentJsonBytes, CONTEXT_RECALL_BUDGET_GROUP } from "./tool-result-budget.ts";
 
 export interface ContextArtifact {
 	id: string;
@@ -44,10 +45,11 @@ export function createContextReadTool(store: ContextArtifactStore): AgentTool<ty
 	return {
 		name: "read_context_artifact",
 		label: "Recall context artifact",
-		description: "Read exact archived context data by artifact ID and JSON pointer. Use this when a context reference omitted required facts; never guess omitted values. For paging, copy that value's next_read object verbatim. The limit is shared across all values, so do not calculate the next offset from the requested limit.",
+		description: "Read exact archived context data by artifact ID and JSON pointer. Use this when a context reference omitted required facts; never guess omitted values. For paging, copy that value's next_read object verbatim. The limit is shared across all values, so do not calculate the next offset from the requested limit. A host batch byte budget may shorten or defer a reply; deferred is not EOF. Retry deferred calls in smaller batches.",
 		parameters: readSchema,
+		resultBudget: { group: CONTEXT_RECALL_BUDGET_GROUP, minBytes: 256, maxBytes: 8192 },
 		replay: "safe",
-		async execute(_callId, args, signal) {
+		async execute(_callId, args, signal, _update, execution) {
 			signal?.throwIfAborted();
 			if (!Number.isSafeInteger(args.offset) || args.offset < 0 || !Number.isSafeInteger(args.limit) || args.limit < 1 || args.limit > 4096) throw new RangeError("Read offset and limit must be bounded safe integers");
 			const artifact = await store.get(args.artifact_id);
@@ -55,26 +57,45 @@ export function createContextReadTool(store: ContextArtifactStore): AgentTool<ty
 			const verified = await contextArtifact(artifact.text, artifact.kind);
 			if (verified.id !== args.artifact_id || verified.sha256 !== artifact.sha256 || verified.bytes !== artifact.bytes) throw new Error("Context artifact integrity mismatch");
 			const parsed = args.json_pointers.some((pointer) => pointer !== "") ? parseContextJson(artifact.text) : null;
-			let remaining = args.limit;
-			const values = [];
+			const fields: { pointer: string; points?: string[]; error?: string }[] = [];
 			for (const pointer of args.json_pointers) {
 				try {
 				const field = pointer === "" ? null : resolveContextPointer(parsed!, pointer);
 				const text = field ? parsed!.text(field.value, field.parent, field.key) : artifact.text;
-				const points = Array.from(text);
+				fields.push({ pointer, points: Array.from(text) });
+				} catch (error) { fields.push({ pointer, error: error instanceof Error ? error.message : "Invalid JSON pointer" }); }
+			}
+			const render = (pointLimit: number, byteLimited: boolean) => {
+				let remaining = pointLimit;
+				const values = fields.map(field => {
+				const pointer = field.pointer;
+				if (!field.points) return { json_pointer: pointer, error: field.error };
+				const points = field.points;
 				const slice = points.slice(args.offset, args.offset + remaining);
 				const nextOffset = args.offset + slice.length;
 				const hasMore = nextOffset < points.length;
 				const nextRead: ContextReadContinuation | null = hasMore ? { artifact_id: artifact.id, json_pointers: [pointer], offset: nextOffset, limit: args.limit } : null;
-				values.push({ json_pointer: pointer, offset: args.offset, total_codepoints: points.length, text: slice.join(""), returned_codepoints: slice.length, next_offset: nextOffset, next_read: nextRead, has_more: hasMore });
 				remaining -= slice.length;
-				} catch (error) {
-					// One wrong path must not discard other exact values in the same bounded read.
-					values.push({ json_pointer: pointer, error: error instanceof Error ? error.message : "Invalid JSON pointer" });
-				}
+				return { json_pointer: pointer, offset: args.offset, total_codepoints: points.length, text: slice.join(""), returned_codepoints: slice.length, next_offset: nextOffset, next_read: nextRead, has_more: hasMore };
+				});
+				const payload = { artifact_id: artifact.id, sha256: artifact.sha256, values, codepoints_used: pointLimit - remaining, source_identity_note: "The ctx_ handle identifies stored bytes, not the source report or document.", ...(execution ? { byte_limited: byteLimited, response_budget_bytes: execution.resultBudgetBytes } : {}) };
+				return { content: [{ type: "text" as const, text: JSON.stringify(payload) }], details: payload };
+			};
+			const full = render(args.limit, false);
+			if (!execution || contentJsonBytes(full.content) <= execution.resultBudgetBytes) return full;
+			const empty = render(0, true);
+			if (contentJsonBytes(empty.content) > execution.resultBudgetBytes) {
+				const payload = { status: "deferred", reason: "batch_byte_budget", retry: "Retry original arguments in another batch with fewer paths.", codepoints_used: 0 };
+				return { content: [{ type: "text", text: JSON.stringify(payload) }], details: payload };
 			}
-			const payload = { artifact_id: artifact.id, sha256: artifact.sha256, values, codepoints_used: args.limit - remaining, source_identity_note: "The ctx_ handle identifies stored bytes, not the source report or document." };
-			return { content: [{ type: "text", text: JSON.stringify(payload) }], details: payload };
+			let low = 0, high = args.limit;
+			while (low < high) {
+				const middle = Math.ceil((low + high) / 2);
+				if (contentJsonBytes(render(middle, true).content) <= execution.resultBudgetBytes) low = middle;
+				else high = middle - 1;
+			}
+			signal?.throwIfAborted();
+			return render(low, true);
 		},
 	};
 }

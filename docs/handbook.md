@@ -1,6 +1,6 @@
 # 从 Pi 到 PiContextLab：框架改造与验证客户端完整讲解
 
-本文对应官方 Pi **1.6.0**、派生核心 **1.6.0-contextlab.8** 与本仓库代码。框架改进是主线，PiMetricLab 经营指标应用是验证客户端。建议按“先跑一个报告，再读架构和恢复，最后看源码”的顺序学习。上游身份见 [upstream-lock.json](../upstream-lock.json)，研究来由见 [references.md](references.md)，实际运行证据见 [validation.md](validation.md)。
+本文对应官方 Pi **1.6.0**、派生核心 **1.6.0-contextlab.9** 与本仓库代码。框架改进是主线，PiMetricLab 经营指标应用是验证客户端。建议按“先跑一个报告，再读架构和恢复，最后看源码”的顺序学习。上游身份见 [upstream-lock.json](../upstream-lock.json)，研究来由见 [references.md](references.md)，实际运行证据见 [validation.md](validation.md)。
 
 ## 1. 项目要解决的具体问题
 
@@ -392,3 +392,17 @@ contextlab.7保留硬总预算，但允许压力模式继续尝试较小、能�
 SDK默认不启用；本应用显式对正常执行和恢复开启。验证与coercion仍由原版pi-ai负责，非法调用不执行工具或钩子。只改变schema拒绝反馈，不修改输入、不放宽长度、不自动续费重试。JSON包装、引号和Unicode都计入2,048字节上限，完整JSON不能因截断损坏；details仅存计数，不复制原输入。
 
 字段形状只看最多8个顶层字段，长字段名可省略；深层错误仍依赖原诊断。工具执行或hook本身抛错不属于这项格式化范围。阅读validation-feedback.ts与validation-feedback.test.ts可看清边界。当前只有CPU证据，旧真实模型压力研究继续是失败结果；不能把字节变少写成任务成功或省token。
+
+## 31. 为什么还需要同一轮的共享回读预算
+
+四次读取各自满足4,096字符上限，合在一起依然可能撑满上下文。contextlab.9把预算提升到原生assistant批次：先知道本批有哪些允许的工具调用，再分配总字节额。宿主可配置`toolResultBudgets: { 'context-recall': 8192 }`；四个相同读取各得2,048字节。它不按完成顺序抢额度，因此串行、并行、恢复得到一致的分配，也不临时把其他工具没用完的配额转给某次读取。
+
+第五个execute参数是宿主的配额，模型不能通过arguments自行扩大。读取按最终content JSON字节限制页面；emoji、引号、换行和两层JSON转义都计入。续读offset等于旧offset加实际返回code points；测试逐页拼回同一Unicode原文。若连路径、来源、游标等元数据都放不下，明确返回deferred；如果返回0字但has_more，仍应缩小批次/路径或提高宿主预算，不能把它当结束。搜索同样不能把容纳不了命中伪装成没有命中。
+
+中断恢复尤其容易出错：原来四次各分2KiB，两次完成后重启，不能按剩余两次重新各分4KiB，否则整批可能超过原8KiB。实现先对原assistant整批分配，再跳过已经保存的结果。已有请求/响应工具白名单仍检查，旧运行指纹不自动迁移。最终结果经过hook后还会检查，超限输出变成紧凑错误；已经发生的工具副作用不能撤销。
+
+当整批最低配额也不够时，在执行前终止并记录错误；低层事件流也必须结束，避免调用方一直等待。原始assistant调用保留供审计，但不能把失败批次描述成完整执行。阅读[tool-result-budget.ts](../vendor/pi-agent-core/src/tool-result-budget.ts)、[原生循环](../vendor/pi-agent-core/src/agent-loop.ts)及[九项专门测试](../test/tool-result-budget.test.ts)，再看[结果与复现方式](../evidence/recall-budget/)。
+
+四份本项目源码组成的新CPU对照中，旧版合计31,262字节，新版8,187字节；新版只是返回较短的第一页，剩余内容按精确游标继续取。71项Node测试、14项浏览器检查及全量UCI核对通过。默认真实入口仍full，budgeted才使用共享预算；本轮无模型请求、无GPU，未验证模型效果。
+
+尤其不要把8KiB理解成“下一轮一定放得下”：它只覆盖指定组的content数组，其他消息、工具、包装和新生成内容还占空间。目前没有输出预留或token级保证，原真实压力任务保持失败，简历只能写已实现的框架机制与CPU验证。

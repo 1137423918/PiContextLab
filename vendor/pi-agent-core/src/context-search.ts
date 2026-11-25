@@ -4,6 +4,7 @@ import type { AgentTool } from "./types.ts";
 import { contextArtifact, type ContextArtifactStore } from "./context-artifacts.ts";
 import { parseContextJson } from "./context-json.ts";
 import { ContextLexicalIndex, contextTerms } from "./tool-router.ts";
+import { contentJsonBytes, CONTEXT_RECALL_BUDGET_GROUP } from "./tool-result-budget.ts";
 
 export const CONTEXT_FIELD_LIMITS = { maxSourceBytes: 8 * 1024 * 1024, maxNodes: 20000, maxDepth: 32, maxFields: 4096, maxPath: 512, responseBytes: 8192, previewCodepoints: 256 } as const;
 interface Field { json_pointer: string; text: string; type: string; document: string; }
@@ -46,9 +47,10 @@ const searchSchema = obj({
 export function createContextSearchTool(store: ContextArtifactStore): AgentTool<typeof searchSchema, unknown> {
 	return {
 		name: "search_context_artifact", label: "Locate archived JSON fields",
-		description: "Locate exact JSON pointers and bounded source values in an archived artifact when paths are unknown. Search is lexical and may be incomplete; never treat no matches as proof of absence. Use read_context_artifact for longer values. No code or SQL is executed.",
+		description: "Locate exact JSON pointers and bounded source values in an archived artifact when paths are unknown. Search is lexical and may be incomplete; never treat no matches as proof of absence. Use read_context_artifact for longer values. No code or SQL is executed. A host shared byte budget may defer a reply; deferred does not mean no matches.",
 		parameters: searchSchema, replay: "safe",
-		async execute(_id, args, signal) {
+		resultBudget: { group: CONTEXT_RECALL_BUDGET_GROUP, minBytes: 256, maxBytes: 8192 },
+		async execute(_id, args, signal, _update, execution) {
 			signal?.throwIfAborted();
 			const artifact = await store.get(args.artifact_id);
 			if (!artifact) throw new Error("Artifact does not belong to this conversation or does not exist");
@@ -56,7 +58,7 @@ export function createContextSearchTool(store: ContextArtifactStore): AgentTool<
 			if (verified.id !== args.artifact_id || verified.sha256 !== artifact.sha256 || verified.bytes !== artifact.bytes) throw new Error("Context artifact integrity mismatch");
 			const found = searchContextFields(artifact.text, args.query, args.limit);
 			const matches: { json_pointer: string; text: string; type: string; has_more: boolean; score: number }[] = [];
-			const payload = { artifact_id: artifact.id, sha256: artifact.sha256, matches, scan: found.scan, response_byte_limit: CONTEXT_FIELD_LIMITS.responseBytes, results_truncated: false };
+			const payload = { artifact_id: artifact.id, sha256: artifact.sha256, matches, scan: found.scan, response_byte_limit: CONTEXT_FIELD_LIMITS.responseBytes, results_truncated: false, ...(execution ? { response_budget_bytes: execution.resultBudgetBytes } : {}) };
 			for (const row of found.ranked) {
 				if (matches.length >= args.limit) { payload.results_truncated = true; break; }
 				const field = found.fields[row.i];
@@ -65,6 +67,14 @@ export function createContextSearchTool(store: ContextArtifactStore): AgentTool<
 				if (new TextEncoder().encode(JSON.stringify(payload)).length > CONTEXT_FIELD_LIMITS.responseBytes - 8) { matches.pop(); payload.results_truncated = true; break; }
 			}
 			signal?.throwIfAborted();
+			if (execution) {
+				const content = () => [{ type: "text" as const, text: JSON.stringify(payload) }];
+				while (matches.length > 0 && contentJsonBytes(content()) > execution.resultBudgetBytes) { matches.pop(); payload.results_truncated = true; }
+				if (contentJsonBytes(content()) > execution.resultBudgetBytes || found.ranked.length > 0 && matches.length === 0) {
+					const deferred = { status: "deferred", reason: "batch_byte_budget", retry: "Retry the original search alone or with fewer results; no absence conclusion." };
+					return { content: [{ type: "text", text: JSON.stringify(deferred) }], details: deferred };
+				}
+			}
 			return { content: [{ type: "text", text: JSON.stringify(payload) }], details: payload };
 		},
 	};

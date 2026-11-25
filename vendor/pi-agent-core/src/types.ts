@@ -192,6 +192,8 @@ export type PrepareRequest = (
 export interface PrepareNextTurnContext extends AgentTurnContext {}
 
 export interface AgentLoopConfig extends SimpleStreamOptions {
+	/** Shared serialized-content bytes per result group for one assistant tool batch. Opt in explicitly. */
+	toolResultBudgets?: Readonly<Record<string, number>>;
 	model: Model<any>;
 	/** Prepare a bounded provider view and enforce its tool allowlist for the resulting response. */
 	modelContextPolicy?: ModelContextPolicy;
@@ -481,6 +483,8 @@ type IsAny<T> = boolean extends (T extends never ? true : false) ? true : false;
  * the type `execute` receives.
  */
 export interface AgentTool<TParameters extends object = object, TDetails = any> extends Tool<TParameters> {
+	/** Result-size contract; ignored unless its group has an explicit runtime budget. */
+	resultBudget?: { readonly group: string; readonly minBytes: number; readonly maxBytes: number };
 	/** Human-readable label for UI display. */
 	label: string;
 	/**
@@ -502,6 +506,7 @@ export interface AgentTool<TParameters extends object = object, TDetails = any> 
 		params: AgentToolParams<TParameters>,
 		signal?: AbortSignal,
 		onUpdate?: AgentToolUpdateCallback<TDetails>,
+		execution?: { readonly resultBudgetBytes: number },
 	) => Promise<AgentToolResult<TDetails>>;
 	/** Recovery policy for an effect whose durable intent exists but whose outcome is unknown. */
 	replay?: "never" | "safe";

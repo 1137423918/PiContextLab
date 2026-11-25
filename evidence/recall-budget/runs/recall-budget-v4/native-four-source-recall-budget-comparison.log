@@ -1,0 +1,4 @@
+(node:2326623) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"variant":"core8-legacy","content_JSON_bytes":[7886,8833,8585,5958],"total_content_JSON_bytes":31262,"cursors":[{"used":3987,"next_offset":null},{"used":4096,"next_offset":4096},{"used":4096,"next_offset":4096},{"used":4096,"next_offset":4096}],"provider_calls":1,"actual_model_calls":0,"original_arguments_preserved":true}
+{"variant":"core9-shared","content_JSON_bytes":[2048,2046,2046,2047],"total_content_JSON_bytes":8187,"cursors":[{"used":686,"next_offset":686},{"used":642,"next_offset":642},{"used":572,"next_offset":572},{"used":1004,"next_offset":1004}],"provider_calls":1,"actual_model_calls":0,"original_arguments_preserved":true}

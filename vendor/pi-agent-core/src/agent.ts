@@ -15,6 +15,7 @@ import {
 import { runAgentLoop, runAgentLoopContinue } from "./agent-loop.ts";
 import type { ModelContextPolicy } from "./model-context.ts";
 import { getDefaultStreamFn } from "./stream-fn.ts";
+import { allocateToolResultBudgets } from "./tool-result-budget.ts";
 import type {
 	AfterToolCallContext,
 	AfterToolCallResult,
@@ -117,6 +118,7 @@ export interface AgentOptions {
 	initialState?: AgentInitialState;
 	modelContextPolicy?: ModelContextPolicy;
 	toolValidationFeedback?: "bounded";
+	toolResultBudgets?: Readonly<Record<string, number>>;
 	convertToLlm?: (messages: AgentMessage[]) => Message[] | Promise<Message[]>;
 	transformContext?: (messages: AgentMessage[], signal?: AbortSignal) => Promise<AgentMessage[]>;
 	streamFn: StreamFn;
@@ -198,6 +200,7 @@ export class Agent {
 	/** Native request policy; does not replace or prune authoritative state.messages. */
 	public readonly modelContextPolicy?: ModelContextPolicy;
 	public toolValidationFeedback?: "bounded";
+	public readonly toolResultBudgets?: Readonly<Record<string, number>>;
 	private _state: MutableAgentState;
 	private readonly listeners = new Set<(event: AgentEvent, signal: AbortSignal) => Promise<void> | void>();
 	private readonly steeringQueue: PendingMessageQueue;
@@ -247,6 +250,8 @@ export class Agent {
 		this._state = createMutableAgentState(runtimeOptions.initialState);
 		this.modelContextPolicy = runtimeOptions.modelContextPolicy;
 		this.toolValidationFeedback = runtimeOptions.toolValidationFeedback;
+		this.toolResultBudgets = runtimeOptions.toolResultBudgets ? Object.freeze({ ...runtimeOptions.toolResultBudgets }) : undefined;
+		allocateToolResultBudgets([], [], this.toolResultBudgets);
 		if (this.modelContextPolicy) {
 			const registered = new Set(this._state.tools.map((tool) => tool.name));
 			for (const tool of this.modelContextPolicy.tools) {
@@ -507,6 +512,7 @@ export class Agent {
 			toolExecution: this.toolExecution,
 			beforeToolCall: this.beforeToolCall,
 			toolValidationFeedback: this.toolValidationFeedback,
+			toolResultBudgets: this.toolResultBudgets,
 			afterToolCall: this.afterToolCall,
 			finishTurn: this.finishTurn,
 			prepareRequest: this.prepareRequest,

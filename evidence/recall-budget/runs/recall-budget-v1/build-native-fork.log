@@ -1,0 +1,10 @@
+vendor/pi-agent-core/src/context-search.ts(57,12): error TS2448: Block-scoped variable 'matches' used before its declaration.
+vendor/pi-agent-core/src/context-search.ts(57,12): error TS2454: Variable 'matches' is used before being assigned.
+vendor/pi-agent-core/src/context-search.ts(57,95): error TS2448: Block-scoped variable 'matches' used before its declaration.
+vendor/pi-agent-core/src/context-search.ts(57,95): error TS2454: Variable 'matches' is used before being assigned.
+vendor/pi-agent-core/src/context-search.ts(57,110): error TS2448: Block-scoped variable 'payload' used before its declaration.
+vendor/pi-agent-core/src/context-search.ts(57,110): error TS2454: Variable 'payload' is used before being assigned.
+vendor/pi-agent-core/src/context-search.ts(58,70): error TS2448: Block-scoped variable 'found' used before its declaration.
+vendor/pi-agent-core/src/context-search.ts(58,70): error TS2454: Variable 'found' is used before being assigned.
+vendor/pi-agent-core/src/context-search.ts(58,97): error TS2448: Block-scoped variable 'matches' used before its declaration.
+vendor/pi-agent-core/src/context-search.ts(58,97): error TS2454: Variable 'matches' is used before being assigned.

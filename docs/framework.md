@@ -4,7 +4,7 @@
 
 ## 改动位置与已有能力
 
-固定 Pi 1.6.0 的完整 Agent Core 源码保留在 [vendor/pi-agent-core](../vendor/pi-agent-core)，原文件哈希见 [UPSTREAM.json](../vendor/pi-agent-core/UPSTREAM.json)，MIT 原许可一并保留。派生版本为 `1.6.0-contextlab.8`，不是上游发布或已合入 PR。原研究克隆保持不变。
+固定 Pi 1.6.0 的完整 Agent Core 源码保留在 [vendor/pi-agent-core](../vendor/pi-agent-core)，原文件哈希见 [UPSTREAM.json](../vendor/pi-agent-core/UPSTREAM.json)，MIT 原许可一并保留。派生版本为 `1.6.0-contextlab.9`，不是上游发布或已合入 PR。原研究克隆保持不变。
 
 上游已有 `transformContext`、工具调用屏障、完整的 `pi-durable` 持久化 Harness、摘要压缩，以及部分工具输出限制。本项目不把这些已有能力说成原创。
 
@@ -205,3 +205,30 @@ const outcome = await runToolCall(call, {
 ```
 
 本轮只做服务器CPU机制验证，不再调用DeepSeek、不重跑已关闭压力任务。脚本provider按反馈进行下一步只验证回合/执行边界，不代表真实模型会纠正。实际字节和测试见验证记录，原研究失败分数保留。
+
+## contextlab.9：同一批次共享 recall 内容预算
+
+单次最多4,096个code points仍不足以约束并行读取总量：Unicode、JSON转义和元数据都占字节，同一assistant可以调用多次。新增[tool-result-budget.ts](../vendor/pi-agent-core/src/tool-result-budget.ts)，在原生循环收到完整assistant后、任何工具开始之前，按本轮允许的实际工具及`resultBudget`元数据一次性分配。配额不进入模型参数，不改原始调用。
+
+```ts
+const groups = { 'context-recall': 8192 };
+const agent = new Agent({
+  streamFn, initialState,
+  modelContextPolicy,
+  toolResultBudgets: groups,
+});
+```
+
+读取与字段定位声明同一`context-recall`组，每个调用最低256、最高8,192字节。分配先保证各调用最低额，再对尚未到上限的调用平分余额，余数按原调用顺序分配；相同四个读取各得2,048。配额固定，不根据完成顺序或实际返回量临时回收，因此串行、并行行为一致，但可能有闲置空间。分组预算未显式配置时，SDK保持旧结果行为，元数据本身不启用限制。
+
+组预算、工具元数据必须是有效安全整数；组内最低额合计放不下时整批执行前拒绝。重复call ID也拒绝，避免配额身份覆盖。Agent正常结束失败状态，低层`agentLoop`和`agentLoopContinue`返回错误assistant并结束事件流，不让消费者一直等待；原发起调用的assistant仍留存。此处是终止失败，未执行的调用不会伪装成已经完成的工具事务，也不自动恢复执行或请求模型重试。
+
+执行函数可通过第五个宿主参数`execution.resultBudgetBytes`获取配额。读取先按原JSON pointer、共享code point上限和精确数字文本生成结果，再测量**完整content数组JSON的UTF-8字节**；过长则安全缩小返回前缀。`next_offset`及`next_read`按实际返回code points推进，绝不按原limit跳过。字段之间仍共享原limit。二分寻找可容纳前缀只保证安全可容纳，不声称跨EOF元数据变化时取得全局最长前缀。空内容元数据也放不下时返回紧凑`status: 'deferred'`，原参数与artifact不变；这不是EOF。0字符但`has_more`的页也不表示结束，调用方应减少同批调用/路径，或由宿主增加预算，不能无限原样重试。
+
+搜索保持原词法排名和扫描限制，按配额去掉尾部命中并标记截断；如果所有正命中都容纳不了，明确延后，不返回看似“无匹配”的结论。读取与搜索仍检查会话归属、SHA256及来源长度。
+
+最终执行结果（包括验证拒绝和after hook改写）在发出toolResult前再次检查。违反配额的工具输出改成紧凑`TOOL_RESULT_BUDGET_EXCEEDED`错误，details只保留计数；保留usage和terminate语义。它无法撤销工具已经发生的副作用；因此这是合作工具的结果协议，不是任意工具副作用的事务系统。取消分支使用固定小错误结果。
+
+PiMetricLab只在显式budgeted模式配置8KiB组预算，默认full模式不启用。恢复先从原assistant的**全部调用**与已绑定允许集合重算原分配，然后跳过已完成调用；若四次中已完成两次，剩余两次仍各2KiB，不各拿一个新8KiB池。指纹包含新版、组预算和工具元数据；旧任务不静默迁移。
+
+边界：总额只覆盖已配置组的最终content数组，不包括外层ToolResult包装、details、partial updates、其他工具、assistant文本或完整下一轮上下文。它没有按下一轮可用空间预留输出，不提供token保证，最新回读批次保护与发送前硬上限照常执行。新的CPU对照和71项测试见[原始证据](../evidence/recall-budget/)，没有追加模型请求或宣称旧失败已解决。

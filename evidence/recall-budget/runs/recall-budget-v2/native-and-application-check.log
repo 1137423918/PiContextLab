@@ -1,0 +1,13 @@
+
+> pi-metriclab@0.1.0 check
+> tsc --noEmit -p vendor/pi-agent-core/tsconfig.json && tsc --noEmit
+
+test/tool-result-budget.test.ts(33,219): error TS2345: Argument of type '{ readonly artifact_id: string; readonly json_pointers: readonly [string]; readonly offset: 0; readonly limit: 4096; } | { readonly artifact_id: string; readonly query: "needle"; readonly limit: 20; }' is not assignable to parameter of type '{ [key: string]: string | number | string[]; }'.
+  Type '{ readonly artifact_id: string; readonly json_pointers: readonly [string]; readonly offset: 0; readonly limit: 4096; }' is not assignable to type '{ [key: string]: string | number | string[]; }'.
+    Property 'json_pointers' is incompatible with index signature.
+      Type 'readonly [string]' is not assignable to type 'string | number | string[]'.
+        The type 'readonly [string]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
+test/tool-result-budget.test.ts(52,396): error TS2322: Type '{ content: (TextContent | ImageContent)[]; details: unknown; structuredContent?: JsonValue; usage?: Usage; terminate?: boolean; role: 'toolResult'; toolCallId: string; toolName: string; isError: boolean; timestamp: number; }' is not assignable to type 'AgentMessage'.
+  Type '{ content: (TextContent | ImageContent)[]; details: unknown; structuredContent?: JsonValue; usage?: Usage; terminate?: boolean; role: 'toolResult'; toolCallId: string; toolName: string; isError: boolean; timestamp: number; }' is not assignable to type '{ role: "toolResult"; toolCallId: string; toolName: string; content: (ImageContent | TextContent)[]; details?: JsonValue; usage?: Usage; nestedCalls?: NestedToolCalls; isError: boolean; timestamp: number; durationMs?: number; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+    Types of property 'details' are incompatible.
+      Type 'unknown' is not assignable to type 'JsonValue'.

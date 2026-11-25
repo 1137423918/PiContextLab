@@ -21,6 +21,7 @@ import {
 } from "@earendil-works/pi-ai";
 import { getDefaultStreamFn } from "./stream-fn.ts";
 import { boundedToolValidationError } from "./validation-feedback.ts";
+import { allocateToolResultBudgets, enforceToolResultBudget } from "./tool-result-budget.ts";
 import type { ExecutableTools } from "./model-context.ts";
 import type {
 	AgentContext,
@@ -55,19 +56,21 @@ export function agentLoop(
 	streamFn: StreamFn,
 ): EventStream<AgentEvent, AgentMessage[]> {
 	const stream = createAgentStream();
+	const emitted: AgentMessage[] = [];
 
 	void runAgentLoop(
 		prompts,
 		context,
 		config,
 		async (event) => {
+			if (event.type === "message_end") emitted.push(event.message);
 			stream.push(event);
 		},
 		signal,
 		streamFn,
 	).then((messages) => {
 		stream.end(messages);
-	});
+	}, error => endFailedAgentStream(stream, emitted, config, error));
 
 	return stream;
 }
@@ -95,18 +98,20 @@ export function agentLoopContinue(
 	}
 
 	const stream = createAgentStream();
+	const emitted: AgentMessage[] = [];
 
 	void runAgentLoopContinue(
 		context,
 		config,
 		async (event) => {
+			if (event.type === "message_end") emitted.push(event.message);
 			stream.push(event);
 		},
 		signal,
 		streamFn,
 	).then((messages) => {
 		stream.end(messages);
-	});
+	}, error => endFailedAgentStream(stream, emitted, config, error));
 
 	return stream;
 }
@@ -167,6 +172,16 @@ function createAgentStream(): EventStream<AgentEvent, AgentMessage[]> {
 		(event: AgentEvent) => event.type === "agent_end",
 		(event: AgentEvent) => (event.type === "agent_end" ? event.messages : []),
 	);
+}
+
+/** An opt-in batch admission failure must settle stream consumers as well as Agent.prompt(). */
+function endFailedAgentStream(stream: EventStream<AgentEvent, AgentMessage[]>, emitted: AgentMessage[], config: AgentLoopConfig, error: unknown): void {
+	const failure: AssistantMessage = { role: "assistant", content: [], api: config.model.api, provider: config.model.provider, model: config.model.id,
+		stopReason: "error", errorMessage: error instanceof Error ? error.message : String(error), timestamp: Date.now(),
+		usage: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, totalTokens: 0, cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, total: 0 } } };
+	stream.push({ type: "message_start", message: failure }); stream.push({ type: "message_end", message: failure });
+	const messages = [...emitted, failure];
+	stream.push({ type: "turn_end", message: failure, toolResults: [] }); stream.push({ type: "agent_end", messages }); stream.end(messages);
 }
 
 /**
@@ -274,14 +289,15 @@ async function runLoop(
 			const toolResults: ToolResultMessage[] = [];
 			hasMoreToolCalls = false;
 			if (toolCalls.length > 0) {
+				const allocations = allocateToolResultBudgets(toolCalls, preparedResponse.tools, config.toolResultBudgets);
 				// A "length" stop means the output was cut off by the token limit, so
 				// every tool call in the message may carry truncated arguments. Fail
 				// them all instead of executing potentially borked calls.
 				const executedToolBatch =
 					message.stopReason === "length"
-						? await failToolCallsFromTruncatedMessage(toolCalls, emit)
+						? await failToolCallsFromTruncatedMessage(toolCalls, emit, allocations)
 						: await executeToolCalls(
-							{ ...currentContext, tools: preparedResponse.tools }, message, config, signal, emit,
+								{ ...currentContext, tools: preparedResponse.tools }, message, config, signal, emit, allocations,
 						);
 				toolResults.push(...executedToolBatch.messages);
 				hasMoreToolCalls = !executedToolBatch.terminate;
@@ -506,6 +522,7 @@ async function streamAssistantResponse(
 async function failToolCallsFromTruncatedMessage(
 	toolCalls: AgentToolCall[],
 	emit: AgentEventSink,
+	allocations: ReadonlyMap<string, number>,
 ): Promise<ExecutedToolCallBatch> {
 	const messages: ToolResultMessage[] = [];
 	for (const toolCall of toolCalls) {
@@ -515,13 +532,13 @@ async function failToolCallsFromTruncatedMessage(
 			toolName: toolCall.name,
 			args: toolCall.arguments,
 		});
-		const finalized: FinalizedToolCallOutcome = {
+		const finalized: FinalizedToolCallOutcome = enforceToolResultBudget({
 			toolCall,
 			result: createErrorToolResult(
 				`Tool call "${toolCall.name}" was not executed: the response hit the output token limit, so its arguments may be truncated. Re-issue the tool call with complete arguments.`,
 			),
 			isError: true,
-		};
+		}, allocations.get(toolCall.id));
 		await emitToolExecutionEnd(finalized, emit);
 		const toolResultMessage = createToolResultMessage(finalized);
 		await emitToolResultMessage(toolResultMessage, emit);
@@ -539,15 +556,16 @@ async function executeToolCalls(
 	config: AgentLoopConfig,
 	signal: AbortSignal | undefined,
 	emit: AgentEventSink,
+	allocations: ReadonlyMap<string, number>,
 ): Promise<ExecutedToolCallBatch> {
 	const toolCalls = assistantMessage.content.filter((c) => c.type === "toolCall");
 	const hasSequentialToolCall = toolCalls.some(
 		(tc) => currentContext.tools?.find((t) => t.name === tc.name)?.executionMode === "sequential",
 	);
 	if (config.toolExecution === "sequential" || hasSequentialToolCall) {
-		return executeToolCallsSequential(currentContext, assistantMessage, toolCalls, config, signal, emit);
+		return executeToolCallsSequential(currentContext, assistantMessage, toolCalls, config, signal, emit, allocations);
 	}
-	return executeToolCallsParallel(currentContext, assistantMessage, toolCalls, config, signal, emit);
+	return executeToolCallsParallel(currentContext, assistantMessage, toolCalls, config, signal, emit, allocations);
 }
 
 type ExecutedToolCallBatch = {
@@ -562,6 +580,7 @@ async function executeToolCallsSequential(
 	config: AgentLoopConfig,
 	signal: AbortSignal | undefined,
 	emit: AgentEventSink,
+	allocations: ReadonlyMap<string, number>,
 ): Promise<ExecutedToolCallBatch> {
 	const finalizedCalls: FinalizedToolCallOutcome[] = [];
 	const messages: ToolResultMessage[] = [];
@@ -574,7 +593,7 @@ async function executeToolCallsSequential(
 			args: toolCall.arguments,
 		});
 
-		const preparation = await prepareToolCall(currentContext, assistantMessage, toolCall, config, signal);
+		const preparation = await prepareToolCall(currentContext, assistantMessage, toolCall, config, signal, currentContext.tools, allocations.get(toolCall.id));
 		let finalized: FinalizedToolCallOutcome;
 		if (preparation.kind === "immediate") {
 			finalized = {
@@ -594,6 +613,7 @@ async function executeToolCallsSequential(
 			);
 		}
 
+		finalized = enforceToolResultBudget(finalized, allocations.get(toolCall.id));
 		await emitToolExecutionEnd(finalized, emit);
 		const toolResultMessage = createToolResultMessage(finalized);
 		await emitToolResultMessage(toolResultMessage, emit);
@@ -614,6 +634,7 @@ async function executeToolCallsParallel(
 	config: AgentLoopConfig,
 	signal: AbortSignal | undefined,
 	emit: AgentEventSink,
+	allocations: ReadonlyMap<string, number>,
 ): Promise<ExecutedToolCallBatch> {
 	const finalizedCalls: FinalizedToolCallEntry[] = [];
 
@@ -625,13 +646,13 @@ async function executeToolCallsParallel(
 			args: toolCall.arguments,
 		});
 
-		const preparation = await prepareToolCall(currentContext, assistantMessage, toolCall, config, signal);
+		const preparation = await prepareToolCall(currentContext, assistantMessage, toolCall, config, signal, currentContext.tools, allocations.get(toolCall.id));
 		if (preparation.kind === "immediate") {
-			const finalized = {
+			const finalized = enforceToolResultBudget({
 				toolCall,
 				result: preparation.result,
 				isError: preparation.isError,
-			} satisfies FinalizedToolCallOutcome;
+			} satisfies FinalizedToolCallOutcome, allocations.get(toolCall.id));
 			await emitToolExecutionEnd(finalized, emit);
 			finalizedCalls.push(finalized);
 			continue;
@@ -648,14 +669,14 @@ async function executeToolCallsParallel(
 				return finalized;
 			}
 			const executed = await executePreparedToolCall(preparation, signal, emitToolExecutionUpdate(toolCall, emit));
-			const finalized = await finalizeExecutedToolCall(
+			const finalized = enforceToolResultBudget(await finalizeExecutedToolCall(
 				currentContext,
 				assistantMessage,
 				preparation,
 				executed,
 				config,
 				signal,
-			);
+			), allocations.get(toolCall.id));
 			await emitToolExecutionEnd(finalized, emit);
 			return finalized;
 		});
@@ -678,6 +699,7 @@ async function executeToolCallsParallel(
 }
 
 type PreparedToolCall = {
+	resultBudgetBytes?: number;
 	kind: "prepared";
 	toolCall: AgentToolCall;
 	tool: AgentTool<any>;
@@ -730,6 +752,7 @@ async function prepareToolCall(
 	config: ToolCallHooks,
 	signal: AbortSignal | undefined,
 	tools: readonly AgentTool<any>[] = currentContext.tools ?? [],
+	resultBudgetBytes?: number,
 ): Promise<PreparedToolCall | ImmediateToolCallOutcome> {
 	// Once aborted, skip preparation and the hooks; callers still record this result, so no call
 	// is left without one (#9986).
@@ -798,6 +821,7 @@ async function prepareToolCall(
 			toolCall,
 			tool,
 			args: validatedArgs,
+			resultBudgetBytes,
 		};
 	} catch (error) {
 		return {
@@ -821,6 +845,8 @@ function emitToolExecutionUpdate(toolCall: AgentToolCall, emit: AgentEventSink):
 
 /** Options for {@link runToolCall}. */
 export interface RunToolCallOptions extends ToolCallHooks {
+	/** Use a precomputed original-batch allocation for replay; never allocate a new pool per pending call. */
+	resultBudgetBytes?: number;
 	/** Tools the call resolves against. */
 	tools: readonly AgentTool<any>[];
 	/** Passed to the hooks as the message that issued the call. */
@@ -843,12 +869,13 @@ export interface RunToolCallOptions extends ToolCallHooks {
  */
 export async function runToolCall(toolCall: AgentToolCall, options: RunToolCallOptions): Promise<AgentToolCallOutcome> {
 	const { assistantMessage, context, signal } = options;
-	const preparation = await prepareToolCall(context, assistantMessage, toolCall, options, signal, options.tools);
+	if (options.resultBudgetBytes !== undefined && (!Number.isSafeInteger(options.resultBudgetBytes) || options.resultBudgetBytes < 256)) throw new RangeError("Invalid tool result allocation");
+	const preparation = await prepareToolCall(context, assistantMessage, toolCall, options, signal, options.tools, options.resultBudgetBytes);
 	if (preparation.kind === "immediate") {
-		return { toolCall, result: preparation.result, isError: preparation.isError };
+		return enforceToolResultBudget({ toolCall, result: preparation.result, isError: preparation.isError }, options.resultBudgetBytes);
 	}
 	const executed = await executePreparedToolCall(preparation, signal, options.onUpdate ?? (() => {}));
-	return finalizeExecutedToolCall(context, assistantMessage, preparation, executed, options, signal);
+	return enforceToolResultBudget(await finalizeExecutedToolCall(context, assistantMessage, preparation, executed, options, signal), options.resultBudgetBytes);
 }
 
 async function executePreparedToolCall(
@@ -870,6 +897,7 @@ async function executePreparedToolCall(
 				if (!acceptingUpdates) return;
 				updateEvents.push(Promise.resolve(onUpdate(partialResult)));
 			},
+			prepared.resultBudgetBytes === undefined ? undefined : { resultBudgetBytes: prepared.resultBudgetBytes },
 		);
 		const durationMs = elapsed();
 		acceptingUpdates = false;

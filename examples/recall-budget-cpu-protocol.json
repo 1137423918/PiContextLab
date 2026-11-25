@@ -1,0 +1,45 @@
+{
+  "purpose": "New CPU native-batch recall output accounting and exact continuation; not a model or retrieval quality rerun.",
+  "baseline": "Frozen core8 createContextReadTool and nativeAgent, vscore9 opt-in context-recall8192 bytes; same4immutable artifacts/read arguments",
+  "inputs": [
+    "README.md",
+    "docs/framework.md",
+    "docs/handbook.md",
+    "package-lock.json"
+  ],
+  "input_transform": "Each current frozen source file is a JSON text field, all source SHA256 recorded; own MIT/project metadata, no raw external corpus redistributed.",
+  "calls_per_batch": 4,
+  "read_parameters": {
+    "json_pointers": [
+      "/text"
+    ],
+    "offset": 0,
+    "limit": 4096
+  },
+  "new_group_bytes": 8192,
+  "variants": [
+    "core8-legacy",
+    "core9-shared"
+  ],
+  "invariants": [
+    "Final serialized content arrays sum<=8192 for admitted newbatch",
+    "Allocation2048each for4same readers, independent of IO/execute order",
+    "Original toolcall arguments unchanged",
+    "Byte-limited cursors advance by actual codepoints and exact field text remains retrievable",
+    "Metadata deferral is not EOF or no matches",
+    "Recovery uses original whole batch, not fresh pool for pending subset"
+  ],
+  "metrics": [
+    "per-call/aggregate UTF8contentJSON bytes",
+    "returned codepoints and cursor offsets",
+    "immutable source identities",
+    "native completion without model calls"
+  ],
+  "not_claimed": [
+    "whole-next-context fit",
+    "actual model success/cost gain",
+    "output-space reservation or token guarantee"
+  ],
+  "model_calls": 0,
+  "GPU": false
+}

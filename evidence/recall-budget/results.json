@@ -1,0 +1,100 @@
+{
+  "kind": "New CPU native recall batch-byte diagnostic, not model task success",
+  "baseline": {
+    "version": "1.6.0-contextlab.8",
+    "agent_loop_js_sha256": "c3a72b4177f5a952549dc3aa964272c9fe9ca594ea135d2e9c25967d54f2c7b8"
+  },
+  "protocol_sha256": "995210d586b4b4953ade1587e3644147aed21fc45682e5939a05d71410634ece",
+  "inputs": [
+    {
+      "path": "README.md",
+      "source_sha256": "9780395d9f40c7dc9d845f26f717e56437ca4d64b15a04ebbb3176c4f5911dfd",
+      "artifact_id": "ctx_tool-result_29fb6e7106366de98806f6870037c2129b8d9288b1eefdce578126bee06b9a67",
+      "source_bytes": 7188
+    },
+    {
+      "path": "docs/framework.md",
+      "source_sha256": "a65f84319b3d6700890d72f5db3065316131cb2b86d09ff8dbc8759f87909468",
+      "artifact_id": "ctx_tool-result_384f217476f2537ae5e641ee1ad329a9b9e76524c308e37db5594ee54b7241ab",
+      "source_bytes": 23625
+    },
+    {
+      "path": "docs/handbook.md",
+      "source_sha256": "aa2add1a9be43e1d8e6c818c7a5939641a4a418f390ca4fa79cf422ab0ce80a3",
+      "artifact_id": "ctx_tool-result_d1da82e9e10f4147ca903d37a479aa62e8c3b33305644586036ae2693ebab8d2",
+      "source_bytes": 39370
+    },
+    {
+      "path": "package-lock.json",
+      "source_sha256": "5543b54d57c031b456463e99da074a2cf44422bec7e2df181e5394d0eac85dac",
+      "artifact_id": "ctx_tool-result_6e760bddf66752722dabd947d299549b60225c810126bb064179df7e9dbe5019",
+      "source_bytes": 62648
+    }
+  ],
+  "rows": [
+    {
+      "variant": "core8-legacy",
+      "content_JSON_bytes": [
+        7886,
+        8833,
+        8585,
+        5958
+      ],
+      "total_content_JSON_bytes": 31262,
+      "cursors": [
+        {
+          "used": 3987,
+          "next_offset": null
+        },
+        {
+          "used": 4096,
+          "next_offset": 4096
+        },
+        {
+          "used": 4096,
+          "next_offset": 4096
+        },
+        {
+          "used": 4096,
+          "next_offset": 4096
+        }
+      ],
+      "provider_calls": 1,
+      "actual_model_calls": 0,
+      "original_arguments_preserved": true
+    },
+    {
+      "variant": "core9-shared",
+      "content_JSON_bytes": [
+        2048,
+        2046,
+        2046,
+        2047
+      ],
+      "total_content_JSON_bytes": 8187,
+      "cursors": [
+        {
+          "used": 686,
+          "next_offset": 686
+        },
+        {
+          "used": 642,
+          "next_offset": 642
+        },
+        {
+          "used": 572,
+          "next_offset": 572
+        },
+        {
+          "used": 1004,
+          "next_offset": 1004
+        }
+      ],
+      "provider_calls": 1,
+      "actual_model_calls": 0,
+      "original_arguments_preserved": true
+    }
+  ],
+  "model_calls": 0,
+  "GPU_used": false
+}
