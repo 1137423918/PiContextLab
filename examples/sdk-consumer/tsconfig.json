@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "ES2024", "module": "NodeNext", "moduleResolution": "NodeNext",
+    "lib": ["ES2024", "DOM"], "types": ["node"],
+    "strict": true, "noUncheckedIndexedAccess": true, "exactOptionalPropertyTypes": true,
+    "noUnusedLocals": true, "noUnusedParameters": true, "verbatimModuleSyntax": true,
+    "skipLibCheck": false, "rootDir": ".", "outDir": "dist"
+  },
+  "include": ["agent.ts", "smoke.ts"]
+}

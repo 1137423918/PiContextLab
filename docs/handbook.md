@@ -1,6 +1,8 @@
 # 从 Pi 到 PiContextLab：框架改造与验证客户端完整讲解
 
-本文对应官方 Pi **1.6.0**、派生核心 **1.6.0-contextlab.11** 与本仓库代码。框架改进是主线，PiMetricLab 经营指标应用是验证客户端。建议按“先跑一个报告，再读架构和恢复，最后看源码”的顺序学习。上游身份见 [upstream-lock.json](../upstream-lock.json)，研究来由见 [references.md](references.md)，实际运行证据见 [validation.md](validation.md)。
+建议先读[项目说明与十分钟展示](project-brief.md)和[独立SDK接入](integration.md)。本文保留各版本的机制演进；历史章节中的版本/分数不代表后续效果已成立。
+
+本文对应官方 Pi **1.6.0**、派生核心 **1.6.0-contextlab.12** 与本仓库代码。框架改进是主线，PiMetricLab 经营指标应用是验证客户端。建议按“先跑一个报告，再读架构和恢复，最后看源码”的顺序学习。上游身份见 [upstream-lock.json](../upstream-lock.json)，研究来由见 [references.md](references.md)，实际运行证据见 [validation.md](validation.md)。
 
 ## 1. 项目要解决的具体问题
 

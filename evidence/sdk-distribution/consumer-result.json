@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "kind": "Isolated npm tarball TypeScript/native Agent integration fixture",
+  "package_version": "1.6.0-contextlab.12",
+  "installed_package": "/tmp/pimetriclab-build-stage98-d73akw7j/pi-context-consumer-ry53um4l/node_modules/@earendil-works/pi-agent-core/package.json",
+  "scripted_provider_calls": 3,
+  "real_model_calls": 0,
+  "source_sha256": "3d127a990144f2f67addffb7cc9031621fdf236f6599cd167d61643cf218d396",
+  "authoritative_source_preserved": true,
+  "exact_numeric_recall": true,
+  "retention_provider_boundary": true,
+  "declarations_match_selection": true,
+  "max_prepared_JSON_bytes": 4901,
+  "GPU_used": false,
+  "outside_repository": true,
+  "package_installed_from_tarball": true,
+  "all_installed_package_bytes_match": true,
+  "skipLibCheck": false
+}

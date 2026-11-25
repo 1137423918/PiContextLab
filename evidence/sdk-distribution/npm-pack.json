@@ -1,0 +1,461 @@
+[
+  {
+    "id": "@earendil-works/pi-agent-core@1.6.0-contextlab.12",
+    "name": "@earendil-works/pi-agent-core",
+    "version": "1.6.0-contextlab.12",
+    "size": 154365,
+    "unpackedSize": 665197,
+    "shasum": "8ea3f626edae9dfdfdc9f1b90701dcef1ea730b2",
+    "integrity": "sha512-ZJfk5mB6OWl37dJnVjshfgaLEFcebAoNhYGdpPMgaVF5nDfUCvC1kBsSOSN8qkDPBpvSJO1NksiFP7wAGJYWmw==",
+    "filename": "earendil-works-pi-agent-core-1.6.0-contextlab.12.tgz",
+    "files": [
+      {
+        "path": "LICENSE",
+        "size": 1069,
+        "mode": 384
+      },
+      {
+        "path": "README.md",
+        "size": 2199,
+        "mode": 384
+      },
+      {
+        "path": "UPSTREAM.json",
+        "size": 780,
+        "mode": 384
+      },
+      {
+        "path": "dist/agent-loop.d.ts",
+        "size": 3593,
+        "mode": 384
+      },
+      {
+        "path": "dist/agent-loop.d.ts.map",
+        "size": 1822,
+        "mode": 384
+      },
+      {
+        "path": "dist/agent-loop.js",
+        "size": 34567,
+        "mode": 384
+      },
+      {
+        "path": "dist/agent-loop.js.map",
+        "size": 66586,
+        "mode": 384
+      },
+      {
+        "path": "dist/agent.d.ts",
+        "size": 8187,
+        "mode": 384
+      },
+      {
+        "path": "dist/agent.d.ts.map",
+        "size": 5072,
+        "mode": 384
+      },
+      {
+        "path": "dist/agent.js",
+        "size": 18485,
+        "mode": 384
+      },
+      {
+        "path": "dist/agent.js.map",
+        "size": 38439,
+        "mode": 384
+      },
+      {
+        "path": "dist/budgeted-policy.d.ts",
+        "size": 2392,
+        "mode": 384
+      },
+      {
+        "path": "dist/budgeted-policy.d.ts.map",
+        "size": 1841,
+        "mode": 384
+      },
+      {
+        "path": "dist/budgeted-policy.js",
+        "size": 7219,
+        "mode": 384
+      },
+      {
+        "path": "dist/budgeted-policy.js.map",
+        "size": 16029,
+        "mode": 384
+      },
+      {
+        "path": "dist/context-artifacts.d.ts",
+        "size": 1314,
+        "mode": 384
+      },
+      {
+        "path": "dist/context-artifacts.d.ts.map",
+        "size": 917,
+        "mode": 384
+      },
+      {
+        "path": "dist/context-artifacts.js",
+        "size": 6674,
+        "mode": 384
+      },
+      {
+        "path": "dist/context-artifacts.js.map",
+        "size": 13086,
+        "mode": 384
+      },
+      {
+        "path": "dist/context-budget.d.ts",
+        "size": 2562,
+        "mode": 384
+      },
+      {
+        "path": "dist/context-budget.d.ts.map",
+        "size": 1667,
+        "mode": 384
+      },
+      {
+        "path": "dist/context-budget.js",
+        "size": 15048,
+        "mode": 384
+      },
+      {
+        "path": "dist/context-budget.js.map",
+        "size": 31037,
+        "mode": 384
+      },
+      {
+        "path": "dist/context-json.d.ts",
+        "size": 547,
+        "mode": 384
+      },
+      {
+        "path": "dist/context-json.d.ts.map",
+        "size": 589,
+        "mode": 384
+      },
+      {
+        "path": "dist/context-json.js",
+        "size": 2557,
+        "mode": 384
+      },
+      {
+        "path": "dist/context-json.js.map",
+        "size": 5888,
+        "mode": 384
+      },
+      {
+        "path": "dist/context-result-budget.d.ts",
+        "size": 1025,
+        "mode": 384
+      },
+      {
+        "path": "dist/context-result-budget.d.ts.map",
+        "size": 879,
+        "mode": 384
+      },
+      {
+        "path": "dist/context-result-budget.js",
+        "size": 4912,
+        "mode": 384
+      },
+      {
+        "path": "dist/context-result-budget.js.map",
+        "size": 10166,
+        "mode": 384
+      },
+      {
+        "path": "dist/context-retention.d.ts",
+        "size": 997,
+        "mode": 384
+      },
+      {
+        "path": "dist/context-retention.d.ts.map",
+        "size": 820,
+        "mode": 384
+      },
+      {
+        "path": "dist/context-retention.js",
+        "size": 4518,
+        "mode": 384
+      },
+      {
+        "path": "dist/context-retention.js.map",
+        "size": 10104,
+        "mode": 384
+      },
+      {
+        "path": "dist/context-search.d.ts",
+        "size": 1204,
+        "mode": 384
+      },
+      {
+        "path": "dist/context-search.d.ts.map",
+        "size": 737,
+        "mode": 384
+      },
+      {
+        "path": "dist/context-search.js",
+        "size": 6719,
+        "mode": 384
+      },
+      {
+        "path": "dist/context-search.js.map",
+        "size": 13165,
+        "mode": 384
+      },
+      {
+        "path": "dist/index.d.ts",
+        "size": 629,
+        "mode": 384
+      },
+      {
+        "path": "dist/index.d.ts.map",
+        "size": 486,
+        "mode": 384
+      },
+      {
+        "path": "dist/index.js",
+        "size": 627,
+        "mode": 384
+      },
+      {
+        "path": "dist/index.js.map",
+        "size": 1148,
+        "mode": 384
+      },
+      {
+        "path": "dist/model-context.d.ts",
+        "size": 1639,
+        "mode": 384
+      },
+      {
+        "path": "dist/model-context.d.ts.map",
+        "size": 1095,
+        "mode": 384
+      },
+      {
+        "path": "dist/model-context.js",
+        "size": 52,
+        "mode": 384
+      },
+      {
+        "path": "dist/model-context.js.map",
+        "size": 1755,
+        "mode": 384
+      },
+      {
+        "path": "dist/proxy.d.ts",
+        "size": 2307,
+        "mode": 384
+      },
+      {
+        "path": "dist/proxy.d.ts.map",
+        "size": 1964,
+        "mode": 384
+      },
+      {
+        "path": "dist/proxy.js",
+        "size": 12073,
+        "mode": 384
+      },
+      {
+        "path": "dist/proxy.js.map",
+        "size": 22055,
+        "mode": 384
+      },
+      {
+        "path": "dist/stream-fn.d.ts",
+        "size": 488,
+        "mode": 384
+      },
+      {
+        "path": "dist/stream-fn.d.ts.map",
+        "size": 271,
+        "mode": 384
+      },
+      {
+        "path": "dist/stream-fn.js",
+        "size": 631,
+        "mode": 384
+      },
+      {
+        "path": "dist/stream-fn.js.map",
+        "size": 1088,
+        "mode": 384
+      },
+      {
+        "path": "dist/tool-result-budget.d.ts",
+        "size": 1104,
+        "mode": 384
+      },
+      {
+        "path": "dist/tool-result-budget.d.ts.map",
+        "size": 871,
+        "mode": 384
+      },
+      {
+        "path": "dist/tool-result-budget.js",
+        "size": 3869,
+        "mode": 384
+      },
+      {
+        "path": "dist/tool-result-budget.js.map",
+        "size": 8417,
+        "mode": 384
+      },
+      {
+        "path": "dist/tool-router.d.ts",
+        "size": 2798,
+        "mode": 384
+      },
+      {
+        "path": "dist/tool-router.d.ts.map",
+        "size": 2072,
+        "mode": 384
+      },
+      {
+        "path": "dist/tool-router.js",
+        "size": 7752,
+        "mode": 384
+      },
+      {
+        "path": "dist/tool-router.js.map",
+        "size": 18092,
+        "mode": 384
+      },
+      {
+        "path": "dist/types.d.ts",
+        "size": 23182,
+        "mode": 384
+      },
+      {
+        "path": "dist/types.d.ts.map",
+        "size": 7842,
+        "mode": 384
+      },
+      {
+        "path": "dist/types.js",
+        "size": 44,
+        "mode": 384
+      },
+      {
+        "path": "dist/types.js.map",
+        "size": 23791,
+        "mode": 384
+      },
+      {
+        "path": "dist/validation-feedback.d.ts",
+        "size": 597,
+        "mode": 384
+      },
+      {
+        "path": "dist/validation-feedback.d.ts.map",
+        "size": 414,
+        "mode": 384
+      },
+      {
+        "path": "dist/validation-feedback.js",
+        "size": 3274,
+        "mode": 384
+      },
+      {
+        "path": "dist/validation-feedback.js.map",
+        "size": 6968,
+        "mode": 384
+      },
+      {
+        "path": "package.json",
+        "size": 679,
+        "mode": 384
+      },
+      {
+        "path": "src/agent-loop.ts",
+        "size": 35154,
+        "mode": 384
+      },
+      {
+        "path": "src/agent.ts",
+        "size": 21664,
+        "mode": 384
+      },
+      {
+        "path": "src/budgeted-policy.ts",
+        "size": 8333,
+        "mode": 384
+      },
+      {
+        "path": "src/context-artifacts.ts",
+        "size": 6667,
+        "mode": 384
+      },
+      {
+        "path": "src/context-budget.ts",
+        "size": 15619,
+        "mode": 384
+      },
+      {
+        "path": "src/context-json.ts",
+        "size": 2726,
+        "mode": 384
+      },
+      {
+        "path": "src/context-result-budget.ts",
+        "size": 5233,
+        "mode": 384
+      },
+      {
+        "path": "src/context-retention.ts",
+        "size": 4677,
+        "mode": 384
+      },
+      {
+        "path": "src/context-search.ts",
+        "size": 6338,
+        "mode": 384
+      },
+      {
+        "path": "src/index.ts",
+        "size": 594,
+        "mode": 384
+      },
+      {
+        "path": "src/model-context.ts",
+        "size": 1562,
+        "mode": 384
+      },
+      {
+        "path": "src/proxy.ts",
+        "size": 11652,
+        "mode": 384
+      },
+      {
+        "path": "src/stream-fn.ts",
+        "size": 683,
+        "mode": 384
+      },
+      {
+        "path": "src/tool-result-budget.ts",
+        "size": 4053,
+        "mode": 384
+      },
+      {
+        "path": "src/tool-router.ts",
+        "size": 8767,
+        "mode": 384
+      },
+      {
+        "path": "src/types.ts",
+        "size": 22632,
+        "mode": 384
+      },
+      {
+        "path": "src/validation-feedback.ts",
+        "size": 3357,
+        "mode": 384
+      }
+    ],
+    "entryCount": 89,
+    "bundled": []
+  }
+]

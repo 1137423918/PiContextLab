@@ -4,7 +4,7 @@
 
 这项项目的主体是对固定 **Pi 1.6.0** 核心的 MIT 派生实现 `1.6.0-contextlab.12`，不是只换 prompt 或套 SDK。原始版本以独立 npm 别名保留作对照；尚未向上游提交或合入。
 
-[完整中文讲解](docs/handbook.md) · [框架改动与算法](docs/framework.md) · [实验结果](docs/validation.md) · [DeepSeek 接入](docs/deepseek.md) · [简历与面试](docs/resume.md) · [研究来源](docs/references.md)
+[项目说明与展示](docs/project-brief.md) · [独立SDK接入](docs/integration.md) · [完整中文讲解](docs/handbook.md) · [框架改动与算法](docs/framework.md) · [实验结果](docs/validation.md) · [DeepSeek 接入](docs/deepseek.md) · [简历与面试](docs/resume.md) · [研究来源](docs/references.md)
 
 ## 核心改进
 
@@ -102,3 +102,7 @@ core11在新的结构化业务预检中修复回退目标未留最低内容空�
 core12增加默认关闭的查询相关精确子树保留，完整原文仍可回查、审计历史不改。新的集中度预检因没有压力而关闭，未改预算重跑；另一个固定部署锁文件工作负载的四个CPU原生Agent控制通过，开启保留仍各需一次回读，不据此宣称模型收益。先行[新方案](examples/dependency-audit-protocol.json)与[全部预检证据](evidence/exact-retention/)公开后才运行真实API。
 
 该先行方案随后实际执行12次DeepSeek请求：开/关各两项均核对正确，每项3请求/1回读；DuckDB开启时回读路径3条缩到1条，但输入token总体更多，没有请求或效率收益。173个执行输入与先行提交一致，原始轨迹及[独立来源检查](evidence/exact-retention/study/independent-source-check.json)公开；研究关闭，不追加余量重试。
+
+## 独立SDK产物
+
+派生核心现在有[已验证tarball](evidence/sdk-distribution/earendil-works-pi-agent-core-1.6.0-contextlab.12.tgz)。补齐包内声明映射所需的17个源码文件后，在仓库外完成独立安装、`skipLibCheck=false`的类型检查和真实Pi Agent脚本集成控制；没有新增模型调用。许可、固定上游身份、哈希、消费lock及原始失败均见[分发证据](evidence/sdk-distribution/)。按[接入说明](docs/integration.md)使用，或先读[简明项目说明与十分钟展示](docs/project-brief.md)。

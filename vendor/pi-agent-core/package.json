@@ -14,8 +14,10 @@
   },
   "files": [
     "dist",
+    "src",
     "LICENSE",
-    "UPSTREAM.json"
+    "UPSTREAM.json",
+    "README.md"
   ],
   "dependencies": {
     "@earendil-works/pi-ai": "1.6.0",

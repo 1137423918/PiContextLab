@@ -1,5 +1,7 @@
 # 简历与面试材料
 
+先读[简明项目说明与展示路线](project-brief.md)，独立复现SDK见[接入说明](integration.md)。
+
 项目名：**PiContextLab — Pi Agent Core 上下文预算与工具选择改造**。个人开源工程项目；PiMetricLab 是真实数据验证客户端，不拆成两个相互独立的履历成果。
 
 ## 算法与 Agent 框架方向：可直接使用

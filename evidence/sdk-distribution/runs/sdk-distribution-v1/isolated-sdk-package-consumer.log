@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/tmp/pimetriclab-build-stage98-1phdsy09/source/scripts/verify_sdk_distribution.py", line 48, in <module>
+    assert not missing_maps, 'Declaration/source maps reference missing packaged source files'
+AssertionError: Declaration/source maps reference missing packaged source files
