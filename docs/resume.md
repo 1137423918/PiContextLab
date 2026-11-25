@@ -73,3 +73,10 @@
 旧项目的[精选写法](https://github.com/1137423918/AgentReliabilityLab/blob/583eb16e0a22e14ce6d815f5632a5559db2dfd85/portfolio/resume-shortlist-2026-11-25.md)、[LoRA原始评分](https://github.com/1137423918/AgentReliabilityLab/blob/583eb16e0a22e14ce6d815f5632a5559db2dfd85/evidence/bfcl-transfer-generation/scoring/results/report.json)、[SciFact完整指标及边界](https://github.com/1137423918/AgentReliabilityLab/blob/583eb16e0a22e14ce6d815f5632a5559db2dfd85/evidence/research-batch/README.md)可用于准备材料。论文另放科研经历，开源贡献另选能解释触发条件与修复取舍的一条；PR合并状态以实时页面为准。
 
 Pi项目目前可写“实现原生策略、执行约束、数值保真及真实验证”；不写“模型成功率提升”“压缩必然省token”。当前默认完整上下文，实验选项仍可研究。个人主页保持冻结。
+
+
+## 新业务演示材料
+
+可展示[退货国家调查](../evidence/business-v6/reports/returns-april-may-country.html)和[二月商品净额调查](../evidence/business-v6/reports/net-sales-feb-halves-products.html)：两项新任务分别以完整/预算配置实际接DeepSeek API，共12次请求，均完成封存与独立金额检查；事后另核对全部保存SQL分组行。它们是同一项目的验证案例，不拆成独立履历。
+
+面试需解释：两个预算任务没有触发外置，因此这不是压力优化有效或成功率提升的证据；模型说明和因果假设仍待核实，报告没有人工审核记录。可写“完成API业务集成和可追溯金额验证”，不写“达到100%泛化准确率”。

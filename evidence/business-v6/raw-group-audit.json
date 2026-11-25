@@ -1,0 +1,42 @@
+{
+  "kind": "Post-study full raw-group arithmetic audit, frozen task grades unchanged",
+  "results": [
+    {
+      "case": "returns-april-may-country",
+      "variant": "full",
+      "groups_checked_individually": 31,
+      "saved_SQL_rows_checked": 49,
+      "passed": true
+    },
+    {
+      "case": "returns-april-may-country",
+      "variant": "budgeted",
+      "groups_checked_individually": 31,
+      "saved_SQL_rows_checked": 49,
+      "passed": true
+    },
+    {
+      "case": "net-sales-feb-halves-products",
+      "variant": "budgeted",
+      "groups_checked_individually": 2417,
+      "saved_SQL_rows_checked": 4161,
+      "passed": true
+    },
+    {
+      "case": "net-sales-feb-halves-products",
+      "variant": "full",
+      "groups_checked_individually": 2417,
+      "saved_SQL_rows_checked": 4161,
+      "passed": true
+    }
+  ],
+  "controls": [
+    "exact amounts accepted",
+    "corrupt amount rejected",
+    "missing group rejected",
+    "duplicate period rejected"
+  ],
+  "model_calls": 0,
+  "GPU_used": false,
+  "passed": true
+}

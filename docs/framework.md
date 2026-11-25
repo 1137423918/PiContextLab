@@ -175,4 +175,4 @@ const decision = routeTools(currentQuestion, registeredTools, {
 
 新的`source_snapshot.py`使用明确的源码目录/后缀与必要fixture清单，生成带逐文件SHA256的归档；不再把历史结果、原始数据、环境、私有状态及旧压缩包套入新包。相同输入归档字节可重复，拒绝选中源码中的symlink。服务器控制验证必要源码/oracle存在、排除项、逐文件hash、可重复字节和symlink拒绝。源字节清单只是重现身份，不替代服务器编译与行为检查；已有冻结历史不修改。
 
-新的真实任务方案在[运行前说明](evaluation-business-v6-plan.md)和[机器协议](../examples/business-v6-protocol.json)。`oracle_business_v6.py`独立CSV/Decimal计算全部分组，`validate-business-v6.ts`在发请求前同DuckDB逐组核对，`business-evaluation.ts`同时检查请求身份、哈希、金额及Top/OTHER。`run-business-v6.ts`使用原生Runner和DeepSeek provider，固定预算并持久保留wire输入/请求预留；不会把oracle答案加入模型上下文。默认真实入口配置保持不变。
+新的真实任务方案在[运行前说明](evaluation-business-v6-plan.md)和[机器协议](../examples/business-v6-protocol.json)。`oracle_business_v6.py`独立CSV/Decimal计算全部分组，`validate-business-v6.ts`在发请求前同DuckDB核对Top/OTHER与总额，研究后另用`audit_business_rows_v6.py`核对全部保存分组行，`business-evaluation.ts`同时检查请求身份、哈希、金额及Top/OTHER。`run-business-v6.ts`使用原生Runner和DeepSeek provider，固定预算并持久保留wire输入/请求预留；不会把oracle答案加入模型上下文。默认真实入口配置保持不变。

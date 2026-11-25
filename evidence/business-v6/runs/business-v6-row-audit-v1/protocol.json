@@ -1,0 +1,22 @@
+{
+  "source_snapshot_sha256": "f587940019bd329f5f23dc09eb380075c99b01124062469698a6bdd96bea79d0",
+  "source_snapshot_format": "source-only-v1",
+  "controller_sha256": "702289d5c34dc0ad000da725e10a11243d1b2d8dc357713033b0502fe917571b",
+  "wrapper_sha256": "9d7e401497343f3f99034a897cdf50d88c59d1ef669494a601a2e9cc326f6ff0",
+  "cpu_admission_sha256": "62350c3401c5336ff873d429da29fb4397f114c016bb96a003d5a2b673029fe1",
+  "input_bundle_sha256": "881780f3e571db7c98ded223deb362b76808a9df3c27c30e82943fee41194c79",
+  "phases": [
+    {
+      "name": "post-study-full-raw-group-audit",
+      "argv": [
+        "/data1/wjz26/agent-lab-20261120/envs/model-request-budget-20261121/bin/python",
+        "scripts/audit_business_rows_v6.py",
+        "/data1/wjz26/agent-lab-20261120/outputs/pi-metriclab-stage98-business-v6-study-v1",
+        "raw-group-audit.json"
+      ],
+      "cap": 45
+    }
+  ],
+  "framework_install": true,
+  "purpose": "Independent post-study rawSQL group-by-group arithmetic verification; unchanged frozen business grader and source; no model requests or GPU."
+}

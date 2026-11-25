@@ -1,0 +1,384 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'"><title>Returns, May 2011 vs April 2011 (calendar month), with country breakdown</title><style>body{font:16px/1.7 system-ui;max-width:1000px;margin:40px auto;padding:0 24px;color:#182b3a}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f1f5f7;padding:16px}h1{line-height:1.3}section{border-top:1px solid #ccd8df;margin-top:32px}small{color:#516578}</style><h1>Returns, May 2011 vs April 2011 (calendar month), with country breakdown</h1><small>report_4640ea96ed91a4a824d667e8ada1ef14e92b2c667eb86b3fe6e049099b665146<br>Dataset ds_1f8144bb8670bcad07cde082 · GBP · 2026-11-25T07:10:18.869Z</small><p>数字事实来自下列已保存证据。模型叙述未经独立核实，贡献拆解不证明因果。</p><section><h2>解释（待核实）</h2><p>Dataset ds_1f8144bb8670bcad07cde082 covers 2010-12-01 to 2011-12-09, so both requested calendar months are fully inside coverage; no partial-period caveat applies. Policy retail-gbp-v1 defines returns as the absolute amount of eligible negative-quantity lines, including cancellations, in GBP; it is a bookkeeping measure, not cash refunded. Per the catalog, duplicate source lines are preserved and return adjustments remain in source, so figures are descriptive only.
+
+Comparison (ev_cbd6a81c...): returns rose from the April 2011 baseline to the May 2011 current period, a positive delta. All quantitative values are in the evidence record.
+
+Country breakdown, top 8 plus OTHER (ev_ee979276...): the increase is not broad-based. The United Kingdom is the single largest positive contributor and by itself exceeds the total net change, meaning other countries net out negative. Singapore and Japan show returns in the baseline and none in the current month, and France, Australia and Switzerland also declined; these are the main offsets. Portugal and Channel Islands show no baseline returns and new current-period returns. The OTHER bucket (23 remaining countries) is small and slightly negative. Top-8 plus OTHER reconciles exactly to the comparison totals, so no unexplained residual exists.
+
+Interpretation limits: the breakdown is additive and descriptive. The concentration in the United Kingdom and the appearance/disappearance of returns in specific countries are consistent with a small number of large return or cancellation events rather than a shift in underlying return propensity, but this dataset view cannot distinguish those. No causal claim is made.</p><h2>待验证假设</h2><ul><li>A small number of large-value return or cancellation lines in the United Kingdom drove most of the month-over-month increase, rather than a broad rise in return frequency.</li><li>The Singapore and Japan baseline returns with zero current-month returns reflect one-off cancellation events in April rather than a durable improvement in those markets.</li><li>The new Portugal and Channel Islands current-month returns reflect isolated large adjustments rather than newly established return activity.</li><li>Because returns include cancellation invoices, part of the movement may reflect invoice-timing/bookkeeping effects (when cancellations were recorded) rather than changes in customer return behavior.</li></ul></section><section><h2>comparison</h2><small>ev_cbd6a81c317c5429a5a1f45c2741a759b8723089fac27b2e2208183c100aa9de · retail-gbp-v1<br>Result SHA256 c89d5a61e693f1bae92e2d3e711b84c89f0b2fd804d7d4e7e20cfc56e80c6327</small><h3>请求</h3><pre>{
+  &quot;metric&quot;: &quot;returns&quot;,
+  &quot;baseline&quot;: {
+    &quot;start&quot;: &quot;2011-04-01&quot;,
+    &quot;end&quot;: &quot;2011-05-01&quot;
+  },
+  &quot;current&quot;: {
+    &quot;start&quot;: &quot;2011-05-01&quot;,
+    &quot;end&quot;: &quot;2011-06-01&quot;
+  },
+  &quot;basis&quot;: &quot;calendar_month&quot;
+}</pre><h3>确定性结果</h3><pre>{
+  &quot;metric&quot;: &quot;returns&quot;,
+  &quot;baseline&quot;: &quot;44601.5000&quot;,
+  &quot;current&quot;: &quot;47202.5100&quot;,
+  &quot;delta&quot;: &quot;2601.0100&quot;,
+  &quot;unit&quot;: &quot;GBP&quot;,
+  &quot;catalog&quot;: {
+    &quot;policy&quot;: &quot;retail-gbp-v1&quot;,
+    &quot;currency&quot;: &quot;GBP&quot;,
+    &quot;time&quot;: &quot;Source local wall time; no timezone inferred&quot;,
+    &quot;grain&quot;: &quot;invoice line; orders use distinct invoice_no; customers use nonempty customer_id&quot;,
+    &quot;eligibility&quot;: &quot;unit_price &gt; 0; exclude cancellation invoices with nonnegative quantity; preserve duplicate source lines&quot;,
+    &quot;net_sales&quot;: &quot;Signed eligible quantity × unit_price; not cash collected&quot;,
+    &quot;gross_sales&quot;: &quot;Eligible positive-quantity sales, excluding cancellation invoices&quot;,
+    &quot;returns&quot;: &quot;Absolute amount of eligible negative-quantity lines, including cancellations&quot;,
+    &quot;sales_orders&quot;: &quot;Distinct invoices with eligible positive sales&quot;,
+    &quot;identified_customers&quot;: &quot;Distinct known customers with eligible positive sales; unknown customers still contribute revenue&quot;,
+    &quot;avg_order_value&quot;: &quot;Gross sales / distinct sales orders; four-decimal half-away-from-zero rounding&quot;,
+    &quot;caveat&quot;: &quot;Bookkeeping and return adjustments remain in source; contribution is descriptive, not causal&quot;
+  }
+}</pre><details><summary>SQL、绑定参数与原始结果</summary><pre>WITH periods AS (SELECT &#39;baseline&#39; period, ?::TIMESTAMP a, ?::TIMESTAMP b UNION ALL SELECT &#39;current&#39;, ?::TIMESTAMP, ?::TIMESTAMP)
+      SELECT p.period, coalesce(sum(CASE WHEN quantity &lt; 0 THEN -(quantity::DECIMAL(18,0) * unit_price) ELSE 0 END),0)::VARCHAR value, count(DISTINCT CASE WHEN quantity &gt; 0 AND NOT starts_with(upper(invoice_no),&#39;C&#39;) THEN invoice_no END)::VARCHAR orders
+      FROM periods p LEFT JOIN facts f ON invoice_time &gt;= p.a AND invoice_time &lt; p.b AND (unit_price &gt; 0 AND NOT (starts_with(upper(invoice_no),&#39;C&#39;) AND quantity &gt;= 0)) GROUP BY p.period ORDER BY p.period
+[&quot;2011-04-01&quot;,&quot;2011-05-01&quot;,&quot;2011-05-01&quot;,&quot;2011-06-01&quot;]
+[
+  {
+    &quot;period&quot;: &quot;baseline&quot;,
+    &quot;value&quot;: &quot;44601.5000&quot;,
+    &quot;orders&quot;: &quot;1246&quot;
+  },
+  {
+    &quot;period&quot;: &quot;current&quot;,
+    &quot;value&quot;: &quot;47202.5100&quot;,
+    &quot;orders&quot;: &quot;1681&quot;
+  }
+]</pre></details></section><section><h2>breakdown</h2><small>ev_ee979276cc05e289b70b472bbc80d49695d2b19a8029017000d1bbe9419bf776 · retail-gbp-v1<br>Result SHA256 f309f2ba41c177808b9bba5e7d0232455e50d881aa4b67b98038161584553df7</small><h3>请求</h3><pre>{
+  &quot;comparison&quot;: {
+    &quot;metric&quot;: &quot;returns&quot;,
+    &quot;baseline&quot;: {
+      &quot;start&quot;: &quot;2011-04-01&quot;,
+      &quot;end&quot;: &quot;2011-05-01&quot;
+    },
+    &quot;current&quot;: {
+      &quot;start&quot;: &quot;2011-05-01&quot;,
+      &quot;end&quot;: &quot;2011-06-01&quot;
+    },
+    &quot;basis&quot;: &quot;calendar_month&quot;
+  },
+  &quot;dimension&quot;: &quot;country&quot;,
+  &quot;limit&quot;: 8
+}</pre><h3>确定性结果</h3><pre>{
+  &quot;dimension&quot;: &quot;country&quot;,
+  &quot;metric&quot;: &quot;returns&quot;,
+  &quot;top&quot;: [
+    {
+      &quot;dimension&quot;: &quot;United Kingdom&quot;,
+      &quot;baseline&quot;: &quot;34263.7200&quot;,
+      &quot;current&quot;: &quot;42854.5000&quot;,
+      &quot;delta&quot;: &quot;8590.7800&quot;
+    },
+    {
+      &quot;dimension&quot;: &quot;Singapore&quot;,
+      &quot;baseline&quot;: &quot;6090.8400&quot;,
+      &quot;current&quot;: &quot;0.0000&quot;,
+      &quot;delta&quot;: &quot;-6090.8400&quot;
+    },
+    {
+      &quot;dimension&quot;: &quot;Portugal&quot;,
+      &quot;baseline&quot;: &quot;0.0000&quot;,
+      &quot;current&quot;: &quot;3614.4000&quot;,
+      &quot;delta&quot;: &quot;3614.4000&quot;
+    },
+    {
+      &quot;dimension&quot;: &quot;Japan&quot;,
+      &quot;baseline&quot;: &quot;1676.6700&quot;,
+      &quot;current&quot;: &quot;0.0000&quot;,
+      &quot;delta&quot;: &quot;-1676.6700&quot;
+    },
+    {
+      &quot;dimension&quot;: &quot;France&quot;,
+      &quot;baseline&quot;: &quot;1334.4000&quot;,
+      &quot;current&quot;: &quot;87.8000&quot;,
+      &quot;delta&quot;: &quot;-1246.6000&quot;
+    },
+    {
+      &quot;dimension&quot;: &quot;Australia&quot;,
+      &quot;baseline&quot;: &quot;438.2000&quot;,
+      &quot;current&quot;: &quot;9.9000&quot;,
+      &quot;delta&quot;: &quot;-428.3000&quot;
+    },
+    {
+      &quot;dimension&quot;: &quot;Channel Islands&quot;,
+      &quot;baseline&quot;: &quot;0.0000&quot;,
+      &quot;current&quot;: &quot;303.4500&quot;,
+      &quot;delta&quot;: &quot;303.4500&quot;
+    },
+    {
+      &quot;dimension&quot;: &quot;Switzerland&quot;,
+      &quot;baseline&quot;: &quot;254.7500&quot;,
+      &quot;current&quot;: &quot;42.8000&quot;,
+      &quot;delta&quot;: &quot;-211.9500&quot;
+    }
+  ],
+  &quot;other&quot;: {
+    &quot;groups&quot;: 23,
+    &quot;baseline&quot;: &quot;542.9200&quot;,
+    &quot;current&quot;: &quot;289.6600&quot;,
+    &quot;delta&quot;: &quot;-253.2600&quot;
+  },
+  &quot;totals&quot;: {
+    &quot;baseline&quot;: &quot;44601.5000&quot;,
+    &quot;current&quot;: &quot;47202.5100&quot;,
+    &quot;delta&quot;: &quot;2601.0100&quot;
+  },
+  &quot;causal&quot;: false
+}</pre><details><summary>SQL、绑定参数与原始结果</summary><pre>SELECT country dimension, coalesce(sum(CASE WHEN quantity &lt; 0 THEN -(quantity::DECIMAL(18,0) * unit_price) ELSE 0 END),0)::VARCHAR value, CASE WHEN invoice_time &lt; ?::TIMESTAMP THEN &#39;baseline&#39; ELSE &#39;current&#39; END period
+      FROM facts WHERE (unit_price &gt; 0 AND NOT (starts_with(upper(invoice_no),&#39;C&#39;) AND quantity &gt;= 0)) AND ((invoice_time &gt;= ?::TIMESTAMP AND invoice_time &lt; ?::TIMESTAMP) OR (invoice_time &gt;= ?::TIMESTAMP AND invoice_time &lt; ?::TIMESTAMP)) GROUP BY dimension, period ORDER BY dimension, period
+[&quot;2011-05-01&quot;,&quot;2011-04-01&quot;,&quot;2011-05-01&quot;,&quot;2011-05-01&quot;,&quot;2011-06-01&quot;]
+[
+  {
+    &quot;dimension&quot;: &quot;Australia&quot;,
+    &quot;value&quot;: &quot;438.2000&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Australia&quot;,
+    &quot;value&quot;: &quot;9.9000&quot;,
+    &quot;period&quot;: &quot;current&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Austria&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Austria&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;current&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Bahrain&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;current&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Belgium&quot;,
+    &quot;value&quot;: &quot;35.3300&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Belgium&quot;,
+    &quot;value&quot;: &quot;5.4000&quot;,
+    &quot;period&quot;: &quot;current&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Brazil&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Canada&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;current&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Channel Islands&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Channel Islands&quot;,
+    &quot;value&quot;: &quot;303.4500&quot;,
+    &quot;period&quot;: &quot;current&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Cyprus&quot;,
+    &quot;value&quot;: &quot;35.8000&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Czech Republic&quot;,
+    &quot;value&quot;: &quot;57.5100&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Denmark&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;current&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;EIRE&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;EIRE&quot;,
+    &quot;value&quot;: &quot;87.4100&quot;,
+    &quot;period&quot;: &quot;current&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;European Community&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Finland&quot;,
+    &quot;value&quot;: &quot;62.1100&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;France&quot;,
+    &quot;value&quot;: &quot;1334.4000&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;France&quot;,
+    &quot;value&quot;: &quot;87.8000&quot;,
+    &quot;period&quot;: &quot;current&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Germany&quot;,
+    &quot;value&quot;: &quot;352.1700&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Germany&quot;,
+    &quot;value&quot;: &quot;179.8500&quot;,
+    &quot;period&quot;: &quot;current&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Greece&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Hong Kong&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Hong Kong&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;current&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Iceland&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Israel&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Italy&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Italy&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;current&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Japan&quot;,
+    &quot;value&quot;: &quot;1676.6700&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Japan&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;current&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Netherlands&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Netherlands&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;current&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Poland&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Poland&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;current&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Portugal&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Portugal&quot;,
+    &quot;value&quot;: &quot;3614.4000&quot;,
+    &quot;period&quot;: &quot;current&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Singapore&quot;,
+    &quot;value&quot;: &quot;6090.8400&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Spain&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Spain&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;current&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Sweden&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Sweden&quot;,
+    &quot;value&quot;: &quot;17.0000&quot;,
+    &quot;period&quot;: &quot;current&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Switzerland&quot;,
+    &quot;value&quot;: &quot;254.7500&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Switzerland&quot;,
+    &quot;value&quot;: &quot;42.8000&quot;,
+    &quot;period&quot;: &quot;current&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;USA&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;United Kingdom&quot;,
+    &quot;value&quot;: &quot;34263.7200&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;United Kingdom&quot;,
+    &quot;value&quot;: &quot;42854.5000&quot;,
+    &quot;period&quot;: &quot;current&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Unspecified&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;baseline&quot;
+  },
+  {
+    &quot;dimension&quot;: &quot;Unspecified&quot;,
+    &quot;value&quot;: &quot;0.0000&quot;,
+    &quot;period&quot;: &quot;current&quot;
+  }
+]</pre></details></section><section><h2>版本绑定审核</h2><pre>{
+  &quot;status&quot;: &quot;Unreviewed&quot;
+}</pre></section></html>

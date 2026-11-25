@@ -287,8 +287,30 @@ v4 最终服务器验证：**33 项测试、14 项浏览器检查通过**。完�
 
 [运行前方案](evaluation-business-v6-plan.md)和[机器协议](../examples/business-v6-protocol.json)在付费请求前冻结。两个新范围分别为四月/五月returns-country和二月两个14天窗口net_sales-stock_code；完整64KiB与预算16KiB各一次，上限24请求，字段搜索关闭，不重新评价旧研究。
 
-服务器无密钥预检通过52项Node测试、14项浏览器检查与原全量UCI核对。新Python CSV/Decimal oracle同DuckDB核对31个国家分组、2,417个商品分组；对应退货金额44,601.5000→47,202.5100 GBP，净额229,796.4900→268,266.1600 GBP。这是独立算术控制，不是模型成功。
+服务器无密钥预检通过52项Node测试、14项浏览器检查与原全量UCI核对。新Python CSV/Decimal oracle包含31个国家分组、2,417个商品分组，预检同DuckDB核对Top/OTHER与总额（全部保存行另在研究后核对）；对应退货金额44,601.5000→47,202.5100 GBP，净额229,796.4900→268,266.1600 GBP。这是独立算术控制，不是模型成功。
 
 新的源码归档控制验证必要fixture、排除私有/生成/旧archive、逐文件hash、相同输入字节一致及symlink拒绝。预检输入包512,820字节，含118个清单文件，不再嵌套历史实验包。已有冻结包保持不变。
 
-[52项预检](../evidence/business-v6/preflight-tests.tap) · [独立oracle](../evidence/business-v6/oracle.json) · [逐组核对](../evidence/business-v6/oracle-validation.json) · [源码归档控制](../evidence/business-v6/source-snapshot-checks.log) · [输入清单](../evidence/business-v6/snapshot-manifest.json) · [资源](../evidence/business-v6/runs/)。此提交尚未发出本研究真实请求，实际结果后续单独留存。
+[52项预检](../evidence/business-v6/preflight-tests.tap) · [独立oracle](../evidence/business-v6/oracle.json) · [逐组核对](../evidence/business-v6/oracle-validation.json) · [源码归档控制](../evidence/business-v6/source-snapshot-checks.log) · [输入清单](../evidence/business-v6/snapshot-manifest.json) · [资源](../evidence/business-v6/runs/)。原预检提交68cf51f当时尚未发出本研究真实请求；随后结果单独留存。原预检把核对范围写宽，当前已更正，冻结方案附有运行后说明。
+
+
+## core6 两个新业务任务的真实 DeepSeek 结果
+
+[先行提交68cf51f](https://github.com/1137423918/PiContextLab/commit/68cf51fbbbd9b8d7c5d3dff9c848d0651344ca51)在发请求前公开，执行的69个源码文件与该提交核对一致。独立新研究按原协议只运行一次：四个任务实例总计12次真实请求/12次持久预留，低于24上限，无缺失usage；研究已关闭，owned进程最终0。
+
+| 新任务 | 配置 | 原定评分 | 请求 | 累计输入tokens（含cache） | 累计输出tokens |
+|---|---|---|---:|---:|---:|
+| 四月/五月returns，country Top8 | 完整64KiB | 通过 | 3 | 5,421 | 851 |
+| 同任务 | 预算16KiB | 通过 | 3 | 5,424 | 981 |
+| 二月等长半月net_sales，stock_code Top12 | 预算16KiB | 通过 | 3 | 5,602 | 1,217 |
+| 同任务 | 完整64KiB | 通过 | 3 | 5,602 | 1,200 |
+
+四个实例均按inspect→compare→breakdown→submit调用工具并封存报告，通过原定请求、来源身份、Top/OTHER金额和总额检查。输出是多次请求的合计，不是单次1,024上限被突破。预算实例的最大规范化视图分别10,633与11,035字节，**均未触发外置、历史归档或回读**；每个policy索引构建1次、命中2次。
+
+因此这只补充低压力真实业务集成证据：新版在这些普通任务中可以保留全部结果并完成流程。不是上下文压力效果实验，没有证明旧v4失败被修复、成功率更高或更省token。两个新任务分别复用相同数据源，两种预算不同，不能作为泛化准确率或新旧版本效果曲线。原v4审计负结果保持不变，默认真实入口仍为完整上下文。
+
+原评分的`groups_checked`表示参与Top/OTHER验证的oracle组数，**不是完整SQL行逐条对账数**；预检的原说明写宽，已明确更正。模型研究结束后，另加独立CPU审计，对保留的每个原始SQL分组/期间行按相同CSV Decimal oracle逐条核对：每个returns实例31组、每个商品实例2,417组。错误金额、缺组和重复行反例拒绝；原评分代码和分数未改，不追加模型请求。这是事后算术完整性核查，应与先验任务评分区分。
+
+总估计费用约$0.0067，按冻结单价和全部usage计算，**不是供应商账单**；前缀缓存、固定顺序及不同输出长度影响费用，不推导省钱比例。报告叙述与因果假设没有评分，仍未经人工审核。
+
+[原始任务/消息/证据](../evidence/business-v6/results.json) · [逐例汇总](../evidence/business-v6/summary.json) · [Pi provider边界输入](../evidence/business-v6/wire-transcripts.json) · [执行源码身份](../evidence/business-v6/source-sha256.json) · [全部分组行补查](../evidence/business-v6/raw-group-audit.json) · [新退货报告](../evidence/business-v6/reports/returns-april-may-country.html) · [新商品报告](../evidence/business-v6/reports/net-sales-feb-halves-products.html) · [资源](../evidence/business-v6/runs/)。所谓wire记录是传给Pi适配器的context，不是原始HTTP body；API适配器还会按自身协议转换。

@@ -1,0 +1,96 @@
+{
+  "source_snapshot_sha256": "f587940019bd329f5f23dc09eb380075c99b01124062469698a6bdd96bea79d0",
+  "source_snapshot_format": "source-only-v1",
+  "controller_sha256": "702289d5c34dc0ad000da725e10a11243d1b2d8dc357713033b0502fe917571b",
+  "wrapper_sha256": "9d7e401497343f3f99034a897cdf50d88c59d1ef669494a601a2e9cc326f6ff0",
+  "cpu_admission_sha256": "62350c3401c5336ff873d429da29fb4397f114c016bb96a003d5a2b673029fe1",
+  "input_bundle_sha256": "4a400de9276b7d415159f5a43b46fcbd2a5da3b0810657d1081c6571e592defb",
+  "phases": [
+    {
+      "name": "numeric-source-runtime-capability",
+      "argv": [
+        "NODE",
+        "-e",
+        "JSON.parse('9007199254740993',(_k,v,c)=>{if(c?.source!=='9007199254740993')throw Error('JSON.parse source unsupported');return v;});console.log('exact numeric source available')"
+      ]
+    },
+    {
+      "name": "source-snapshot-boundaries",
+      "argv": [
+        "/data1/wjz26/agent-lab-20261120/envs/model-request-budget-20261121/bin/python",
+        "scripts/check_source_snapshot.py"
+      ],
+      "cap": 30
+    },
+    {
+      "name": "build-native-fork",
+      "argv": [
+        "NODE",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "vendor/pi-agent-core/tsconfig.json"
+      ]
+    },
+    {
+      "name": "native-and-application-check",
+      "argv": [
+        "/tmp/agentlab-deeptutor-setup-stage92-02uddvuy/tools/node/bin/npm",
+        "run",
+        "check"
+      ]
+    },
+    {
+      "name": "build-application",
+      "argv": [
+        "NODE",
+        "node_modules/typescript/bin/tsc"
+      ]
+    },
+    {
+      "name": "new-business-independent-CSV-oracle",
+      "argv": [
+        "/data1/wjz26/agent-lab-20261120/envs/model-request-budget-20261121/bin/python",
+        "scripts/oracle_business_v6.py",
+        "/tmp/pimetriclab-intake-stage98-_jz6nfyq/dataset/transactions.csv",
+        "examples/business-v6-protocol.json",
+        "business-v6-oracle.json"
+      ],
+      "cap": 90
+    },
+    {
+      "name": "new-business-oracle-engine-reconciliation",
+      "argv": [
+        "NODE",
+        "dist/scripts/validate-business-v6.js",
+        "/tmp/pimetriclab-build-stage98-whosstp1/source/validation-final/home/datasets",
+        "business-v6-oracle.json",
+        "business-v6-oracle-validation.json"
+      ],
+      "cap": 90
+    },
+    {
+      "name": "deepseek-runtime-validation",
+      "argv": [
+        "NODE",
+        "dist/scripts/run-business-v6.js",
+        "/tmp/pimetriclab-build-stage98-whosstp1/source/validation-final/home/datasets",
+        "business-v6-oracle.json",
+        "business-v6"
+      ],
+      "cap": 560
+    }
+  ],
+  "framework_install": true,
+  "purpose": "Once-only preregistered new real business comparison on core6;2tasksx2variants,24maxrequests; oracle separate from model input; source68cf51f published before any request; no GPU/old-study rerun.",
+  "mode": "cpu",
+  "environment": {
+    "METRICLAB_MODEL_URL": "https://api.deepseek.com",
+    "METRICLAB_MODEL_ID": "deepseek-flash",
+    "METRICLAB_MAX_CONTEXT_BYTES": "65536",
+    "METRICLAB_CONTEXT_POLICY": "upstream",
+    "METRICLAB_ARTIFACT_SEARCH": "0",
+    "METRICLAB_BUSINESS_SOURCE_COMMIT": "68cf51fbbbd9b8d7c5d3dff9c848d0651344ca51"
+  },
+  "provider": "deepseek",
+  "model_count_evidence_path": "business-v6/checkpoint.json"
+}
