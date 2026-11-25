@@ -4,7 +4,7 @@
 
 ## 改动位置与已有能力
 
-固定 Pi 1.6.0 的完整 Agent Core 源码保留在 [vendor/pi-agent-core](../vendor/pi-agent-core)，原文件哈希见 [UPSTREAM.json](../vendor/pi-agent-core/UPSTREAM.json)，MIT 原许可一并保留。派生版本为 `1.6.0-contextlab.9`，不是上游发布或已合入 PR。原研究克隆保持不变。
+固定 Pi 1.6.0 的完整 Agent Core 源码保留在 [vendor/pi-agent-core](../vendor/pi-agent-core)，原文件哈希见 [UPSTREAM.json](../vendor/pi-agent-core/UPSTREAM.json)，MIT 原许可一并保留。派生版本为 `1.6.0-contextlab.10`，不是上游发布或已合入 PR。原研究克隆保持不变。
 
 上游已有 `transformContext`、工具调用屏障、完整的 `pi-durable` 持久化 Harness、摘要压缩，以及部分工具输出限制。本项目不把这些已有能力说成原创。
 
@@ -232,3 +232,35 @@ const agent = new Agent({
 PiMetricLab只在显式budgeted模式配置8KiB组预算，默认full模式不启用。恢复先从原assistant的**全部调用**与已绑定允许集合重算原分配，然后跳过已完成调用；若四次中已完成两次，剩余两次仍各2KiB，不各拿一个新8KiB池。指纹包含新版、组预算和工具元数据；旧任务不静默迁移。
 
 边界：总额只覆盖已配置组的最终content数组，不包括外层ToolResult包装、details、partial updates、其他工具、assistant文本或完整下一轮上下文。它没有按下一轮可用空间预留输出，不提供token保证，最新回读批次保护与发送前硬上限照常执行。新的CPU对照和71项测试见[原始证据](../evidence/recall-budget/)，没有追加模型请求或宣称旧失败已解决。
+
+## contextlab.10：响应返回后的纯回读空间规划
+
+静态8KiB总额仍可能大于当前剩余空间。新增可选`ModelContextPolicy.planToolResultBudgets`：拿到本轮完整assistant后、任何工具执行前，允许策略根据实际参数和来源上下文**降低**宿主已有组预算；核心通过`restrictToolResultBudgets`拒绝提高上限、非法字节数及新增组，之后仍用原生分配/执行/最终检查路径。响应因length截断时直接沿用拒绝路径，不规划执行。
+
+`BudgetedContextPolicy`只在`recallResultBudget: true`时启用。具体实现见[context-result-budget.ts](../vendor/pi-agent-core/src/context-result-budget.ts)：只处理全部为已选读取/字段定位工具的批次；混有业务工具或未知工具时保持原静态配额，因为这些结果大小不受该协议约束。
+
+1. 捕获请求转换、规范化后的来源消息数组快照，追加实际assistant和每个调用的空结果，构成完整事务。不能直接保留一个会被流式回调追加assistant的活数组，否则投影可能重复调用、产生未配对事务。正常Agent和低层identity converter都有覆盖。
+2. 设硬上限H、初始总分配D、调用数N；空content数组每个占2字节，另为通常时间戳/耗时等包装增量留256N字节余量。先尝试按`max(1024, H-D-256N+2N)`打包投影视图，使用同一查询、路由后工具、精确外置和完整旧轮规则，最新空回读批次仍保护。
+3. 只有明确的`ContextPackingLimitError`才退回H再投影，存储错误、取消、损坏事务等直接抛出。得到投影大小P后，实际总配额是`min(D, H-P+2N-256N)`；若小于组内最低额，执行前终止。不会减少原assistant输入或伪造已完成结果。
+4. 对正常内建回读，最终content按此配额分页，继续给实际offset。当前代码没有把投影替换成权威历史；它只用于准入和配额计算，下轮仍由正常policy重新准备并经过硬上限检查。
+
+```ts
+const policy = new BudgetedContextPolicy({
+  ...policyOptions,
+  recallResultBudget: true,
+  onResultBudgetPlanned: async (input, budgets, trace) => {
+    // 宿主在任何工具开始前，把方案与已保存的具体响应绑定。
+    await saveResponseBoundPlan(input.assistantMessage, budgets, trace);
+  },
+});
+const agent = new Agent({
+  streamFn, initialState, modelContextPolicy: policy,
+  toolResultBudgets: { 'context-recall': 8192 },
+});
+```
+
+PiMetricLab在budgeted模式显式开启；full仍不启用。`result_budget_plans`以job和忽略thinkingLevel注释的assistant身份保存组配额，先验证持久请求/响应的工具绑定、再原子写方案与审计事件；已有方案不可修改。恢复先取此方案，再按原整批分配、跳过已完成结果。若中断发生在规划前，只用原assistant之前的来源重建，不把已经完成的部分回读误算成新空间。运行指纹升级，旧版本任务不静默迁移。
+
+这不是任意后续请求的空间证明：256字节余量只面向通常内建回读包装，不约束任意hook的usage/元数据、自定义transform、后续工具集合变化或外部消息；混合批次仍静态。精确投影可能为较小目标写入artifact后失败，再走硬上限投影，这些幂等存储不能仅按最后packing trace声称精确写入次数。两个投影均不调用模型。保留下一轮硬上限、完整原文及错误状态，不提供token或模型成功保证。
+
+新合成控制中静态版压力回读后拒绝，规划版以5,996字节回读生成23,660/24,576字节下一轮；空间充足时两版相同，无法容纳时新版工具开始数为0。80项工程控制、正常宿主持久化和重启复用见[完整证据](../evidence/result-headroom/)，未重试关闭的DeepSeek研究。

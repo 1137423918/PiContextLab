@@ -5,6 +5,15 @@ import type { AgentToolCall, AgentToolCallOutcome } from "./types.ts";
 export const CONTEXT_RECALL_BUDGET_GROUP = "context-recall";
 export const contentJsonBytes = (content: unknown): number => new TextEncoder().encode(JSON.stringify(content)).length;
 
+/** Policies may tighten host budgets, never enable a new group or increase a ceiling. */
+export function restrictToolResultBudgets(configured: Readonly<Record<string, number>> | undefined, planned: Readonly<Record<string, number>> | undefined): Readonly<Record<string, number>> | undefined {
+	if (planned === undefined) return configured;
+	for (const [group, bytes] of Object.entries(planned)) {
+		if (!configured || !Object.hasOwn(configured, group) || !Number.isSafeInteger(bytes) || bytes < 256 || bytes > configured[group]) throw new RangeError("Policy result budgets must only lower configured group ceilings");
+	}
+	return Object.freeze({ ...configured, ...planned });
+}
+
 export function allocateToolResultBudgets(
 	calls: readonly AgentToolCall[], tools: readonly ExecutableTools[number][],
 	budgets?: Readonly<Record<string, number>>,

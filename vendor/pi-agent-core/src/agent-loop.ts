@@ -16,12 +16,13 @@ import {
 	type SystemMessage,
 	type ToolResultMessage,
 	type ToolStateChanges,
+	type TranscriptContext,
 	toToolDeclaration,
 	validateToolArguments,
 } from "@earendil-works/pi-ai";
 import { getDefaultStreamFn } from "./stream-fn.ts";
 import { boundedToolValidationError } from "./validation-feedback.ts";
-import { allocateToolResultBudgets, enforceToolResultBudget } from "./tool-result-budget.ts";
+import { allocateToolResultBudgets, enforceToolResultBudget, restrictToolResultBudgets } from "./tool-result-budget.ts";
 import type { ExecutableTools } from "./model-context.ts";
 import type {
 	AgentContext,
@@ -289,7 +290,11 @@ async function runLoop(
 			const toolResults: ToolResultMessage[] = [];
 			hasMoreToolCalls = false;
 			if (toolCalls.length > 0) {
-				const allocations = allocateToolResultBudgets(toolCalls, preparedResponse.tools, config.toolResultBudgets);
+				const planned = config.toolResultBudgets && message.stopReason !== "length"
+					? await config.modelContextPolicy?.planToolResultBudgets?.({ context: preparedResponse.sourceContext, tools: preparedResponse.tools, model: config.model, assistantMessage: message, budgets: config.toolResultBudgets }, signal)
+					: undefined;
+				const budgets = restrictToolResultBudgets(config.toolResultBudgets, planned);
+				const allocations = allocateToolResultBudgets(toolCalls, preparedResponse.tools, budgets);
 				// A "length" stop means the output was cut off by the token limit, so
 				// every tool call in the message may carry truncated arguments. Fail
 				// them all instead of executing potentially borked calls.
@@ -415,7 +420,7 @@ async function streamAssistantResponse(
 	signal: AbortSignal | undefined,
 	emit: AgentEventSink,
 	streamFunction: StreamFn,
-): Promise<{ message: AssistantMessage; tools: ExecutableTools }> {
+): Promise<{ message: AssistantMessage; tools: ExecutableTools; sourceContext: TranscriptContext }> {
 	// Apply context transform if configured (AgentMessage[] → AgentMessage[])
 	let messages = context.messages;
 	if (config.transformContext) {
@@ -426,6 +431,9 @@ async function streamAssistantResponse(
 	const llmMessages = await config.convertToLlm(messages);
 
 	const normalized = normalizeContext({ messages: llmMessages });
+	// A caller's convertToLlm may return the live message array. Streaming appends the response there.
+	const sourceContext = config.toolResultBudgets && config.modelContextPolicy?.planToolResultBudgets
+		? normalizeContext({ messages: [...normalized.messages] }) : normalized;
 	const prepared = config.modelContextPolicy
 		? await config.modelContextPolicy.prepare({ context: normalized, tools: context.tools ?? [], model: config.model }, signal)
 		: { context: normalized, tools: context.tools ?? [] };
@@ -496,7 +504,7 @@ async function streamAssistantResponse(
 					await emit({ type: "message_start", message: { ...finalMessage } });
 				}
 				await emit({ type: "message_end", message: finalMessage });
-				return { message: finalMessage, tools: prepared.tools };
+				return { message: finalMessage, tools: prepared.tools, sourceContext };
 			}
 		}
 	}
@@ -509,7 +517,7 @@ async function streamAssistantResponse(
 		await emit({ type: "message_start", message: { ...finalMessage } });
 	}
 	await emit({ type: "message_end", message: finalMessage });
-	return { message: finalMessage, tools: prepared.tools };
+	return { message: finalMessage, tools: prepared.tools, sourceContext };
 }
 
 /**

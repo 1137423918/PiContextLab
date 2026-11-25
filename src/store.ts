@@ -32,6 +32,7 @@ export class Store {
     this.db.exec('CREATE TABLE IF NOT EXISTS job_intents(job TEXT PRIMARY KEY,payload TEXT NOT NULL)');
     this.db.exec('CREATE TABLE IF NOT EXISTS call_tool_sets(call_id TEXT PRIMARY KEY,job TEXT NOT NULL,tool_names TEXT NOT NULL,assistant_hash TEXT)');
     this.db.exec('CREATE INDEX IF NOT EXISTS call_tool_sets_reply ON call_tool_sets(job,assistant_hash)');
+    this.db.exec('CREATE TABLE IF NOT EXISTS result_budget_plans(job TEXT NOT NULL,assistant_hash TEXT NOT NULL,payload TEXT NOT NULL,PRIMARY KEY(job,assistant_hash))');
     this.db.exec('CREATE INDEX IF NOT EXISTS events_by_kind ON events(job,kind,seq)');
   }
   close(): void { this.db.close(); }
@@ -77,6 +78,19 @@ export class Store {
     const selections=[...new Set(rows.map(r=>String(r.tool_names)))];
     if(selections.length!==1)throw new Error('Ambiguous request-bound tool selection for saved assistant');
     return JSON.parse(selections[0]!) as string[];
+  }
+  saveResultBudgets(claim:Claim,assistant:AgentMessage,budgets:Readonly<Record<string,number>>,projection?:unknown):void {
+    this.transaction(()=>{this.toolsForAssistant(claim,assistant);
+      if(Object.values(budgets).some(value=>!Number.isSafeInteger(value)||value<256))throw new Error('Invalid persisted result budgets');
+      const identity=assistantIdentity(assistant),payload=JSON.stringify(Object.fromEntries(Object.entries(budgets).sort(([a],[b])=>a.localeCompare(b))));
+      const prior=this.db.prepare('SELECT payload FROM result_budget_plans WHERE job=? AND assistant_hash=?').get(claim.id,identity);
+      if(prior&&prior.payload!==payload)throw new Error('Saved result budget plan cannot change');
+      if(!prior){this.db.prepare('INSERT INTO result_budget_plans VALUES(?,?,?)').run(claim.id,identity,payload);this.event(claim.id,'result_budget_planned',{assistant_hash:identity,budgets,...(projection===undefined?{}:{projection})});}
+    });
+  }
+  resultBudgetsForAssistant(claim:Claim,assistant:AgentMessage):Readonly<Record<string,number>>|undefined {
+    this.toolsForAssistant(claim,assistant);const row=this.db.prepare('SELECT payload FROM result_budget_plans WHERE job=? AND assistant_hash=?').get(claim.id,assistantIdentity(assistant));
+    return row?Object.freeze(JSON.parse(String(row.payload)) as Record<string,number>):undefined;
   }
   messages(claim: Claim, messages: AgentMessage[]): void { this.transaction(() => { this.assert(claim); this.db.prepare('UPDATE jobs SET messages=? WHERE id=?').run(JSON.stringify(messages), claim.id); }); }
   finish(claim: Claim, status: Status, error: string | null = null): void {

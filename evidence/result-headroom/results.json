@@ -1,0 +1,200 @@
+{
+  "kind": "Synthetic native recall headroom engineering control; no real model success measurement",
+  "protocol_sha256": "bec378ef453724da061b9b82f2b6fe273bb723d151976381f1c7725307170d93",
+  "baseline": {
+    "version": "1.6.0-contextlab.9",
+    "agent_loop_js_sha256": "4b8c2e6fa9438e562b02a939c61ce1170f553725bb276c59fc4dbc60222e48c5"
+  },
+  "rows": [
+    {
+      "case": "roomy",
+      "variant": "core9-static",
+      "provider_view_bytes": [
+        1468,
+        11512
+      ],
+      "scripted_provider_calls": 2,
+      "tool_starts": 4,
+      "result_content_bytes": [
+        2046,
+        2046,
+        2046,
+        2046
+      ],
+      "total_result_content_bytes": 8184,
+      "error": null,
+      "plan": null,
+      "source_ids": [
+        "ctx_tool-result_b59c08a9c166308d7ca686ccf7a3cca6766e1ed6c63bcbfa9f12ec67ec884806",
+        "ctx_tool-result_65c852dc70a48e8e1728e8d8a87712c1266f60449e432d03736438bf6da53970",
+        "ctx_tool-result_c886958b62064870cf971d9d84a5cdcb75866a842ae289519d73e9ec2f7eb765",
+        "ctx_tool-result_196a7341dbfd21be79d4f5e4222ea164f77236001ade6461eb8398ed24bffa9e"
+      ],
+      "original_args_unchanged": true
+    },
+    {
+      "case": "roomy",
+      "variant": "core10-headroom",
+      "provider_view_bytes": [
+        1468,
+        11512
+      ],
+      "scripted_provider_calls": 2,
+      "tool_starts": 4,
+      "result_content_bytes": [
+        2046,
+        2046,
+        2046,
+        2046
+      ],
+      "total_result_content_bytes": 8184,
+      "error": null,
+      "plan": {
+        "hardLimitBytes": 24576,
+        "configuredContentBytes": 8192,
+        "allocatedContentBytes": 8192,
+        "projectedContextBytes": 3228,
+        "envelopeMarginBytes": 1024,
+        "targetProjectionBytes": 15368,
+        "fellBackToHardLimit": false,
+        "packing": {
+          "beforeBytes": 3689,
+          "normalizedBeforeBytes": 3228,
+          "spillMode": "pressure",
+          "trigger": "none",
+          "protectedRecallCallIds": [],
+          "afterBytes": 3228,
+          "spilledResults": [],
+          "belowThresholdSpills": [],
+          "archivedTurns": [],
+          "retainedHistoryTurns": 0
+        }
+      },
+      "source_ids": [
+        "ctx_tool-result_b59c08a9c166308d7ca686ccf7a3cca6766e1ed6c63bcbfa9f12ec67ec884806",
+        "ctx_tool-result_65c852dc70a48e8e1728e8d8a87712c1266f60449e432d03736438bf6da53970",
+        "ctx_tool-result_c886958b62064870cf971d9d84a5cdcb75866a842ae289519d73e9ec2f7eb765",
+        "ctx_tool-result_196a7341dbfd21be79d4f5e4222ea164f77236001ade6461eb8398ed24bffa9e"
+      ],
+      "original_args_unchanged": true
+    },
+    {
+      "case": "pressure",
+      "variant": "core9-static",
+      "provider_view_bytes": [
+        15804
+      ],
+      "scripted_provider_calls": 1,
+      "tool_starts": 4,
+      "result_content_bytes": [
+        2046,
+        2046,
+        2046,
+        2046
+      ],
+      "total_result_content_bytes": 8184,
+      "error": "Current turn and system/tool declarations exceed the context budget after bounded spilling",
+      "plan": null,
+      "source_ids": [
+        "ctx_tool-result_b59c08a9c166308d7ca686ccf7a3cca6766e1ed6c63bcbfa9f12ec67ec884806",
+        "ctx_tool-result_65c852dc70a48e8e1728e8d8a87712c1266f60449e432d03736438bf6da53970",
+        "ctx_tool-result_c886958b62064870cf971d9d84a5cdcb75866a842ae289519d73e9ec2f7eb765",
+        "ctx_tool-result_196a7341dbfd21be79d4f5e4222ea164f77236001ade6461eb8398ed24bffa9e"
+      ],
+      "original_args_unchanged": true
+    },
+    {
+      "case": "pressure",
+      "variant": "core10-headroom",
+      "provider_view_bytes": [
+        15804,
+        23660
+      ],
+      "scripted_provider_calls": 2,
+      "tool_starts": 4,
+      "result_content_bytes": [
+        1499,
+        1499,
+        1499,
+        1499
+      ],
+      "total_result_content_bytes": 5996,
+      "error": null,
+      "plan": {
+        "hardLimitBytes": 24576,
+        "configuredContentBytes": 8192,
+        "allocatedContentBytes": 5996,
+        "projectedContextBytes": 17564,
+        "envelopeMarginBytes": 1024,
+        "targetProjectionBytes": 15368,
+        "fellBackToHardLimit": true,
+        "packing": {
+          "beforeBytes": 18025,
+          "normalizedBeforeBytes": 17564,
+          "spillMode": "pressure",
+          "trigger": "none",
+          "protectedRecallCallIds": [],
+          "afterBytes": 17564,
+          "spilledResults": [],
+          "belowThresholdSpills": [],
+          "archivedTurns": [],
+          "retainedHistoryTurns": 0
+        }
+      },
+      "source_ids": [
+        "ctx_tool-result_b59c08a9c166308d7ca686ccf7a3cca6766e1ed6c63bcbfa9f12ec67ec884806",
+        "ctx_tool-result_65c852dc70a48e8e1728e8d8a87712c1266f60449e432d03736438bf6da53970",
+        "ctx_tool-result_c886958b62064870cf971d9d84a5cdcb75866a842ae289519d73e9ec2f7eb765",
+        "ctx_tool-result_196a7341dbfd21be79d4f5e4222ea164f77236001ade6461eb8398ed24bffa9e"
+      ],
+      "original_args_unchanged": true
+    },
+    {
+      "case": "unfittable",
+      "variant": "core9-static",
+      "provider_view_bytes": [
+        23468
+      ],
+      "scripted_provider_calls": 1,
+      "tool_starts": 4,
+      "result_content_bytes": [
+        2046,
+        2046,
+        2046,
+        2046
+      ],
+      "total_result_content_bytes": 8184,
+      "error": "Current turn and system/tool declarations exceed the context budget after bounded spilling",
+      "plan": null,
+      "source_ids": [
+        "ctx_tool-result_b59c08a9c166308d7ca686ccf7a3cca6766e1ed6c63bcbfa9f12ec67ec884806",
+        "ctx_tool-result_65c852dc70a48e8e1728e8d8a87712c1266f60449e432d03736438bf6da53970",
+        "ctx_tool-result_c886958b62064870cf971d9d84a5cdcb75866a842ae289519d73e9ec2f7eb765",
+        "ctx_tool-result_196a7341dbfd21be79d4f5e4222ea164f77236001ade6461eb8398ed24bffa9e"
+      ],
+      "original_args_unchanged": true
+    },
+    {
+      "case": "unfittable",
+      "variant": "core10-headroom",
+      "provider_view_bytes": [
+        23468
+      ],
+      "scripted_provider_calls": 1,
+      "tool_starts": 0,
+      "result_content_bytes": [],
+      "total_result_content_bytes": 0,
+      "error": "Current turn and system/tool declarations exceed the context budget after bounded spilling",
+      "plan": null,
+      "source_ids": [
+        "ctx_tool-result_b59c08a9c166308d7ca686ccf7a3cca6766e1ed6c63bcbfa9f12ec67ec884806",
+        "ctx_tool-result_65c852dc70a48e8e1728e8d8a87712c1266f60449e432d03736438bf6da53970",
+        "ctx_tool-result_c886958b62064870cf971d9d84a5cdcb75866a842ae289519d73e9ec2f7eb765",
+        "ctx_tool-result_196a7341dbfd21be79d4f5e4222ea164f77236001ade6461eb8398ed24bffa9e"
+      ],
+      "original_args_unchanged": true
+    }
+  ],
+  "real_model_calls": 0,
+  "GPU_used": false
+}

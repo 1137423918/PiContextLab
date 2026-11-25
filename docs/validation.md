@@ -397,3 +397,23 @@ core7只修复压力模式的候选过滤：按大小优先、净节省才替换
 [71项测试](../evidence/recall-budget/tests.tap) · [逐文件清单](../evidence/recall-budget/snapshot-manifest.json) · [84文件核对](../evidence/recall-budget/source-verification.json) · [冻结core8身份](../evidence/recall-budget/baseline-source.json) · [源码包](../evidence/recall-budget/source-snapshot.tar.gz) · [全量核对](../evidence/recall-budget/uci-validation.json) · [浏览器](../evidence/recall-budget/browser-result.json) · [所有阶段及失败](../evidence/recall-budget/runs/)。
 
 只约束参与组的最终content，不含ToolResult包装、details或其他消息，未按下一轮剩余空间预留，也没有真实模型成功/token/费用收益证据。默认full不变，原已关闭研究结果与89次真实生成请求总数不变。
+
+## contextlab.10：响应后空间规划的原生循环控制
+
+这是新的[合成工程方案](../examples/result-headroom-cpu-protocol.json)，不是关闭的模型任务、ToolRet质量或四源码字节诊断重跑。每个变体用实际原生Agent并行读取同样四个合成artifact，再由脚本provider回应；强制当前user备注分别0、14,336和22,000个ASCII填充字符，明确用于制造程序边界，不能当作真实业务分布。旧core9与新core10都配置24,576上下文/8,192组内容上限，读取工具显式始终选择；只有新版本开启响应后规划。
+
+| 新合成控制 | 静态core9 | 规划core10 |
+|---|---|---|
+| 空间充足 | 2次脚本调用，下一轮11,512字节 | 同样2次/11,512字节，保留8,192配额 |
+| 当前轮压力 | 4次读取共8,184内容字节，下一轮准备拒绝 | 配额收紧至5,996，实际内容5,996，下一轮23,660/24,576字节，2次脚本调用 |
+| 极端空间不足 | 4次工具开始，下一轮准备拒绝 | 第1次响应后、任何工具开始前拒绝，开始数0 |
+
+三个案例所有原assistant参数和原artifact文本保持不变。压力场景新版每次1,499内容字节，总5,996；投影空事务17,564字节，另留1,024包装余量，按H-P+2N-256N计算。实际下一轮余916字节。字节数来自该次计时/时间戳，不承诺跨机器逐字相同；上下文上限和保真游标才是断言。没有把缩短第一页解释成相同信息量压缩，更没有实际大模型接续或任务成功率测量。
+
+80项Node测试覆盖投影、串行/并行、低层identity converter活数组快照、默认关闭、混合批次旁路、不可行/取消/存储故障、策略不得提高组预算、未绑定/陈旧写入者拒绝、数据库重开及超过500事件读取、部分完成后原较低总配额复用，以及正常宿主在工具开始前保存具体响应的方案。14项浏览器检查、全量UCI/独立算术核对仍通过。87个当前执行源码/配置与服务器snapshot核对相同。
+
+初版v1因两逻辑CPU空闲准入不足，在安装和测试前终止；v2严格类型/构建通过，79项中78项通过，剩余测试错误地期待runAgentLoop改写输入数组，而它返回新消息。v3修正为检查返回值、保留输入不变，并补正常宿主持久化覆盖；80项全过，首次三案例对照成功。没有改案例、填充长度、配额或artifact配方来挑结果，诊断现已关闭。最终54.527秒，owned进程0；所有阶段在服务器，实际模型调用0、GPU0。
+
+[6行原始比较及投影](../evidence/result-headroom/results.json) · [80项测试](../evidence/result-headroom/tests.tap) · [冻结core9身份](../evidence/result-headroom/baseline-source.json) · [源码包](../evidence/result-headroom/source-snapshot.tar.gz) · [逐文件清单](../evidence/result-headroom/snapshot-manifest.json) · [87文件核对](../evidence/result-headroom/source-verification.json) · [服务器lock](../evidence/result-headroom/package-lock.json) · [完整数据核对](../evidence/result-headroom/uci-validation.json) · [浏览器](../evidence/result-headroom/browser-result.json) · [准入/失败/资源](../evidence/result-headroom/runs/)。冻结输入的root lock随后在服务器更新为10版，复现用旁边服务器lock；发布文档/补丁在验证后补写，旧冻结包不改。
+
+只规划纯回读/定位批次，256字节余量不约束任意hook、usage、transform、外部消息或后续工具集合。下一轮正常policy和硬字节检查仍必要；投影打包可能做幂等artifact写入，最后trace不等于所有中间写次数。SDK默认关闭、真实入口默认full，原89次关闭模型请求和失败结论不变；真实效果需独立新任务及冻结方案。

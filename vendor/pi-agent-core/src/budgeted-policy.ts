@@ -6,9 +6,11 @@ import { createContextSearchTool } from "./context-search.ts";
 import { contextBytes, modelContextView, packModelContext, type ContextPackingTrace } from "./context-budget.ts";
 import type { ExecutableTools, ModelContextPolicy, ModelContextPolicyInput, PreparedModelContext } from "./model-context.ts";
 import { routeTools, ToolRoutingIndexCache, type RankedTool, type ToolRoutingCacheStats, type ToolRoutingOptions } from "./tool-router.ts";
+import { planContextResultBudget, type ContextResultBudgetTrace } from "./context-result-budget.ts";
+import type { ToolResultBudgetInput } from "./model-context.ts";
 
 export interface BudgetedPolicyTrace extends ContextPackingTrace {
-	policy: "pi-context-lab-v9";
+	policy: "pi-context-lab-v10";
 	request: number;
 	registeredTools: number;
 	selectedToolNames: string[];
@@ -24,6 +26,9 @@ export interface BudgetedPolicyOptions extends ToolRoutingOptions {
 	/** Opt in to lexical JSON-field location alongside exact artifact reads. */
 	artifactSearch?: boolean;
 	spillMode?: "pressure" | "threshold";
+	/** Opt in to actual post-response headroom planning for pure recall batches. */
+	recallResultBudget?: boolean;
+	onResultBudgetPlanned?: (input: ToolResultBudgetInput, budgets: Readonly<Record<string, number>>, trace: ContextResultBudgetTrace) => Promise<void> | void;
 	onPrepared?: (trace: BudgetedPolicyTrace) => Promise<void> | void;
 }
 
@@ -63,6 +68,14 @@ export class BudgetedContextPolicy implements ModelContextPolicy {
 		this.registry = tools;
 	}
 
+	async planToolResultBudgets(input: ToolResultBudgetInput, signal?: AbortSignal): Promise<Readonly<Record<string, number>> | undefined> {
+		if (!this.options.recallResultBudget) return undefined;
+		const planned = await planContextResultBudget(input, { maxContextBytes: this.options.maxContextBytes, inlineToolResultBytes: this.options.inlineToolResultBytes, store: this.options.artifacts, artifactSearch: this.options.artifactSearch, spillMode: this.options.spillMode }, signal);
+		if (!planned) return undefined;
+		await this.options.onResultBudgetPlanned?.(input, planned.budgets, planned.trace);
+		return planned.budgets;
+	}
+
 	async prepare(input: ModelContextPolicyInput, signal?: AbortSignal): Promise<PreparedModelContext> {
 		signal?.throwIfAborted();
 		this.request++;
@@ -98,7 +111,7 @@ export class BudgetedContextPolicy implements ModelContextPolicy {
 		const eager = this.options.spillMode === "threshold" && input.context.messages.some(message => message.role === "toolResult" && contextBytes(message.content) > this.options.inlineToolResultBytes);
 		const decision = exceedsBudget || eager ? select([reader, ...(this.options.artifactSearch ? [this.tools[2]] : [])]) : initial;
 		const packed = await packModelContext(input.context, decision.tools, query, { maxContextBytes: this.options.maxContextBytes, inlineToolResultBytes: this.options.inlineToolResultBytes, store: this.options.artifacts, artifactSearch: this.options.artifactSearch, spillMode: this.options.spillMode }, signal);
-		const trace: BudgetedPolicyTrace = { policy: "pi-context-lab-v9", request: this.request, registeredTools: input.tools.length, selectedToolNames: decision.tools.map((t) => t.name), schemaBytes: decision.schemaBytes, ranking: decision.ranked, routingCache: this.routingIndex.stats, ...packed.trace };
+		const trace: BudgetedPolicyTrace = { policy: "pi-context-lab-v10", request: this.request, registeredTools: input.tools.length, selectedToolNames: decision.tools.map((t) => t.name), schemaBytes: decision.schemaBytes, ranking: decision.ranked, routingCache: this.routingIndex.stats, ...packed.trace };
 		await this.options.onPrepared?.(trace);
 		return { context: packed.context, tools: decision.tools };
 	}

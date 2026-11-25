@@ -8,17 +8,22 @@
  	getCurrentTools,
  	getToolStateChanges,
  	mergeClientIdentity,
-@@ -19,6 +20,9 @@
+@@ -15,10 +16,14 @@
+ 	type SystemMessage,
+ 	type ToolResultMessage,
+ 	type ToolStateChanges,
++	type TranscriptContext,
+ 	toToolDeclaration,
  	validateToolArguments,
  } from "@earendil-works/pi-ai";
  import { getDefaultStreamFn } from "./stream-fn.ts";
 +import { boundedToolValidationError } from "./validation-feedback.ts";
-+import { allocateToolResultBudgets, enforceToolResultBudget } from "./tool-result-budget.ts";
++import { allocateToolResultBudgets, enforceToolResultBudget, restrictToolResultBudgets } from "./tool-result-budget.ts";
 +import type { ExecutableTools } from "./model-context.ts";
  import type {
  	AgentContext,
  	AgentEvent,
-@@ -52,19 +56,21 @@
+@@ -52,19 +57,21 @@
  	streamFn: StreamFn,
  ): EventStream<AgentEvent, AgentMessage[]> {
  	const stream = createAgentStream();
@@ -41,7 +46,7 @@
  
  	return stream;
  }
-@@ -92,18 +98,20 @@
+@@ -92,18 +99,20 @@
  	}
  
  	const stream = createAgentStream();
@@ -63,7 +68,7 @@
  
  	return stream;
  }
-@@ -164,6 +172,16 @@
+@@ -164,6 +173,16 @@
  		(event: AgentEvent) => event.type === "agent_end",
  		(event: AgentEvent) => (event.type === "agent_end" ? event.messages : []),
  	);
@@ -80,7 +85,7 @@
  }
  
  /**
-@@ -248,7 +266,8 @@
+@@ -248,7 +267,8 @@
  			}
  
  			// Stream assistant response
@@ -90,11 +95,15 @@
  			newMessages.push(message);
  
  			if (message.stopReason === "error" || message.stopReason === "aborted") {
-@@ -270,13 +289,16 @@
+@@ -270,13 +290,20 @@
  			const toolResults: ToolResultMessage[] = [];
  			hasMoreToolCalls = false;
  			if (toolCalls.length > 0) {
-+				const allocations = allocateToolResultBudgets(toolCalls, preparedResponse.tools, config.toolResultBudgets);
++				const planned = config.toolResultBudgets && message.stopReason !== "length"
++					? await config.modelContextPolicy?.planToolResultBudgets?.({ context: preparedResponse.sourceContext, tools: preparedResponse.tools, model: config.model, assistantMessage: message, budgets: config.toolResultBudgets }, signal)
++					: undefined;
++				const budgets = restrictToolResultBudgets(config.toolResultBudgets, planned);
++				const allocations = allocateToolResultBudgets(toolCalls, preparedResponse.tools, budgets);
  				// A "length" stop means the output was cut off by the token limit, so
  				// every tool call in the message may carry truncated arguments. Fail
  				// them all instead of executing potentially borked calls.
@@ -109,21 +118,24 @@
  				toolResults.push(...executedToolBatch.messages);
  				hasMoreToolCalls = !executedToolBatch.terminate;
  
-@@ -393,7 +415,7 @@
+@@ -393,7 +420,7 @@
  	signal: AbortSignal | undefined,
  	emit: AgentEventSink,
  	streamFunction: StreamFn,
 -): Promise<AssistantMessage> {
-+): Promise<{ message: AssistantMessage; tools: ExecutableTools }> {
++): Promise<{ message: AssistantMessage; tools: ExecutableTools; sourceContext: TranscriptContext }> {
  	// Apply context transform if configured (AgentMessage[] → AgentMessage[])
  	let messages = context.messages;
  	if (config.transformContext) {
-@@ -403,7 +425,19 @@
+@@ -403,7 +430,22 @@
  	// Convert to LLM-compatible messages (AgentMessage[] → Message[])
  	const llmMessages = await config.convertToLlm(messages);
  
 -	const llmContext = normalizeContext({ messages: llmMessages });
 +	const normalized = normalizeContext({ messages: llmMessages });
++	// A caller's convertToLlm may return the live message array. Streaming appends the response there.
++	const sourceContext = config.toolResultBudgets && config.modelContextPolicy?.planToolResultBudgets
++		? normalizeContext({ messages: [...normalized.messages] }) : normalized;
 +	const prepared = config.modelContextPolicy
 +		? await config.modelContextPolicy.prepare({ context: normalized, tools: context.tools ?? [], model: config.model }, signal)
 +		: { context: normalized, tools: context.tools ?? [] };
@@ -139,25 +151,25 @@
  
  	// Resolve API key (important for expiring tokens)
  	const resolvedApiKey =
-@@ -462,7 +496,7 @@
+@@ -462,7 +504,7 @@
  					await emit({ type: "message_start", message: { ...finalMessage } });
  				}
  				await emit({ type: "message_end", message: finalMessage });
 -				return finalMessage;
-+				return { message: finalMessage, tools: prepared.tools };
++				return { message: finalMessage, tools: prepared.tools, sourceContext };
  			}
  		}
  	}
-@@ -475,7 +509,7 @@
+@@ -475,7 +517,7 @@
  		await emit({ type: "message_start", message: { ...finalMessage } });
  	}
  	await emit({ type: "message_end", message: finalMessage });
 -	return finalMessage;
-+	return { message: finalMessage, tools: prepared.tools };
++	return { message: finalMessage, tools: prepared.tools, sourceContext };
  }
  
  /**
-@@ -488,6 +522,7 @@
+@@ -488,6 +530,7 @@
  async function failToolCallsFromTruncatedMessage(
  	toolCalls: AgentToolCall[],
  	emit: AgentEventSink,
@@ -165,7 +177,7 @@
  ): Promise<ExecutedToolCallBatch> {
  	const messages: ToolResultMessage[] = [];
  	for (const toolCall of toolCalls) {
-@@ -497,13 +532,13 @@
+@@ -497,13 +540,13 @@
  			toolName: toolCall.name,
  			args: toolCall.arguments,
  		});
@@ -181,7 +193,7 @@
  		await emitToolExecutionEnd(finalized, emit);
  		const toolResultMessage = createToolResultMessage(finalized);
  		await emitToolResultMessage(toolResultMessage, emit);
-@@ -521,15 +556,16 @@
+@@ -521,15 +564,16 @@
  	config: AgentLoopConfig,
  	signal: AbortSignal | undefined,
  	emit: AgentEventSink,
@@ -201,7 +213,7 @@
  }
  
  type ExecutedToolCallBatch = {
-@@ -544,6 +580,7 @@
+@@ -544,6 +588,7 @@
  	config: AgentLoopConfig,
  	signal: AbortSignal | undefined,
  	emit: AgentEventSink,
@@ -209,7 +221,7 @@
  ): Promise<ExecutedToolCallBatch> {
  	const finalizedCalls: FinalizedToolCallOutcome[] = [];
  	const messages: ToolResultMessage[] = [];
-@@ -556,7 +593,7 @@
+@@ -556,7 +601,7 @@
  			args: toolCall.arguments,
  		});
  
@@ -218,7 +230,7 @@
  		let finalized: FinalizedToolCallOutcome;
  		if (preparation.kind === "immediate") {
  			finalized = {
-@@ -576,6 +613,7 @@
+@@ -576,6 +621,7 @@
  			);
  		}
  
@@ -226,7 +238,7 @@
  		await emitToolExecutionEnd(finalized, emit);
  		const toolResultMessage = createToolResultMessage(finalized);
  		await emitToolResultMessage(toolResultMessage, emit);
-@@ -596,6 +634,7 @@
+@@ -596,6 +642,7 @@
  	config: AgentLoopConfig,
  	signal: AbortSignal | undefined,
  	emit: AgentEventSink,
@@ -234,7 +246,7 @@
  ): Promise<ExecutedToolCallBatch> {
  	const finalizedCalls: FinalizedToolCallEntry[] = [];
  
-@@ -607,13 +646,13 @@
+@@ -607,13 +654,13 @@
  			args: toolCall.arguments,
  		});
  
@@ -251,7 +263,7 @@
  			await emitToolExecutionEnd(finalized, emit);
  			finalizedCalls.push(finalized);
  			continue;
-@@ -630,14 +669,14 @@
+@@ -630,14 +677,14 @@
  				return finalized;
  			}
  			const executed = await executePreparedToolCall(preparation, signal, emitToolExecutionUpdate(toolCall, emit));
@@ -268,7 +280,7 @@
  			await emitToolExecutionEnd(finalized, emit);
  			return finalized;
  		});
-@@ -660,6 +699,7 @@
+@@ -660,6 +707,7 @@
  }
  
  type PreparedToolCall = {
@@ -276,7 +288,7 @@
  	kind: "prepared";
  	toolCall: AgentToolCall;
  	tool: AgentTool<any>;
-@@ -681,7 +721,7 @@
+@@ -681,7 +729,7 @@
  type FinalizedToolCallOutcome = AgentToolCallOutcome;
  
  /** The `beforeToolCall` and `afterToolCall` hooks of {@link AgentLoopConfig}. */
@@ -285,7 +297,7 @@
  
  type ToolUpdateSink = (partialResult: AgentToolResult<any>) => Promise<void> | void;
  
-@@ -712,6 +752,7 @@
+@@ -712,6 +760,7 @@
  	config: ToolCallHooks,
  	signal: AbortSignal | undefined,
  	tools: readonly AgentTool<any>[] = currentContext.tools ?? [],
@@ -293,7 +305,7 @@
  ): Promise<PreparedToolCall | ImmediateToolCallOutcome> {
  	// Once aborted, skip preparation and the hooks; callers still record this result, so no call
  	// is left without one (#9986).
-@@ -733,7 +774,19 @@
+@@ -733,7 +782,19 @@
  
  	try {
  		const preparedToolCall = prepareToolCallArguments(tool, toolCall);
@@ -314,7 +326,7 @@
  		if (config.beforeToolCall) {
  			const beforeResult = await config.beforeToolCall(
  				{
-@@ -768,6 +821,7 @@
+@@ -768,6 +829,7 @@
  			toolCall,
  			tool,
  			args: validatedArgs,
@@ -322,7 +334,7 @@
  		};
  	} catch (error) {
  		return {
-@@ -791,6 +845,8 @@
+@@ -791,6 +853,8 @@
  
  /** Options for {@link runToolCall}. */
  export interface RunToolCallOptions extends ToolCallHooks {
@@ -331,7 +343,7 @@
  	/** Tools the call resolves against. */
  	tools: readonly AgentTool<any>[];
  	/** Passed to the hooks as the message that issued the call. */
-@@ -813,12 +869,13 @@
+@@ -813,12 +877,13 @@
   */
  export async function runToolCall(toolCall: AgentToolCall, options: RunToolCallOptions): Promise<AgentToolCallOutcome> {
  	const { assistantMessage, context, signal } = options;
@@ -348,7 +360,7 @@
  }
  
  async function executePreparedToolCall(
-@@ -840,6 +897,7 @@
+@@ -840,6 +905,7 @@
  				if (!acceptingUpdates) return;
  				updateEvents.push(Promise.resolve(onUpdate(partialResult)));
  			},
@@ -428,7 +440,7 @@
  			prepareRequest: this.prepareRequest,
 --- /dev/null
 +++ b/src/budgeted-policy.ts
-@@ -0,0 +1,105 @@
+@@ -0,0 +1,118 @@
 +/** An opt-in core policy combining task-aware tool selection, bounded context and explicit recall. */
 +import { arr, compile, int, num, obj, str } from "@earendil-works/pi-schema";
 +import { toToolDeclaration } from "@earendil-works/pi-ai";
@@ -437,9 +449,11 @@
 +import { contextBytes, modelContextView, packModelContext, type ContextPackingTrace } from "./context-budget.ts";
 +import type { ExecutableTools, ModelContextPolicy, ModelContextPolicyInput, PreparedModelContext } from "./model-context.ts";
 +import { routeTools, ToolRoutingIndexCache, type RankedTool, type ToolRoutingCacheStats, type ToolRoutingOptions } from "./tool-router.ts";
++import { planContextResultBudget, type ContextResultBudgetTrace } from "./context-result-budget.ts";
++import type { ToolResultBudgetInput } from "./model-context.ts";
 +
 +export interface BudgetedPolicyTrace extends ContextPackingTrace {
-+	policy: "pi-context-lab-v9";
++	policy: "pi-context-lab-v10";
 +	request: number;
 +	registeredTools: number;
 +	selectedToolNames: string[];
@@ -455,6 +469,9 @@
 +	/** Opt in to lexical JSON-field location alongside exact artifact reads. */
 +	artifactSearch?: boolean;
 +	spillMode?: "pressure" | "threshold";
++	/** Opt in to actual post-response headroom planning for pure recall batches. */
++	recallResultBudget?: boolean;
++	onResultBudgetPlanned?: (input: ToolResultBudgetInput, budgets: Readonly<Record<string, number>>, trace: ContextResultBudgetTrace) => Promise<void> | void;
 +	onPrepared?: (trace: BudgetedPolicyTrace) => Promise<void> | void;
 +}
 +
@@ -494,6 +511,14 @@
 +		this.registry = tools;
 +	}
 +
++	async planToolResultBudgets(input: ToolResultBudgetInput, signal?: AbortSignal): Promise<Readonly<Record<string, number>> | undefined> {
++		if (!this.options.recallResultBudget) return undefined;
++		const planned = await planContextResultBudget(input, { maxContextBytes: this.options.maxContextBytes, inlineToolResultBytes: this.options.inlineToolResultBytes, store: this.options.artifacts, artifactSearch: this.options.artifactSearch, spillMode: this.options.spillMode }, signal);
++		if (!planned) return undefined;
++		await this.options.onResultBudgetPlanned?.(input, planned.budgets, planned.trace);
++		return planned.budgets;
++	}
++
 +	async prepare(input: ModelContextPolicyInput, signal?: AbortSignal): Promise<PreparedModelContext> {
 +		signal?.throwIfAborted();
 +		this.request++;
@@ -529,7 +554,7 @@
 +		const eager = this.options.spillMode === "threshold" && input.context.messages.some(message => message.role === "toolResult" && contextBytes(message.content) > this.options.inlineToolResultBytes);
 +		const decision = exceedsBudget || eager ? select([reader, ...(this.options.artifactSearch ? [this.tools[2]] : [])]) : initial;
 +		const packed = await packModelContext(input.context, decision.tools, query, { maxContextBytes: this.options.maxContextBytes, inlineToolResultBytes: this.options.inlineToolResultBytes, store: this.options.artifacts, artifactSearch: this.options.artifactSearch, spillMode: this.options.spillMode }, signal);
-+		const trace: BudgetedPolicyTrace = { policy: "pi-context-lab-v9", request: this.request, registeredTools: input.tools.length, selectedToolNames: decision.tools.map((t) => t.name), schemaBytes: decision.schemaBytes, ranking: decision.ranked, routingCache: this.routingIndex.stats, ...packed.trace };
++		const trace: BudgetedPolicyTrace = { policy: "pi-context-lab-v10", request: this.request, registeredTools: input.tools.length, selectedToolNames: decision.tools.map((t) => t.name), schemaBytes: decision.schemaBytes, ranking: decision.ranked, routingCache: this.routingIndex.stats, ...packed.trace };
 +		await this.options.onPrepared?.(trace);
 +		return { context: packed.context, tools: decision.tools };
 +	}
@@ -640,7 +665,7 @@
 +}
 --- /dev/null
 +++ b/src/context-budget.ts
-@@ -0,0 +1,183 @@
+@@ -0,0 +1,186 @@
 +/** Budget provider views while preserving system instructions and complete tool-call transactions. */
 +import { getCurrentSystemMessage, normalizeContext, toToolDeclaration, type Message, type TranscriptContext } from "@earendil-works/pi-ai";
 +import { contextArtifact, type ContextArtifact, type ContextArtifactStore } from "./context-artifacts.ts";
@@ -672,6 +697,9 @@
 +}
 +
 +const encoder = new TextEncoder();
++
++/** A size failure only; callers must not swallow store, integrity, abort or transaction errors. */
++export class ContextPackingLimitError extends Error {}
 +
 +/** The byte metric is normalized context JSON, not an asserted tokenizer count. */
 +export function contextBytes(value: unknown): number {
@@ -789,7 +817,7 @@
 +	}
 +	const current = turns.pop() ?? [];
 +	// Current user input and all its completed tool rounds stay together. Never cut arbitrary last-N messages.
-+	if (contextBytes(build(current)) > options.maxContextBytes) throw new Error("Current turn and system/tool declarations exceed the context budget after bounded spilling");
++	if (contextBytes(build(current)) > options.maxContextBytes) throw new ContextPackingLimitError("Current turn and system/tool declarations exceed the context budget after bounded spilling");
 +	const scores = rankContextDocuments(query, turns.map((turn) => JSON.stringify(turn)));
 +	const priority = turns.map((turn, i) => ({ i, density: (scores[i] + 0.15 * (i + 1) / Math.max(1, turns.length)) / Math.sqrt(contextBytes(turn)) })).sort((a, b) => b.density - a.density);
 +	const keep = new Set<number>();
@@ -810,7 +838,7 @@
 +	}
 +	const indexArtifact = await contextArtifact(JSON.stringify({ references }), "history-index");
 +	await options.store.put(indexArtifact);
-+	if (contextBytes(build(current, indexArtifact)) > options.maxContextBytes) throw new Error("Archive index reference does not fit the fixed context budget");
++	if (contextBytes(build(current, indexArtifact)) > options.maxContextBytes) throw new ContextPackingLimitError("Archive index reference does not fit the fixed context budget");
 +	for (const candidate of priority) {
 +		const chosen = turns.flatMap((turn, i) => keep.has(i) || i === candidate.i ? turn : []);
 +		if (contextBytes(build([...chosen, ...current], indexArtifact)) <= options.maxContextBytes) keep.add(candidate.i);
@@ -874,6 +902,56 @@
 +		parent = value; last = key; value = (value as Record<string, unknown>)[key];
 +	}
 +	return { value, parent, key: last };
++}
+--- /dev/null
++++ b/src/context-result-budget.ts
+@@ -0,0 +1,47 @@
++/** Post-response admission for a pure recall batch; uses the actual response and a complete projected transaction. */
++import { normalizeContext } from "@earendil-works/pi-ai";
++import { ContextPackingLimitError, contextBytes, packModelContext, type ContextPackingOptions, type ContextPackingTrace } from "./context-budget.ts";
++import type { ToolResultBudgetInput } from "./model-context.ts";
++import { allocateToolResultBudgets, CONTEXT_RECALL_BUDGET_GROUP } from "./tool-result-budget.ts";
++
++export interface ContextResultBudgetTrace {
++	hardLimitBytes: number;
++	configuredContentBytes: number;
++	allocatedContentBytes: number;
++	projectedContextBytes: number;
++	envelopeMarginBytes: number;
++	targetProjectionBytes: number;
++	fellBackToHardLimit: boolean;
++	packing: ContextPackingTrace;
++}
++
++/** Mixed/unregistered batches retain static caps: unknown outputs cannot share a proven estimate. */
++export async function planContextResultBudget(input: ToolResultBudgetInput, options: ContextPackingOptions, signal?: AbortSignal): Promise<{ budgets: Readonly<Record<string, number>>; trace: ContextResultBudgetTrace } | undefined> {
++	const group = CONTEXT_RECALL_BUDGET_GROUP;
++	const calls = input.assistantMessage.content.filter(part => part.type === "toolCall");
++	if (!calls.length || !Object.hasOwn(input.budgets, group) || calls.some(call => !["read_context_artifact", "search_context_artifact"].includes(call.name) || input.tools.find(tool => tool.name === call.name)?.resultBudget?.group !== group)) return undefined;
++	const initial = allocateToolResultBudgets(calls, input.tools, input.budgets);
++	const desired = [...initial.values()].reduce((sum, value) => sum + value, 0);
++	const minimum = calls.reduce((sum, call) => sum + input.tools.find(tool => tool.name === call.name)!.resultBudget!.minBytes, 0);
++	// Empty content costs two bytes. Reserve additional space for ordinary result timestamp/duration envelopes.
++	// This margin is not a bound on arbitrary hooks, usage or transformations; the next hard gate remains required.
++	const margin = 256 * calls.length;
++	const projected = normalizeContext({ messages: [...input.context.messages, input.assistantMessage, ...calls.map(call => ({ role: "toolResult" as const, toolCallId: call.id, toolName: call.name, content: [], isError: false, timestamp: 0 }))] });
++	const target = Math.max(1024, options.maxContextBytes - desired - margin + 2 * calls.length);
++	const user = [...input.context.messages].reverse().find(message => message.role === "user");
++	const query = user ? typeof user.content === "string" ? user.content : user.content.filter(part => part.type === "text").map(part => part.type === "text" ? part.text : "").join("\n") : "";
++	const pack = (maxContextBytes: number) => packModelContext(projected, input.tools, query, { ...options, maxContextBytes }, signal);
++	let packed: Awaited<ReturnType<typeof pack>>, fallback = false;
++	try { packed = await pack(target); }
++	catch (error) {
++		if (!(error instanceof ContextPackingLimitError)) throw error;
++		fallback = true; packed = await pack(options.maxContextBytes);
++	}
++	const projectedBytes = contextBytes(packed.context);
++	const available = options.maxContextBytes - projectedBytes + 2 * calls.length - margin;
++	const allocated = Math.min(desired, available);
++	if (allocated < minimum) throw new ContextPackingLimitError("Recall batch cannot reserve its minimum result bytes within the context ceiling; no calls executed");
++	const budgets = Object.freeze({ ...input.budgets, [group]: allocated });
++	allocateToolResultBudgets(calls, input.tools, budgets);
++	return { budgets, trace: { hardLimitBytes: options.maxContextBytes, configuredContentBytes: input.budgets[group], allocatedContentBytes: allocated, projectedContextBytes: projectedBytes, envelopeMarginBytes: margin, targetProjectionBytes: target, fellBackToHardLimit: fallback, packing: packed.trace } };
 +}
 --- /dev/null
 +++ b/src/context-search.ts
@@ -961,7 +1039,7 @@
 +}
 --- a/src/index.ts
 +++ b/src/index.ts
-@@ -3,3 +3,12 @@
+@@ -3,3 +3,13 @@
  export * from "./proxy.ts";
  export { setDefaultStreamFn } from "./stream-fn.ts";
  export * from "./types.ts";
@@ -974,11 +1052,12 @@
 +export * from "./context-search.ts";
 +export * from "./validation-feedback.ts";
 +export * from "./tool-result-budget.ts";
++export * from "./context-result-budget.ts";
 --- /dev/null
 +++ b/src/model-context.ts
-@@ -0,0 +1,26 @@
+@@ -0,0 +1,34 @@
 +/** Request-scoped context policy contracts; authoritative agent history stays unchanged. */
-+import type { Api, Model, TranscriptContext } from "@earendil-works/pi-ai";
++import type { Api, AssistantMessage, Model, TranscriptContext } from "@earendil-works/pi-ai";
 +import type { AgentContext } from "./types.ts";
 +
 +export type ExecutableTools = NonNullable<AgentContext["tools"]>;
@@ -996,22 +1075,39 @@
 +	model: Model<Api>;
 +}
 +
++/** Source view before this response, plus the complete response; no tool has started. */
++export interface ToolResultBudgetInput extends ModelContextPolicyInput {
++	assistantMessage: AssistantMessage;
++	budgets: Readonly<Record<string, number>>;
++}
++
 +/** An opt-in native Agent policy; utility tools enter the normal registry and validation path. */
 +export interface ModelContextPolicy {
 +	readonly tools: ExecutableTools;
 +	/** Bind normal registry lookup before a recovered utility call can execute. */
 +	register?(tools: ExecutableTools): void;
 +	prepare(input: ModelContextPolicyInput, signal?: AbortSignal): Promise<PreparedModelContext>;
++	/** May lower explicitly configured group caps after seeing the actual response. */
++	planToolResultBudgets?(input: ToolResultBudgetInput, signal?: AbortSignal): Promise<Readonly<Record<string, number>> | undefined>;
 +}
 --- /dev/null
 +++ b/src/tool-result-budget.ts
-@@ -0,0 +1,54 @@
+@@ -0,0 +1,63 @@
 +/** Deterministic per-assistant-batch budgets for cooperating bounded-result tools. */
 +import type { ExecutableTools } from "./model-context.ts";
 +import type { AgentToolCall, AgentToolCallOutcome } from "./types.ts";
 +
 +export const CONTEXT_RECALL_BUDGET_GROUP = "context-recall";
 +export const contentJsonBytes = (content: unknown): number => new TextEncoder().encode(JSON.stringify(content)).length;
++
++/** Policies may tighten host budgets, never enable a new group or increase a ceiling. */
++export function restrictToolResultBudgets(configured: Readonly<Record<string, number>> | undefined, planned: Readonly<Record<string, number>> | undefined): Readonly<Record<string, number>> | undefined {
++	if (planned === undefined) return configured;
++	for (const [group, bytes] of Object.entries(planned)) {
++		if (!configured || !Object.hasOwn(configured, group) || !Number.isSafeInteger(bytes) || bytes < 256 || bytes > configured[group]) throw new RangeError("Policy result budgets must only lower configured group ceilings");
++	}
++	return Object.freeze({ ...configured, ...planned });
++}
 +
 +export function allocateToolResultBudgets(
 +	calls: readonly AgentToolCall[], tools: readonly ExecutableTools[number][],

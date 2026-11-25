@@ -30,6 +30,9 @@ export interface ContextPackingTrace {
 
 const encoder = new TextEncoder();
 
+/** A size failure only; callers must not swallow store, integrity, abort or transaction errors. */
+export class ContextPackingLimitError extends Error {}
+
 /** The byte metric is normalized context JSON, not an asserted tokenizer count. */
 export function contextBytes(value: unknown): number {
 	return encoder.encode(JSON.stringify(value)).length;
@@ -146,7 +149,7 @@ export async function packModelContext(
 	}
 	const current = turns.pop() ?? [];
 	// Current user input and all its completed tool rounds stay together. Never cut arbitrary last-N messages.
-	if (contextBytes(build(current)) > options.maxContextBytes) throw new Error("Current turn and system/tool declarations exceed the context budget after bounded spilling");
+	if (contextBytes(build(current)) > options.maxContextBytes) throw new ContextPackingLimitError("Current turn and system/tool declarations exceed the context budget after bounded spilling");
 	const scores = rankContextDocuments(query, turns.map((turn) => JSON.stringify(turn)));
 	const priority = turns.map((turn, i) => ({ i, density: (scores[i] + 0.15 * (i + 1) / Math.max(1, turns.length)) / Math.sqrt(contextBytes(turn)) })).sort((a, b) => b.density - a.density);
 	const keep = new Set<number>();
@@ -167,7 +170,7 @@ export async function packModelContext(
 	}
 	const indexArtifact = await contextArtifact(JSON.stringify({ references }), "history-index");
 	await options.store.put(indexArtifact);
-	if (contextBytes(build(current, indexArtifact)) > options.maxContextBytes) throw new Error("Archive index reference does not fit the fixed context budget");
+	if (contextBytes(build(current, indexArtifact)) > options.maxContextBytes) throw new ContextPackingLimitError("Archive index reference does not fit the fixed context budget");
 	for (const candidate of priority) {
 		const chosen = turns.flatMap((turn, i) => keep.has(i) || i === candidate.i ? turn : []);
 		if (contextBytes(build([...chosen, ...current], indexArtifact)) <= options.maxContextBytes) keep.add(candidate.i);

@@ -1,0 +1,8 @@
+(node:2470577) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"case":"roomy","variant":"core9-static","requests":2,"started":4,"total_content_bytes":8184,"error":null,"allocated":null}
+{"case":"roomy","variant":"core10-headroom","requests":2,"started":4,"total_content_bytes":8184,"error":null,"allocated":8192}
+{"case":"pressure","variant":"core9-static","requests":1,"started":4,"total_content_bytes":8184,"error":"Current turn and system/tool declarations exceed the context budget after bounded spilling","allocated":null}
+{"case":"pressure","variant":"core10-headroom","requests":2,"started":4,"total_content_bytes":5996,"error":null,"allocated":5996}
+{"case":"unfittable","variant":"core9-static","requests":1,"started":4,"total_content_bytes":8184,"error":"Current turn and system/tool declarations exceed the context budget after bounded spilling","allocated":null}
+{"case":"unfittable","variant":"core10-headroom","requests":1,"started":0,"total_content_bytes":0,"error":"Current turn and system/tool declarations exceed the context budget after bounded spilling","allocated":null}

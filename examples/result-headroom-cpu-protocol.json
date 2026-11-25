@@ -1,0 +1,23 @@
+{
+  "purpose": "Synthetic native-loop engineering comparison of post-response recall admission; not model task success or a benchmark.",
+  "baseline_commit": "daac8abeecf08063e5026be703906a86622cbbed",
+  "baseline_version": "1.6.0-contextlab.9",
+  "new_version": "1.6.0-contextlab.10",
+  "context_ceiling_bytes": 24576,
+  "configured_recall_content_bytes": 8192,
+  "calls": 4,
+  "read_limit_codepoints": 4096,
+  "artifact_recipe": "Each of 4 artifacts is JSON{text:'document'+index+' '+repeat('甲🧪q',2500)}. Independent synthetic exact text, no external source or closed model task reused.",
+  "user_recipe": "Read the exact saved fields. Technical case notes: followed by padding ASCII x; padding is a deliberately mandatory current user note, not a quality corpus.",
+  "cases": [
+    {"id":"roomy", "padding":0},
+    {"id":"pressure", "padding":14336},
+    {"id":"unfittable", "padding":22000}
+  ],
+  "execution": "Actual native Agent and BudgetedContextPolicy, parallel4read calls then scripted acknowledgement; reader always explicitly selected; identical caps, messages, source identities and read args per variant. Only new variant enables recallResultBudget.",
+  "metrics": ["provider boundary bytes and scripted calls", "tool starts/results", "content JSON bytes", "allocation/projection trace", "native terminal state", "exact source hash and unchanged args"],
+  "assertions": ["native next provider view never above hard ceiling", "new pressure has lowered allowance and completes next view", "roomy keeps8192 allowance", "unfittable terminates without tool execution", "source and original args unchanged"],
+  "scope": "One comparison per case/variant after type checks pass; preserve all failures, no case/budget/recipe adjustment after inspecting comparison. Margins account for normal builtin recall envelopes only; arbitrary hooks/usage/transforms/tool-set changes can still fail the next hard gate.",
+  "real_model_calls": 0,
+  "GPU": false
+}
