@@ -1,0 +1,23 @@
+{
+  "purpose": "CPU native-loop application sealing regression on three already-recorded claim bodies. Not a reopened model experiment, model correction rate or new task accuracy score.",
+  "source_results": "evidence/structured-brief/study/results.json.gz",
+  "source_results_sha256": "0efc8872f8e0342ba208c0c83e6df6fe0850826753233d5b583b848ba7c4b8c6",
+  "baseline_commit": "6bf2b5b3eee370b3615190530c8cc67eca62216a",
+  "baseline_brief_client_ts_sha256": "6cd9dd69cd7f25de7dbf94c705689b82598ca1fc8ebb7f2944613a9718270d58",
+  "baseline_core": "1.6.0-contextlab.11",
+  "variants": [
+    "legacy-v11",
+    "source-claims-v1"
+  ],
+  "cases": "All3sealed reports from frozen16request study:twofactuallyvalidfull bodies,onewrongprioritybudgetedbody; originalno-report row not invented. Same original body/evidence/hypotheses, explicit CPUreplay title and fresh isolatedjob.",
+  "execution": "ActualnativePiAgent and actualclientsubmit tool, one scriptedassistant call/end percase/variant. Copy sourceevidence into new fencedSQLite stores; no oldstores/writes/modelcalls.",
+  "invariants": [
+    "Originalclosedstudy/scores/inputs remain byteunchanged",
+    "Legacy accepts3;new sourceguard accepts2correct/rejects1wrong beforeanysealing/cache",
+    "Newacceptedproof binds fields/evidence into reporthash; unreviewedstate remains",
+    "Errors<=2048contentJSONbytes and no automaticcorrectvalues",
+    "Duplicate same-call submit uses existing result/proof; no duplicate report event"
+  ],
+  "model_calls": 0,
+  "GPU": false
+}

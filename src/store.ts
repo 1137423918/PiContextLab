@@ -3,11 +3,12 @@ import { randomUUID } from 'node:crypto';
 import type { AgentMessage, ContextArtifact } from '@earendil-works/pi-agent-core';
 import { explicitComparison,hash, POLICY, type Comparison, type Submission } from './domain.js';
 import type { Evidence } from './warehouse.js';
+import type { BriefSourceProof } from './brief-proof.js';
 
 export type Status = 'queued' | 'running' | 'paused' | 'clarification' | 'completed' | 'failed' | 'cancelled';
 export interface Job { id: string; dataset: string; question: string; status: Status; max_calls: number; max_output: number; epoch: number; owner: string | null; lease: number; cancel: number; messages: AgentMessage[]; error: string | null; created: number; }
 export interface Claim { id: string; owner: string; epoch: number; }
-export interface Report { id: string; job: string; dataset: string; title: string; evidence: Evidence[]; interpretation: string; hypotheses: string[]; created: number; }
+export interface Report { id: string; job: string; dataset: string; title: string; evidence: Evidence[]; interpretation: string; hypotheses: string[]; created: number; claims_proof?:BriefSourceProof; }
 interface SqlJob extends Omit<Job, 'messages'> { messages: string; }
 function assistantIdentity(reply: unknown): string {
   // Pi annotates this field after the provider reply is persisted. It is not response identity.
@@ -127,7 +128,7 @@ export class Store {
   }
   evidence(job: string): Evidence[] { return this.db.prepare('SELECT payload FROM evidence WHERE job=? ORDER BY id').all(job).map(r => JSON.parse(String(r.payload)) as Evidence); }
   report(job: string): Report | null { const row = this.db.prepare('SELECT payload FROM reports WHERE job=?').get(job); return row ? JSON.parse(String(row.payload)) as Report : null; }
-  submit(claim: Claim, submission: Submission): Report {
+  submit(claim: Claim, submission: Submission,verifyClaims?:(evidence:readonly Evidence[],job:Job,intent:Comparison|null)=>BriefSourceProof): Report {
     return this.transaction(() => { const job = this.assert(claim); const evidence = submission.evidence_ids.map(id => {
       const e = this.evidence(job.id).find(e => e.id === id); if (!e || e.dataset !== job.dataset || e.policy !== POLICY || hash({ rows: e.rows, result: e.result }) !== e.result_sha256) throw new Error('Missing, corrupt or wrong-version evidence');
       const { id: _id, ...payload } = e; if (`ev_${hash(payload)}` !== e.id) throw new Error('Evidence identity mismatch'); return e;
@@ -142,7 +143,8 @@ export class Store {
         const values = comparison.result as { baseline: string; current: string; delta: string };
         for (const key of ['baseline', 'current', 'delta'] as const) if (totals[key] !== values[key]) throw new Error('Breakdown does not reconcile with comparison');
       }
-      const payload = { job: job.id, dataset: job.dataset, title: submission.title, evidence, interpretation: submission.interpretation, hypotheses: submission.hypotheses };
+      const proof=verifyClaims?.(evidence,job,intent);
+      const payload = { job: job.id, dataset: job.dataset, title: submission.title, evidence, interpretation: submission.interpretation, hypotheses: submission.hypotheses,...(proof===undefined?{}:{claims_proof:proof}) };
       const id = `report_${hash(payload)}`; const existing = this.report(job.id); if (existing) { if (existing.id !== id) throw new Error('Report already sealed'); return existing; }
       const report = { id, ...payload, created: Date.now() }; this.db.prepare('INSERT INTO reports VALUES(?,?,?)').run(id, job.id, JSON.stringify(report)); this.event(job.id, 'report_sealed', { id }); return report;
     });

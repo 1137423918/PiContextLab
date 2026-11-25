@@ -1,0 +1,1 @@
+{"passed": true, "checks": ["required source/fixture included", "private/output/history excluded", "deterministic bytes", "all member digests", "symlink rejected"]}

@@ -1,0 +1,13 @@
+{
+  "baseline_commit": "6bf2b5b3eee370b3615190530c8cc67eca62216a",
+  "unchanged_byte_for_byte": {
+    "examples/brief-study-protocol.json": "2dcda87fe4304e6079b77783691e1825330c9f9a4e47ad7774ba45a8d00a7565",
+    "scripts/brief-evaluation.ts": "7822b1b51ee0787c0db1ca718f1da68904230b6286d462bfe7e05aa03ffb5698",
+    "evidence/structured-brief/study/results.json.gz": "0efc8872f8e0342ba208c0c83e6df6fe0850826753233d5b583b848ba7c4b8c6",
+    "evidence/structured-brief/study/summary.json": "523412ac00c485e249853555e67fd437b670f13beae7b9a739f3cba4c9b1a5e8"
+  },
+  "new_real_model_calls": 0,
+  "original_full_passed": 2,
+  "original_budgeted_passed": 0,
+  "total_closed_generation_calls": 105
+}

@@ -1,0 +1,5 @@
+
+> pi-metriclab@0.1.0 check
+> tsc --noEmit -p vendor/pi-agent-core/tsconfig.json && tsc --noEmit
+
+test/brief-proof.test.ts(8,34): error TS6133: 'scriptedControlModel' is declared but its value is never read.

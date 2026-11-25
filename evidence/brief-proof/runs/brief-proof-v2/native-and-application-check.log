@@ -1,0 +1,6 @@
+
+> pi-metriclab@0.1.0 check
+> tsc --noEmit -p vendor/pi-agent-core/tsconfig.json && tsc --noEmit
+
+scripts/probe-brief-proof.ts(26,10): error TS7022: 'args' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+scripts/probe-brief-proof.ts(26,207): error TS7022: 'untouched' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.

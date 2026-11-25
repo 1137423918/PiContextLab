@@ -1,26 +1,26 @@
-/** Structured operating briefs for the independent validation client; model claims remain unverified until graded. */
+/** Structured operating briefs: saved-source agreement before sealing, narrative and causal claims still unverified. */
 import type { AgentTool,ExecutableTools } from '@earendil-works/pi-agent-core';
-import { arr,nullable,obj,oneOf,str,type Static } from '@earendil-works/pi-schema';
+import { obj } from '@earendil-works/pi-schema';
 import { Runner } from './runtime.js';
 import { catalog,metricSchema,parse,submitSchema } from './domain.js';
-import type { Claim } from './store.js';
+import type { Claim,Report } from './store.js';
+import type { Submission } from './domain.js';
+import { briefSubmitSchema } from './brief-schema.js';
+import { verifyBriefClaims,briefProofMatches,BriefClaimError } from './brief-proof.js';
+export { briefFactsSchema,briefBodySchema,briefSubmitSchema,type BriefBody } from './brief-schema.js';
 
-const numberText=str({minLength:1,maxLength:64,description:'Exact source number as a decimal string; do not round money or convert units.'});
-const evidenceID=str({minLength:1,maxLength:100});
 const definitionSchema=obj({metric:metricSchema});
-export const briefFactsSchema=arr(obj({metric:metricSchema,evidence_id:evidenceID,baseline:numberText,current:numberText,delta:numberText,direction:oneOf(['increase','decrease','unchanged'])}),{minItems:3,maxItems:3});
-export const briefBodySchema=obj({
- facts:briefFactsSchema,
- priorities:arr(obj({metric:metricSchema,dimension:oneOf(['country','stock_code']),evidence_id:evidenceID,group:nullable(str({maxLength:128})),delta:numberText}),{minItems:2,maxItems:2}),
- check:obj({name:oneOf(['gross_per_order','gross_minus_returns']),source_evidence_ids:arr(evidenceID,{minItems:3,maxItems:3}),baseline:numberText,current:numberText}),
- note:str({maxLength:600,description:'Unverified descriptive explanation; no causal claim or human approval.'}),
-});
-export type BriefBody=Static<typeof briefBodySchema>;
-export const briefSubmitSchema=obj({title:str({minLength:1,maxLength:160}),evidence_ids:arr(evidenceID,{minItems:5,maxItems:5}),brief:briefBodySchema,hypotheses:arr(str({maxLength:500}),{maxItems:8})});
 
 /** Uses the normal Pi host, fenced Store and report sealer; no separate handwritten tool loop. */
 export class BriefRunner extends Runner {
  businessToolNames:string[]=[];
+ protected override get applicationPolicy():string { return 'brief-source-claims-v1'; }
+ protected override sealReport(claim:Claim,input:Submission):Report {
+  return this.store.submit(claim,input,(evidence,job,intent)=>{
+   let body:unknown;try{body=JSON.parse(input.interpretation);}catch{body=null;}
+   return verifyBriefClaims(body,evidence,job.dataset,intent);
+  });
+ }
  override tools(claim:Claim):ExecutableTools{
   const tools=super.tools(claim),submit=tools.find(tool=>tool.name==='submit_investigation');
   if(!submit)return tools;
@@ -32,7 +32,7 @@ export class BriefRunner extends Runner {
    read('list_saved_evidence','List up to20 saved evidence identities, request specifications and SQL row counts for this investigation. Does not return metric values.',async()=>({evidence:this.store.evidence(claim.id).slice(0,20).map(e=>({id:e.id,kind:e.kind,request:e.request,result_sha256:e.result_sha256,rows:e.rows.length}))})),
    {name:'metric_definition',label:'Metric definition',description:'Read the exact eligibility, grain and definition of a named retail metric.',parameters:definitionSchema,replay:'safe' as const,execute:async(_id,args,signal)=>{this.store.assert(claim);signal?.throwIfAborted();const value={metric:args.metric,definition:catalog[args.metric],eligibility:catalog.eligibility,grain:catalog.grain};return {content:[{type:'text' as const,text:JSON.stringify(value)}],details:value};}} satisfies AgentTool<typeof definitionSchema>,
   ];
-  const structured:AgentTool<typeof briefSubmitSchema>={...submit,parameters:briefSubmitSchema,description:'Seal one operating brief from exactly five saved evidence IDs. Include three exact comparison facts with source IDs/direction, largest absolute-change country and stock_code groups, and the requested bookkeeping/average definition check. These model facts are stored as unverified claims; no external correctness oracle is available to this tool.',execute:async(id,input,signal,update,execution)=>{const value=parse(briefSubmitSchema,input);const submission=parse(submitSchema,{title:value.title,evidence_ids:value.evidence_ids,interpretation:JSON.stringify(value.brief),hypotheses:value.hypotheses});return submit.execute(id,submission,signal,update,execution);}};
+  const structured:AgentTool<typeof briefSubmitSchema>={...submit,parameters:briefSubmitSchema,description:'Seal one operating brief from exactly five saved evidence IDs. Include three exact comparison facts with source IDs/direction, largest absolute-change country and stock_code groups, and the requested bookkeeping/average definition check. Structured facts, priorities and arithmetic checks must agree with saved source evidence before sealing. Rejections identify fields without substituting values. Explanation and hypotheses are still unverified; no external oracle or human approval is supplied.',execute:async(id,input,signal,update,execution)=>{const value=parse(briefSubmitSchema,input);const submission=parse(submitSchema,{title:value.title,evidence_ids:value.evidence_ids,interpretation:JSON.stringify(value.brief),hypotheses:value.hypotheses});const cached=this.store.cachedTool(claim,id,{name:submit.name,input:submission});if(cached!==undefined){const report=this.store.report(claim.id);if(!report||!briefProofMatches(report))throw new BriefClaimError([{path:'/brief',code:'CACHED_REPORT_UNVERIFIED'}]);}return submit.execute(id,submission,signal,update,execution);}};
   const result=[...tools.map(tool=>tool.name===submit.name?structured:tool),...metadata];this.businessToolNames=result.map(tool=>tool.name);return result;
  }
 }

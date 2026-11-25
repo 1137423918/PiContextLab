@@ -458,3 +458,23 @@ core11新CPU控制中两个完整分支各4次脚本请求，两个预算分支�
 全体已知usage输入63,331、输出7,682 tokens，按冻结峰时单价估计约$0.0155，非供应商账单；错误/未知及usage缺失额外列在分析中，本次均为0。最终owned0、GPU0。包括之前关闭研究，总真实生成请求为105次；不重开任何剩余额度。
 
 [原始四实例与评分](../evidence/structured-brief/study/results.json.gz) · [逐例汇总](../evidence/structured-brief/study/summary.json) · [完整边界输入](../evidence/structured-brief/study/wire-transcripts.json.gz) · [151文件来源验证](../evidence/structured-brief/study-source-verification.json) · [配额/工具与usage分析](../evidence/structured-brief/analysis.json) · [原始调用与错误字段](../evidence/structured-brief/failure-analysis.json) · [新订单报告](../evidence/structured-brief/study/summer-order-value-full.html) · [新退货报告](../evidence/structured-brief/study/autumn-return-offset-full.html) · [资源及执行日志](../evidence/structured-brief/runs/brief-study-v1/)。原错误报告亦完整保留，分析不改评分或发出新请求。
+
+## 源声明门槛的应用回归：不重跑模型
+
+在原16请求研究关闭后，新增应用封存门槛，仍使用相同Pi核心。当前任务的已保存证据是校验来源；未导入独立oracle或评分脚本给Agent。校验在报告插入同一事务中，数字/方向/来源/最大贡献组/勾稽未通过时不产生报告、校验记录或成功缓存；正常调用可在原额度内提出新提交，不追加模型额度。
+
+按[固定方案](../examples/brief-proof-replay-protocol.json)读取原三个封存声明体（两个正确完整配置、一份错误预算配置），建立全新隔离任务，各通过旧客户端/新版门槛在实际Pi循环里执行一次。声明正文、引用证据和假设保持一致，标题标CPU replay，原缺报告实例不补造。所有原文件与旧评分字节不变。
+
+| 原记录声明体 | 旧客户端 | 新版源声明门槛 |
+|---|---|---|
+| 订单/客单价，原full事实通过 | 封存，无核对标记 | 封存，记录facts/priorities/check范围 |
+| 退货/净额，原budgeted贡献错误 | 仍封存，无核对标记 | 拒绝；无报告/成功缓存，389字节字段诊断 |
+| 退货/净额，原full事实通过 | 封存，无核对标记 | 封存，记录facts/priorities/check范围 |
+
+这是六次脚本provider的封存回归，不是重新给模型评分、更不是实际模型纠正率。原16请求的full2/2、budgeted0/2及错误报告照旧。新增真实请求0、GPU0，总关闭生成请求仍105。校验记录不证明原始CSV、业务口径或因果正确；自然语言要求覆盖仍由独立任务评分区分，解释/假设不自动变成已核实。
+
+服务器95项Node测试覆盖正确/错值、方向和引用、跨任务/陈旧写入者、篡改后自洽hash但行/结果不一致、null/并列组、事务插入失败回滚、重复提交/旧缓存、旧指纹拒绝以及有界且不回显答案的错误。完整UCI和原14项浏览器回归仍通过；五个导出报告经真实浏览器核对，两个新记录显示范围且保持Unreviewed，三个旧记录不展示已核对，窄屏无横向溢出。
+
+初版v1未使用导入、v2控制脚本推断类型、v3JSON对象边界类型均留存；v4类型/构建、95项测试、回归与浏览器通过，任务78.839秒，owned0。99个当前执行文件匹配实际源码包；核心vendor、旧协议、旧评分器和原结果没有修改。
+
+[六次执行与错误原文](../evidence/brief-proof/results.json) · [95项测试](../evidence/brief-proof/tests.tap) · [源码核对](../evidence/brief-proof/source-verification.json) · [旧研究未变](../evidence/brief-proof/closed-study-unchanged.json) · [导出浏览器检查](../evidence/brief-proof/browser-proof.json) · [所有失败/资源/源码](../evidence/brief-proof/runs/) · [CPU回归导出示例](../evidence/brief-proof/exports/autumn-return-offset-full-source-claims-v1.html)。

@@ -2,8 +2,8 @@ import { Agent, BudgetedContextPolicy, runToolCall, allocateToolResultBudgets, r
 import { createAssistantMessageEventStream, normalizeContext, type Api, type AssistantMessage, type Model } from '@earendil-works/pi-ai';
 import { streamSimple } from '@earendil-works/pi-ai/api/openai-completions';
 import { obj, str, type Static } from '@earendil-works/pi-schema';
-import { breakdownSchema, catalog, comparisonSchema, hash, parse, POLICY, submitSchema,type Comparison,validateComparison } from './domain.js';
-import { Store, type Claim } from './store.js';
+import { breakdownSchema, catalog, comparisonSchema, hash, parse, POLICY, submitSchema,type Comparison,type Submission,validateComparison } from './domain.js';
+import { Store, type Claim,type Report } from './store.js';
 import { Warehouse, type Evidence } from './warehouse.js';
 
 export const scriptedControlModel: Model<'openai-completions'> = { id: 'local-model', name: 'Configured OpenAI-compatible model', api: 'openai-completions', provider: 'metriclab', baseUrl: 'https://control.invalid', reasoning: false, input: ['text'], cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 }, contextWindow: 32768, maxTokens: 1200 };
@@ -44,6 +44,8 @@ export class Runner {
   private readonly tasks = new Set<Promise<void>>();
   private readonly pausing = new Set<string>();
   constructor(readonly store: Store, readonly warehouse: Warehouse, readonly base: StreamFn, readonly model: Model<Api> = scriptedControlModel, readonly requestTimeoutMs = 90000, readonly maxContextBytes=65536,readonly contextMode:'budgeted'|'upstream'='upstream',readonly artifactSearch=false) { if (!Number.isSafeInteger(requestTimeoutMs) || requestTimeoutMs<1000 || requestTimeoutMs>300000) throw new Error('Invalid request deadline');if(!Number.isSafeInteger(maxContextBytes)||maxContextBytes<4096||maxContextBytes>262144)throw new Error('Invalid context byte ceiling'); }
+  protected get applicationPolicy():string|undefined {return undefined;}
+  protected sealReport(claim:Claim,input:Submission):Report {return this.store.submit(claim,input);}
   tools(claim: Claim): ExecutableTools {
     const dataset = this.store.job(claim.id).dataset;
     const intent=this.store.intent(claim.id);
@@ -63,7 +65,7 @@ export class Runner {
       tool('compare_metric', 'Compare explicit disjoint complete periods. End date is exclusive. Use equal_days or complete calendar_month.', comparisonSchema, async (args, signal) => {if(!permitted(args))return clarify(); const e = await this.warehouse.compare(dataset, args, signal); return { value: { id: e.id, result: e.result, request: e.request }, evidence: e }; }),
       tool('breakdown_change', 'Descriptive additive monetary contributions by country or stock_code. Includes OTHER and reconciled totals.', breakdownSchema, async (args, signal) => {if(!permitted(args.comparison))return clarify(); const e = await this.warehouse.breakdown(dataset, args, signal); return { value: { id: e.id, result: e.result, request: e.request }, evidence: e }; }),
       tool('request_clarification', 'Stop and ask the analyst when metric, dates or comparable-period basis is ambiguous.', clarificationSchema, async args => { this.store.clarify(claim,args.question); return { value: args, terminate: true }; }),
-      tool('submit_investigation', 'Seal report from evidence IDs. Narrative is an unverified interpretation; hypotheses never prove causality. No human approval.', submitSchema, async args => ({ value: this.store.submit(claim, args), terminate: true })),
+      tool('submit_investigation', 'Seal report from evidence IDs. Narrative is an unverified interpretation; hypotheses never prove causality. No human approval.', submitSchema, async args => ({ value: this.sealReport(claim, args), terminate: true })),
     ];
     return intent?all:all.filter(t=>['inspect_dataset','request_clarification'].includes(t.name));
   }
@@ -85,7 +87,7 @@ export class Runner {
     try {
       const intent=this.store.intent(id);
       if(intent){const dataset=await this.warehouse.dataset(job.dataset);try{validateComparison(intent,dataset.min_time,dataset.max_time);}catch(e){this.store.clarify(claim,e instanceof Error?e.message:String(e));this.store.finish(claim,'clarification');return;}}
-      this.store.bindRuntime(claim,{model:this.model,policy:POLICY,Pi:'1.6.0-contextlab.11',recall_result_budget:policy?'post-response-v2':null,request_binding:'v1',tool_validation_feedback:'bounded-2048-v1',tool_result_budgets:policy?RECALL_RESULT_BUDGETS:null,intent:this.store.intent(id),contextMode:this.contextMode,artifactSearch:this.artifactSearch,prompt_version:'v2-compact-context',requestTimeoutMs:this.requestTimeoutMs,maxContextBytes:this.maxContextBytes,tools:agent.state.tools.map(t=>({name:t.name,parameters:t.parameters,resultBudget:t.resultBudget}))});
+      this.store.bindRuntime(claim,{...(this.applicationPolicy===undefined?{}:{application_policy:this.applicationPolicy}),model:this.model,policy:POLICY,Pi:'1.6.0-contextlab.11',recall_result_budget:policy?'post-response-v2':null,request_binding:'v1',tool_validation_feedback:'bounded-2048-v1',tool_result_budgets:policy?RECALL_RESULT_BUDGETS:null,intent:this.store.intent(id),contextMode:this.contextMode,artifactSearch:this.artifactSearch,prompt_version:'v2-compact-context',requestTimeoutMs:this.requestTimeoutMs,maxContextBytes:this.maxContextBytes,tools:agent.state.tools.map(t=>({name:t.name,parameters:t.parameters,resultBudget:t.resultBudget}))});
       // An assistant tool batch may have been committed before a process died. Reconcile through Pi's own validator/executor.
       const messages = [...agent.state.messages]; let index = messages.length - 1;
       const interrupted = messages.at(-1);

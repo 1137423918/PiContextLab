@@ -1,0 +1,8 @@
+
+> pi-metriclab@0.1.0 check
+> tsc --noEmit -p vendor/pi-agent-core/tsconfig.json && tsc --noEmit
+
+scripts/probe-brief-proof.ts(26,480): error TS2322: Type '{ title: string; evidence_ids: string[]; brief: Record<string, unknown>; hypotheses: string[]; }' is not assignable to type 'JsonObject'.
+  Property 'brief' is incompatible with index signature.
+    Type 'Record<string, unknown>' is not assignable to type 'JsonValue'.
+      Type 'Record<string, unknown>' is missing the following properties from type 'readonly JsonValue[]': length, concat, join, slice, and 26 more.
