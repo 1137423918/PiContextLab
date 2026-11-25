@@ -4,7 +4,7 @@
 
 ## 改动位置与已有能力
 
-固定 Pi 1.6.0 的完整 Agent Core 源码保留在 [vendor/pi-agent-core](../vendor/pi-agent-core)，原文件哈希见 [UPSTREAM.json](../vendor/pi-agent-core/UPSTREAM.json)，MIT 原许可一并保留。派生版本为 `1.6.0-contextlab.5`，不是上游发布或已合入 PR。原研究克隆保持不变。
+固定 Pi 1.6.0 的完整 Agent Core 源码保留在 [vendor/pi-agent-core](../vendor/pi-agent-core)，原文件哈希见 [UPSTREAM.json](../vendor/pi-agent-core/UPSTREAM.json)，MIT 原许可一并保留。派生版本为 `1.6.0-contextlab.6`，不是上游发布或已合入 PR。原研究克隆保持不变。
 
 上游已有 `transformContext`、工具调用屏障、完整的 `pi-durable` 持久化 Harness、摘要压缩，以及部分工具输出限制。本项目不把这些已有能力说成原创。
 
@@ -146,3 +146,26 @@ v4 轨迹暴露了可在 CPU 上单独检验的程序行为，但没有证明它
 `spillMode: 'threshold'` 仅为明确选择的旧触发方式兼容选项，仍使用新版批次保护与续读接口，不代表完整复现旧版本。严格复现 v4 需要检出旧提交。审计新增 `normalizedBeforeBytes`、`trigger`、`spillMode` 和 `protectedRecallCallIds`；UI 使用规范化前后字节作比较，权威历史保持原样。
 
 新版继续保持真实入口默认完整上下文，预算策略为 opt-in。验证为新的合成机制控制和工程回归，没有追加 DeepSeek 请求；不能据此宣称修复了实际模型失败、降低累计 token 或提高成功率。对照、原始测试和失败类型检查见 [验证记录](validation.md)。
+
+
+## contextlab.6：有界目录索引复用
+
+此前 `routeTools` 在每次请求中重新分词并建立整个工具目录的 BM25 统计。`ContextLexicalIndex` 已支持多次 score，但实际原生策略没有复用它。新增 `ToolRoutingIndexCache`，将这个可复用索引接入正常路由和 `discover_tools`，不改变评分公式、依赖闭包或预算规则。
+
+缓存以有序工具声明 JSON 和实际检索文档的逐字符串相等作为命中条件，每次请求仍重新读取并比较当前元数据。因此同一数组或同一工具对象被就地修改时，也会失效重建；新增、删除、改名、排序、schema、描述和自定义文档变化都能检测。它不靠数组地址或一个可能忘记更新的版本号判断一致性。代价是命中时仍需 O(目录文本大小) 的序列化与比较，尚未消除大目录扫描。
+
+缓存只保存声明/文档快照与词法统计，不保存 query、答案、选择结果或 execute 函数。每轮依赖、必选项、提升候选及预算重新计算；选中的可执行对象从当前注册表取得。即使元数据完全相同而实现函数被替换，也使用新对象。核心声明/执行校验与宿主权限仍照常生效。
+
+原生 policy 默认创建属于本实例的缓存；不使用进程全局缓存。独立使用 `routeTools` 时可显式传入 `indexCache`；不传则保留每次构建路径。默认最多2个目录快照、合计32MiB的声明/文档 UTF-8源字节，超限的目录只临时评分、不保留；淘汰按LRU执行。该源字节上限不等于JavaScript堆内存上限，索引对象也占内存。`clear()` 释放目录保留，计数器保留。`stats` 和 prepare trace 提供命中、构建、淘汰、旁路及源字节记录。
+
+```ts
+const indexCache = new ToolRoutingIndexCache({
+  maxEntries: 2,
+  maxSourceBytes: 32 * 1024 * 1024,
+});
+const decision = routeTools(currentQuestion, registeredTools, {
+  maxTools: 8, maxSchemaBytes: 8192, alwaysInclude: [], indexCache,
+});
+```
+
+缓存优化与模型效果不同：这里要求与冻结旧版对同一输入产生完全相同的所有排名分数、顺序、schema成本和选择，而不是修改检索质量。新的CPU性能方案使用真实37,292工具目录，仅导出工具元数据；旧101条查询和标签不进入驱动。重复名称被命名空间化，原始名称保留在描述和字段检索文档中；其中1,211条非对象参数描述包在惰性对象schema的`x-catalog-parameters`字段下，原始参数文本仍用于检索文档；所有行保留。这些旧schema仅序列化作负载，不实际执行API。八条新查询按预定双向顺序比较，完整样本保留，不据时间结果调参或重试。结果见 [验证记录](validation.md)。

@@ -139,7 +139,7 @@
  			onPayload: this.onPayload,
 --- /dev/null
 +++ b/src/budgeted-policy.ts
-@@ -0,0 +1,102 @@
+@@ -0,0 +1,105 @@
 +/** An opt-in core policy combining task-aware tool selection, bounded context and explicit recall. */
 +import { arr, compile, int, num, obj, str } from "@earendil-works/pi-schema";
 +import { toToolDeclaration } from "@earendil-works/pi-ai";
@@ -147,15 +147,16 @@
 +import { createContextSearchTool } from "./context-search.ts";
 +import { contextBytes, modelContextView, packModelContext, type ContextPackingTrace } from "./context-budget.ts";
 +import type { ExecutableTools, ModelContextPolicy, ModelContextPolicyInput, PreparedModelContext } from "./model-context.ts";
-+import { routeTools, type RankedTool, type ToolRoutingOptions } from "./tool-router.ts";
++import { routeTools, ToolRoutingIndexCache, type RankedTool, type ToolRoutingCacheStats, type ToolRoutingOptions } from "./tool-router.ts";
 +
 +export interface BudgetedPolicyTrace extends ContextPackingTrace {
-+	policy: "pi-context-lab-v5";
++	policy: "pi-context-lab-v6";
 +	request: number;
 +	registeredTools: number;
 +	selectedToolNames: string[];
 +	schemaBytes: number;
 +	ranking: RankedTool[];
++	routingCache: ToolRoutingCacheStats;
 +}
 +
 +export interface BudgetedPolicyOptions extends ToolRoutingOptions {
@@ -178,16 +179,18 @@
 +	private registry: ExecutableTools = [];
 +	private bound = false;
 +	private request = 0;
++	private readonly routingIndex: ToolRoutingIndexCache;
 +
 +	constructor(options: BudgetedPolicyOptions) {
 +		this.options = options;
++		this.routingIndex = options.indexCache ?? new ToolRoutingIndexCache();
 +		this.tools = [createContextReadTool(options.artifacts), {
 +			name: "discover_tools", label: "Discover tools",
 +			description: "Find omitted tools when the current tool set does not support the task. Returned candidates and dependencies are exposed on the next request if the fixed budget permits. Do not guess unavailable tool names.",
 +			parameters: discoverySchema, replay: "safe",
 +			execute: async (_id, args, signal) => {
 +				signal?.throwIfAborted();
-+				const decision = routeTools(args.query, this.registry, { ...this.options, alwaysInclude: [] });
++				const decision = routeTools(args.query, this.registry, { ...this.options, indexCache: this.routingIndex, alwaysInclude: [] });
 +				const candidates = decision.ranked.filter((r) => !this.tools.some((t) => t.name === r.name)).slice(0, args.limit);
 +				const payload = { candidates, instructions: "Candidate schemas are added on the next provider request; all calls still require normal argument validation." };
 +				return { content: [{ type: "text", text: JSON.stringify(payload) }], details: payload };
@@ -229,7 +232,7 @@
 +			const needsDiscovery = business.length + recallTools.length > this.options.maxTools || totalSchemaBytes > this.options.maxSchemaBytes;
 +			const required = [...baseNames, ...(needsDiscovery ? ["discover_tools"] : [])];
 +			const candidates = input.tools.filter((tool) => !utilityNames.has(tool.name) || required.includes(tool.name));
-+			return routeTools(query, candidates, { ...this.options, alwaysInclude: required }, [...promoted]);
++			return routeTools(query, candidates, { ...this.options, indexCache: this.routingIndex, alwaysInclude: required }, [...promoted]);
 +		};
 +		// Unselected schemas and display details must not manufacture context pressure.
 +		const initial = select([]);
@@ -237,7 +240,7 @@
 +		const eager = this.options.spillMode === "threshold" && input.context.messages.some(message => message.role === "toolResult" && contextBytes(message.content) > this.options.inlineToolResultBytes);
 +		const decision = exceedsBudget || eager ? select([reader, ...(this.options.artifactSearch ? [this.tools[2]] : [])]) : initial;
 +		const packed = await packModelContext(input.context, decision.tools, query, { maxContextBytes: this.options.maxContextBytes, inlineToolResultBytes: this.options.inlineToolResultBytes, store: this.options.artifacts, artifactSearch: this.options.artifactSearch, spillMode: this.options.spillMode }, signal);
-+		const trace: BudgetedPolicyTrace = { policy: "pi-context-lab-v5", request: this.request, registeredTools: input.tools.length, selectedToolNames: decision.tools.map((t) => t.name), schemaBytes: decision.schemaBytes, ranking: decision.ranked, ...packed.trace };
++		const trace: BudgetedPolicyTrace = { policy: "pi-context-lab-v6", request: this.request, registeredTools: input.tools.length, selectedToolNames: decision.tools.map((t) => t.name), schemaBytes: decision.schemaBytes, ranking: decision.ranked, routingCache: this.routingIndex.stats, ...packed.trace };
 +		await this.options.onPrepared?.(trace);
 +		return { context: packed.context, tools: decision.tools };
 +	}
@@ -674,7 +677,7 @@
 +}
 --- /dev/null
 +++ b/src/tool-router.ts
-@@ -0,0 +1,119 @@
+@@ -0,0 +1,190 @@
 +/** Deterministic lexical tool ranking with dependency closure and explicit schema budgets. */
 +import { toToolDeclaration } from "@earendil-works/pi-ai";
 +import type { ExecutableTools } from "./model-context.ts";
@@ -686,6 +689,8 @@
 +	dependencies?: Readonly<Record<string, readonly string[]>>;
 +	/** Preserve a catalog's complete documentation when it carries metadata beyond the wire schema. */
 +	routingDocuments?: Readonly<Record<string,string>>;
++	/** Optional per-owner bounded cache. It stores catalog statistics, never execution functions or query results. */
++	indexCache?: ToolRoutingIndexCache;
 +}
 +
 +export interface RankedTool {
@@ -753,6 +758,74 @@
 +
 +const encoder = new TextEncoder();
 +
++export interface ToolRoutingCacheOptions {
++	maxEntries?: number;
++	/** Combined UTF-8 declaration/document bytes retained, not a JavaScript heap limit. */
++	maxSourceBytes?: number;
++}
++
++export interface ToolRoutingCacheStats {
++	hits: number;
++	misses: number;
++	builds: number;
++	evictions: number;
++	bypasses: number;
++	entries: number;
++	sourceBytes: number;
++}
++
++interface CatalogSnapshot {
++	declarations: string[];
++	documents: string[];
++	sizes: number[];
++	bytes: number;
++}
++
++/** Exact metadata comparison detects in-place mutations; selected execution objects always come from the live registry. */
++export class ToolRoutingIndexCache {
++	private readonly maxEntries: number;
++	private readonly maxSourceBytes: number;
++	private entries: { snapshot: CatalogSnapshot; index: ContextLexicalIndex }[] = [];
++	private counters = { hits: 0, misses: 0, builds: 0, evictions: 0, bypasses: 0 };
++
++	constructor(options: ToolRoutingCacheOptions = {}) {
++		this.maxEntries = options.maxEntries ?? 2;
++		this.maxSourceBytes = options.maxSourceBytes ?? 32 * 1024 * 1024;
++		if (!Number.isSafeInteger(this.maxEntries) || this.maxEntries < 1 || !Number.isSafeInteger(this.maxSourceBytes) || this.maxSourceBytes < 256) throw new RangeError("Routing cache limits must be bounded positive integers");
++	}
++
++	get stats(): ToolRoutingCacheStats {
++		return { ...this.counters, entries: this.entries.length, sourceBytes: this.entries.reduce((n, entry) => n + entry.snapshot.bytes, 0) };
++	}
++
++	clear(): void { this.entries = []; }
++
++	score(query: string, registry: ExecutableTools, documents?: Readonly<Record<string,string>>): { scores: number[]; schemaBytes: number[] } {
++		const snapshot: CatalogSnapshot = { declarations: [], documents: [], sizes: [], bytes: 0 };
++		for (const tool of registry) {
++			const declaration = JSON.stringify(toToolDeclaration(tool));
++			const document = documents?.[tool.name] ?? `${tool.name} ${tool.name} ${tool.description} ${JSON.stringify(tool.parameters)}`;
++			const size = encoder.encode(declaration).length;
++			snapshot.declarations.push(declaration); snapshot.documents.push(document); snapshot.sizes.push(size);
++			snapshot.bytes += size + encoder.encode(document).length;
++		}
++		const found = this.entries.findIndex(entry => entry.snapshot.declarations.length === snapshot.declarations.length && entry.snapshot.declarations.every((text, i) => text === snapshot.declarations[i] && entry.snapshot.documents[i] === snapshot.documents[i]));
++		if (found >= 0) {
++			this.counters.hits++;
++			const [entry] = this.entries.splice(found, 1); this.entries.push(entry);
++			return { scores: entry.index.score(query), schemaBytes: [...entry.snapshot.sizes] };
++		}
++		this.counters.misses++; this.counters.builds++;
++		const index = new ContextLexicalIndex(snapshot.documents);
++		if (snapshot.bytes > this.maxSourceBytes) this.counters.bypasses++;
++		else {
++			while (this.entries.length >= this.maxEntries || this.stats.sourceBytes + snapshot.bytes > this.maxSourceBytes) { this.entries.shift(); this.counters.evictions++; }
++			this.entries.push({ snapshot, index });
++		}
++		return { scores: index.score(query), schemaBytes: [...snapshot.sizes] };
++	}
++}
++
 +/** Include required tools and complete dependency groups, then admit ranked candidates that fit. */
 +export function routeTools(
 +	query: string,
@@ -765,8 +838,9 @@
 +	}
 +	const byName = new Map(registry.map((tool) => [tool.name, tool]));
 +	if (byName.size !== registry.length) throw new Error("Tool registry has duplicate names");
-+	const sizes = new Map(registry.map((tool) => [tool.name, encoder.encode(JSON.stringify(toToolDeclaration(tool))).length]));
-+	const scores = rankContextDocuments(query, registry.map((tool) => options.routingDocuments?.[tool.name] ?? `${tool.name} ${tool.name} ${tool.description} ${JSON.stringify(tool.parameters)}`));
++	const cached = options.indexCache?.score(query, registry, options.routingDocuments);
++	const sizes = new Map(registry.map((tool, i) => [tool.name, cached?.schemaBytes[i] ?? encoder.encode(JSON.stringify(toToolDeclaration(tool))).length]));
++	const scores = cached?.scores ?? rankContextDocuments(query, registry.map((tool) => options.routingDocuments?.[tool.name] ?? `${tool.name} ${tool.name} ${tool.description} ${JSON.stringify(tool.parameters)}`));
 +	const ranked = registry.map((tool, i) => ({ name: tool.name, score: scores[i], schemaBytes: sizes.get(tool.name)! }));
 +	ranked.sort((a, b) => b.score - a.score);
 +	const selected = new Set<string>();

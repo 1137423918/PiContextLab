@@ -1,0 +1,47 @@
+{
+  "purpose": "CPU latency and output-equivalence of request-scoped tool catalog index reuse, not new retrieval quality scoring. Closed ToolRet query set is never loaded by this driver.",
+  "baseline_commit": "3cda10c255d97ae0cb686ad308acdbf28b69bdbe",
+  "corpus": {
+    "normalized_path_read_only": "/tmp/pimetriclab-build-stage98-k3w93odk/source/toolret/normalized.json",
+    "tools": 37292,
+    "provenance": "examples/toolret-protocol.json pinned web corpus, reused solely as workload; source text is not redistributed",
+    "boundary": "prepare_routing_workload.py exports only tool metadata to fresh tools-only JSON; driver never receives query labels. catalog_<index> namespaces duplicate names; original name retained in description and exact field routing document. Legacy schemas serialized for workload only; never executed. Non-object/array/null legacy parameters are preserved under x-catalog-parameters in an inert object schema; original parameter JSON remains in routing document. All rows retained; adapter correction follows pre-timing assertion failure, not observed performance."
+  },
+  "queries": [
+    "check airline reservation status",
+    "read customer invoice and refund policy",
+    "schedule a calendar meeting",
+    "search recent scientific publications",
+    "fetch city weather forecast",
+    "retrieve product inventory by identifier",
+    "list repository pull requests",
+    "查询订单配送状态"
+  ],
+  "variants": [
+    "frozen core5 uncached routeTools",
+    "core6 routeTools with bounded per-instance lexical cache"
+  ],
+  "runs_per_variant": 2,
+  "order": "Pass0 uncached then cache; Pass1 cache then uncached; first cached call is cold; all per-call samples retained",
+  "routing": {
+    "maxTools": 8,
+    "maxSchemaBytes": 8192,
+    "alwaysInclude": []
+  },
+  "cache": {
+    "maxEntries": 2,
+    "maxSourceBytes": 33554432
+  },
+  "measurements": [
+    "exact full ranking score/name/schema equality per query",
+    "selected object and schema-byte equivalence",
+    "all wall-ms samples and median/p95 descriptions",
+    "cold build, cache hit/build/eviction/bypass counts",
+    "process RSS and CPU in guarded phase report"
+  ],
+  "outcome_rule": "No speedup threshold; retain losses. Correctness requires exact ranking and execution object references. Do not tune cache sizes/query text after observing timing.",
+  "GPU": false,
+  "model_calls": 0,
+  "quality_labels_used": false,
+  "scope": "New system performance diagnostic; no repeated old101 quality scores, no API studies reopened."
+}

@@ -260,3 +260,24 @@ v4 最终服务器验证：**33 项测试、14 项浏览器检查通过**。完�
 服务器通过 **44 项测试、14 项浏览器检查**；541,909 行全量数据在显式 budgeted/16KiB 的脚本 provider 下完成，继续独立核对12个指标值、29个国家分组及质量计数。执行约46秒，owned 进程最终0，新增模型请求0、GPU0。旧真实 DeepSeek 负结果不变；普通入口继续默认完整上下文。
 
 [方案](../examples/pressure-policy-cpu-protocol.json) · [逐例结果与输入源码](../evidence/context-pressure/) · [44项测试](../evidence/context-pressure/tests.tap) · [源码身份](../evidence/context-pressure/source-sha256.json) · [全量核对](../evidence/context-pressure/uci-validation.json) · [浏览器](../evidence/context-pressure/browser-result.json) · [资源与两次类型错误](../evidence/context-pressure/runs/)。类型错误均发生在诊断运行之前，修复后使用全新目录，未改预期或重跑已评分数据。
+
+
+## contextlab.6：真实工具目录上的索引复用开销
+
+新方案只使用固定 ToolRet web 目录的37,292条元数据，不加载原101条检索查询或标签进行评分。用八条新的通用查询、每变体两轮，首轮旧版在前、次轮缓存版在前；缓存第一次调用冷启动也纳入结果。被测为相同路由逻辑与完整字段文档，基线为3cda10c的冻结core5，不重新评价旧质量分数。
+
+目录中1,210条参数描述为list、1条为string。第一次驱动在开始任何计时前因对象断言中止；修正边界适配，将这1,211条保留在惰性对象schema的`x-catalog-parameters`字段，检索文档仍使用原始参数。没有删除行、改变query或缓存额度。全部37,292条保持在负载中，但这里不是可直接执行的API目录。
+
+| 固定CPU负载 | 每次重建的core5 | 有界复用的core6 |
+|---|---:|---:|
+| 实际路由调用 | 16 | 16（含1次冷启动） |
+| 中位 wall ms | 991.1 | 433.3 |
+| 样本p95 wall ms | 1,171.0 | 1,022.8 |
+| 路由总wall ms | 16,280.0 | 7,716.6 |
+| 与配对变体全部排名/分数/schema成本/选集相等 | 16/16 | 16/16 |
+
+缓存构建1次、命中15次，未淘汰/旁路，保留源字节26,306,261；benchmark阶段进程树峰值RSS约689MB，包含两变体与负载，不是缓存单独占用或堆内存上限。每次命中仍扫描序列化元数据；该结果是单台受限CPU服务器、固定工作负载的观察，不是生产SLA、端到端Agent速度、统计泛化或准确率提升。所有样本、冷启动及顺序均保留，没有按速度阈值挑结果。
+
+另通过51项工程测试，包含就地修改失效、当前执行对象身份、预算/依赖重算、LRU和源字节旁路，以及原有协议、恢复和业务边界。完整UCI的541,909行/12指标/29国家核对及14项浏览器检查通过；脚本provider显式验证16KiB预算模式，不冒充真实大模型。最终owned进程0，新增模型请求0、GPU0。默认真实入口仍为完整上下文。
+
+[运行前方案](../examples/routing-cache-cpu-protocol.json) · [逐调用结果及冻结源码](../evidence/routing-cache/) · [51项测试](../evidence/routing-cache/tests.tap) · [执行源码身份](../evidence/routing-cache/source-sha256.json) · [资源和失败记录](../evidence/routing-cache/runs/)。首次严格类型检查也曾在计时前因驱动数组类型失败；原日志与上面的目录边界失败均保留。修正后在新目录只执行一次有效性能对照。

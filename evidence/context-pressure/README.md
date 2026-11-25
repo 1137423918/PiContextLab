@@ -9,7 +9,7 @@
 
 三组输入均为特制程序控制：视图已满足预算、仅需外置一个大结果、最新两个并行回读应共同保留。它们证明相应实现行为，不能外推到所有对话或已失败的真实模型任务。JSON 字节度量不是供应商 HTTP 请求体大小。
 
-复现只需 CPU，先按固定提交 fc2d13c 在独立目录构建旧 core4，再构建新版：
+复现只需 CPU。被测 core5 使用固定提交 3cda10c 或本目录冻结源码包及锁文件；另按固定提交 fc2d13c 在独立目录构建旧 core4。在已构建的 core5 中运行：
 
 ```bash
 node dist/scripts/probe-pressure.js /path/to/frozen-core4/vendor/pi-agent-core/dist/index.js /path/to/new-results.json

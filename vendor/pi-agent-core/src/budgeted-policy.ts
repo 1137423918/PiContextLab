@@ -5,15 +5,16 @@ import { createContextReadTool, type ContextArtifactStore } from "./context-arti
 import { createContextSearchTool } from "./context-search.ts";
 import { contextBytes, modelContextView, packModelContext, type ContextPackingTrace } from "./context-budget.ts";
 import type { ExecutableTools, ModelContextPolicy, ModelContextPolicyInput, PreparedModelContext } from "./model-context.ts";
-import { routeTools, type RankedTool, type ToolRoutingOptions } from "./tool-router.ts";
+import { routeTools, ToolRoutingIndexCache, type RankedTool, type ToolRoutingCacheStats, type ToolRoutingOptions } from "./tool-router.ts";
 
 export interface BudgetedPolicyTrace extends ContextPackingTrace {
-	policy: "pi-context-lab-v5";
+	policy: "pi-context-lab-v6";
 	request: number;
 	registeredTools: number;
 	selectedToolNames: string[];
 	schemaBytes: number;
 	ranking: RankedTool[];
+	routingCache: ToolRoutingCacheStats;
 }
 
 export interface BudgetedPolicyOptions extends ToolRoutingOptions {
@@ -36,16 +37,18 @@ export class BudgetedContextPolicy implements ModelContextPolicy {
 	private registry: ExecutableTools = [];
 	private bound = false;
 	private request = 0;
+	private readonly routingIndex: ToolRoutingIndexCache;
 
 	constructor(options: BudgetedPolicyOptions) {
 		this.options = options;
+		this.routingIndex = options.indexCache ?? new ToolRoutingIndexCache();
 		this.tools = [createContextReadTool(options.artifacts), {
 			name: "discover_tools", label: "Discover tools",
 			description: "Find omitted tools when the current tool set does not support the task. Returned candidates and dependencies are exposed on the next request if the fixed budget permits. Do not guess unavailable tool names.",
 			parameters: discoverySchema, replay: "safe",
 			execute: async (_id, args, signal) => {
 				signal?.throwIfAborted();
-				const decision = routeTools(args.query, this.registry, { ...this.options, alwaysInclude: [] });
+				const decision = routeTools(args.query, this.registry, { ...this.options, indexCache: this.routingIndex, alwaysInclude: [] });
 				const candidates = decision.ranked.filter((r) => !this.tools.some((t) => t.name === r.name)).slice(0, args.limit);
 				const payload = { candidates, instructions: "Candidate schemas are added on the next provider request; all calls still require normal argument validation." };
 				return { content: [{ type: "text", text: JSON.stringify(payload) }], details: payload };
@@ -87,7 +90,7 @@ export class BudgetedContextPolicy implements ModelContextPolicy {
 			const needsDiscovery = business.length + recallTools.length > this.options.maxTools || totalSchemaBytes > this.options.maxSchemaBytes;
 			const required = [...baseNames, ...(needsDiscovery ? ["discover_tools"] : [])];
 			const candidates = input.tools.filter((tool) => !utilityNames.has(tool.name) || required.includes(tool.name));
-			return routeTools(query, candidates, { ...this.options, alwaysInclude: required }, [...promoted]);
+			return routeTools(query, candidates, { ...this.options, indexCache: this.routingIndex, alwaysInclude: required }, [...promoted]);
 		};
 		// Unselected schemas and display details must not manufacture context pressure.
 		const initial = select([]);
@@ -95,7 +98,7 @@ export class BudgetedContextPolicy implements ModelContextPolicy {
 		const eager = this.options.spillMode === "threshold" && input.context.messages.some(message => message.role === "toolResult" && contextBytes(message.content) > this.options.inlineToolResultBytes);
 		const decision = exceedsBudget || eager ? select([reader, ...(this.options.artifactSearch ? [this.tools[2]] : [])]) : initial;
 		const packed = await packModelContext(input.context, decision.tools, query, { maxContextBytes: this.options.maxContextBytes, inlineToolResultBytes: this.options.inlineToolResultBytes, store: this.options.artifacts, artifactSearch: this.options.artifactSearch, spillMode: this.options.spillMode }, signal);
-		const trace: BudgetedPolicyTrace = { policy: "pi-context-lab-v5", request: this.request, registeredTools: input.tools.length, selectedToolNames: decision.tools.map((t) => t.name), schemaBytes: decision.schemaBytes, ranking: decision.ranked, ...packed.trace };
+		const trace: BudgetedPolicyTrace = { policy: "pi-context-lab-v6", request: this.request, registeredTools: input.tools.length, selectedToolNames: decision.tools.map((t) => t.name), schemaBytes: decision.schemaBytes, ranking: decision.ranked, routingCache: this.routingIndex.stats, ...packed.trace };
 		await this.options.onPrepared?.(trace);
 		return { context: packed.context, tools: decision.tools };
 	}

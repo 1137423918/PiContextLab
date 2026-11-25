@@ -1,6 +1,6 @@
 {
   "upstream_commit": "faac585884ae2c013a6b1400f3e9e77f10b34bac",
-  "fork_version": "1.6.0-contextlab.5",
+  "fork_version": "1.6.0-contextlab.6",
   "changed_source_files": [
     "src/agent-loop.ts",
     "src/agent.ts",
@@ -14,8 +14,8 @@
     "src/tool-router.ts",
     "src/types.ts"
   ],
-  "patch_sha256": "f03f92916aa55d63c9641fd50905ee4f227e40bf69b7489cf47f60f2ab79504b",
-  "scope": "Source-only patch against packages/agent; standalone package/tsconfig under vendor. Historical v1/v3/v4 patches retained.",
+  "patch_sha256": "776c905a9bd11c972b07663b90da277f49d115b3f8acd2bfe3afcacd28faab47",
+  "scope": "Source-only patch against packages/agent; standalone package/tsconfig under vendor. Historical v1/v3/v4/v5 patches retained.",
   "upstream_read_only_clone_unchanged": true,
   "unmodified_npm_baseline": "1.6.0",
   "real_API_evaluated_versions": [
@@ -24,5 +24,6 @@
     "contextlab.4"
   ],
   "v4_validation": "Preregistered real DeepSeek study atabd69e2:23requests;full2/2,native-read/search0/2. Post-study configuredAPI/Runner defaultfull, experiments opt-in.37engineering tests; no claimed performance improvement.",
-  "v5_validation": "44 engineering tests,14 browser checks, full UCI16KiB scripted control; three new synthetic mechanism comparisons against frozen core4. No additional real model requests; default full context preserved."
+  "v5_validation": "44 engineering tests,14 browser checks, full UCI16KiB scripted control; three new synthetic mechanism comparisons against frozen core4. No additional real model requests; default full context preserved.",
+  "v6_validation": "51 engineering tests,14 browser checks, full UCI16KiB scripted control. 16 paired complete routing outputs equal on37292-tool CPU workload; medians991.1ms uncached vs433.3ms cached, cold included. Not model or end-to-end improvement; no paid calls."
 }

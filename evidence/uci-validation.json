@@ -42,7 +42,7 @@
   "country_groups_checked": 29,
   "quality_checks": 6,
   "job": {
-    "id": "4c8a5461-9d26-4c28-b34a-42b9a0813992",
+    "id": "e96da617-0057-428e-856f-c449092d4df0",
     "dataset": "ds_1f8144bb8670bcad07cde082",
     "question": "Compare October and November 2011 net sales using full calendar months, explain country contribution.",
     "status": "completed",
@@ -281,7 +281,7 @@
       {
         "role": "system",
         "content": "",
-        "timestamp": 1795588075209,
+        "timestamp": 1795589098066,
         "toolsAdded": [
           {
             "name": "read_context_artifact",
@@ -353,7 +353,7 @@
       {
         "role": "user",
         "content": "Compare October and November 2011 net sales using full calendar months, explain country contribution.",
-        "timestamp": 1795588075208
+        "timestamp": 1795589098065
       },
       {
         "role": "assistant",
@@ -369,7 +369,7 @@
         "provider": "metriclab",
         "model": "local-model",
         "stopReason": "toolUse",
-        "timestamp": 1795588075220,
+        "timestamp": 1795589098077,
         "usage": {
           "input": 0,
           "output": 0,
@@ -433,7 +433,7 @@
         },
         "isError": false,
         "durationMs": 2,
-        "timestamp": 1795588075229
+        "timestamp": 1795589098085
       },
       {
         "role": "assistant",
@@ -460,7 +460,7 @@
         "provider": "metriclab",
         "model": "local-model",
         "stopReason": "toolUse",
-        "timestamp": 1795588075235,
+        "timestamp": 1795589098091,
         "usage": {
           "input": 0,
           "output": 0,
@@ -525,8 +525,8 @@
           }
         },
         "isError": false,
-        "durationMs": 54,
-        "timestamp": 1795588075294
+        "durationMs": 55,
+        "timestamp": 1795589098151
       },
       {
         "role": "assistant",
@@ -557,7 +557,7 @@
         "provider": "metriclab",
         "model": "local-model",
         "stopReason": "toolUse",
-        "timestamp": 1795588075302,
+        "timestamp": 1795589098159,
         "usage": {
           "input": 0,
           "output": 0,
@@ -653,8 +653,8 @@
           }
         },
         "isError": false,
-        "durationMs": 47,
-        "timestamp": 1795588075353
+        "durationMs": 49,
+        "timestamp": 1795589098213
       },
       {
         "role": "assistant",
@@ -680,7 +680,7 @@
         "provider": "metriclab",
         "model": "local-model",
         "stopReason": "toolUse",
-        "timestamp": 1795588075361,
+        "timestamp": 1795589098220,
         "usage": {
           "input": 0,
           "output": 0,
@@ -705,12 +705,12 @@
         "content": [
           {
             "type": "text",
-            "text": "{\"id\":\"report_a017eb9c5e5619cbe7c79df822fdb73d1b19066c09ec8acd592520b8e5341260\",\"job\":\"4c8a5461-9d26-4c28-b34a-42b9a0813992\",\"dataset\":\"ds_1f8144bb8670bcad07cde082\",\"title\":\"Scripted Pi runtime control · monthly net sales\",\"evidence\":[{\"id\":\"ev_a053739eba28224a0e9103e7edf1f2df5eb6d8f43e38a240c45202596ce0dd56\",\"dataset\":\"ds_1f8144bb8670bcad07cde082\",\"policy\":\"retail-gbp-v1\",\"kind\":\"comparison\",\"request\":{\"metric\":\"net_sales\",\"baseline\":{\"start\":\"2011-10-01\",\"end\":\"2011-11-01\"},\"current\":{\"start\":\"2011-11-01\",\"end\":\"2011-12-01\"},\"basis\":\"calendar_month\"},\"sql\":\"WITH periods AS (SELECT 'baseline' period, ?::TIMESTAMP a, ?::TIMESTAMP b UNION ALL SELECT 'current', ?::TIMESTAMP, ?::TIMESTAMP)\\n      SELECT p.period, coalesce(sum(quantity::DECIMAL(18,0) * unit_price),0)::VARCHAR value, count(DISTINCT CASE WHEN quantity > 0 AND NOT starts_with(upper(invoice_no),'C') THEN invoice_no END)::VARCHAR orders\\n      FROM periods p LEFT JOIN facts f ON invoice_time >= p.a AND invoice_time < p.b AND (unit_price > 0 AND NOT (starts_with(upper(invoice_no),'C') AND quantity >= 0)) GROUP BY p.period ORDER BY p.period\",\"bindings\":[\"2011-10-01\",\"2011-11-01\",\"2011-11-01\",\"2011-12-01\"],\"rows\":[{\"period\":\"baseline\",\"value\":\"1070704.6700\",\"orders\":\"2040\"},{\"period\":\"current\",\"value\":\"1461756.2500\",\"orders\":\"2769\"}],\"result\":{\"metric\":\"net_sales\",\"baseline\":\"1070704.6700\",\"current\":\"1461756.2500\",\"delta\":\"391051.5800\",\"unit\":\"GBP\",\"catalog\":{\"policy\":\"retail-gbp-v1\",\"currency\":\"GBP\",\"time\":\"Source local wall time; no timezone inferred\",\"grain\":\"invoice line; orders use distinct invoice_no; customers use nonempty customer_id\",\"eligibility\":\"unit_price > 0; exclude cancellation invoices with nonnegative quantity; preserve duplicate source lines\",\"net_sales\":\"Signed eligible quantity × unit_price; not cash collected\",\"gross_sales\":\"Eligible positive-quantity sales, excluding cancellation invoices\",\"returns\":\"Absolute amount of eligible negative-quantity lines, including cancellations\",\"sales_orders\":\"Distinct invoices with eligible positive sales\",\"identified_customers\":\"Distinct known customers with eligible positive sales; unknown customers still contribute revenue\",\"avg_order_value\":\"Gross sales / distinct sales orders; four-decimal half-away-from-zero rounding\",\"caveat\":\"Bookkeeping and return adjustments remain in source; contribution is descriptive, not causal\"}},\"result_sha256\":\"a4a0cd6cd99bb29932bd34f484cb38c00f4e55bf0eda18ee43b0e953d0f53e74\"},{\"id\":\"ev_76746596cb06ad9a4d36d63e362311969d5c12abed77fb79b0914fa4ca3335ca\",\"dataset\":\"ds_1f8144bb8670bcad07cde082\",\"policy\":\"retail-gbp-v1\",\"kind\":\"breakdown\",\"request\":{\"comparison\":{\"metric\":\"net_sales\",\"baseline\":{\"start\":\"2011-10-01\",\"end\":\"2011-11-01\"},\"current\":{\"start\":\"2011-11-01\",\"end\":\"2011-12-01\"},\"basis\":\"calendar_month\"},\"dimension\":\"country\",\"limit\":5},\"sql\":\"SELECT country dimension, coalesce(sum(quantity::DECIMAL(18,0) * unit_price),0)::VARCHAR value, CASE WHEN invoice_time < ?::TIMESTAMP THEN 'baseline' ELSE 'current' END period\\n      FROM facts WHERE (unit_price > 0 AND NOT (starts_with(upper(invoice_no),'C') AND quantity >= 0)) AND ((invoice_time >= ?::TIMESTAMP AND invoice_time < ?::TIMESTAMP) OR (invoice_time >= ?::TIMESTAMP AND invoice_time < ?::TIMESTAMP)) GROUP BY dimension, period ORDER BY dimension, period\",\"bindings\":[\"2011-11-01\",\"2011-10-01\",\"2011-11-01\",\"2011-11-01\",\"2011-12-01\"],\"rows\":[{\"dimension\":\"Australia\",\"value\":\"17150.5300\",\"period\":\"baseline\"},{\"dimension\":\"Australia\",\"value\":\"6805.9900\",\"period\":\"current\"},{\"dimension\":\"Austria\",\"value\":\"1043.7800\",\"period\":\"baseline\"},{\"dimension\":\"Austria\",\"value\":\"1329.7800\",\"period\":\"current\"},{\"dimension\":\"Belgium\",\"value\":\"5651.3800\",\"period\":\"baseline\"},{\"dimension\":\"Belgium\",\"value\":\"6229.4100\",\"period\":\"current\"},{\"dimension\":\"Channel Islands\",\"value\":\"2623.3200\",\"period\":\"baseline\"},{\"dimension\":\"Channel Islands\",\"value\":\"1495.1700\",\"period\":\"current\"},{\"dimension\":\"Cyprus\",\"value\":\"4216.5200\",\"period\":\"baseline\"},{\"dimension\":\"Cyprus\",\"value\":\"460.8900\",\"period\":\"current\"},{\"dimension\":\"Czech Republic\",\"value\":\"277.4800\",\"period\":\"baseline\"},{\"dimension\":\"Czech Republic\",\"value\":\"-61.5100\",\"period\":\"current\"},{\"dimension\":\"Denmark\",\"value\":\"1438.1100\",\"period\":\"baseline\"},{\"dimension\":\"Denmark\",\"value\":\"2699.5700\",\"period\":\"current\"},{\"dimension\":\"EIRE\",\"value\":\"23307.6200\",\"period\":\"baseline\"},{\"dimension\":\"EIRE\",\"value\":\"30413.0500\",\"period\":\"current\"},{\"dimension\":\"Finland\",\"value\":\"2804.1200\",\"period\":\"baseline\"},{\"dimension\":\"Finland\",\"value\":\"2950.2400\",\"period\":\"current\"},{\"dimension\":\"France\",\"value\":\"25032.0400\",\"period\":\"baseline\"},{\"dimension\":\"France\",\"value\":\"30697.5100\",\"period\":\"current\"},{\"dimension\":\"Germany\",\"value\":\"30614.2700\",\"period\":\"baseline\"},{\"dimension\":\"Germany\",\"value\":\"26044.3500\",\"period\":\"current\"},{\"dimension\":\"Hong Kong\",\"value\":\"723.5700\",\"period\":\"baseline\"},{\"dimension\":\"Hong Kong\",\"value\":\"0.0000\",\"period\":\"current\"},{\"dimension\":\"Iceland\",\"value\":\"1294.3200\",\"period\":\"baseline\"},{\"dimension\":\"Israel\",\"value\":\"138.0300\",\"period\":\"baseline\"},{\"dimension\":\"Italy\",\"value\":\"3410.7900\",\"period\":\"baseline\"},{\"dimension\":\"Italy\",\"value\":\"4243.7500\",\"period\":\"current\"},{\"dimension\":\"Japan\",\"value\":\"1948.0400\",\"period\":\"baseline\"},{\"dimension\":\"Japan\",\"value\":\"8460.0800\",\"period\":\"current\"},{\"dimension\":\"Malta\",\"value\":\"582.6200\",\"period\":\"current\"},{\"dimension\":\"Netherlands\",\"value\":\"40708.6500\",\"period\":\"baseline\"},{\"dimension\":\"Netherlands\",\"value\":\"25856.0100\",\"period\":\"current\"},{\"dimension\":\"Norway\",\"value\":\"3687.2300\",\"period\":\"baseline\"},{\"dimension\":\"Norway\",\"value\":\"6527.5000\",\"period\":\"current\"},{\"dimension\":\"Poland\",\"value\":\"1341.8700\",\"period\":\"current\"},{\"dimension\":\"Portugal\",\"value\":\"5584.6300\",\"period\":\"baseline\"},{\"dimension\":\"Portugal\",\"value\":\"2644.9000\",\"period\":\"current\"},{\"dimension\":\"RSA\",\"value\":\"1002.3100\",\"period\":\"baseline\"},{\"dimension\":\"Singapore\",\"value\":\"999.2600\",\"period\":\"baseline\"},{\"dimension\":\"Spain\",\"value\":\"5078.6500\",\"period\":\"baseline\"},{\"dimension\":\"Spain\",\"value\":\"8533.8700\",\"period\":\"current\"},{\"dimension\":\"Sweden\",\"value\":\"5766.1600\",\"period\":\"baseline\"},{\"dimension\":\"Sweden\",\"value\":\"2612.7100\",\"period\":\"current\"},{\"dimension\":\"Switzerland\",\"value\":\"8033.9800\",\"period\":\"baseline\"},{\"dimension\":\"Switzerland\",\"value\":\"8116.9600\",\"period\":\"current\"},{\"dimension\":\"USA\",\"value\":\"731.6900\",\"period\":\"baseline\"},{\"dimension\":\"United Kingdom\",\"value\":\"877438.1900\",\"period\":\"baseline\"},{\"dimension\":\"United Kingdom\",\"value\":\"1282805.7800\",\"period\":\"current\"},{\"dimension\":\"Unspecified\",\"value\":\"965.7500\",\"period\":\"current\"}],\"result\":{\"dimension\":\"country\",\"metric\":\"net_sales\",\"top\":[{\"dimension\":\"United Kingdom\",\"baseline\":\"877438.1900\",\"current\":\"1282805.7800\",\"delta\":\"405367.5900\"},{\"dimension\":\"Netherlands\",\"baseline\":\"40708.6500\",\"current\":\"25856.0100\",\"delta\":\"-14852.6400\"},{\"dimension\":\"Australia\",\"baseline\":\"17150.5300\",\"current\":\"6805.9900\",\"delta\":\"-10344.5400\"},{\"dimension\":\"EIRE\",\"baseline\":\"23307.6200\",\"current\":\"30413.0500\",\"delta\":\"7105.4300\"},{\"dimension\":\"Japan\",\"baseline\":\"1948.0400\",\"current\":\"8460.0800\",\"delta\":\"6512.0400\"}],\"other\":{\"groups\":24,\"baseline\":\"110151.6400\",\"current\":\"107415.3400\",\"delta\":\"-2736.3000\"},\"totals\":{\"baseline\":\"1070704.6700\",\"current\":\"1461756.2500\",\"delta\":\"391051.5800\"},\"causal\":false},\"result_sha256\":\"8922476532a39b732a294d7ae8cd336b558dc42c05663d3d3862bc076504d9dd\"}],\"interpretation\":\"Scripted control: numerical facts are in the evidence tables. This run makes no model capability claim.\",\"hypotheses\":[\"Changes in product or country mix need independent business validation.\"],\"created\":1795588075368}"
+            "text": "{\"id\":\"report_ff2e141b9981616e4a40d53c3e0f483ee7aa6df65d0a67fd1462e2d61f5679cd\",\"job\":\"e96da617-0057-428e-856f-c449092d4df0\",\"dataset\":\"ds_1f8144bb8670bcad07cde082\",\"title\":\"Scripted Pi runtime control · monthly net sales\",\"evidence\":[{\"id\":\"ev_a053739eba28224a0e9103e7edf1f2df5eb6d8f43e38a240c45202596ce0dd56\",\"dataset\":\"ds_1f8144bb8670bcad07cde082\",\"policy\":\"retail-gbp-v1\",\"kind\":\"comparison\",\"request\":{\"metric\":\"net_sales\",\"baseline\":{\"start\":\"2011-10-01\",\"end\":\"2011-11-01\"},\"current\":{\"start\":\"2011-11-01\",\"end\":\"2011-12-01\"},\"basis\":\"calendar_month\"},\"sql\":\"WITH periods AS (SELECT 'baseline' period, ?::TIMESTAMP a, ?::TIMESTAMP b UNION ALL SELECT 'current', ?::TIMESTAMP, ?::TIMESTAMP)\\n      SELECT p.period, coalesce(sum(quantity::DECIMAL(18,0) * unit_price),0)::VARCHAR value, count(DISTINCT CASE WHEN quantity > 0 AND NOT starts_with(upper(invoice_no),'C') THEN invoice_no END)::VARCHAR orders\\n      FROM periods p LEFT JOIN facts f ON invoice_time >= p.a AND invoice_time < p.b AND (unit_price > 0 AND NOT (starts_with(upper(invoice_no),'C') AND quantity >= 0)) GROUP BY p.period ORDER BY p.period\",\"bindings\":[\"2011-10-01\",\"2011-11-01\",\"2011-11-01\",\"2011-12-01\"],\"rows\":[{\"period\":\"baseline\",\"value\":\"1070704.6700\",\"orders\":\"2040\"},{\"period\":\"current\",\"value\":\"1461756.2500\",\"orders\":\"2769\"}],\"result\":{\"metric\":\"net_sales\",\"baseline\":\"1070704.6700\",\"current\":\"1461756.2500\",\"delta\":\"391051.5800\",\"unit\":\"GBP\",\"catalog\":{\"policy\":\"retail-gbp-v1\",\"currency\":\"GBP\",\"time\":\"Source local wall time; no timezone inferred\",\"grain\":\"invoice line; orders use distinct invoice_no; customers use nonempty customer_id\",\"eligibility\":\"unit_price > 0; exclude cancellation invoices with nonnegative quantity; preserve duplicate source lines\",\"net_sales\":\"Signed eligible quantity × unit_price; not cash collected\",\"gross_sales\":\"Eligible positive-quantity sales, excluding cancellation invoices\",\"returns\":\"Absolute amount of eligible negative-quantity lines, including cancellations\",\"sales_orders\":\"Distinct invoices with eligible positive sales\",\"identified_customers\":\"Distinct known customers with eligible positive sales; unknown customers still contribute revenue\",\"avg_order_value\":\"Gross sales / distinct sales orders; four-decimal half-away-from-zero rounding\",\"caveat\":\"Bookkeeping and return adjustments remain in source; contribution is descriptive, not causal\"}},\"result_sha256\":\"a4a0cd6cd99bb29932bd34f484cb38c00f4e55bf0eda18ee43b0e953d0f53e74\"},{\"id\":\"ev_76746596cb06ad9a4d36d63e362311969d5c12abed77fb79b0914fa4ca3335ca\",\"dataset\":\"ds_1f8144bb8670bcad07cde082\",\"policy\":\"retail-gbp-v1\",\"kind\":\"breakdown\",\"request\":{\"comparison\":{\"metric\":\"net_sales\",\"baseline\":{\"start\":\"2011-10-01\",\"end\":\"2011-11-01\"},\"current\":{\"start\":\"2011-11-01\",\"end\":\"2011-12-01\"},\"basis\":\"calendar_month\"},\"dimension\":\"country\",\"limit\":5},\"sql\":\"SELECT country dimension, coalesce(sum(quantity::DECIMAL(18,0) * unit_price),0)::VARCHAR value, CASE WHEN invoice_time < ?::TIMESTAMP THEN 'baseline' ELSE 'current' END period\\n      FROM facts WHERE (unit_price > 0 AND NOT (starts_with(upper(invoice_no),'C') AND quantity >= 0)) AND ((invoice_time >= ?::TIMESTAMP AND invoice_time < ?::TIMESTAMP) OR (invoice_time >= ?::TIMESTAMP AND invoice_time < ?::TIMESTAMP)) GROUP BY dimension, period ORDER BY dimension, period\",\"bindings\":[\"2011-11-01\",\"2011-10-01\",\"2011-11-01\",\"2011-11-01\",\"2011-12-01\"],\"rows\":[{\"dimension\":\"Australia\",\"value\":\"17150.5300\",\"period\":\"baseline\"},{\"dimension\":\"Australia\",\"value\":\"6805.9900\",\"period\":\"current\"},{\"dimension\":\"Austria\",\"value\":\"1043.7800\",\"period\":\"baseline\"},{\"dimension\":\"Austria\",\"value\":\"1329.7800\",\"period\":\"current\"},{\"dimension\":\"Belgium\",\"value\":\"5651.3800\",\"period\":\"baseline\"},{\"dimension\":\"Belgium\",\"value\":\"6229.4100\",\"period\":\"current\"},{\"dimension\":\"Channel Islands\",\"value\":\"2623.3200\",\"period\":\"baseline\"},{\"dimension\":\"Channel Islands\",\"value\":\"1495.1700\",\"period\":\"current\"},{\"dimension\":\"Cyprus\",\"value\":\"4216.5200\",\"period\":\"baseline\"},{\"dimension\":\"Cyprus\",\"value\":\"460.8900\",\"period\":\"current\"},{\"dimension\":\"Czech Republic\",\"value\":\"277.4800\",\"period\":\"baseline\"},{\"dimension\":\"Czech Republic\",\"value\":\"-61.5100\",\"period\":\"current\"},{\"dimension\":\"Denmark\",\"value\":\"1438.1100\",\"period\":\"baseline\"},{\"dimension\":\"Denmark\",\"value\":\"2699.5700\",\"period\":\"current\"},{\"dimension\":\"EIRE\",\"value\":\"23307.6200\",\"period\":\"baseline\"},{\"dimension\":\"EIRE\",\"value\":\"30413.0500\",\"period\":\"current\"},{\"dimension\":\"Finland\",\"value\":\"2804.1200\",\"period\":\"baseline\"},{\"dimension\":\"Finland\",\"value\":\"2950.2400\",\"period\":\"current\"},{\"dimension\":\"France\",\"value\":\"25032.0400\",\"period\":\"baseline\"},{\"dimension\":\"France\",\"value\":\"30697.5100\",\"period\":\"current\"},{\"dimension\":\"Germany\",\"value\":\"30614.2700\",\"period\":\"baseline\"},{\"dimension\":\"Germany\",\"value\":\"26044.3500\",\"period\":\"current\"},{\"dimension\":\"Hong Kong\",\"value\":\"723.5700\",\"period\":\"baseline\"},{\"dimension\":\"Hong Kong\",\"value\":\"0.0000\",\"period\":\"current\"},{\"dimension\":\"Iceland\",\"value\":\"1294.3200\",\"period\":\"baseline\"},{\"dimension\":\"Israel\",\"value\":\"138.0300\",\"period\":\"baseline\"},{\"dimension\":\"Italy\",\"value\":\"3410.7900\",\"period\":\"baseline\"},{\"dimension\":\"Italy\",\"value\":\"4243.7500\",\"period\":\"current\"},{\"dimension\":\"Japan\",\"value\":\"1948.0400\",\"period\":\"baseline\"},{\"dimension\":\"Japan\",\"value\":\"8460.0800\",\"period\":\"current\"},{\"dimension\":\"Malta\",\"value\":\"582.6200\",\"period\":\"current\"},{\"dimension\":\"Netherlands\",\"value\":\"40708.6500\",\"period\":\"baseline\"},{\"dimension\":\"Netherlands\",\"value\":\"25856.0100\",\"period\":\"current\"},{\"dimension\":\"Norway\",\"value\":\"3687.2300\",\"period\":\"baseline\"},{\"dimension\":\"Norway\",\"value\":\"6527.5000\",\"period\":\"current\"},{\"dimension\":\"Poland\",\"value\":\"1341.8700\",\"period\":\"current\"},{\"dimension\":\"Portugal\",\"value\":\"5584.6300\",\"period\":\"baseline\"},{\"dimension\":\"Portugal\",\"value\":\"2644.9000\",\"period\":\"current\"},{\"dimension\":\"RSA\",\"value\":\"1002.3100\",\"period\":\"baseline\"},{\"dimension\":\"Singapore\",\"value\":\"999.2600\",\"period\":\"baseline\"},{\"dimension\":\"Spain\",\"value\":\"5078.6500\",\"period\":\"baseline\"},{\"dimension\":\"Spain\",\"value\":\"8533.8700\",\"period\":\"current\"},{\"dimension\":\"Sweden\",\"value\":\"5766.1600\",\"period\":\"baseline\"},{\"dimension\":\"Sweden\",\"value\":\"2612.7100\",\"period\":\"current\"},{\"dimension\":\"Switzerland\",\"value\":\"8033.9800\",\"period\":\"baseline\"},{\"dimension\":\"Switzerland\",\"value\":\"8116.9600\",\"period\":\"current\"},{\"dimension\":\"USA\",\"value\":\"731.6900\",\"period\":\"baseline\"},{\"dimension\":\"United Kingdom\",\"value\":\"877438.1900\",\"period\":\"baseline\"},{\"dimension\":\"United Kingdom\",\"value\":\"1282805.7800\",\"period\":\"current\"},{\"dimension\":\"Unspecified\",\"value\":\"965.7500\",\"period\":\"current\"}],\"result\":{\"dimension\":\"country\",\"metric\":\"net_sales\",\"top\":[{\"dimension\":\"United Kingdom\",\"baseline\":\"877438.1900\",\"current\":\"1282805.7800\",\"delta\":\"405367.5900\"},{\"dimension\":\"Netherlands\",\"baseline\":\"40708.6500\",\"current\":\"25856.0100\",\"delta\":\"-14852.6400\"},{\"dimension\":\"Australia\",\"baseline\":\"17150.5300\",\"current\":\"6805.9900\",\"delta\":\"-10344.5400\"},{\"dimension\":\"EIRE\",\"baseline\":\"23307.6200\",\"current\":\"30413.0500\",\"delta\":\"7105.4300\"},{\"dimension\":\"Japan\",\"baseline\":\"1948.0400\",\"current\":\"8460.0800\",\"delta\":\"6512.0400\"}],\"other\":{\"groups\":24,\"baseline\":\"110151.6400\",\"current\":\"107415.3400\",\"delta\":\"-2736.3000\"},\"totals\":{\"baseline\":\"1070704.6700\",\"current\":\"1461756.2500\",\"delta\":\"391051.5800\"},\"causal\":false},\"result_sha256\":\"8922476532a39b732a294d7ae8cd336b558dc42c05663d3d3862bc076504d9dd\"}],\"interpretation\":\"Scripted control: numerical facts are in the evidence tables. This run makes no model capability claim.\",\"hypotheses\":[\"Changes in product or country mix need independent business validation.\"],\"created\":1795589098234}"
           }
         ],
         "details": {
-          "id": "report_a017eb9c5e5619cbe7c79df822fdb73d1b19066c09ec8acd592520b8e5341260",
-          "job": "4c8a5461-9d26-4c28-b34a-42b9a0813992",
+          "id": "report_ff2e141b9981616e4a40d53c3e0f483ee7aa6df65d0a67fd1462e2d61f5679cd",
+          "job": "e96da617-0057-428e-856f-c449092d4df0",
           "dataset": "ds_1f8144bb8670bcad07cde082",
           "title": "Scripted Pi runtime control · monthly net sales",
           "evidence": [
@@ -1109,22 +1109,22 @@
           "hypotheses": [
             "Changes in product or country mix need independent business validation."
           ],
-          "created": 1795588075368
+          "created": 1795589098234
         },
         "isError": false,
-        "durationMs": 17,
-        "timestamp": 1795588075383
+        "durationMs": 20,
+        "timestamp": 1795589098245
       }
     ],
     "error": null,
-    "created": 1795588075202
+    "created": 1795589098059
   },
   "calls": [
     {
-      "id": "02b5f027-7fa6-4249-afd6-5bd486f9a497",
-      "request_hash": "584dc6d0bd56fb3b4b602b30974ef21572eebee3de2247379831a13d75adaa99",
+      "id": "013cfca5-dd67-4fd3-a2e3-dcd664f621db",
+      "request_hash": "dd94e652d942c60d6fbf7f7fedeb00121cc5a370dc34a07aa1d91b705ccbc65d",
       "status": "done",
-      "created": 1795588075218,
+      "created": 1795589098076,
       "usage": {
         "input": 0,
         "output": 0,
@@ -1142,10 +1142,10 @@
       "stop_reason": "toolUse"
     },
     {
-      "id": "d95f3360-6c75-450e-ac4e-00f8fc00283c",
-      "request_hash": "f93f4c63df1c437758c6364133825aa4f7b1030b5da71873659e030cd0e9bfbb",
+      "id": "e9f0bad7-4386-4f06-a382-eeca065e299e",
+      "request_hash": "52d200ac933ed374f91e557c3998890fa48f749edac7f09b27897ce7e0a540ae",
       "status": "done",
-      "created": 1795588075235,
+      "created": 1795589098091,
       "usage": {
         "input": 0,
         "output": 0,
@@ -1163,10 +1163,10 @@
       "stop_reason": "toolUse"
     },
     {
-      "id": "b0ee383e-c59f-4cd4-af2d-da282def7087",
-      "request_hash": "f66c6e6ee119d6cdfd23343e072ef1ed3315627b0beda13805079d2d6fba6231",
+      "id": "afcf8a6b-8261-464d-8e3f-73436383af8e",
+      "request_hash": "37b24ca962418111b47b65e76f9aa66da6d99ba4db94a7dd710f3fb353eee56e",
       "status": "done",
-      "created": 1795588075301,
+      "created": 1795589098158,
       "usage": {
         "input": 0,
         "output": 0,
@@ -1184,10 +1184,10 @@
       "stop_reason": "toolUse"
     },
     {
-      "id": "185e5114-b0e5-4cfc-bf65-6a8ca53733af",
-      "request_hash": "c851bc036cd8cb62e4d7dc535979cbb65da2881cd04d21a4f93af5ba717f69ff",
+      "id": "c812d20e-0699-4381-a129-a3f359cb0934",
+      "request_hash": "dd5b7ceab5a75022686898ab2faac0e8da092016f1c4a7976094a0799272542b",
       "status": "done",
-      "created": 1795588075359,
+      "created": 1795589098219,
       "usage": {
         "input": 0,
         "output": 0,
@@ -1206,8 +1206,8 @@
     }
   ],
   "report": {
-    "id": "report_a017eb9c5e5619cbe7c79df822fdb73d1b19066c09ec8acd592520b8e5341260",
-    "job": "4c8a5461-9d26-4c28-b34a-42b9a0813992",
+    "id": "report_ff2e141b9981616e4a40d53c3e0f483ee7aa6df65d0a67fd1462e2d61f5679cd",
+    "job": "e96da617-0057-428e-856f-c449092d4df0",
     "dataset": "ds_1f8144bb8670bcad07cde082",
     "title": "Scripted Pi runtime control · monthly net sales",
     "evidence": [
@@ -1606,7 +1606,7 @@
     "hypotheses": [
       "Changes in product or country mix need independent business validation."
     ],
-    "created": 1795588075368
+    "created": 1795589098234
   },
   "checks": [
     {

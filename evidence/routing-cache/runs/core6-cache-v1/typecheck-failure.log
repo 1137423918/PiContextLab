@@ -1,0 +1,6 @@
+
+> pi-metriclab@0.1.0 check
+> tsc --noEmit -p vendor/pi-agent-core/tsconfig.json && tsc --noEmit
+
+scripts/probe-routing-cache.ts(21,138): error TS7034: Variable 'rows' implicitly has type 'any[]' in some locations where its type cannot be determined.
+scripts/probe-routing-cache.ts(38,14): error TS7005: Variable 'rows' implicitly has an 'any[]' type.

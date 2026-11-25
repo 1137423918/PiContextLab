@@ -9,6 +9,8 @@ export interface ToolRoutingOptions {
 	dependencies?: Readonly<Record<string, readonly string[]>>;
 	/** Preserve a catalog's complete documentation when it carries metadata beyond the wire schema. */
 	routingDocuments?: Readonly<Record<string,string>>;
+	/** Optional per-owner bounded cache. It stores catalog statistics, never execution functions or query results. */
+	indexCache?: ToolRoutingIndexCache;
 }
 
 export interface RankedTool {
@@ -76,6 +78,74 @@ export function rankContextDocuments(query: string, documents: readonly string[]
 
 const encoder = new TextEncoder();
 
+export interface ToolRoutingCacheOptions {
+	maxEntries?: number;
+	/** Combined UTF-8 declaration/document bytes retained, not a JavaScript heap limit. */
+	maxSourceBytes?: number;
+}
+
+export interface ToolRoutingCacheStats {
+	hits: number;
+	misses: number;
+	builds: number;
+	evictions: number;
+	bypasses: number;
+	entries: number;
+	sourceBytes: number;
+}
+
+interface CatalogSnapshot {
+	declarations: string[];
+	documents: string[];
+	sizes: number[];
+	bytes: number;
+}
+
+/** Exact metadata comparison detects in-place mutations; selected execution objects always come from the live registry. */
+export class ToolRoutingIndexCache {
+	private readonly maxEntries: number;
+	private readonly maxSourceBytes: number;
+	private entries: { snapshot: CatalogSnapshot; index: ContextLexicalIndex }[] = [];
+	private counters = { hits: 0, misses: 0, builds: 0, evictions: 0, bypasses: 0 };
+
+	constructor(options: ToolRoutingCacheOptions = {}) {
+		this.maxEntries = options.maxEntries ?? 2;
+		this.maxSourceBytes = options.maxSourceBytes ?? 32 * 1024 * 1024;
+		if (!Number.isSafeInteger(this.maxEntries) || this.maxEntries < 1 || !Number.isSafeInteger(this.maxSourceBytes) || this.maxSourceBytes < 256) throw new RangeError("Routing cache limits must be bounded positive integers");
+	}
+
+	get stats(): ToolRoutingCacheStats {
+		return { ...this.counters, entries: this.entries.length, sourceBytes: this.entries.reduce((n, entry) => n + entry.snapshot.bytes, 0) };
+	}
+
+	clear(): void { this.entries = []; }
+
+	score(query: string, registry: ExecutableTools, documents?: Readonly<Record<string,string>>): { scores: number[]; schemaBytes: number[] } {
+		const snapshot: CatalogSnapshot = { declarations: [], documents: [], sizes: [], bytes: 0 };
+		for (const tool of registry) {
+			const declaration = JSON.stringify(toToolDeclaration(tool));
+			const document = documents?.[tool.name] ?? `${tool.name} ${tool.name} ${tool.description} ${JSON.stringify(tool.parameters)}`;
+			const size = encoder.encode(declaration).length;
+			snapshot.declarations.push(declaration); snapshot.documents.push(document); snapshot.sizes.push(size);
+			snapshot.bytes += size + encoder.encode(document).length;
+		}
+		const found = this.entries.findIndex(entry => entry.snapshot.declarations.length === snapshot.declarations.length && entry.snapshot.declarations.every((text, i) => text === snapshot.declarations[i] && entry.snapshot.documents[i] === snapshot.documents[i]));
+		if (found >= 0) {
+			this.counters.hits++;
+			const [entry] = this.entries.splice(found, 1); this.entries.push(entry);
+			return { scores: entry.index.score(query), schemaBytes: [...entry.snapshot.sizes] };
+		}
+		this.counters.misses++; this.counters.builds++;
+		const index = new ContextLexicalIndex(snapshot.documents);
+		if (snapshot.bytes > this.maxSourceBytes) this.counters.bypasses++;
+		else {
+			while (this.entries.length >= this.maxEntries || this.stats.sourceBytes + snapshot.bytes > this.maxSourceBytes) { this.entries.shift(); this.counters.evictions++; }
+			this.entries.push({ snapshot, index });
+		}
+		return { scores: index.score(query), schemaBytes: [...snapshot.sizes] };
+	}
+}
+
 /** Include required tools and complete dependency groups, then admit ranked candidates that fit. */
 export function routeTools(
 	query: string,
@@ -88,8 +158,9 @@ export function routeTools(
 	}
 	const byName = new Map(registry.map((tool) => [tool.name, tool]));
 	if (byName.size !== registry.length) throw new Error("Tool registry has duplicate names");
-	const sizes = new Map(registry.map((tool) => [tool.name, encoder.encode(JSON.stringify(toToolDeclaration(tool))).length]));
-	const scores = rankContextDocuments(query, registry.map((tool) => options.routingDocuments?.[tool.name] ?? `${tool.name} ${tool.name} ${tool.description} ${JSON.stringify(tool.parameters)}`));
+	const cached = options.indexCache?.score(query, registry, options.routingDocuments);
+	const sizes = new Map(registry.map((tool, i) => [tool.name, cached?.schemaBytes[i] ?? encoder.encode(JSON.stringify(toToolDeclaration(tool))).length]));
+	const scores = cached?.scores ?? rankContextDocuments(query, registry.map((tool) => options.routingDocuments?.[tool.name] ?? `${tool.name} ${tool.name} ${tool.description} ${JSON.stringify(tool.parameters)}`));
 	const ranked = registry.map((tool, i) => ({ name: tool.name, score: scores[i], schemaBytes: sizes.get(tool.name)! }));
 	ranked.sort((a, b) => b.score - a.score);
 	const selected = new Set<string>();

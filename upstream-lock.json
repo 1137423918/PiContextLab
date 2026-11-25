@@ -22,6 +22,6 @@
   },
   "original_research_clone_modified": false,
   "vendored_fork_modified": true,
-  "fork_version": "1.6.0-contextlab.5",
+  "fork_version": "1.6.0-contextlab.6",
   "unmodified_baseline_alias": "@pi-context-lab/upstream-agent-core@npm:@earendil-works/pi-agent-core@1.6.0"
 }

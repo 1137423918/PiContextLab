@@ -1,6 +1,6 @@
 # 从 Pi 到 PiContextLab：框架改造与验证客户端完整讲解
 
-本文对应官方 Pi **1.6.0**、派生核心 **1.6.0-contextlab.5** 与本仓库代码。框架改进是主线，PiMetricLab 经营指标应用是验证客户端。建议按“先跑一个报告，再读架构和恢复，最后看源码”的顺序学习。上游身份见 [upstream-lock.json](../upstream-lock.json)，研究来由见 [references.md](references.md)，实际运行证据见 [validation.md](validation.md)。
+本文对应官方 Pi **1.6.0**、派生核心 **1.6.0-contextlab.6** 与本仓库代码。框架改进是主线，PiMetricLab 经营指标应用是验证客户端。建议按“先跑一个报告，再读架构和恢复，最后看源码”的顺序学习。上游身份见 [upstream-lock.json](../upstream-lock.json)，研究来由见 [references.md](references.md)，实际运行证据见 [validation.md](validation.md)。
 
 ## 1. 项目要解决的具体问题
 
@@ -296,7 +296,7 @@ node dist/scripts/validate-uci.js /path/to/retail-data /path/to/oracle.json /pat
 
 设工具排名为 s(t)，schema 成本为 c(t)。实现先加入必选工具及其递归依赖，然后按 s(t) 顺序贪心加入能同时满足 `工具数≤K` 与 `Σc(t)≤B` 的完整依赖组。不是最优背包算法。依赖缺失、必选组超预算直接失败。漏选时模型调用 `discover_tools`，候选记录持久化在 toolResult；下一轮从最近两个 assistant 轮次重放提升候选，而不是只放在内存。
 
-公开评测显示裁剪到字段会丢失有用目录信息，低于完整文档基线。这推动接口支持保留完整文档，但不回跑同一标签集制造改进分数。当前 core 排名每次重建索引，大目录服务化时应增加有版本身份的缓存；公开离线评测的可复用索引不代表运行时已经缓存。
+公开评测显示裁剪到字段会丢失有用目录信息，低于完整文档基线。这推动接口支持保留完整文档，但不回跑同一标签集制造改进分数。早期 core 每次重建索引；contextlab.6 将有界索引复用接入原生策略，使用实际元数据逐字符串核对失效，详见第27章。
 
 ## 21. 上下文打包怎样保持可追溯
 
@@ -350,3 +350,12 @@ v4使用新的六月/七月gross_sales报告和六项溯源字段。完整上下
 分页也由接口承担明确的算术：批量读取的 limit 由各字段共享，每项返回可直接复用的 `next_read`，offset 等于原 offset 加实际返回 code points。模型不必猜下一页从哪里开始。Unicode 控制将多个续读页串回原值，另覆盖共享预算为零、非法偏移及结束页。
 
 阅读顺序：`BudgetedContextPolicy.prepare → modelContextView → packModelContext → createContextReadTool`；随后看 `test/context-pressure.test.ts` 与 `scripts/probe-pressure.ts`。后者使用冻结的旧 core4 和相同合成输入，只比较字节、artifact 写入及精确文本保留。三组机制诊断不能充当公开 benchmark、模型准确率或成本收益；既有真实模型负结果保持原分数。
+
+
+## 27. 工具目录大时，怎样复用索引而不复用旧权限
+
+只缓存检索统计。每次路由重新取得当前注册表、参数声明与检索文档，逐项比较后才能复用词频、文档频率和长度统计；schema、工具顺序或目录文档发生变化会重建。query、执行函数和最终选择都不缓存。这样缓存命中也必须重新走依赖闭包及预算，不能把上一轮工具权限带到这一轮。
+
+若工具名、描述与schema完全相同，执行函数却换了实现，排名可以相同，但返回对象必须来自这次注册表。`routing-cache.test.ts` 对这种情形单独核对对象身份；另覆盖就地修改、schema改变、目录重排、预算与依赖变化、LRU淘汰、超限旁路和调用方篡改返回数组。
+
+默认每个policy拥有自己的缓存，最多两个目录快照和32MiB源文本；这个数值约束保留的目录字节，不是堆内存保证。缺点是每轮仍需序列化并比较目录，而不是O(1)命中。新的CPU对照只考察实际37,292工具元数据上的路由耗时和逐分数相等，没有真实API执行或新质量分数。

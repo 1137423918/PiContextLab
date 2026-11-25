@@ -1,0 +1,20 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(d.parameters !== null && typeof d.parameters === 'object')
+
+    at file:///tmp/pimetriclab-build-stage98-xm2jcum4/source/dist/scripts/probe-routing-cache.js:23:12
+    at Array.map (<anonymous>)
+    at file:///tmp/pimetriclab-build-stage98-xm2jcum4/source/dist/scripts/probe-routing-cache.js:20:29 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v22.23.5
