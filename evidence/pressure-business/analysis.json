@@ -1,0 +1,53 @@
+{
+  "variants": [
+    {
+      "variant": "full",
+      "below_threshold_spill_occurrences": 0,
+      "distinct_spilled_artifacts": 0,
+      "recall_calls": 0,
+      "actual_tool_calls": [
+        "inspect_dataset",
+        "compare_metric",
+        "compare_metric",
+        "compare_metric",
+        "breakdown_change",
+        "breakdown_change",
+        "breakdown_change",
+        "breakdown_change",
+        "breakdown_change",
+        "breakdown_change",
+        "submit_investigation",
+        "submit_investigation",
+        "submit_investigation"
+      ],
+      "sealed_evidence_count": 0
+    },
+    {
+      "variant": "budgeted",
+      "below_threshold_spill_occurrences": 4,
+      "distinct_spilled_artifacts": 4,
+      "recall_calls": 4,
+      "actual_tool_calls": [
+        "inspect_dataset",
+        "compare_metric",
+        "compare_metric",
+        "compare_metric",
+        "breakdown_change",
+        "breakdown_change",
+        "breakdown_change",
+        "breakdown_change",
+        "breakdown_change",
+        "breakdown_change",
+        "read_context_artifact",
+        "read_context_artifact",
+        "read_context_artifact",
+        "read_context_artifact"
+      ],
+      "sealed_evidence_count": 0
+    }
+  ],
+  "actual_requests": 10,
+  "estimated_cost_usd": 0.013234847999999999,
+  "not_an_invoice": true,
+  "study_closed": true
+}

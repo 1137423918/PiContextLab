@@ -1,0 +1,92 @@
+{
+  "kind": "Offline diagnostics, no model retry or regrading",
+  "variants": [
+    {
+      "variant": "full",
+      "saved_evidence": 9,
+      "submissions": [
+        {
+          "tool_call_id": "call_00_h0AVnQDqDt5aN4EMaiy35436",
+          "interpretation_code_points": 3348,
+          "interpretation_UTF16_units": 3348,
+          "schema_maxLength": 3000,
+          "evidence_id_count": 9,
+          "submitted_ids_match_all_saved_evidence": true
+        },
+        {
+          "tool_call_id": "call_00_Gwx0Jhy0aGNoleK3CMmZ9348",
+          "interpretation_code_points": 3019,
+          "interpretation_UTF16_units": 3019,
+          "schema_maxLength": 3000,
+          "evidence_id_count": 9,
+          "submitted_ids_match_all_saved_evidence": true
+        },
+        {
+          "tool_call_id": "call_00_N8v9VrQrThAgETGW8PVs0167",
+          "interpretation_code_points": 3006,
+          "interpretation_UTF16_units": 3006,
+          "schema_maxLength": 3000,
+          "evidence_id_count": 9,
+          "submitted_ids_match_all_saved_evidence": true
+        }
+      ],
+      "validation_errors": [
+        {
+          "tool": "submit_investigation",
+          "content_UTF8_bytes": 5506,
+          "includes_received_arguments": true,
+          "diagnostic_prefix": [
+            "Validation failed for tool \"submit_investigation\":\n  - interpretation: expected at most 3000 characters"
+          ]
+        },
+        {
+          "tool": "submit_investigation",
+          "content_UTF8_bytes": 5073,
+          "includes_received_arguments": true,
+          "diagnostic_prefix": [
+            "Validation failed for tool \"submit_investigation\":\n  - interpretation: expected at most 3000 characters"
+          ]
+        },
+        {
+          "tool": "submit_investigation",
+          "content_UTF8_bytes": 5060,
+          "includes_received_arguments": true,
+          "diagnostic_prefix": [
+            "Validation failed for tool \"submit_investigation\":\n  - interpretation: expected at most 3000 characters"
+          ]
+        }
+      ],
+      "recalls": []
+    },
+    {
+      "variant": "budgeted",
+      "saved_evidence": 9,
+      "submissions": [],
+      "validation_errors": [],
+      "recalls": [
+        {
+          "call_id": "call_00_LY0y86YUZK5PGFuGS0ME5233",
+          "used_codepoints": 1299,
+          "response_content_UTF8_bytes": 2525
+        },
+        {
+          "call_id": "call_01_OGZF8JOQu9rQF5tGo6ht5813",
+          "used_codepoints": 1152,
+          "response_content_UTF8_bytes": 2282
+        },
+        {
+          "call_id": "call_02_ZHzSrH9HuqlxoKAghIV07610",
+          "used_codepoints": 1306,
+          "response_content_UTF8_bytes": 2532
+        },
+        {
+          "call_id": "call_03_G47IY2Rrc7l7IqCbyY2X7197",
+          "used_codepoints": 1256,
+          "response_content_UTF8_bytes": 2482
+        }
+      ]
+    }
+  ],
+  "limits": "Error echo and latest parallel recalls are observed contributors, not isolated single-cause ablations. Original frozen grades stay failed.",
+  "model_calls": 0
+}

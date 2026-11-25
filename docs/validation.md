@@ -334,4 +334,24 @@ core7只修复压力模式的候选过滤：按大小优先、净节省才替换
 
 这8,544是六个组成部分的组检查数，不是独立样本或订单数。脚本提交只从provider视图中的id/source_identity.id取九个来源身份，未绕过上下文从Store取答案。它证明程序可行性和精确来源保留，不是模型质量结果。
 
-服务器通过56项Node测试、14项浏览器检查、完整UCI核对；owned进程0，GPU0。新研究尚未发付费请求；后续只在本修订源码公开后按固定16请求上限运行一次，失败保留。[56项测试](../evidence/pressure-business/preflight-tests.tap) · [失败根因的结果大小](../evidence/pressure-business/preflight-cause.json) · [旧控制](../evidence/pressure-business/controls/core6/) · [新控制](../evidence/pressure-business/controls/core7/) · [独立oracle](../evidence/pressure-business/oracle.json) · [阶段/资源/类型错误](../evidence/pressure-business/runs/)。既有关闭研究未重跑。
+服务器通过56项Node测试、14项浏览器检查、完整UCI核对；owned进程0，GPU0。先行提交1c386e7当时尚未发付费请求；随后按固定16请求上限执行一次，原始结果见后文，失败保留。[56项测试](../evidence/pressure-business/preflight-tests.tap) · [失败根因的结果大小](../evidence/pressure-business/preflight-cause.json) · [旧控制](../evidence/pressure-business/controls/core6/) · [新控制](../evidence/pressure-business/controls/core7/) · [独立oracle](../evidence/pressure-business/oracle.json) · [阶段/资源/类型错误](../evidence/pressure-business/runs/)。既有关闭研究未重跑。
+
+
+## core7 多指标压力业务的真实模型结果
+
+[先行提交1c386e7](https://github.com/1137423918/PiContextLab/commit/1c386e795ff43745c8880e63ae818e5266998764)公开后执行一次：实际10次DeepSeek请求/10次持久预留，低于16上限，无缺失usage；已关闭，不追加质量重试。128个实际执行输入文件逐一与先行提交核对一致。
+
+| 同一工作流的配置 | 原定评分 | 请求 | 累计输入tokens（含cache） | 累计输出tokens | 最终状态 |
+|---|---|---:|---:|---:|---|
+| 完整64KiB | 未通过 | 6 | 36,076 | 5,376 | 发送前字节上限拒绝 |
+| 预算24KiB | 未通过 | 4 | 12,152 | 1,781 | 当前轮在外置后仍超限 |
+
+两个分支都获得九份查询证据，但均未封存报告，因此按预定规则均失败。完整分支三次submit的interpretation分别3,348、3,019、3,006个字符，均超过schema的3,000限制；错误反馈包含完整收到的参数，三条内容JSON分别5,506、5,073、5,060字节，随后触及64KiB发送前上限。模型逐次缩短但仍未满足限制，不能放宽schema或补一次请求来改成成功。
+
+预算分支在成功准备记录中触发pressure，记录四条原本低于4KiB阈值结果的外置、四个不同artifact，最大成功准备视图23,655字节。失败准备的中间写入不在此计数中，不能把它读成精确artifact写次数。随后模型同批调用四个精确读取，取/result内容，合计返回5,013个code points；四条响应内容JSON合计9,821字节。最近回读批次按原协议保护，后续准备因当前轮仍超24KiB而拒绝，没有发出第五次模型请求。这里观察到返回预留与并行回读的限制，没有独立消融证明某个因素是唯一原因。
+
+因此，core7累计中等结果的程序缺陷已在CPU控制中修复，实际模型也使用了四次该类外置；**真实任务完成仍未成立**。脚本只需要来源ID，模型为叙述又读取结果，二者行为不同。不能用脚本通过代替模型成功，更不能由失败任务少用token推导成本收益。不同预算、单一工作流及固定顺序也不支持泛化准确率结论。
+
+总冻结单价估计约$0.0132，不是供应商账单。owned进程最终0，GPU0。默认真实入口仍为完整上下文。后续可研究有界schema错误反馈、请求前输出空间预留与跨并行读取的总响应预算；这些尚未实现或被模型验证，不写作成果，也不以本任务重试挑分。
+
+[逐配置汇总](../evidence/pressure-business/summary.json) · [完整压缩原记录](../evidence/pressure-business/results.json.gz) · [Pi边界输入](../evidence/pressure-business/wire-transcripts.json.gz) · [外置与调用分析](../evidence/pressure-business/analysis.json) · [离线错误诊断](../evidence/pressure-business/failure-analysis.json) · [执行源码](../evidence/pressure-business/source-sha256.json) · [128文件提交核对](../evidence/pressure-business/commit-verification.json) · [资源](../evidence/pressure-business/runs/)。gzip格式只压缩保存字节，不改原始JSON内容；Pi边界输入不是原始HTTP body，费用不作账单陈述。

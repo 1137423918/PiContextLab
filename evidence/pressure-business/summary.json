@@ -1,0 +1,62 @@
+{
+  "control": false,
+  "source_commit": "1c386e795ff43745c8880e63ae818e5266998764",
+  "protocol_sha256": "f451332c2f413236e3531eb386be293da1b8605eac78e8ac01d44d149c6c48d2",
+  "actual_provider_attempts": 10,
+  "model_calls": 10,
+  "total_reserved": 10,
+  "variants": [
+    {
+      "variant": "full",
+      "status": "failed",
+      "error": "Fixed model context byte ceiling exceeded before sending",
+      "grade": {
+        "passed": false,
+        "error": "No sealed report",
+        "components": 0,
+        "raw_groups_checked": 0
+      },
+      "reserved": 6,
+      "input_tokens_including_cache": 36076,
+      "output_tokens": 5376,
+      "estimated_cost_usd": 0.009032591999999999,
+      "usage_missing": 0,
+      "pressure_preparations": 0,
+      "spill_occurrences": 0,
+      "archive_occurrences": 0,
+      "max_prepared_JSON_bytes": 0,
+      "last_routing_cache": null
+    },
+    {
+      "variant": "budgeted",
+      "status": "failed",
+      "error": "Current turn and system/tool declarations exceed the context budget after bounded spilling",
+      "grade": {
+        "passed": false,
+        "error": "No sealed report",
+        "components": 0,
+        "raw_groups_checked": 0
+      },
+      "reserved": 4,
+      "input_tokens_including_cache": 12152,
+      "output_tokens": 1781,
+      "estimated_cost_usd": 0.004202256,
+      "usage_missing": 0,
+      "pressure_preparations": 1,
+      "spill_occurrences": 4,
+      "archive_occurrences": 0,
+      "max_prepared_JSON_bytes": 23655,
+      "last_routing_cache": {
+        "hits": 3,
+        "misses": 2,
+        "builds": 2,
+        "evictions": 0,
+        "bypasses": 0,
+        "entries": 2,
+        "sourceBytes": 13122
+      }
+    }
+  ],
+  "GPU_used": false,
+  "not_an_invoice": true
+}
