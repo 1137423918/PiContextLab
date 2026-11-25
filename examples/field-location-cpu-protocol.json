@@ -1,0 +1,95 @@
+{
+  "kind": "CPU diagnostic JSON field location, authored queries over real software metadata; not model accuracy, not a held-out benchmark",
+  "sources": [
+    "frozen project lock at02f69f7",
+    "own immutable GitHub commit02f69f7 metadata"
+  ],
+  "variants": [
+    "path-only BM25",
+    "path+sibling-label+scalar-prefix BM25"
+  ],
+  "limits": {
+    "top_k": [
+      5,
+      10
+    ],
+    "response_bytes": 8192,
+    "max_results": 20,
+    "max_source_bytes": 8388608,
+    "max_nodes": 20000,
+    "max_fields": 4096,
+    "max_depth": 32,
+    "preview_codepoints": 256
+  },
+  "queries": [
+    {
+      "id": "lock-duckdb",
+      "source": "lock",
+      "query": "duckdb node api installed version",
+      "targets": [
+        "/packages/node_modules~1@duckdb~1node-api/version"
+      ]
+    },
+    {
+      "id": "lock-upstream",
+      "source": "lock",
+      "query": "upstream pi agent core installed version",
+      "targets": [
+        "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/version"
+      ]
+    },
+    {
+      "id": "lock-vendor",
+      "source": "lock",
+      "query": "vendored pi agent core version",
+      "targets": [
+        "/packages/vendor~1pi-agent-core/version"
+      ]
+    },
+    {
+      "id": "lock-engine",
+      "source": "lock",
+      "query": "root package node engine",
+      "targets": [
+        "/packages//engines/node"
+      ]
+    },
+    {
+      "id": "lock-typescript",
+      "source": "lock",
+      "query": "typescript resolved tarball URL",
+      "targets": [
+        "/packages/node_modules~1typescript/resolved"
+      ]
+    },
+    {
+      "id": "commit-date",
+      "source": "commit",
+      "query": "commit author timestamp date",
+      "targets": [
+        "/commit/author/date"
+      ]
+    },
+    {
+      "id": "commit-verified",
+      "source": "commit",
+      "query": "commit verification verified signature status",
+      "targets": [
+        "/commit/verification/verified"
+      ]
+    },
+    {
+      "id": "commit-statistics",
+      "source": "commit",
+      "query": "total changed additions deletions statistics",
+      "targets": [
+        "/stats/total",
+        "/stats/additions",
+        "/stats/deletions"
+      ]
+    }
+  ],
+  "grading": "Exact target JSON pointers; preserve source numeric literal text. Targets used only by grader, never ranking. Eachquery grades all targets. Keep failures. No tuning/rerun for a better score.",
+  "model_calls": 0,
+  "GPU": false
+}

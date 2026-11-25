@@ -1,0 +1,1608 @@
+{
+  "kind": "CPU field-location diagnostic on real software metadata + synthetic exact-numeric controls; not a model accuracy benchmark",
+  "protocol_sha256": "bf11b24b107cbadf3b26b163239086b357ce008304055394a86e17a7b4f9ac3e",
+  "sources": {
+    "commit": {
+      "url": "https://api.github.com/repos/1137423918/PiContextLab/commits/02f69f750a0bb7ec98760d43eadde2f81cf06541",
+      "representation": "Normalized data object only; no authentication headers or helper state",
+      "sha256": "eeff4609258eb1218a93a8b7a6fdc21350bb188ee08d1cfa93d651e048ee7a29",
+      "bytes": 152219
+    },
+    "lock": {
+      "source_commit": "02f69f750a0bb7ec98760d43eadde2f81cf06541",
+      "sha256": "a8c2f4d866fad5078f509bfe44e0050092131849abebd00271dd2ee7ea225dc0",
+      "bytes": 62648
+    }
+  },
+  "summary": {
+    "queries": 8,
+    "path_only_recall10": 0.75,
+    "path_labels_preview_recall10": 0.625,
+    "bounded_tool_recall": 0.75,
+    "max_response_bytes": 3934,
+    "all_structural_scans_complete": true
+  },
+  "numeric_control": {
+    "source": "{\"transaction_id\":9007199254740993,\"amount\":0.1000000000000000001,\"nested\":{\"overflow\":1e999,\"negative_zero\":-0}}",
+    "results": [
+      {
+        "variant": "frozen-contextlab3",
+        "expected": [
+          "9007199254740993",
+          "0.1000000000000000001",
+          "{\"overflow\":1e999,\"negative_zero\":-0}"
+        ],
+        "actual": [
+          "9007199254740992",
+          "0.1",
+          "{\"overflow\":null,\"negative_zero\":0}"
+        ],
+        "exact_fields": 0
+      },
+      {
+        "variant": "contextlab4",
+        "expected": [
+          "9007199254740993",
+          "0.1000000000000000001",
+          "{\"overflow\":1e999,\"negative_zero\":-0}"
+        ],
+        "actual": [
+          "9007199254740993",
+          "0.1000000000000000001",
+          "{\"overflow\":1e999,\"negative_zero\":-0}"
+        ],
+        "exact_fields": 3
+      }
+    ]
+  },
+  "rows": [
+    {
+      "id": "lock-duckdb",
+      "source": "lock",
+      "query": "duckdb node api installed version",
+      "targets": [
+        "/packages/node_modules~1@duckdb~1node-api/version"
+      ],
+      "path_only": {
+        "recall5": 1,
+        "recall10": 1,
+        "top10": [
+          "/packages/node_modules~1@duckdb~1node-api/version",
+          "/packages//dependencies/@duckdb~1node-api",
+          "/packages/node_modules~1@duckdb~1node-api/resolved",
+          "/packages/node_modules~1@duckdb~1node-api/integrity",
+          "/packages/node_modules~1@duckdb~1node-api/license",
+          "/packages/node_modules~1@duckdb~1node-api/dependencies/@duckdb~1node-bindings",
+          "/packages/node_modules~1@duckdb~1node-bindings/version",
+          "/packages/node_modules~1@duckdb~1node-bindings-darwin-arm64/version",
+          "/packages/node_modules~1@duckdb~1node-bindings-darwin-x64/version",
+          "/packages/node_modules~1@duckdb~1node-bindings-linux-arm64/version"
+        ]
+      },
+      "path_labels_preview": {
+        "recall5": 1,
+        "recall10": 1,
+        "top10": [
+          "/packages/node_modules~1@duckdb~1node-api/resolved",
+          "/packages/node_modules~1@duckdb~1node-api/license",
+          "/packages/node_modules~1@duckdb~1node-api/dependencies/@duckdb~1node-bindings",
+          "/packages/node_modules~1@duckdb~1node-api/version",
+          "/packages/node_modules~1@duckdb~1node-api/integrity",
+          "/packages//dependencies/@duckdb~1node-api",
+          "/packages//dependencies/@earendil-works~1pi-ai",
+          "/packages//dependencies/@earendil-works~1pi-schema",
+          "/packages//dependencies/@earendil-works~1pi-agent-core",
+          "/packages/node_modules~1@duckdb~1node-bindings/optionalDependencies/@duckdb~1node-bindings-darwin-arm64"
+        ]
+      },
+      "bounded_tool": {
+        "recall": 1,
+        "response_bytes": 3934,
+        "scan": {
+          "visited": 1350,
+          "fields": 987,
+          "truncated": false,
+          "complete": true
+        },
+        "matches": [
+          {
+            "json_pointer": "/packages/node_modules~1@duckdb~1node-api/resolved",
+            "text": "https://registry.npmjs.org/@duckdb/node-api/-/node-api-2.0.1-r.1.tgz",
+            "type": "string",
+            "has_more": false,
+            "score": 12.537861297589105
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@duckdb~1node-api/license",
+            "text": "MIT",
+            "type": "string",
+            "has_more": false,
+            "score": 12.088330473391185
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@duckdb~1node-api/dependencies/@duckdb~1node-bindings",
+            "text": "2.0.1-r.1",
+            "type": "string",
+            "has_more": false,
+            "score": 12.081894377028988
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@duckdb~1node-api/version",
+            "text": "2.0.1-r.1",
+            "type": "string",
+            "has_more": false,
+            "score": 11.918349297400209
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@duckdb~1node-api/integrity",
+            "text": "sha512-YAuAEZOgd511AZkXl0i3c7WFlTdIE6hEa5avih+fwJ+FYgkhgyis9IU7b++IEadT2+9tGRh8QZK9qALOtLwdXw==",
+            "type": "string",
+            "has_more": false,
+            "score": 11.876408644453614
+          },
+          {
+            "json_pointer": "/packages//dependencies/@duckdb~1node-api",
+            "text": "2.0.1-r.1",
+            "type": "string",
+            "has_more": false,
+            "score": 10.955774231936825
+          },
+          {
+            "json_pointer": "/packages//dependencies/@earendil-works~1pi-ai",
+            "text": "1.6.0",
+            "type": "string",
+            "has_more": false,
+            "score": 6.793505655244359
+          },
+          {
+            "json_pointer": "/packages//dependencies/@earendil-works~1pi-schema",
+            "text": "1.6.0",
+            "type": "string",
+            "has_more": false,
+            "score": 6.793505655244359
+          },
+          {
+            "json_pointer": "/packages//dependencies/@earendil-works~1pi-agent-core",
+            "text": "file:vendor/pi-agent-core",
+            "type": "string",
+            "has_more": false,
+            "score": 6.602312945379707
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@duckdb~1node-bindings/optionalDependencies/@duckdb~1node-bindings-darwin-arm64",
+            "text": "2.0.1-r.1",
+            "type": "string",
+            "has_more": false,
+            "score": 4.626967130601939
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@duckdb~1node-bindings/optionalDependencies/@duckdb~1node-bindings-darwin-x64",
+            "text": "2.0.1-r.1",
+            "type": "string",
+            "has_more": false,
+            "score": 4.626967130601939
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@duckdb~1node-bindings/optionalDependencies/@duckdb~1node-bindings-linux-arm64",
+            "text": "2.0.1-r.1",
+            "type": "string",
+            "has_more": false,
+            "score": 4.626967130601939
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@duckdb~1node-bindings/optionalDependencies/@duckdb~1node-bindings-linux-x64",
+            "text": "2.0.1-r.1",
+            "type": "string",
+            "has_more": false,
+            "score": 4.626967130601939
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@duckdb~1node-bindings/optionalDependencies/@duckdb~1node-bindings-win32-arm64",
+            "text": "2.0.1-r.1",
+            "type": "string",
+            "has_more": false,
+            "score": 4.626967130601939
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@duckdb~1node-bindings/optionalDependencies/@duckdb~1node-bindings-win32-x64",
+            "text": "2.0.1-r.1",
+            "type": "string",
+            "has_more": false,
+            "score": 4.626967130601939
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@duckdb~1node-bindings/optionalDependencies/@duckdb~1node-bindings-linux-arm64-musl",
+            "text": "2.0.1-r.1",
+            "type": "string",
+            "has_more": false,
+            "score": 4.617064997181225
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@duckdb~1node-bindings/optionalDependencies/@duckdb~1node-bindings-linux-x64-musl",
+            "text": "2.0.1-r.1",
+            "type": "string",
+            "has_more": false,
+            "score": 4.617064997181225
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@duckdb~1node-bindings/resolved",
+            "text": "https://registry.npmjs.org/@duckdb/node-bindings/-/node-bindings-2.0.1-r.1.tgz",
+            "type": "string",
+            "has_more": false,
+            "score": 4.19130324521837
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@duckdb~1node-bindings/license",
+            "text": "MIT",
+            "type": "string",
+            "has_more": false,
+            "score": 4.088718503976313
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@duckdb~1node-bindings/version",
+            "text": "2.0.1-r.1",
+            "type": "string",
+            "has_more": false,
+            "score": 4.022931076298123
+          }
+        ]
+      },
+      "wall_ms": 65.76283799999999
+    },
+    {
+      "id": "lock-upstream",
+      "source": "lock",
+      "query": "upstream pi agent core installed version",
+      "targets": [
+        "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/version"
+      ],
+      "path_only": {
+        "recall5": 1,
+        "recall10": 1,
+        "top10": [
+          "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/version",
+          "/packages//devDependencies/@pi-context-lab~1upstream-agent-core",
+          "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/name",
+          "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/resolved",
+          "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/integrity",
+          "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/dev",
+          "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/license",
+          "/packages/vendor~1pi-agent-core/version",
+          "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/engines/node",
+          "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/dependencies/@earendil-works~1pi-ai"
+        ]
+      },
+      "path_labels_preview": {
+        "recall5": 0,
+        "recall10": 0,
+        "top10": [
+          "/packages//devDependencies/@pi-context-lab~1upstream-agent-core",
+          "/packages//devDependencies/typescript",
+          "/packages//devDependencies/@types~1node",
+          "/packages/node_modules~1@earendil-works~1pi-agent-core/resolved",
+          "/packages/vendor~1pi-agent-core/name",
+          "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/resolved",
+          "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/name",
+          "/packages//dependencies/@earendil-works~1pi-agent-core",
+          "/packages/node_modules~1@earendil-works~1pi-agent-core/link",
+          "/packages/vendor~1pi-agent-core/license"
+        ]
+      },
+      "bounded_tool": {
+        "recall": 1,
+        "response_bytes": 3681,
+        "scan": {
+          "visited": 1350,
+          "fields": 987,
+          "truncated": false,
+          "complete": true
+        },
+        "matches": [
+          {
+            "json_pointer": "/packages//devDependencies/@pi-context-lab~1upstream-agent-core",
+            "text": "npm:@earendil-works/pi-agent-core@1.6.0",
+            "type": "string",
+            "has_more": false,
+            "score": 12.706786091015575
+          },
+          {
+            "json_pointer": "/packages//devDependencies/typescript",
+            "text": "7.0.2",
+            "type": "string",
+            "has_more": false,
+            "score": 12.06549679002685
+          },
+          {
+            "json_pointer": "/packages//devDependencies/@types~1node",
+            "text": "22.19.19",
+            "type": "string",
+            "has_more": false,
+            "score": 11.905280204975513
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@earendil-works~1pi-agent-core/resolved",
+            "text": "vendor/pi-agent-core",
+            "type": "string",
+            "has_more": false,
+            "score": 7.727941059366276
+          },
+          {
+            "json_pointer": "/packages/vendor~1pi-agent-core/name",
+            "text": "@earendil-works/pi-agent-core",
+            "type": "string",
+            "has_more": false,
+            "score": 7.675385467139105
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/resolved",
+            "text": "https://registry.npmjs.org/@earendil-works/pi-agent-core/-/pi-agent-core-1.6.0.tgz",
+            "type": "string",
+            "has_more": false,
+            "score": 7.571040468745982
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/name",
+            "text": "@earendil-works/pi-agent-core",
+            "type": "string",
+            "has_more": false,
+            "score": 7.471537944543517
+          },
+          {
+            "json_pointer": "/packages//dependencies/@earendil-works~1pi-agent-core",
+            "text": "file:vendor/pi-agent-core",
+            "type": "string",
+            "has_more": false,
+            "score": 7.411426497040348
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@earendil-works~1pi-agent-core/link",
+            "text": "true",
+            "type": "boolean",
+            "has_more": false,
+            "score": 7.374971798422619
+          },
+          {
+            "json_pointer": "/packages/vendor~1pi-agent-core/license",
+            "text": "MIT",
+            "type": "string",
+            "has_more": false,
+            "score": 7.343052493000485
+          },
+          {
+            "json_pointer": "/packages/vendor~1pi-agent-core/version",
+            "text": "1.6.0-contextlab.3",
+            "type": "string",
+            "has_more": false,
+            "score": 7.217546445659618
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/dev",
+            "text": "true",
+            "type": "boolean",
+            "has_more": false,
+            "score": 7.096128913986193
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/license",
+            "text": "MIT",
+            "type": "string",
+            "has_more": false,
+            "score": 7.096128913986193
+          },
+          {
+            "json_pointer": "/packages/vendor~1pi-agent-core/engines/node",
+            "text": ">=22.19.0",
+            "type": "string",
+            "has_more": false,
+            "score": 7.095979880911893
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/version",
+            "text": "1.6.0",
+            "type": "string",
+            "has_more": false,
+            "score": 7.0370906014836505
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/integrity",
+            "text": "sha512-IU/x+2XtE4KIdIkEndZssdLPbIUR38Btj+Q7vjIIXIK7GSamLtDH5jOw/dzBWAvWFAgZ2dslF5sPc6GcGOnS+w==",
+            "type": "string",
+            "has_more": false,
+            "score": 6.9214737822993895
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/engines/node",
+            "text": ">=22.19.0",
+            "type": "string",
+            "has_more": false,
+            "score": 6.865150438256528
+          },
+          {
+            "json_pointer": "/packages/vendor~1pi-agent-core/dependencies/@earendil-works~1pi-ai",
+            "text": "1.6.0",
+            "type": "string",
+            "has_more": false,
+            "score": 6.648734822174049
+          },
+          {
+            "json_pointer": "/packages/vendor~1pi-agent-core/dependencies/@earendil-works~1pi-schema",
+            "text": "1.6.0",
+            "type": "string",
+            "has_more": false,
+            "score": 6.648734822174049
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/dependencies/@earendil-works~1pi-ai",
+            "text": "1.6.0",
+            "type": "string",
+            "has_more": false,
+            "score": 6.445625299172579
+          }
+        ]
+      },
+      "wall_ms": 45.80210099999999
+    },
+    {
+      "id": "lock-vendor",
+      "source": "lock",
+      "query": "vendored pi agent core version",
+      "targets": [
+        "/packages/vendor~1pi-agent-core/version"
+      ],
+      "path_only": {
+        "recall5": 0,
+        "recall10": 1,
+        "top10": [
+          "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/version",
+          "/packages//devDependencies/@pi-context-lab~1upstream-agent-core",
+          "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/name",
+          "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/resolved",
+          "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/integrity",
+          "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/dev",
+          "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/license",
+          "/packages/vendor~1pi-agent-core/version",
+          "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/engines/node",
+          "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/dependencies/@earendil-works~1pi-ai"
+        ]
+      },
+      "path_labels_preview": {
+        "recall5": 0,
+        "recall10": 1,
+        "top10": [
+          "/packages/node_modules~1@earendil-works~1pi-agent-core/resolved",
+          "/packages/vendor~1pi-agent-core/name",
+          "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/resolved",
+          "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/name",
+          "/packages//devDependencies/@pi-context-lab~1upstream-agent-core",
+          "/packages//dependencies/@earendil-works~1pi-agent-core",
+          "/packages/node_modules~1@earendil-works~1pi-agent-core/link",
+          "/packages/vendor~1pi-agent-core/license",
+          "/packages/vendor~1pi-agent-core/version",
+          "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/dev"
+        ]
+      },
+      "bounded_tool": {
+        "recall": 1,
+        "response_bytes": 3737,
+        "scan": {
+          "visited": 1350,
+          "fields": 987,
+          "truncated": false,
+          "complete": true
+        },
+        "matches": [
+          {
+            "json_pointer": "/packages/node_modules~1@earendil-works~1pi-agent-core/resolved",
+            "text": "vendor/pi-agent-core",
+            "type": "string",
+            "has_more": false,
+            "score": 7.727941059366276
+          },
+          {
+            "json_pointer": "/packages/vendor~1pi-agent-core/name",
+            "text": "@earendil-works/pi-agent-core",
+            "type": "string",
+            "has_more": false,
+            "score": 7.675385467139105
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/resolved",
+            "text": "https://registry.npmjs.org/@earendil-works/pi-agent-core/-/pi-agent-core-1.6.0.tgz",
+            "type": "string",
+            "has_more": false,
+            "score": 7.571040468745982
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/name",
+            "text": "@earendil-works/pi-agent-core",
+            "type": "string",
+            "has_more": false,
+            "score": 7.471537944543517
+          },
+          {
+            "json_pointer": "/packages//devDependencies/@pi-context-lab~1upstream-agent-core",
+            "text": "npm:@earendil-works/pi-agent-core@1.6.0",
+            "type": "string",
+            "has_more": false,
+            "score": 7.450701325500068
+          },
+          {
+            "json_pointer": "/packages//dependencies/@earendil-works~1pi-agent-core",
+            "text": "file:vendor/pi-agent-core",
+            "type": "string",
+            "has_more": false,
+            "score": 7.411426497040348
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@earendil-works~1pi-agent-core/link",
+            "text": "true",
+            "type": "boolean",
+            "has_more": false,
+            "score": 7.374971798422619
+          },
+          {
+            "json_pointer": "/packages/vendor~1pi-agent-core/license",
+            "text": "MIT",
+            "type": "string",
+            "has_more": false,
+            "score": 7.343052493000485
+          },
+          {
+            "json_pointer": "/packages/vendor~1pi-agent-core/version",
+            "text": "1.6.0-contextlab.3",
+            "type": "string",
+            "has_more": false,
+            "score": 7.217546445659618
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/dev",
+            "text": "true",
+            "type": "boolean",
+            "has_more": false,
+            "score": 7.096128913986193
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/license",
+            "text": "MIT",
+            "type": "string",
+            "has_more": false,
+            "score": 7.096128913986193
+          },
+          {
+            "json_pointer": "/packages/vendor~1pi-agent-core/engines/node",
+            "text": ">=22.19.0",
+            "type": "string",
+            "has_more": false,
+            "score": 7.095979880911893
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/version",
+            "text": "1.6.0",
+            "type": "string",
+            "has_more": false,
+            "score": 7.0370906014836505
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/integrity",
+            "text": "sha512-IU/x+2XtE4KIdIkEndZssdLPbIUR38Btj+Q7vjIIXIK7GSamLtDH5jOw/dzBWAvWFAgZ2dslF5sPc6GcGOnS+w==",
+            "type": "string",
+            "has_more": false,
+            "score": 6.9214737822993895
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/engines/node",
+            "text": ">=22.19.0",
+            "type": "string",
+            "has_more": false,
+            "score": 6.865150438256528
+          },
+          {
+            "json_pointer": "/packages/vendor~1pi-agent-core/dependencies/@earendil-works~1pi-ai",
+            "text": "1.6.0",
+            "type": "string",
+            "has_more": false,
+            "score": 6.648734822174049
+          },
+          {
+            "json_pointer": "/packages/vendor~1pi-agent-core/dependencies/@earendil-works~1pi-schema",
+            "text": "1.6.0",
+            "type": "string",
+            "has_more": false,
+            "score": 6.648734822174049
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/dependencies/@earendil-works~1pi-ai",
+            "text": "1.6.0",
+            "type": "string",
+            "has_more": false,
+            "score": 6.445625299172579
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@pi-context-lab~1upstream-agent-core/dependencies/@earendil-works~1pi-schema",
+            "text": "1.6.0",
+            "type": "string",
+            "has_more": false,
+            "score": 6.445625299172579
+          },
+          {
+            "json_pointer": "/packages//devDependencies/typescript",
+            "text": "7.0.2",
+            "type": "string",
+            "has_more": false,
+            "score": 6.131889679117871
+          }
+        ]
+      },
+      "wall_ms": 35.09034599999998
+    },
+    {
+      "id": "lock-engine",
+      "source": "lock",
+      "query": "root package node engine",
+      "targets": [
+        "/packages//engines/node"
+      ],
+      "path_only": {
+        "recall5": 0,
+        "recall10": 0,
+        "top10": [
+          "/packages/node_modules~1debug/engines/node",
+          "/packages/node_modules~1gaxios/engines/node",
+          "/packages/node_modules~1openai/engines/node",
+          "/packages/node_modules~1protobufjs/engines/node",
+          "/packages/node_modules~1retry/engines/node",
+          "/packages/node_modules~1typescript/engines/node",
+          "/packages/node_modules~1ws/engines/node",
+          "/packages/node_modules~1@aws-sdk~1credential-provider-node/engines/node",
+          "/packages/node_modules~1@aws-sdk~1eventstream-handler-node/engines/node",
+          "/packages/node_modules~1agent-base/engines/node"
+        ]
+      },
+      "path_labels_preview": {
+        "recall5": 0,
+        "recall10": 0,
+        "top10": [
+          "/packages/node_modules~1@aws-sdk~1credential-provider-node/engines/node",
+          "/packages/node_modules~1@aws-sdk~1eventstream-handler-node/engines/node",
+          "/packages/node_modules~1proxy-agent-negotiate/engines/node",
+          "/packages/node_modules~1node-domexception/engines/node",
+          "/packages/node_modules~1node-fetch/engines/node",
+          "/packages/node_modules~1@types~1node/resolved",
+          "/packages/node_modules~1node-fetch/resolved",
+          "/packages/node_modules~1retry/engines/node",
+          "/packages/node_modules~1@aws-sdk~1credential-provider-node/resolved",
+          "/packages/node_modules~1@aws-sdk~1eventstream-handler-node/resolved"
+        ]
+      },
+      "bounded_tool": {
+        "recall": 0,
+        "response_bytes": 3756,
+        "scan": {
+          "visited": 1350,
+          "fields": 987,
+          "truncated": false,
+          "complete": true
+        },
+        "matches": [
+          {
+            "json_pointer": "/packages/node_modules~1@aws-sdk~1credential-provider-node/engines/node",
+            "text": ">=20.0.0",
+            "type": "string",
+            "has_more": false,
+            "score": 0.022421056152027767
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@aws-sdk~1eventstream-handler-node/engines/node",
+            "text": ">=20.0.0",
+            "type": "string",
+            "has_more": false,
+            "score": 0.022421056152027767
+          },
+          {
+            "json_pointer": "/packages/node_modules~1proxy-agent-negotiate/engines/node",
+            "text": ">= 20",
+            "type": "string",
+            "has_more": false,
+            "score": 0.022054962525715108
+          },
+          {
+            "json_pointer": "/packages/node_modules~1node-domexception/engines/node",
+            "text": ">=10.5.0",
+            "type": "string",
+            "has_more": false,
+            "score": 0.02191575219985824
+          },
+          {
+            "json_pointer": "/packages/node_modules~1node-fetch/engines/node",
+            "text": "^12.20.0 || ^14.13.1 || >=16.0.0",
+            "type": "string",
+            "has_more": false,
+            "score": 0.021737606372258758
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@types~1node/resolved",
+            "text": "https://registry.npmjs.org/@types/node/-/node-22.19.19.tgz",
+            "type": "string",
+            "has_more": false,
+            "score": 0.021636492132547376
+          },
+          {
+            "json_pointer": "/packages/node_modules~1node-fetch/resolved",
+            "text": "https://registry.npmjs.org/node-fetch/-/node-fetch-3.3.2.tgz",
+            "type": "string",
+            "has_more": false,
+            "score": 0.021636492132547376
+          },
+          {
+            "json_pointer": "/packages/node_modules~1retry/engines/node",
+            "text": ">= 4",
+            "type": "string",
+            "has_more": false,
+            "score": 0.02161814664336956
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@aws-sdk~1credential-provider-node/resolved",
+            "text": "https://registry.npmjs.org/@aws-sdk/credential-provider-node/-/credential-provider-node-3.972.99.tgz",
+            "type": "string",
+            "has_more": false,
+            "score": 0.021585553838134375
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@aws-sdk~1eventstream-handler-node/resolved",
+            "text": "https://registry.npmjs.org/@aws-sdk/eventstream-handler-node/-/eventstream-handler-node-3.972.43.tgz",
+            "type": "string",
+            "has_more": false,
+            "score": 0.021585553838134375
+          },
+          {
+            "json_pointer": "/packages/node_modules~1bignumber.js/engines/node",
+            "text": "*",
+            "type": "string",
+            "has_more": false,
+            "score": 0.02149650231804947
+          },
+          {
+            "json_pointer": "/packages/node_modules~1debug/engines/node",
+            "text": ">=6.0",
+            "type": "string",
+            "has_more": false,
+            "score": 0.02149650231804947
+          },
+          {
+            "json_pointer": "/packages/node_modules~1gaxios/engines/node",
+            "text": ">=18",
+            "type": "string",
+            "has_more": false,
+            "score": 0.02149650231804947
+          },
+          {
+            "json_pointer": "/packages/node_modules~1node-fetch/funding/url",
+            "text": "https://opencollective.com/node-fetch",
+            "type": "string",
+            "has_more": false,
+            "score": 0.021484393414317147
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@aws-sdk~1middleware-eventstream/engines/node",
+            "text": ">=20.0.0",
+            "type": "string",
+            "has_more": false,
+            "score": 0.02143619208040353
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@aws-sdk~1middleware-websocket/engines/node",
+            "text": ">= 14.0.0",
+            "type": "string",
+            "has_more": false,
+            "score": 0.02143619208040353
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@aws-sdk~1token-providers/engines/node",
+            "text": ">=20.0.0",
+            "type": "string",
+            "has_more": false,
+            "score": 0.02143619208040353
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@aws~1lambda-invoke-store/engines/node",
+            "text": ">=18.0.0",
+            "type": "string",
+            "has_more": false,
+            "score": 0.02143619208040353
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@smithy~1credential-provider-imds/engines/node",
+            "text": ">=18.0.0",
+            "type": "string",
+            "has_more": false,
+            "score": 0.02143619208040353
+          },
+          {
+            "json_pointer": "/packages/node_modules~1@smithy~1fetch-http-handler/engines/node",
+            "text": ">=18.0.0",
+            "type": "string",
+            "has_more": false,
+            "score": 0.02143619208040353
+          }
+        ]
+      },
+      "wall_ms": 35.81884100000002
+    },
+    {
+      "id": "lock-typescript",
+      "source": "lock",
+      "query": "typescript resolved tarball URL",
+      "targets": [
+        "/packages/node_modules~1typescript/resolved"
+      ],
+      "path_only": {
+        "recall5": 0,
+        "recall10": 0,
+        "top10": [
+          "/packages/node_modules~1node-fetch/funding/url",
+          "/packages/node_modules~1base64-js/funding/0/url",
+          "/packages/node_modules~1base64-js/funding/1/url",
+          "/packages/node_modules~1base64-js/funding/2/url",
+          "/packages/node_modules~1fetch-blob/funding/0/url",
+          "/packages/node_modules~1fetch-blob/funding/1/url",
+          "/packages/node_modules~1node-domexception/funding/0/url",
+          "/packages/node_modules~1node-domexception/funding/1/url",
+          "/packages/node_modules~1safe-buffer/funding/0/url",
+          "/packages/node_modules~1safe-buffer/funding/1/url"
+        ]
+      },
+      "path_labels_preview": {
+        "recall5": 0,
+        "recall10": 0,
+        "top10": [
+          "/packages/node_modules~1base64-js/funding/2/url",
+          "/packages/node_modules~1fetch-blob/funding/1/url",
+          "/packages/node_modules~1node-fetch/funding/url",
+          "/packages/node_modules~1safe-buffer/funding/2/url",
+          "/packages/node_modules~1base64-js/funding/0/url",
+          "/packages/node_modules~1base64-js/funding/1/url",
+          "/packages/node_modules~1fetch-blob/funding/0/url",
+          "/packages/node_modules~1safe-buffer/funding/0/url",
+          "/packages/node_modules~1safe-buffer/funding/1/url",
+          "/packages/node_modules~1node-domexception/funding/1/url"
+        ]
+      },
+      "bounded_tool": {
+        "recall": 0,
+        "response_bytes": 3495,
+        "scan": {
+          "visited": 1350,
+          "fields": 987,
+          "truncated": false,
+          "complete": true
+        },
+        "matches": [
+          {
+            "json_pointer": "/packages/node_modules~1base64-js/funding/2/url",
+            "text": "https://feross.org/support",
+            "type": "string",
+            "has_more": false,
+            "score": 6.557836653189613
+          },
+          {
+            "json_pointer": "/packages/node_modules~1fetch-blob/funding/1/url",
+            "text": "https://paypal.me/jimmywarting",
+            "type": "string",
+            "has_more": false,
+            "score": 6.557836653189613
+          },
+          {
+            "json_pointer": "/packages/node_modules~1node-fetch/funding/url",
+            "text": "https://opencollective.com/node-fetch",
+            "type": "string",
+            "has_more": false,
+            "score": 6.557836653189613
+          },
+          {
+            "json_pointer": "/packages/node_modules~1safe-buffer/funding/2/url",
+            "text": "https://feross.org/support",
+            "type": "string",
+            "has_more": false,
+            "score": 6.557836653189613
+          },
+          {
+            "json_pointer": "/packages/node_modules~1base64-js/funding/0/url",
+            "text": "https://github.com/sponsors/feross",
+            "type": "string",
+            "has_more": false,
+            "score": 6.501203675304241
+          },
+          {
+            "json_pointer": "/packages/node_modules~1base64-js/funding/1/url",
+            "text": "https://www.patreon.com/feross",
+            "type": "string",
+            "has_more": false,
+            "score": 6.501203675304241
+          },
+          {
+            "json_pointer": "/packages/node_modules~1fetch-blob/funding/0/url",
+            "text": "https://github.com/sponsors/jimmywarting",
+            "type": "string",
+            "has_more": false,
+            "score": 6.501203675304241
+          },
+          {
+            "json_pointer": "/packages/node_modules~1safe-buffer/funding/0/url",
+            "text": "https://github.com/sponsors/feross",
+            "type": "string",
+            "has_more": false,
+            "score": 6.501203675304241
+          },
+          {
+            "json_pointer": "/packages/node_modules~1safe-buffer/funding/1/url",
+            "text": "https://www.patreon.com/feross",
+            "type": "string",
+            "has_more": false,
+            "score": 6.501203675304241
+          },
+          {
+            "json_pointer": "/packages/node_modules~1node-domexception/funding/1/url",
+            "text": "https://paypal.me/jimmywarting",
+            "type": "string",
+            "has_more": false,
+            "score": 6.33733330250149
+          },
+          {
+            "json_pointer": "/packages/node_modules~1node-domexception/funding/0/url",
+            "text": "https://github.com/sponsors/jimmywarting",
+            "type": "string",
+            "has_more": false,
+            "score": 6.28462435438993
+          },
+          {
+            "json_pointer": "/packages/node_modules~1node-fetch/funding/type",
+            "text": "opencollective",
+            "type": "string",
+            "has_more": false,
+            "score": 4.538138938231446
+          },
+          {
+            "json_pointer": "/packages/node_modules~1base64-js/funding/2/type",
+            "text": "consulting",
+            "type": "string",
+            "has_more": false,
+            "score": 4.502440653362454
+          },
+          {
+            "json_pointer": "/packages/node_modules~1fetch-blob/funding/1/type",
+            "text": "paypal",
+            "type": "string",
+            "has_more": false,
+            "score": 4.502440653362454
+          },
+          {
+            "json_pointer": "/packages/node_modules~1safe-buffer/funding/2/type",
+            "text": "consulting",
+            "type": "string",
+            "has_more": false,
+            "score": 4.502440653362454
+          },
+          {
+            "json_pointer": "/packages/node_modules~1base64-js/funding/0/type",
+            "text": "github",
+            "type": "string",
+            "has_more": false,
+            "score": 4.467299610686581
+          },
+          {
+            "json_pointer": "/packages/node_modules~1base64-js/funding/1/type",
+            "text": "patreon",
+            "type": "string",
+            "has_more": false,
+            "score": 4.467299610686581
+          },
+          {
+            "json_pointer": "/packages/node_modules~1fetch-blob/funding/0/type",
+            "text": "github",
+            "type": "string",
+            "has_more": false,
+            "score": 4.467299610686581
+          },
+          {
+            "json_pointer": "/packages/node_modules~1safe-buffer/funding/0/type",
+            "text": "github",
+            "type": "string",
+            "has_more": false,
+            "score": 4.467299610686581
+          },
+          {
+            "json_pointer": "/packages/node_modules~1safe-buffer/funding/1/type",
+            "text": "patreon",
+            "type": "string",
+            "has_more": false,
+            "score": 4.467299610686581
+          }
+        ]
+      },
+      "wall_ms": 33.99146300000001
+    },
+    {
+      "id": "commit-date",
+      "source": "commit",
+      "query": "commit author timestamp date",
+      "targets": [
+        "/commit/author/date"
+      ],
+      "path_only": {
+        "recall5": 1,
+        "recall10": 1,
+        "top10": [
+          "/commit/author/date",
+          "/commit/committer/date",
+          "/commit/author/email",
+          "/commit/author/name",
+          "/commit/message",
+          "/commit/url",
+          "/author/id",
+          "/author/login",
+          "/author/type",
+          "/author/url"
+        ]
+      },
+      "path_labels_preview": {
+        "recall5": 1,
+        "recall10": 1,
+        "top10": [
+          "/commit/author/date",
+          "/commit/author/name",
+          "/commit/author/email",
+          "/commit/committer/date",
+          "/commit/committer/name",
+          "/commit/committer/email",
+          "/files/30/patch",
+          "/commit/comment_count",
+          "/commit/tree/sha",
+          "/commit/verification/payload"
+        ]
+      },
+      "bounded_tool": {
+        "recall": 1,
+        "response_bytes": 3407,
+        "scan": {
+          "visited": 425,
+          "fields": 381,
+          "truncated": false,
+          "complete": true
+        },
+        "matches": [
+          {
+            "json_pointer": "/commit/author/date",
+            "text": "2026-11-25T05:00:25Z",
+            "type": "string",
+            "has_more": false,
+            "score": 13.764194691753422
+          },
+          {
+            "json_pointer": "/commit/author/name",
+            "text": "A_Zhe",
+            "type": "string",
+            "has_more": false,
+            "score": 11.857092843334655
+          },
+          {
+            "json_pointer": "/commit/author/email",
+            "text": "164762867+1137423918@users.noreply.github.com",
+            "type": "string",
+            "has_more": false,
+            "score": 11.47780354573695
+          },
+          {
+            "json_pointer": "/commit/committer/date",
+            "text": "2026-11-25T05:00:25Z",
+            "type": "string",
+            "has_more": false,
+            "score": 9.954305690876527
+          },
+          {
+            "json_pointer": "/commit/committer/name",
+            "text": "A_Zhe",
+            "type": "string",
+            "has_more": false,
+            "score": 7.964698541397569
+          },
+          {
+            "json_pointer": "/commit/committer/email",
+            "text": "164762867+1137423918@users.noreply.github.com",
+            "type": "string",
+            "has_more": false,
+            "score": 7.694644508571135
+          },
+          {
+            "json_pointer": "/files/30/patch",
+            "text": "@@ -32,6 +32,7 @@ test('restart reconciles committed assistant tools through Pi with cached result\n     const assistant=message(runner.model,[{type:'toolCall',id:'recovered-compare',name:'compare_metric',arguments:comparison}], 'toolUse');\n     f.store.mes",
+            "type": "string",
+            "has_more": true,
+            "score": 6.883316774866727
+          },
+          {
+            "json_pointer": "/commit/comment_count",
+            "text": "0",
+            "type": "number",
+            "has_more": false,
+            "score": 4.7435445709609985
+          },
+          {
+            "json_pointer": "/commit/tree/sha",
+            "text": "c6b640ecb5d32cbc694f0ccf0ebcbf8f2d8d8f87",
+            "type": "string",
+            "has_more": false,
+            "score": 4.666746255909403
+          },
+          {
+            "json_pointer": "/commit/verification/payload",
+            "text": "null",
+            "type": "null",
+            "has_more": false,
+            "score": 4.666746255909403
+          },
+          {
+            "json_pointer": "/commit/verification/reason",
+            "text": "unsigned",
+            "type": "string",
+            "has_more": false,
+            "score": 4.666746255909403
+          },
+          {
+            "json_pointer": "/commit/verification/signature",
+            "text": "null",
+            "type": "null",
+            "has_more": false,
+            "score": 4.666746255909403
+          },
+          {
+            "json_pointer": "/commit/verification/verified",
+            "text": "false",
+            "type": "boolean",
+            "has_more": false,
+            "score": 4.666746255909403
+          },
+          {
+            "json_pointer": "/commit/verification/verified_at",
+            "text": "null",
+            "type": "null",
+            "has_more": false,
+            "score": 4.59239506187564
+          },
+          {
+            "json_pointer": "/commit/message",
+            "text": "Bind recovered tool execution to persisted model requests",
+            "type": "string",
+            "has_more": false,
+            "score": 4.556100873005051
+          },
+          {
+            "json_pointer": "/commit/url",
+            "text": "https://api.github.com/repos/1137423918/PiContextLab/git/commits/02f69f750a0bb7ec98760d43eadde2f81cf06541",
+            "type": "string",
+            "has_more": false,
+            "score": 4.485206736835561
+          },
+          {
+            "json_pointer": "/commit/tree/url",
+            "text": "https://api.github.com/repos/1137423918/PiContextLab/git/trees/c6b640ecb5d32cbc694f0ccf0ebcbf8f2d8d8f87",
+            "type": "string",
+            "has_more": false,
+            "score": 4.349837490217781
+          },
+          {
+            "json_pointer": "/html_url",
+            "text": "https://github.com/1137423918/PiContextLab/commit/02f69f750a0bb7ec98760d43eadde2f81cf06541",
+            "type": "string",
+            "has_more": false,
+            "score": 3.934715459353964
+          },
+          {
+            "json_pointer": "/parents/0/html_url",
+            "text": "https://github.com/1137423918/PiContextLab/commit/4f8c83f58d09b00017109f60add2ebaf2ca59d09",
+            "type": "string",
+            "has_more": false,
+            "score": 3.6368472458355687
+          },
+          {
+            "json_pointer": "/author/id",
+            "text": "164762867",
+            "type": "number",
+            "has_more": false,
+            "score": 3.1435624513725613
+          }
+        ]
+      },
+      "wall_ms": 18.950360999999987
+    },
+    {
+      "id": "commit-verified",
+      "source": "commit",
+      "query": "commit verification verified signature status",
+      "targets": [
+        "/commit/verification/verified"
+      ],
+      "path_only": {
+        "recall5": 1,
+        "recall10": 1,
+        "top10": [
+          "/commit/verification/signature",
+          "/commit/verification/verified",
+          "/commit/verification/verified_at",
+          "/commit/verification/payload",
+          "/commit/verification/reason",
+          "/commit/message",
+          "/commit/url",
+          "/commit/author/date",
+          "/commit/author/email",
+          "/commit/author/name"
+        ]
+      },
+      "path_labels_preview": {
+        "recall5": 1,
+        "recall10": 1,
+        "top10": [
+          "/commit/verification/signature",
+          "/commit/verification/verified",
+          "/commit/verification/verified_at",
+          "/commit/verification/payload",
+          "/commit/verification/reason",
+          "/commit/comment_count",
+          "/commit/tree/sha",
+          "/commit/message",
+          "/commit/url",
+          "/commit/tree/url"
+        ]
+      },
+      "bounded_tool": {
+        "recall": 1,
+        "response_bytes": 3168,
+        "scan": {
+          "visited": 425,
+          "fields": 381,
+          "truncated": false,
+          "complete": true
+        },
+        "matches": [
+          {
+            "json_pointer": "/commit/verification/signature",
+            "text": "null",
+            "type": "null",
+            "has_more": false,
+            "score": 19.742369607240626
+          },
+          {
+            "json_pointer": "/commit/verification/verified",
+            "text": "false",
+            "type": "boolean",
+            "has_more": false,
+            "score": 18.95499535184265
+          },
+          {
+            "json_pointer": "/commit/verification/verified_at",
+            "text": "null",
+            "type": "null",
+            "has_more": false,
+            "score": 18.653001958580845
+          },
+          {
+            "json_pointer": "/commit/verification/payload",
+            "text": "null",
+            "type": "null",
+            "has_more": false,
+            "score": 11.203216255878777
+          },
+          {
+            "json_pointer": "/commit/verification/reason",
+            "text": "unsigned",
+            "type": "string",
+            "has_more": false,
+            "score": 11.203216255878777
+          },
+          {
+            "json_pointer": "/commit/comment_count",
+            "text": "0",
+            "type": "number",
+            "has_more": false,
+            "score": 4.7435445709609985
+          },
+          {
+            "json_pointer": "/commit/tree/sha",
+            "text": "c6b640ecb5d32cbc694f0ccf0ebcbf8f2d8d8f87",
+            "type": "string",
+            "has_more": false,
+            "score": 4.666746255909403
+          },
+          {
+            "json_pointer": "/commit/message",
+            "text": "Bind recovered tool execution to persisted model requests",
+            "type": "string",
+            "has_more": false,
+            "score": 4.556100873005051
+          },
+          {
+            "json_pointer": "/commit/url",
+            "text": "https://api.github.com/repos/1137423918/PiContextLab/git/commits/02f69f750a0bb7ec98760d43eadde2f81cf06541",
+            "type": "string",
+            "has_more": false,
+            "score": 4.485206736835561
+          },
+          {
+            "json_pointer": "/commit/tree/url",
+            "text": "https://api.github.com/repos/1137423918/PiContextLab/git/trees/c6b640ecb5d32cbc694f0ccf0ebcbf8f2d8d8f87",
+            "type": "string",
+            "has_more": false,
+            "score": 4.349837490217781
+          },
+          {
+            "json_pointer": "/commit/author/name",
+            "text": "A_Zhe",
+            "type": "string",
+            "has_more": false,
+            "score": 4.161441108270315
+          },
+          {
+            "json_pointer": "/commit/committer/name",
+            "text": "A_Zhe",
+            "type": "string",
+            "has_more": false,
+            "score": 4.161441108270315
+          },
+          {
+            "json_pointer": "/commit/author/date",
+            "text": "2026-11-25T05:00:25Z",
+            "type": "string",
+            "has_more": false,
+            "score": 4.073232945158158
+          },
+          {
+            "json_pointer": "/commit/committer/date",
+            "text": "2026-11-25T05:00:25Z",
+            "type": "string",
+            "has_more": false,
+            "score": 4.073232945158158
+          },
+          {
+            "json_pointer": "/commit/author/email",
+            "text": "164762867+1137423918@users.noreply.github.com",
+            "type": "string",
+            "has_more": false,
+            "score": 4.0446553753691745
+          },
+          {
+            "json_pointer": "/commit/committer/email",
+            "text": "164762867+1137423918@users.noreply.github.com",
+            "type": "string",
+            "has_more": false,
+            "score": 4.0446553753691745
+          },
+          {
+            "json_pointer": "/html_url",
+            "text": "https://github.com/1137423918/PiContextLab/commit/02f69f750a0bb7ec98760d43eadde2f81cf06541",
+            "type": "string",
+            "has_more": false,
+            "score": 3.934715459353964
+          },
+          {
+            "json_pointer": "/parents/0/html_url",
+            "text": "https://github.com/1137423918/PiContextLab/commit/4f8c83f58d09b00017109f60add2ebaf2ca59d09",
+            "type": "string",
+            "has_more": false,
+            "score": 3.6368472458355687
+          },
+          {
+            "json_pointer": "/files/0/status",
+            "text": "modified",
+            "type": "string",
+            "has_more": false,
+            "score": 0.3299813005786502
+          },
+          {
+            "json_pointer": "/files/1/status",
+            "text": "modified",
+            "type": "string",
+            "has_more": false,
+            "score": 0.3279668552564756
+          }
+        ]
+      },
+      "wall_ms": 13.855460999999991
+    },
+    {
+      "id": "commit-statistics",
+      "source": "commit",
+      "query": "total changed additions deletions statistics",
+      "targets": [
+        "/stats/total",
+        "/stats/additions",
+        "/stats/deletions"
+      ],
+      "path_only": {
+        "recall5": 1,
+        "recall10": 1,
+        "top10": [
+          "/stats/total",
+          "/stats/additions",
+          "/stats/deletions",
+          "/files/0/additions",
+          "/files/0/deletions",
+          "/files/1/additions",
+          "/files/1/deletions",
+          "/files/2/additions",
+          "/files/2/deletions",
+          "/files/3/additions"
+        ]
+      },
+      "path_labels_preview": {
+        "recall5": 1,
+        "recall10": 1,
+        "top10": [
+          "/stats/total",
+          "/stats/additions",
+          "/stats/deletions",
+          "/files/0/additions",
+          "/files/0/deletions",
+          "/files/1/additions",
+          "/files/1/deletions",
+          "/files/2/additions",
+          "/files/2/deletions",
+          "/files/4/additions"
+        ]
+      },
+      "bounded_tool": {
+        "recall": 1,
+        "response_bytes": 2497,
+        "scan": {
+          "visited": 425,
+          "fields": 381,
+          "truncated": false,
+          "complete": true
+        },
+        "matches": [
+          {
+            "json_pointer": "/stats/total",
+            "text": "11729",
+            "type": "number",
+            "has_more": false,
+            "score": 9.543464090073824
+          },
+          {
+            "json_pointer": "/stats/additions",
+            "text": "11613",
+            "type": "number",
+            "has_more": false,
+            "score": 4.192741309995293
+          },
+          {
+            "json_pointer": "/stats/deletions",
+            "text": "116",
+            "type": "number",
+            "has_more": false,
+            "score": 4.192741309995293
+          },
+          {
+            "json_pointer": "/files/0/additions",
+            "text": "3",
+            "type": "number",
+            "has_more": false,
+            "score": 3.8770558981088863
+          },
+          {
+            "json_pointer": "/files/0/deletions",
+            "text": "1",
+            "type": "number",
+            "has_more": false,
+            "score": 3.8770558981088863
+          },
+          {
+            "json_pointer": "/files/1/additions",
+            "text": "12",
+            "type": "number",
+            "has_more": false,
+            "score": 3.8448898403342224
+          },
+          {
+            "json_pointer": "/files/1/deletions",
+            "text": "0",
+            "type": "number",
+            "has_more": false,
+            "score": 3.8448898403342224
+          },
+          {
+            "json_pointer": "/files/2/additions",
+            "text": "9",
+            "type": "number",
+            "has_more": false,
+            "score": 3.8448898403342224
+          },
+          {
+            "json_pointer": "/files/2/deletions",
+            "text": "1",
+            "type": "number",
+            "has_more": false,
+            "score": 3.8448898403342224
+          },
+          {
+            "json_pointer": "/files/4/additions",
+            "text": "1",
+            "type": "number",
+            "has_more": false,
+            "score": 3.8448898403342224
+          },
+          {
+            "json_pointer": "/files/4/deletions",
+            "text": "1",
+            "type": "number",
+            "has_more": false,
+            "score": 3.8448898403342224
+          },
+          {
+            "json_pointer": "/files/5/additions",
+            "text": "29",
+            "type": "number",
+            "has_more": false,
+            "score": 3.8448898403342224
+          },
+          {
+            "json_pointer": "/files/5/deletions",
+            "text": "1",
+            "type": "number",
+            "has_more": false,
+            "score": 3.8448898403342224
+          },
+          {
+            "json_pointer": "/files/25/additions",
+            "text": "12",
+            "type": "number",
+            "has_more": false,
+            "score": 3.8448898403342224
+          },
+          {
+            "json_pointer": "/files/25/deletions",
+            "text": "12",
+            "type": "number",
+            "has_more": false,
+            "score": 3.8448898403342224
+          },
+          {
+            "json_pointer": "/files/26/additions",
+            "text": "1",
+            "type": "number",
+            "has_more": false,
+            "score": 3.8448898403342224
+          },
+          {
+            "json_pointer": "/files/26/deletions",
+            "text": "1",
+            "type": "number",
+            "has_more": false,
+            "score": 3.8448898403342224
+          },
+          {
+            "json_pointer": "/files/27/additions",
+            "text": "31",
+            "type": "number",
+            "has_more": false,
+            "score": 3.8448898403342224
+          },
+          {
+            "json_pointer": "/files/27/deletions",
+            "text": "4",
+            "type": "number",
+            "has_more": false,
+            "score": 3.8448898403342224
+          },
+          {
+            "json_pointer": "/files/31/additions",
+            "text": "3",
+            "type": "number",
+            "has_more": false,
+            "score": 3.8448898403342224
+          }
+        ]
+      },
+      "wall_ms": 13.28949
+    }
+  ],
+  "model_calls": 0,
+  "GPU_used": false
+}

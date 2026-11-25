@@ -8,6 +8,7 @@ export interface ContextPackingOptions {
 	maxContextBytes: number;
 	inlineToolResultBytes: number;
 	store: ContextArtifactStore;
+	artifactSearch?: boolean;
 }
 
 export interface ContextPackingTrace {
@@ -66,7 +67,7 @@ export async function packModelContext(
 		if (message.role !== "toolResult") { body.push(message); continue; }
 		// Display details do not go on provider wires. Drop them only from this view, never from audit history.
 		const { details: _details, ...view } = message;
-		const latestRecall = index === context.messages.length - 1 && message.toolName === "read_context_artifact";
+		const latestRecall = index === context.messages.length - 1 && ["read_context_artifact", "search_context_artifact"].includes(message.toolName);
 		const textOnly = message.content.every((item) => item.type === "text");
 		if (!textOnly || latestRecall || contextBytes(view.content) <= options.inlineToolResultBytes) { body.push(view); continue; }
 		const text = message.content.map((item) => item.type === "text" ? item.text : "").join("\n");
@@ -81,14 +82,14 @@ export async function packModelContext(
 				const entries = Object.entries(decoded);
 				const identities = entries.filter((entry): entry is [string, string | number | boolean | null] => {
 					const [key,value] = entry;
-					return key.length<=64 && /(^id$|_id$|sha256$|version$|^kind$|^type$)/u.test(key) && (value === null || typeof value === "boolean" || typeof value === "number" || typeof value === "string" && value.length <= 160);
+					return key.length<=64 && /(^id$|_id$|sha256$|version$|^kind$|^type$)/u.test(key) && (value === null || typeof value === "boolean" || typeof value === "number" && Number.isSafeInteger(value) && !Object.is(value, -0) || typeof value === "string" && value.length <= 160);
 				}).sort(([a],[b]) => Number(b==='id')-Number(a==='id')).slice(0, 8);
 				shape = { root_keys: entries.slice(0, 16).map(([key]) => key), source_identity: Object.fromEntries(identities) };
 				while (contextBytes(shape)>512 && shape.root_keys!.length>0) shape.root_keys!.pop();
 				while (contextBytes(shape)>512 && Object.keys(shape.source_identity!).length>0) delete shape.source_identity![Object.keys(shape.source_identity!).at(-1)!];
 			}
 		} catch { /* Non-JSON output remains available through bounded raw text recall. */ }
-		body.push({ ...view, content: [{ type: "text", text: JSON.stringify({ context_artifact: { artifact_id: artifact.id, sha256: artifact.sha256, bytes: artifact.bytes }, ...shape, source_tool: message.toolName, is_error: message.isError, instruction: "ctx_ is a storage handle, never the source document/report ID. Exact source_identity fields above are retained. Retrieve missing facts with read_context_artifact; request multiple precise JSON paths in one call rather than paging the whole document." }) }] });
+		body.push({ ...view, content: [{ type: "text", text: JSON.stringify({ context_artifact: { artifact_id: artifact.id, sha256: artifact.sha256, bytes: artifact.bytes }, ...shape, source_tool: message.toolName, is_error: message.isError, instruction: "ctx_ is a storage handle, never the source document/report ID. Exact source_identity fields above are retained. Retrieve missing facts with read_context_artifact; request multiple precise JSON paths in one call rather than paging the whole document." + (options.artifactSearch ? " If paths are unknown, use search_context_artifact to locate source fields before reading them." : "") }) }] });
 	}
 	const build = (messages: Message[], index?: ContextArtifact): TranscriptContext => {
 		if (!index) return normalizeContext({ messages: [head, ...messages] });

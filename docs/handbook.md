@@ -1,6 +1,6 @@
 # 从 Pi 到 PiContextLab：框架改造与验证客户端完整讲解
 
-本文对应官方 Pi **1.6.0**、派生核心 **1.6.0-contextlab.3** 与本仓库代码。框架改进是主线，PiMetricLab 经营指标应用是验证客户端。建议按“先跑一个报告，再读架构和恢复，最后看源码”的顺序学习。上游身份见 [upstream-lock.json](../upstream-lock.json)，研究来由见 [references.md](references.md)，实际运行证据见 [validation.md](validation.md)。
+本文对应官方 Pi **1.6.0**、派生核心 **1.6.0-contextlab.4** 与本仓库代码。框架改进是主线，PiMetricLab 经营指标应用是验证客户端。建议按“先跑一个报告，再读架构和恢复，最后看源码”的顺序学习。上游身份见 [upstream-lock.json](../upstream-lock.json)，研究来由见 [references.md](references.md)，实际运行证据见 [validation.md](validation.md)。
 
 ## 1. 项目要解决的具体问题
 
@@ -323,3 +323,11 @@ node dist/scripts/validate-uci.js /path/to/retail-data /path/to/oracle.json /pat
 一个工程反例包含超过 500 条事件、一次只允许澄清却返回比较工具的响应，以及无关的较新策略记录。旧版从前 500 条事件取到允许比较的旧集合；新版本按响应绑定拒绝比较，查询证据保持为零。这个反例是合成协议控制，不是 DeepSeek 准确率。另有无绑定暂停、缓存集合不一致拒绝、已澄清不追加推理的回归。
 
 运行配置加入 `request_binding: v1`，旧任务不静默迁移。当前只读计算可重放；如果未来加入外部写操作，还需要单独的幂等键、结果对账与明确副作用协议。
+
+## 24. 路径不知道和数字太大时怎么办
+
+可以启用 `BudgetedContextPolicy({ artifactSearch: true, ... })`。模型先按字段名或周边标签搜索 artifact，获得合法 pointer 与短预览，再按精确路径批量读取。搜索只是有界词法定位，没有调用别的模型，也不会执行生成代码。它共享工具/schema 预算，不能无限增加工具来换取结果。
+
+例如原始 JSON 为 `{"transaction_id":9007199254740993}`，直接转 JS Number 会变成 `9007199254740992`。回查器通过 JSON.parse 的 source context 记住原数字字面，`/transaction_id` 返回文本 `9007199254740993`。源哈希对应原始 UTF-8；JSON 容器回读会规范化空白，不能混淆“原文字节”“字段文本”与“JS 浮点值”。
+
+先读 `context-json.ts` 的数值来源与 pointer 解析，再读 `context-search.ts` 的扫描/返回限制；`artifact-search.test.ts` 覆盖大整数、小数、指数、转义路径、Unicode、完整性、外会话和预算。真实软件元数据上的 CPU 定位诊断与真实模型效果是两层证据，不用前者替代后者。

@@ -1,0 +1,13 @@
+{
+  "commit": {
+    "url": "https://api.github.com/repos/1137423918/PiContextLab/commits/02f69f750a0bb7ec98760d43eadde2f81cf06541",
+    "representation": "Normalized data object only; no authentication headers or helper state",
+    "sha256": "eeff4609258eb1218a93a8b7a6fdc21350bb188ee08d1cfa93d651e048ee7a29",
+    "bytes": 152219
+  },
+  "lock": {
+    "source_commit": "02f69f750a0bb7ec98760d43eadde2f81cf06541",
+    "sha256": "a8c2f4d866fad5078f509bfe44e0050092131849abebd00271dd2ee7ea225dc0",
+    "bytes": 62648
+  }
+}

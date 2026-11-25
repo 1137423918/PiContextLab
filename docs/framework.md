@@ -4,7 +4,7 @@
 
 ## 改动位置与已有能力
 
-固定 Pi 1.6.0 的完整 Agent Core 源码保留在 [vendor/pi-agent-core](../vendor/pi-agent-core)，原文件哈希见 [UPSTREAM.json](../vendor/pi-agent-core/UPSTREAM.json)，MIT 原许可一并保留。派生版本为 `1.6.0-contextlab.3`，不是上游发布或已合入 PR。原研究克隆保持不变。
+固定 Pi 1.6.0 的完整 Agent Core 源码保留在 [vendor/pi-agent-core](../vendor/pi-agent-core)，原文件哈希见 [UPSTREAM.json](../vendor/pi-agent-core/UPSTREAM.json)，MIT 原许可一并保留。派生版本为 `1.6.0-contextlab.4`，不是上游发布或已合入 PR。原研究克隆保持不变。
 
 上游已有 `transformContext`、工具调用屏障、完整的 `pi-durable` 持久化 Harness、摘要压缩，以及部分工具输出限制。本项目不把这些已有能力说成原创。
 
@@ -96,3 +96,30 @@ const agent = new Agent({
 事件 SSE 仍按 cursor 顺序分页；任务快照使用最近 500 条，并单独读取最新策略供界面显示。持久澄清从数据库直接判断，恢复时已进入澄清的任务不再额外请求模型。
 
 这部分是宿主对原生策略的持久化集成，不是 Pi 上游已合入的功能。工程反例与验证见 [validation.md](validation.md)。旧版任务没有该绑定或运行指纹不同，保持暂停并新建调查，不能偷偷推测其执行集合。
+
+## 可选 JSON 字段定位与精确数值回查（contextlab.4）
+
+v2 失败轨迹表明：知道 artifact ID 不代表知道 JSON 内部路径。新增 `artifactSearch: true` 选项；在需要外置/归档时，原生策略同时暴露 `search_context_artifact` 和读取工具，二者 schema 一起纳入原有预算。小上下文保持隐藏；低预算放不下必需工具时拒绝。通用默认不启用，验证客户端显式启用。没有附加 LLM 调用或任意代码执行。
+
+搜索输入是现有 artifact、自然语言字段查询和结果数量。遍历 JSON 叶字段，用路径、少量相邻短标签和 scalar 前缀构建词法文档，再用固定 BM25 排序。返回来源 JSON pointer、精确值的有界预览、类型、截断状态和分数。没有电商字段特判，也没有把评分目标喂给检索。
+
+限制：源文本最多 8 MiB；最多 20,000 个节点、32 层、4,096 个字段、512 字符路径；每个预览最多 256 code points，整个搜索 payload JSON 最多 8 KiB。`scan.complete` 仅表示结构遍历是否完整，不表示语义检索或值内容全文覆盖；路径/预览可能漏召回，找不到不能证明字段不存在。长值继续用精确读取工具读取。
+
+另修复普通 `JSON.parse → JSON.stringify` 在大整数、高精度小数、指数及负零上的改变。解析通过标准 reviver source context 记住数字的原始字面；按路径读取数字或容器时保留它们，以文本返回。容器空白和字符串转义会规范化，整段原始字节仍通过空 pointer 读取；不要把文本再次转成 JS Number 后声称精度仍完整。运行时不支持 source context 时拒绝精确数值解析；服务器 Node22.23.5 已验证。占位符不再暴露不安全的数值身份猜测。
+
+原文 SHA256 与会话归属在搜索前校验，搜索结果不改原文或权威对话。该功能仍是 opt-in 的程序机制，尚未得到 DeepSeek 任务成功率提升的实测证据。v1/v2 付费研究保持关闭。
+
+辅助解析对象中的 JS `value` 仅用于遍历结构；需要保真文本时使用 `text/json` 方法或原文读取工具，不直接序列化该 JS value。字段定位仍为实验性接口，8 条诊断没有证明组合检索优于仅路径基线，详见验证记录。
+
+## CPU 诊断复现入口
+
+冻结输入在 `evidence/artifact-search/inputs`，只含本项目公开提交的元数据与锁文件。先在服务器单独检出提交 `02f69f7`，用它自己的 lock 安装并构建 v3，保留该目录。再构建当前 v4：
+
+```bash
+node dist/scripts/eval-field-location.js \
+  evidence/artifact-search/inputs \
+  /path/to/fresh-field-diagnostic.json \
+  /path/to/frozen-contextlab3/vendor/pi-agent-core/dist/index.js
+```
+
+输出必须是新文件；该脚本不读取模型密钥或调用模型。它重现既有诊断，不构成未见过的验证，不能覆盖原结果或用于重复挑分数。真实模型的后续效果研究需要独立新任务和预先冻结的方案。本次 v4 未运行付费模型研究。

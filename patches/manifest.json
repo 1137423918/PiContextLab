@@ -1,24 +1,26 @@
 {
   "upstream_commit": "faac585884ae2c013a6b1400f3e9e77f10b34bac",
-  "fork_version": "1.6.0-contextlab.3",
+  "fork_version": "1.6.0-contextlab.4",
   "changed_source_files": [
     "src/agent-loop.ts",
     "src/agent.ts",
     "src/budgeted-policy.ts",
     "src/context-artifacts.ts",
     "src/context-budget.ts",
+    "src/context-json.ts",
+    "src/context-search.ts",
     "src/index.ts",
     "src/model-context.ts",
     "src/tool-router.ts",
     "src/types.ts"
   ],
-  "patch_sha256": "52c8f6e013a3cff9b47a3d4bff13909eadddecba7e2741afdf23cb2974dac136",
-  "scope": "Source-only portable patch against packages/agent. Standalone fork package/tsconfig and provenance ship in vendor/pi-agent-core. v1 historical patch retained.",
+  "patch_sha256": "8b5bc2afff124cd66c4896824d1bd3cfe612b6ddd27ef29c5b869f373810e3d7",
+  "scope": "Source-only patch against packages/agent; standalone package/tsconfig under vendor. Historicalv1/v3 patches retained.",
   "upstream_read_only_clone_unchanged": true,
   "unmodified_npm_baseline": "1.6.0",
   "real_API_evaluated_versions": [
     "contextlab.1",
     "contextlab.2"
   ],
-  "v3_validation": "25 engineering tests; no paid v3 rerun"
+  "v4_validation": "CPU engineering controls, numeric-source old/new contrast and8authored real-metadata field-location diagnostics; no real API effectiveness claim."
 }

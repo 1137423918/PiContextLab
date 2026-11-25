@@ -1,6 +1,7 @@
 /** Immutable text artifacts and bounded, explicit recall for provider-context views. */
 import type { AgentTool } from "./types.ts";
 import { arr, int, obj, str } from "@earendil-works/pi-schema";
+import { parseContextJson, resolveContextPointer } from "./context-json.ts";
 
 export interface ContextArtifact {
 	id: string;
@@ -45,21 +46,13 @@ export function createContextReadTool(store: ContextArtifactStore): AgentTool<ty
 			if (!artifact) throw new Error("Artifact does not belong to this conversation or does not exist");
 			const verified = await contextArtifact(artifact.text, artifact.kind);
 			if (verified.id !== args.artifact_id || verified.sha256 !== artifact.sha256 || verified.bytes !== artifact.bytes) throw new Error("Context artifact integrity mismatch");
-			const parsed: unknown = args.json_pointers.some((pointer) => pointer !== "") ? JSON.parse(artifact.text) : null;
+			const parsed = args.json_pointers.some((pointer) => pointer !== "") ? parseContextJson(artifact.text) : null;
 			let remaining = args.limit;
 			const values = [];
 			for (const pointer of args.json_pointers) {
 				try {
-				let value = parsed;
-				if (pointer !== "" && !pointer.startsWith("/")) throw new Error("JSON pointer must be empty or start with /");
-				for (const raw of pointer === "" ? [] : pointer.slice(1).split("/")) {
-					if (/~(?![01])/u.test(raw)) throw new Error("Invalid JSON pointer escape");
-					const key = raw.replace(/~1/g, "/").replace(/~0/g, "~");
-					if (Array.isArray(value) && !/^(0|[1-9][0-9]*)$/u.test(key)) throw new Error("JSON pointer array segment must be an index");
-					if (value === null || typeof value !== "object" || !Object.hasOwn(value, key)) throw new Error("JSON pointer does not exist");
-					value = (value as Record<string, unknown>)[key];
-				}
-				const text = pointer === "" ? artifact.text : typeof value === "string" ? value : JSON.stringify(value);
+				const field = pointer === "" ? null : resolveContextPointer(parsed!, pointer);
+				const text = field ? parsed!.text(field.value, field.parent, field.key) : artifact.text;
 				const points = Array.from(text);
 				const slice = points.slice(args.offset, args.offset + remaining);
 				values.push({ json_pointer: pointer, offset: args.offset, total_codepoints: points.length, text: slice.join(""), has_more: args.offset + slice.length < points.length });

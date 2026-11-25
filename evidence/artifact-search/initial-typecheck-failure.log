@@ -1,0 +1,8 @@
+
+> pi-metriclab@0.1.0 check
+> tsc --noEmit -p vendor/pi-agent-core/tsconfig.json && tsc --noEmit
+
+scripts/eval-field-location.ts(14,52): error TS7022: 'data' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+scripts/eval-field-location.ts(19,7): error TS7034: Variable 'rows' implicitly has type 'any[]' in some locations where its type cannot be determined.
+scripts/eval-field-location.ts(40,30): error TS7005: Variable 'rows' implicitly has an 'any[]' type.
+scripts/eval-field-location.ts(40,54): error TS7005: Variable 'rows' implicitly has an 'any[]' type.

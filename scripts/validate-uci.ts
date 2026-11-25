@@ -7,7 +7,8 @@ import { Runner } from '../src/runtime.js';
 import { demoComparison, scriptedProvider } from '../src/demo.js';
 import { exportReport } from '../src/report.js';
 import type { Metric } from '../src/domain.js';
-const [datasetPath, oraclePath, output] = process.argv.slice(2); if (!datasetPath || !oraclePath || !output) throw new Error('DATASET_DIR ORACLE_JSON OUTPUT_DIR');
+const [datasetPath, oraclePath, output, contextLimit='16384'] = process.argv.slice(2); if (!datasetPath || !oraclePath || !output) throw new Error('DATASET_DIR ORACLE_JSON OUTPUT_DIR [CONTEXT_BYTES]');
+const maxContextBytes=Number(contextLimit);
 await mkdir(output, { recursive: true });
 const oracle = JSON.parse(await readFile(oraclePath, 'utf8')) as { metrics: Record<string, Record<Metric, string>>; quality: Record<string, number>; countries: { dimension: string | null; baseline: string; current: string; delta: string }[] };
 const warehouse = new Warehouse(join(output, 'home/datasets')); const dataset = await warehouse.ingest(join(datasetPath, 'transactions.csv'), join(datasetPath, 'source-manifest.json'));
@@ -28,8 +29,8 @@ assert.equal(groups.size, oracle.countries.length);
 const store = new Store(join(output, 'home/jobs.sqlite'));
 try {
   const job = store.create(dataset.id,'Compare October and November 2011 net sales using full calendar months, explain country contribution.',8,1200,demoComparison);
-  await new Runner(store, warehouse, scriptedProvider()).run(job.id); assert.equal(store.job(job.id).status,'completed'); const report = store.report(job.id); assert.ok(report);
+  await new Runner(store, warehouse, scriptedProvider(),undefined,90000,maxContextBytes).run(job.id); assert.equal(store.job(job.id).status,'completed'); const report = store.report(job.id); assert.ok(report);
   await writeFile(join(output,'demo-report.html'),exportReport(report,null));
-  const result = { passed: true, validation: 'real dataset / deterministic independent arithmetic + scripted actual Pi runtime, not real model inference', dataset, metric_checks: checks.length * 2, country_groups_checked: groups.size, quality_checks: Object.keys(oracle.quality).length, job:store.job(job.id), calls:store.calls(job.id), report, checks, breakdown, GPU_used:false, model_calls:0 };
+  const result = { passed: true, validation: 'real dataset / deterministic independent arithmetic + scripted actual Pi runtime, not real model inference',max_context_bytes:maxContextBytes, dataset, metric_checks: checks.length * 2, country_groups_checked: groups.size, quality_checks: Object.keys(oracle.quality).length, job:store.job(job.id), calls:store.calls(job.id), report, checks, breakdown, GPU_used:false, model_calls:0 };
   await writeFile(join(output,'validation.json'),JSON.stringify(result,null,2)); console.log(JSON.stringify({passed:true,dataset:dataset.id,rows:dataset.rows,metric_checks:12,country_groups_checked:groups.size,scripted_Pi_provider_requests:store.calls(job.id).length,real_model_calls:0}));
 } finally { store.close(); }

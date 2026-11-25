@@ -139,11 +139,12 @@
  			onPayload: this.onPayload,
 --- /dev/null
 +++ b/src/budgeted-policy.ts
-@@ -0,0 +1,92 @@
+@@ -0,0 +1,96 @@
 +/** An opt-in core policy combining task-aware tool selection, bounded context and explicit recall. */
 +import { arr, compile, int, num, obj, str } from "@earendil-works/pi-schema";
 +import { toToolDeclaration } from "@earendil-works/pi-ai";
 +import { createContextReadTool, type ContextArtifactStore } from "./context-artifacts.ts";
++import { createContextSearchTool } from "./context-search.ts";
 +import { contextBytes, packModelContext, type ContextPackingTrace } from "./context-budget.ts";
 +import type { ExecutableTools, ModelContextPolicy, ModelContextPolicyInput, PreparedModelContext } from "./model-context.ts";
 +import { routeTools, type RankedTool, type ToolRoutingOptions } from "./tool-router.ts";
@@ -161,6 +162,8 @@
 +	maxContextBytes: number;
 +	inlineToolResultBytes: number;
 +	artifacts: ContextArtifactStore;
++	/** Opt in to lexical JSON-field location alongside exact artifact reads. */
++	artifactSearch?: boolean;
 +	onPrepared?: (trace: BudgetedPolicyTrace) => Promise<void> | void;
 +}
 +
@@ -188,7 +191,7 @@
 +				const payload = { candidates, instructions: "Candidate schemas are added on the next provider request; all calls still require normal argument validation." };
 +				return { content: [{ type: "text", text: JSON.stringify(payload) }], details: payload };
 +			},
-+		}];
++		}, ...(options.artifactSearch ? [createContextSearchTool(options.artifacts)] : [])];
 +	}
 +
 +	/** Registry lookup also works before the first post-restart model request. */
@@ -220,13 +223,14 @@
 +		const business = input.tools.filter((tool) => !utilityNames.has(tool.name));
 +		const needsRead = input.context.messages.some((message) => message.role === "toolResult" && contextBytes(message.content) > this.options.inlineToolResultBytes) || contextBytes(input.context) > this.options.maxContextBytes;
 +		const reader = this.tools[0];
-+		const baseNames = [...this.options.alwaysInclude, ...(needsRead ? [reader.name] : [])];
-+		const totalSchemaBytes = [...business, ...(needsRead ? [reader] : [])].reduce((n, tool) => n + contextBytes(toToolDeclaration(tool)), 0);
-+		const needsDiscovery = business.length + Number(needsRead) > this.options.maxTools || totalSchemaBytes > this.options.maxSchemaBytes;
++		const recallTools = needsRead ? [reader, ...(this.options.artifactSearch ? [this.tools[2]] : [])] : [];
++		const baseNames = [...this.options.alwaysInclude, ...recallTools.map(tool => tool.name)];
++		const totalSchemaBytes = [...business, ...recallTools].reduce((n, tool) => n + contextBytes(toToolDeclaration(tool)), 0);
++		const needsDiscovery = business.length + recallTools.length > this.options.maxTools || totalSchemaBytes > this.options.maxSchemaBytes;
 +		const required = [...baseNames, ...(needsDiscovery ? ["discover_tools"] : [])];
 +		const candidates = input.tools.filter((tool) => !utilityNames.has(tool.name) || required.includes(tool.name));
 +		const decision = routeTools(query, candidates, { ...this.options, alwaysInclude: required }, [...promoted]);
-+		const packed = await packModelContext(input.context, decision.tools, query, { maxContextBytes: this.options.maxContextBytes, inlineToolResultBytes: this.options.inlineToolResultBytes, store: this.options.artifacts }, signal);
++		const packed = await packModelContext(input.context, decision.tools, query, { maxContextBytes: this.options.maxContextBytes, inlineToolResultBytes: this.options.inlineToolResultBytes, store: this.options.artifacts, artifactSearch: this.options.artifactSearch }, signal);
 +		const trace: BudgetedPolicyTrace = { policy: "pi-context-lab-v2", request: this.request, registeredTools: input.tools.length, selectedToolNames: decision.tools.map((t) => t.name), schemaBytes: decision.schemaBytes, ranking: decision.ranked, ...packed.trace };
 +		await this.options.onPrepared?.(trace);
 +		return { context: packed.context, tools: decision.tools };
@@ -234,10 +238,11 @@
 +}
 --- /dev/null
 +++ b/src/context-artifacts.ts
-@@ -0,0 +1,76 @@
+@@ -0,0 +1,69 @@
 +/** Immutable text artifacts and bounded, explicit recall for provider-context views. */
 +import type { AgentTool } from "./types.ts";
 +import { arr, int, obj, str } from "@earendil-works/pi-schema";
++import { parseContextJson, resolveContextPointer } from "./context-json.ts";
 +
 +export interface ContextArtifact {
 +	id: string;
@@ -282,21 +287,13 @@
 +			if (!artifact) throw new Error("Artifact does not belong to this conversation or does not exist");
 +			const verified = await contextArtifact(artifact.text, artifact.kind);
 +			if (verified.id !== args.artifact_id || verified.sha256 !== artifact.sha256 || verified.bytes !== artifact.bytes) throw new Error("Context artifact integrity mismatch");
-+			const parsed: unknown = args.json_pointers.some((pointer) => pointer !== "") ? JSON.parse(artifact.text) : null;
++			const parsed = args.json_pointers.some((pointer) => pointer !== "") ? parseContextJson(artifact.text) : null;
 +			let remaining = args.limit;
 +			const values = [];
 +			for (const pointer of args.json_pointers) {
 +				try {
-+				let value = parsed;
-+				if (pointer !== "" && !pointer.startsWith("/")) throw new Error("JSON pointer must be empty or start with /");
-+				for (const raw of pointer === "" ? [] : pointer.slice(1).split("/")) {
-+					if (/~(?![01])/u.test(raw)) throw new Error("Invalid JSON pointer escape");
-+					const key = raw.replace(/~1/g, "/").replace(/~0/g, "~");
-+					if (Array.isArray(value) && !/^(0|[1-9][0-9]*)$/u.test(key)) throw new Error("JSON pointer array segment must be an index");
-+					if (value === null || typeof value !== "object" || !Object.hasOwn(value, key)) throw new Error("JSON pointer does not exist");
-+					value = (value as Record<string, unknown>)[key];
-+				}
-+				const text = pointer === "" ? artifact.text : typeof value === "string" ? value : JSON.stringify(value);
++				const field = pointer === "" ? null : resolveContextPointer(parsed!, pointer);
++				const text = field ? parsed!.text(field.value, field.parent, field.key) : artifact.text;
 +				const points = Array.from(text);
 +				const slice = points.slice(args.offset, args.offset + remaining);
 +				values.push({ json_pointer: pointer, offset: args.offset, total_codepoints: points.length, text: slice.join(""), has_more: args.offset + slice.length < points.length });
@@ -313,7 +310,7 @@
 +}
 --- /dev/null
 +++ b/src/context-budget.ts
-@@ -0,0 +1,142 @@
+@@ -0,0 +1,143 @@
 +/** Budget provider views while preserving system instructions and complete tool-call transactions. */
 +import { getCurrentSystemMessage, normalizeContext, toToolDeclaration, type Message, type TranscriptContext } from "@earendil-works/pi-ai";
 +import { contextArtifact, type ContextArtifact, type ContextArtifactStore } from "./context-artifacts.ts";
@@ -324,6 +321,7 @@
 +	maxContextBytes: number;
 +	inlineToolResultBytes: number;
 +	store: ContextArtifactStore;
++	artifactSearch?: boolean;
 +}
 +
 +export interface ContextPackingTrace {
@@ -382,7 +380,7 @@
 +		if (message.role !== "toolResult") { body.push(message); continue; }
 +		// Display details do not go on provider wires. Drop them only from this view, never from audit history.
 +		const { details: _details, ...view } = message;
-+		const latestRecall = index === context.messages.length - 1 && message.toolName === "read_context_artifact";
++		const latestRecall = index === context.messages.length - 1 && ["read_context_artifact", "search_context_artifact"].includes(message.toolName);
 +		const textOnly = message.content.every((item) => item.type === "text");
 +		if (!textOnly || latestRecall || contextBytes(view.content) <= options.inlineToolResultBytes) { body.push(view); continue; }
 +		const text = message.content.map((item) => item.type === "text" ? item.text : "").join("\n");
@@ -397,14 +395,14 @@
 +				const entries = Object.entries(decoded);
 +				const identities = entries.filter((entry): entry is [string, string | number | boolean | null] => {
 +					const [key,value] = entry;
-+					return key.length<=64 && /(^id$|_id$|sha256$|version$|^kind$|^type$)/u.test(key) && (value === null || typeof value === "boolean" || typeof value === "number" || typeof value === "string" && value.length <= 160);
++					return key.length<=64 && /(^id$|_id$|sha256$|version$|^kind$|^type$)/u.test(key) && (value === null || typeof value === "boolean" || typeof value === "number" && Number.isSafeInteger(value) && !Object.is(value, -0) || typeof value === "string" && value.length <= 160);
 +				}).sort(([a],[b]) => Number(b==='id')-Number(a==='id')).slice(0, 8);
 +				shape = { root_keys: entries.slice(0, 16).map(([key]) => key), source_identity: Object.fromEntries(identities) };
 +				while (contextBytes(shape)>512 && shape.root_keys!.length>0) shape.root_keys!.pop();
 +				while (contextBytes(shape)>512 && Object.keys(shape.source_identity!).length>0) delete shape.source_identity![Object.keys(shape.source_identity!).at(-1)!];
 +			}
 +		} catch { /* Non-JSON output remains available through bounded raw text recall. */ }
-+		body.push({ ...view, content: [{ type: "text", text: JSON.stringify({ context_artifact: { artifact_id: artifact.id, sha256: artifact.sha256, bytes: artifact.bytes }, ...shape, source_tool: message.toolName, is_error: message.isError, instruction: "ctx_ is a storage handle, never the source document/report ID. Exact source_identity fields above are retained. Retrieve missing facts with read_context_artifact; request multiple precise JSON paths in one call rather than paging the whole document." }) }] });
++		body.push({ ...view, content: [{ type: "text", text: JSON.stringify({ context_artifact: { artifact_id: artifact.id, sha256: artifact.sha256, bytes: artifact.bytes }, ...shape, source_tool: message.toolName, is_error: message.isError, instruction: "ctx_ is a storage handle, never the source document/report ID. Exact source_identity fields above are retained. Retrieve missing facts with read_context_artifact; request multiple precise JSON paths in one call rather than paging the whole document." + (options.artifactSearch ? " If paths are unknown, use search_context_artifact to locate source fields before reading them." : "") }) }] });
 +	}
 +	const build = (messages: Message[], index?: ContextArtifact): TranscriptContext => {
 +		if (!index) return normalizeContext({ messages: [head, ...messages] });
@@ -456,9 +454,134 @@
 +	signal?.throwIfAborted();
 +	return { context: prepared, trace };
 +}
+--- /dev/null
++++ b/src/context-json.ts
+@@ -0,0 +1,48 @@
++/** JSON pointer access that preserves source numeric literals instead of rounding through Number. */
++export interface ContextJson {
++	value: unknown;
++	text(value: unknown, parent?: object, key?: string): string;
++	json(value: unknown, parent?: object, key?: string): string;
++}
++
++export function parseContextJson(text: string): ContextJson {
++	const numbers = new WeakMap<object, Map<string, string>>();
++	let rootNumber: string | undefined;
++	const value: unknown = JSON.parse(text, function (this: object, key: string, item: unknown, context?: { source?: string }): unknown {
++		if (typeof item === "number") {
++			if (typeof context?.source !== "string") throw new Error("Exact numeric recall requires JSON.parse source contexts in this Node runtime");
++			let fields = numbers.get(this);
++			if (!fields) { fields = new Map(); numbers.set(this, fields); }
++			fields.set(key, context.source);
++			if (key === "") rootNumber = context.source;
++		}
++		return item;
++	});
++	const json = (item: unknown, parent?: object, key?: string): string => {
++		if (typeof item === "number") {
++			const literal = parent && key !== undefined ? numbers.get(parent)?.get(key) : rootNumber;
++			if (literal === undefined) throw new Error("Numeric source identity is unavailable");
++			return literal;
++		}
++		if (item === null || typeof item === "string" || typeof item === "boolean") return JSON.stringify(item);
++		if (Array.isArray(item)) return `[${item.map((entry, i) => json(entry, item, String(i))).join(",")}]`;
++		if (typeof item === "object") return `{${Object.entries(item).map(([name, entry]) => `${JSON.stringify(name)}:${json(entry, item, name)}`).join(",")}}`;
++		throw new Error("Unsupported JSON value");
++	};
++	return { value, json, text: (item, parent, key) => typeof item === "string" ? item : json(item, parent, key) };
++}
++
++export function resolveContextPointer(document: ContextJson, pointer: string): { value: unknown; parent?: object; key?: string } {
++	if (pointer !== "" && !pointer.startsWith("/")) throw new Error("JSON pointer must be empty or start with /");
++	let value = document.value;
++	let parent: object | undefined;
++	let last: string | undefined;
++	for (const raw of pointer === "" ? [] : pointer.slice(1).split("/")) {
++		if (/~(?![01])/u.test(raw)) throw new Error("Invalid JSON pointer escape");
++		const key = raw.replace(/~1/g, "/").replace(/~0/g, "~");
++		if (Array.isArray(value) && !/^(0|[1-9][0-9]*)$/u.test(key)) throw new Error("JSON pointer array segment must be an index");
++		if (value === null || typeof value !== "object" || !Object.hasOwn(value, key)) throw new Error("JSON pointer does not exist");
++		parent = value; last = key; value = (value as Record<string, unknown>)[key];
++	}
++	return { value, parent, key: last };
++}
+--- /dev/null
++++ b/src/context-search.ts
+@@ -0,0 +1,71 @@
++/** Bounded lexical field location in exact archived JSON; no code execution or model request. */
++import { int, obj, str } from "@earendil-works/pi-schema";
++import type { AgentTool } from "./types.ts";
++import { contextArtifact, type ContextArtifactStore } from "./context-artifacts.ts";
++import { parseContextJson } from "./context-json.ts";
++import { ContextLexicalIndex, contextTerms } from "./tool-router.ts";
++
++export const CONTEXT_FIELD_LIMITS = { maxSourceBytes: 8 * 1024 * 1024, maxNodes: 20000, maxDepth: 32, maxFields: 4096, maxPath: 512, responseBytes: 8192, previewCodepoints: 256 } as const;
++interface Field { json_pointer: string; text: string; type: string; document: string; }
++
++/** Query only ranks source paths and short primitive content. Labels never enter this function. */
++export function searchContextFields(text: string, query: string, limit: number) {
++	if (new TextEncoder().encode(text).length > CONTEXT_FIELD_LIMITS.maxSourceBytes) throw new Error("JSON field search exceeds its8MiB source limit; use bounded raw reads");
++	if (!Number.isSafeInteger(limit) || limit < 1 || limit > 20 || query.length > 2000 || contextTerms(query).length === 0) throw new Error("Invalid bounded field search query or result count");
++	const parsed = parseContextJson(text);
++	const fields: Field[] = [];
++	let visited = 0;
++	let truncated = false;
++	const visit = (value: unknown, path: string, depth: number, parent?: object, key?: string, labels = ""): void => {
++		if (++visited > CONTEXT_FIELD_LIMITS.maxNodes || depth > CONTEXT_FIELD_LIMITS.maxDepth || fields.length >= CONTEXT_FIELD_LIMITS.maxFields || path.length > CONTEXT_FIELD_LIMITS.maxPath) { truncated = true; return; }
++		if (value === null || typeof value !== "object") {
++			const exact = parsed.text(value, parent, key);
++			fields.push({ json_pointer: path, text: exact, type: value === null ? "null" : typeof value, document: `${path} ${path} ${labels} ${exact.slice(0, 384)}` });
++			return;
++		}
++		// Short sibling scalar labels distinguish array entries without business-specific field rules.
++		const entries = Object.entries(value);
++		const context = entries.filter(([, v]) => typeof v === "string" && v.length <= 80).slice(0, 8).map(([k, v]) => `${k} ${v}`).join(" ").slice(0, 512);
++		for (const [name, child] of entries) {
++			if (visited >= CONTEXT_FIELD_LIMITS.maxNodes || fields.length >= CONTEXT_FIELD_LIMITS.maxFields) { truncated = true; break; }
++			visit(child, `${path}/${name.replace(/~/g, "~0").replace(/\//g, "~1")}`, depth + 1, value, name, `${labels} ${context}`.slice(-768));
++		}
++	};
++	visit(parsed.value, "", 0);
++	const scores = new ContextLexicalIndex(fields.map(field => field.document)).score(query);
++	const ranked = scores.map((score, i) => ({ score, i })).filter(row => row.score > 0).sort((a, b) => b.score - a.score || a.i - b.i);
++	return { fields, ranked, scan: { visited, fields: fields.length, truncated, complete: !truncated } };
++}
++
++const searchSchema = obj({
++	artifact_id: str({ description: "Existing ctx_ handle belonging to this conversation" }),
++	query: str({ minLength: 1, maxLength: 2000, description: "Field names or nearby labels to locate, e.g. published timestamp or comparison result checksum" }),
++	limit: int({ minimum: 1, maximum: 20 }),
++});
++
++export function createContextSearchTool(store: ContextArtifactStore): AgentTool<typeof searchSchema, unknown> {
++	return {
++		name: "search_context_artifact", label: "Locate archived JSON fields",
++		description: "Locate exact JSON pointers and bounded source values in an archived artifact when paths are unknown. Search is lexical and may be incomplete; never treat no matches as proof of absence. Use read_context_artifact for longer values. No code or SQL is executed.",
++		parameters: searchSchema, replay: "safe",
++		async execute(_id, args, signal) {
++			signal?.throwIfAborted();
++			const artifact = await store.get(args.artifact_id);
++			if (!artifact) throw new Error("Artifact does not belong to this conversation or does not exist");
++			const verified = await contextArtifact(artifact.text, artifact.kind);
++			if (verified.id !== args.artifact_id || verified.sha256 !== artifact.sha256 || verified.bytes !== artifact.bytes) throw new Error("Context artifact integrity mismatch");
++			const found = searchContextFields(artifact.text, args.query, args.limit);
++			const matches: { json_pointer: string; text: string; type: string; has_more: boolean; score: number }[] = [];
++			const payload = { artifact_id: artifact.id, sha256: artifact.sha256, matches, scan: found.scan, response_byte_limit: CONTEXT_FIELD_LIMITS.responseBytes, results_truncated: false };
++			for (const row of found.ranked) {
++				if (matches.length >= args.limit) { payload.results_truncated = true; break; }
++				const field = found.fields[row.i];
++				const points = Array.from(field.text);
++				matches.push({ json_pointer: field.json_pointer, text: points.slice(0, CONTEXT_FIELD_LIMITS.previewCodepoints).join(""), type: field.type, has_more: points.length > CONTEXT_FIELD_LIMITS.previewCodepoints, score: row.score });
++				if (new TextEncoder().encode(JSON.stringify(payload)).length > CONTEXT_FIELD_LIMITS.responseBytes - 8) { matches.pop(); payload.results_truncated = true; break; }
++			}
++			signal?.throwIfAborted();
++			return { content: [{ type: "text", text: JSON.stringify(payload) }], details: payload };
++		},
++	};
++}
 --- a/src/index.ts
 +++ b/src/index.ts
-@@ -3,3 +3,8 @@
+@@ -3,3 +3,10 @@
  export * from "./proxy.ts";
  export { setDefaultStreamFn } from "./stream-fn.ts";
  export * from "./types.ts";
@@ -467,6 +590,8 @@
 +export * from "./context-artifacts.ts";
 +export * from "./context-budget.ts";
 +export * from "./budgeted-policy.ts";
++export * from "./context-json.ts";
++export * from "./context-search.ts";
 --- /dev/null
 +++ b/src/model-context.ts
 @@ -0,0 +1,26 @@

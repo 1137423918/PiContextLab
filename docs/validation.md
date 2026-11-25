@@ -14,7 +14,7 @@
 
 ## 框架与 DeepSeek 的实际结果
 
-当前交付核心为 `1.6.0-contextlab.3`；三轮真实 API 研究均已关闭，不重试挑选更好的成绩。v3 在 v2 失败轨迹之后修复了批量 recall 中“一个错误路径丢掉全部有效字段”的行为，仅做工程回归，**尚无 v3 真实 API 效果结论**。以下明确标出版本和不同问题，不能合并计算准确率。
+当前交付核心为 `1.6.0-contextlab.4`；三轮真实 API 研究均已关闭，不重试挑选更好的成绩。v3 在 v2 失败轨迹之后修复了批量 recall 中“一个错误路径丢掉全部有效字段”的行为，仅做工程回归，**尚无 v3/v4 真实 API 效果结论**。以下明确标出版本和不同问题，不能合并计算准确率。
 
 ### 工具选择：公开 ToolRet 子集
 
@@ -179,3 +179,38 @@ HTTP 503 用例使用真实 Pi OpenAI-compatible adapter 指向受控失败服�
 [29 项测试 TAP](../evidence/request-binding/tests.tap) · [全量核对](../evidence/uci-validation.json) · [浏览器](../evidence/browser-result.json) · [资源、阶段结果及冻结协议](../evidence/request-binding/runs/)。服务器 owned 进程最终为零。
 
 首次对照驱动错误假设旧版也会结束为 clarification，断言中止；旧版实际为 failed，正是遗漏后续澄清的另一表现。已保留[失败日志](../evidence/request-binding/initial-control-failure.log)和当次资源报告，修正驱动为分别核对旧版错误与新版预期，再在新目录运行。期间没有改应用源码、重跑已关闭 API 研究或产生真实模型请求。
+
+## contextlab.4：数字原始字面与可选字段定位
+
+新增 JSON 字段定位工具，按需与读取工具一起纳入预算；核心默认关闭，验证客户端显式启用。它定位原始 pointer 和有界值预览，不执行代码、不额外调用模型。字段扫描和返回都有上限；没有匹配不能证明字段不存在。
+
+独立合成数值控制直接固定原始字符串与预期文本，再对冻结 contextlab.3 和新版工具读取：
+
+| 读取 | 旧版 | contextlab.4 |
+|---|---|---|
+| `9007199254740993` | `9007199254740992` | 原始字面 |
+| `0.1000000000000000001` | `0.1` | 原始字面 |
+| 含 `1e999`、`-0` 的对象 | `null`、`0` | 原始数字字面 |
+
+三项检查旧版 0/3、新版 3/3。它证明指定数值保真缺陷被修复，**不是模型成功率或所有 JSON 字节完全相同的结论**。源 artifact 的原字节仍由 SHA256 标识；容器字段回读规范化空白/字符串转义，并保留数字字面。未支持 JSON.parse source context 的运行时明确报错。
+
+字段定位的 CPU 诊断使用固定提交 `02f69f7` 的真实 package-lock 和 GitHub 提交元数据，提前固定 8 条自编字段查询及目标 pointer；这是已知软件结构的诊断集，不是公开 benchmark 或未见过的泛化任务。query 进入排名，目标只用于 grader。输入完整性以来源 SHA256 核验。
+
+| 变体/测量 | 结果 |
+|---|---:|
+| 仅路径 BM25 平均 Recall@10 | **75%** |
+| 路径＋相邻标签＋值前缀 BM25 Recall@10 | 62.5% |
+| 实际有界工具返回的平均目标覆盖 | 75% |
+| 最大搜索 payload JSON 字节 | 3,934 / 8,192 |
+| 结构扫描完整 | 8/8 |
+
+组合表示没有胜过简单基线，保持负结果；不修改该诊断或重复运行挑分数。实际有界覆盖最多取 20 项，与 Recall@10 不是相同指标。结构完整不等于语义检索完整或字符串全文索引。当前没有 v4 DeepSeek 效果研究，v1/v2 已关闭付费实验不重跑。
+
+[冻结诊断方案](../examples/field-location-cpu-protocol.json) · [逐例定位及数值对照](../evidence/artifact-search/results.json) · [来源身份](../evidence/artifact-search/source-manifest.json)。[完整诊断输入](../evidence/artifact-search/inputs/)来自本项目自身的公开 MIT 源码提交及锁文件，只含规范化 API data 对象，不包含认证头或私有 helper 状态；输入字节已冻结，可直接按 SHA256 核验。
+
+最初新增诊断脚本的 TS 严格推断失败，尚未执行评分或模型请求；补充具体 Buffer/行类型后在新目录构建执行，保留[原类型错误](../evidence/artifact-search/initial-typecheck-failure.log)与当次资源记录。没有据此改动应用算法或重跑已评分诊断。
+
+
+v4 最终服务器验证：**33 项测试、14 项浏览器检查通过**。完整 UCI 控制调查在 **16,384 字节的规范化上下文预算**下完成，独立核对 12 个指标值及 29 个国家分组；这里的 provider 是显式脚本控制，不是付费模型调用。旧请求绑定、两种真实 SIGKILL 和故障适配器控制仍通过。
+
+[33 项测试](../evidence/artifact-search/tests.tap) · [实际源码身份](../evidence/artifact-search/source-sha256.json) · [严格预算全数据核对](../evidence/uci-validation.json) · [浏览器检查](../evidence/browser-result.json) · [资源及失败记录](../evidence/artifact-search/runs/)。最终 owned 进程为零，本轮模型调用及 GPU 均为零。

@@ -27,3 +27,11 @@
 [UCI Online Retail 官方数据页](https://archive.ics.uci.edu/dataset/352/online+retail) 和 [DOI](https://doi.org/10.24432/C5BW33) 提供来源、许可和字段背景。数据为历史英国零售交易，价格币种 GBP；包含匿名客户标识。实际工作簿中的缺失情况以本项目实测为准，不能直接照抄数据卡的缺失值标签。
 
 项目新增指标定义是本项目的分析选择，并非 UCI 作者对会计收入、现金流或因果关系的认定。所有公开演示都属于历史公开数据分析。
+
+## 上下文研究补充
+
+2026-11-25 核对了一手资料：[DTOC](https://arxiv.org/abs/2609.26121) 将工具输出外置并提供显式恢复；[ACM](https://arxiv.org/abs/2607.23809) 研究 Agent 主动管理上下文，另包含训练工作。本项目没有复现其训练或论文分数，不把外置、恢复思想称为原创。
+
+[Anthropic advanced tool use](https://www.anthropic.com/research/advanced-tool-use) 说明按需载入工具和减少中间结果进入上下文的工程方向。这里仍使用 Pi/DeepSeek，不依赖其专有工具或迁移其结果数字。
+
+本次针对自身失败增加可选的 JSON 字段定位，并使用 [ECMAScript JSON.parse source context](https://tc39.es/ecma262/multipage/structured-data.html#sec-json.parse) 保存数值原始字面。没有复制上述项目代码，也没有向这些大团队仓库发起贡献。来源用于解释设计边界；“检索定位”“原文可回读”和“模型成功完成任务”分别评估。
