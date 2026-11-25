@@ -1,6 +1,6 @@
 {
   "upstream_commit": "faac585884ae2c013a6b1400f3e9e77f10b34bac",
-  "fork_version": "1.6.0-contextlab.11",
+  "fork_version": "1.6.0-contextlab.12",
   "changed_source_files": [
     "src/agent-loop.ts",
     "src/agent.ts",
@@ -9,6 +9,7 @@
     "src/context-budget.ts",
     "src/context-json.ts",
     "src/context-result-budget.ts",
+    "src/context-retention.ts",
     "src/context-search.ts",
     "src/index.ts",
     "src/model-context.ts",
@@ -17,8 +18,8 @@
     "src/types.ts",
     "src/validation-feedback.ts"
   ],
-  "patch_sha256": "5cab2380ba4940df4548f781dfc6d42f7adce8ab250ef5a28f64e529744ed7be",
-  "scope": "Source-only patch against packages/agent; standalone package/tsconfig under vendor. Historical v1/v3/v4/v5/v6/v7/v8/v9/v10 patches retained.",
+  "patch_sha256": "47d3b9995ecfa9937f2f1219a84a2d36f6120bbb050b84c3d87d7b0ea547bf62",
+  "scope": "Source-only patch against packages/agent; standalone package/tsconfig under vendor. Historical v1/v3/v4/v5/v6/v7/v8/v9/v10/v11 patches retained.",
   "upstream_read_only_clone_unchanged": true,
   "unmodified_npm_baseline": "1.6.0",
   "real_API_evaluated_versions": [
@@ -37,5 +38,6 @@
   "v9_validation": "71tests/14browser/fullUCI; native4parallel source recall CPU comparison31262->8187contentJSONbytes within8192sharedcap. Deterministic serial/parallel/original-batch recovery, exactUnicodepagination, explicitdeferral, infeasible admission settles streams. No model calls; not whole-context/token/success improvement.",
   "v10_validation": "80tests/14browser/fullUCI; new3synthetic native cases compare static9 vs post-response headroom10. Pressure: static8192contentcap rejected nextview; new5996content/23660of24576contextbytes completes. Roomy unchanged; unfittable beforeanytool. Reply-bound immutable plans saved before execution and reused on recovery. No real model calls or universal fit/token/quality claim.",
   "v11_preflight": "85Node/14browser/fullUCI; old10 structured business controls fullpass/budgetreject, unchanged tasks/budgets/grader aftergeneric11fallbacksearch+compactmetadata fix all4CPUcontrolspass. Budgeted2pressure/2recalls/1plan percase, max20438/20390of20480. Independent3facts/2priorities plus2974/3108fullgroups. No paid calls before prospective source release.",
-  "v11_real_validation": "Once-only preregistered302cf1d structured brief2familiesx2configs,16DeepSeekcalls,full2/2factualpass,budgeted0/2; bothbudgetedpressure, onefailsbefore4recalls and othersealedwrongprioritieswithoutrecall. No outputreservation/modelquality gain claim.151executedinputs matchpreregisteredcommit; no retries."
+  "v11_real_validation": "Once-only preregistered302cf1d structured brief2familiesx2configs,16DeepSeekcalls,full2/2factualpass,budgeted0/2; bothbudgetedpressure, onefailsbefore4recalls and othersealedwrongprioritieswithoutrecall. No outputreservation/modelquality gain claim.151executedinputs matchpreregisteredcommit; no retries.",
+  "v12_status": "101 server tests/14browser/fullUCI passed; four fresh deployment CPU controls pass, same3calls/1recall each, no model gain. Closed concentration preflight correct but0pressure/0paid. New24request API study not yet launched."
 }

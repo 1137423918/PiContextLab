@@ -1,0 +1,1 @@
+vendor/pi-agent-core/src/context-budget.ts(125,5): error TS2741: Property '[transcriptContextBrand]' is missing in type '{ messages: Message[]; }' but required in type 'TranscriptContext'.

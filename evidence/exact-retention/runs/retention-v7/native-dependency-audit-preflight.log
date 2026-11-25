@@ -1,0 +1,24 @@
+(node:3028236) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"case":"linux-duckdb-deployment","variant":"retained","status":"failed","error":"Fixed model request budget exhausted; unknown attempts remain charged","wall_seconds":0.356437181,"grade":{"passed":false,"error":"Invalid input: [{\"path\":\"\",\"keyword\":\"type\",\"message\":\"expected object, got undefined\"}]","complete_records":0},"reserved":6,"input_tokens_including_cache":0,"output_tokens":0,"estimated_cost_usd":0,"usage_missing":0,"pressure_preparations":6,"spill_occurrences":6,"retained_slice_occurrences":18,"max_prepared_JSON_bytes":14330,"recall_calls":5,"corruption_checks":0}
+{"case":"linux-duckdb-deployment","variant":"control","status":"failed","error":"Fixed model request budget exhausted; unknown attempts remain charged","wall_seconds":0.1911253180000001,"grade":{"passed":false,"error":"Invalid input: [{\"path\":\"\",\"keyword\":\"type\",\"message\":\"expected object, got undefined\"}]","complete_records":0},"reserved":6,"input_tokens_including_cache":0,"output_tokens":0,"estimated_cost_usd":0,"usage_missing":0,"pressure_preparations":6,"spill_occurrences":6,"retained_slice_occurrences":0,"max_prepared_JSON_bytes":12986,"recall_calls":5,"corruption_checks":0}
+{"case":"pi-alias-and-local-fork","variant":"control","status":"failed","error":"Fixed model request budget exhausted; unknown attempts remain charged","wall_seconds":0.13394017000000008,"grade":{"passed":false,"error":"Invalid input: [{\"path\":\"\",\"keyword\":\"type\",\"message\":\"expected object, got undefined\"}]","complete_records":0},"reserved":6,"input_tokens_including_cache":0,"output_tokens":0,"estimated_cost_usd":0,"usage_missing":0,"pressure_preparations":6,"spill_occurrences":6,"retained_slice_occurrences":0,"max_prepared_JSON_bytes":13004,"recall_calls":5,"corruption_checks":0}
+{"case":"pi-alias-and-local-fork","variant":"retained","status":"failed","error":"Fixed model request budget exhausted; unknown attempts remain charged","wall_seconds":0.293930789,"grade":{"passed":false,"error":"Invalid input: [{\"path\":\"\",\"keyword\":\"type\",\"message\":\"expected object, got undefined\"}]","complete_records":0},"reserved":6,"input_tokens_including_cache":0,"output_tokens":0,"estimated_cost_usd":0,"usage_missing":0,"pressure_preparations":6,"spill_occurrences":6,"retained_slice_occurrences":18,"max_prepared_JSON_bytes":14401,"recall_calls":5,"corruption_checks":0}
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(summaries.some(s => s.grade.passed))
+
+    at file:///tmp/pimetriclab-build-stage98-sylrlnen/source/dist/scripts/run-dependency-audit-study.js:147:12 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v22.23.5

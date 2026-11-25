@@ -1,0 +1,21 @@
+(node:2989174) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"case":"spring-gross-concentration","variant":"retained","status":"completed","error":null,"wall_seconds":0.695574733,"grade":{"passed":true,"error":null,"raw_groups_checked":2848},"reserved":4,"input_tokens_including_cache":0,"output_tokens":0,"estimated_cost_usd":0,"usage_missing":0,"pressure_preparations":0,"spill_occurrences":0,"max_prepared_JSON_bytes":18331,"retained_slice_occurrences":0,"recall_calls":0,"result_budget_plans":0}
+{"case":"spring-gross-concentration","variant":"control","status":"completed","error":null,"wall_seconds":0.54403622,"grade":{"passed":true,"error":null,"raw_groups_checked":2848},"reserved":4,"input_tokens_including_cache":0,"output_tokens":0,"estimated_cost_usd":0,"usage_missing":0,"pressure_preparations":0,"spill_occurrences":0,"max_prepared_JSON_bytes":18331,"retained_slice_occurrences":0,"recall_calls":0,"result_budget_plans":0}
+{"case":"november-net-offsets","variant":"control","status":"completed","error":null,"wall_seconds":0.610073977,"grade":{"passed":true,"error":null,"raw_groups_checked":2972},"reserved":4,"input_tokens_including_cache":0,"output_tokens":0,"estimated_cost_usd":0,"usage_missing":0,"pressure_preparations":0,"spill_occurrences":0,"max_prepared_JSON_bytes":18273,"retained_slice_occurrences":0,"recall_calls":0,"result_budget_plans":0}
+{"case":"november-net-offsets","variant":"retained","status":"completed","error":null,"wall_seconds":0.5398573860000001,"grade":{"passed":true,"error":null,"raw_groups_checked":2972},"reserved":4,"input_tokens_including_cache":0,"output_tokens":0,"estimated_cost_usd":0,"usage_missing":0,"pressure_preparations":0,"spill_occurrences":0,"max_prepared_JSON_bytes":18275,"retained_slice_occurrences":0,"recall_calls":0,"result_budget_plans":0}
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Preflight needs observed pressure; retain outcomes and stop before paid if absent
+    at file:///tmp/pimetriclab-build-stage98-he2_4ff9/source/dist/scripts/run-concentration-study.js:83:12 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v22.23.5

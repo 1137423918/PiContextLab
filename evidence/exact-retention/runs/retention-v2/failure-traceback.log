@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/data1/wjz26/agent-lab-20261120/outputs/pi-metriclab-stage98-retention-v2/run_cpu.py", line 90, in <module>
+    report['CPU_admission']=measure_compute_headroom(os.sched_getaffinity(0),interval_seconds=5,count=cpu_count,minimum=minimum);save();assert len(report['CPU_admission']['selected_cpus'])==cpu_count,'No requested CPUs meet the declared headroom requirement';os.sched_setaffinity(0,report['CPU_admission']['selected_cpus']);report['execution_CPU_affinity']=sorted(os.sched_getaffinity(0));save()
+                                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: No requested CPUs meet the declared headroom requirement

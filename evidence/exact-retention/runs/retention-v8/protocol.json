@@ -1,0 +1,148 @@
+{
+  "source_snapshot_sha256": "f587940019bd329f5f23dc09eb380075c99b01124062469698a6bdd96bea79d0",
+  "source_snapshot_format": "source-only-v1",
+  "controller_sha256": "36ae983ea63e67fd113895a4b8f373520f109496e99fe6481fde4e445eb7ff11",
+  "wrapper_sha256": "9d7e401497343f3f99034a897cdf50d88c59d1ef669494a601a2e9cc326f6ff0",
+  "cpu_admission_sha256": "62350c3401c5336ff873d429da29fb4397f114c016bb96a003d5a2b673029fe1",
+  "input_bundle_sha256": "ddc5162ea91720845be355b6c49668f4f233f76488a367179af4d5daf12e437e",
+  "phases": [
+    {
+      "name": "numeric-source-runtime-capability",
+      "argv": [
+        "NODE",
+        "-e",
+        "JSON.parse('9007199254740993',(_k,v,c)=>{if(c?.source!=='9007199254740993')throw Error('JSON.parse source unsupported');return v;});console.log('exact numeric source available')"
+      ]
+    },
+    {
+      "name": "source-snapshot-boundaries",
+      "argv": [
+        "/data1/wjz26/agent-lab-20261120/envs/model-request-budget-20261121/bin/python",
+        "scripts/check_source_snapshot.py"
+      ],
+      "cap": 30
+    },
+    {
+      "name": "build-native-fork",
+      "argv": [
+        "NODE",
+        "node_modules/typescript/bin/tsc",
+        "-p",
+        "vendor/pi-agent-core/tsconfig.json"
+      ]
+    },
+    {
+      "name": "native-and-application-check",
+      "argv": [
+        "/tmp/agentlab-deeptutor-setup-stage92-02uddvuy/tools/node/bin/npm",
+        "run",
+        "check"
+      ]
+    },
+    {
+      "name": "build-application",
+      "argv": [
+        "NODE",
+        "node_modules/typescript/bin/tsc"
+      ]
+    },
+    {
+      "name": "framework-and-client-tests",
+      "argv": [
+        "NODE",
+        "--test",
+        "--test-concurrency=1",
+        "dist/test/framework.test.js",
+        "dist/test/business.test.js",
+        "dist/test/runtime.test.js",
+        "dist/test/api.test.js",
+        "dist/test/recovery.test.js",
+        "dist/test/integrity.test.js",
+        "dist/test/deepseek.test.js",
+        "dist/test/request-binding.test.js",
+        "dist/test/artifact-search.test.js",
+        "dist/test/audit-evaluation.test.js",
+        "dist/test/context-pressure.test.js",
+        "dist/test/routing-cache.test.js",
+        "dist/test/business-evaluation.test.js",
+        "dist/test/pressure-business-evaluation.test.js",
+        "dist/test/aggregate-pressure.test.js",
+        "dist/test/validation-feedback.test.js",
+        "dist/test/tool-result-budget.test.js",
+        "dist/test/result-headroom.test.js",
+        "dist/test/brief-client.test.js",
+        "dist/test/brief-proof.test.js",
+        "dist/test/context-retention.test.js"
+      ],
+      "cap": 180
+    },
+    {
+      "name": "final-UCI-oracle-reconciliation",
+      "argv": [
+        "NODE",
+        "dist/scripts/validate-uci.js",
+        "/tmp/pimetriclab-intake-stage98-_jz6nfyq/dataset",
+        "evidence/uci-oracle.json",
+        "validation-final"
+      ],
+      "cap": 180
+    },
+    {
+      "name": "browser-workflow",
+      "argv": [
+        "/tmp/agentlab-research-view-setup-stage89-vd1ix5wi/source/extras/research-view-checks/.venv/bin/python",
+        "scripts/browser_qa.py",
+        "--node",
+        "/tmp/agentlab-deeptutor-setup-stage92-02uddvuy/tools/node/bin/node",
+        "--home",
+        "validation-final/home",
+        "--browser",
+        "/tmp/agentlab-research-view-assets-stage89-vwc838a1/browsers/chromium_headless_shell-1255/chrome-headless-shell-linux64/chrome-headless-shell",
+        "--output",
+        "browser"
+      ],
+      "cap": 180
+    },
+    {
+      "name": "closed-concentration-grader-controls",
+      "argv": [
+        "NODE",
+        "dist/scripts/audit-concentration-preflight.js",
+        "/tmp/pimetriclab-build-stage98-he2_4ff9/source/concentration-preflight/results.json.gz",
+        "/tmp/pimetriclab-build-stage98-he2_4ff9/source/concentration-oracle.json",
+        "concentration-grader-controls.json"
+      ],
+      "cap": 30
+    },
+    {
+      "name": "native-dependency-audit-preflight",
+      "argv": [
+        "NODE",
+        "dist/scripts/run-dependency-audit-study.js",
+        "dependency-control",
+        "--control"
+      ],
+      "cap": 120
+    },
+    {
+      "name": "independent-dependency-audit-record-check",
+      "argv": [
+        "/data1/wjz26/agent-lab-20261120/envs/model-request-budget-20261121/bin/python",
+        "scripts/audit_dependency_results.py",
+        "dependency-control/results.json.gz",
+        "dependency-control/independent-source-check.json"
+      ],
+      "cap": 30
+    }
+  ],
+  "framework_install": true,
+  "purpose": "Core12 exact subtree retention,101tests/fullUCI/browser and genuinely new deployment lock audit controls. Prior concentration CPU study remains closed/no rerun: all4correct but0pressure/0paid, only grade corruption controls against saved results.",
+  "mode": "browser",
+  "environment": {
+    "LD_LIBRARY_PATH": "/tmp/agentlab-research-view-assets-stage89-g2hsf8v6/assets/lib",
+    "FONTCONFIG_FILE": "/tmp/agentlab-research-view-assets-stage89-g2hsf8v6/assets/fonts.conf",
+    "PLAYWRIGHT_BROWSERS_PATH": "/tmp/agentlab-research-view-assets-stage89-vwc838a1/browsers"
+  },
+  "cpu_count": 1,
+  "cpu_min_headroom": 0.7
+}

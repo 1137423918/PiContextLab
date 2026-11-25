@@ -1,0 +1,83 @@
+{
+  "purpose": "Prospective exact subtree-retention ablation on a fresh cross-dimension concentration/offset review family with two new instances. No closed question or budget reopened.",
+  "core": "1.6.0-contextlab.12",
+  "provider": "https://api.deepseek.com",
+  "model": "deepseek-flash",
+  "thinking": "disabled",
+  "temperature": 0,
+  "retries": 0,
+  "cases": [
+    {
+      "id": "spring-gross-concentration",
+      "intent": {
+        "metric": "gross_sales",
+        "baseline": {
+          "start": "2011-03-01",
+          "end": "2011-04-01"
+        },
+        "current": {
+          "start": "2011-04-01",
+          "end": "2011-05-01"
+        },
+        "basis": "calendar_month"
+      },
+      "question": "Investigate concentration and opposing changes for gross_sales, baseline [2011-03-01,2011-04-01) vs current [2011-04-01,2011-05-01), calendar_month. Inspect coverage and metric policy first. Obtain one comparison and two breakdowns of this same metric, country and stock_code, each top20 plus OTHER; use exactly these three distinct saved evidence sources. Seal analysis.comparison with exact baseline/current/delta and its ev_ evidence_id. For each dimension, select three distinct returned groups with largest absolute signed delta (any tie valid), list each group and signed delta in leading_groups, and sum their absolute deltas in top3_absolute_delta_sum. Separately set offset_group to the returned Top20 group whose change opposes the total comparison delta and has greatest absolute delta, or null if no returned group opposes it. Use exact decimal strings without rounding. These are descriptive concentrations, not causal effects or shares. Cite the appropriate breakdown evidence_id and never use a ctx_ storage handle as evidence identity. Keep note <=300 characters; no human-review claim. If fields are omitted, retrieve exact source fields. Source-derived concise working notes may appear in assistant text. Never guess a missing number or group.",
+      "variant_order": [
+        "retained",
+        "control"
+      ]
+    },
+    {
+      "id": "november-net-offsets",
+      "intent": {
+        "metric": "net_sales",
+        "baseline": {
+          "start": "2011-11-01",
+          "end": "2011-11-16"
+        },
+        "current": {
+          "start": "2011-11-16",
+          "end": "2011-12-01"
+        },
+        "basis": "equal_days"
+      },
+      "question": "Investigate concentration and opposing changes for net_sales, baseline [2011-11-01,2011-11-16) vs current [2011-11-16,2011-12-01), equal_days. Inspect coverage and metric policy first. Obtain one comparison and two breakdowns of this same metric, country and stock_code, each top20 plus OTHER; use exactly these three distinct saved evidence sources. Seal analysis.comparison with exact baseline/current/delta and its ev_ evidence_id. For each dimension, select three distinct returned groups with largest absolute signed delta (any tie valid), list each group and signed delta in leading_groups, and sum their absolute deltas in top3_absolute_delta_sum. Separately set offset_group to the returned Top20 group whose change opposes the total comparison delta and has greatest absolute delta, or null if no returned group opposes it. Use exact decimal strings without rounding. These are descriptive concentrations, not causal effects or shares. Cite the appropriate breakdown evidence_id and never use a ctx_ storage handle as evidence identity. Keep note <=300 characters; no human-review claim. If fields are omitted, retrieve exact source fields. Source-derived concise working notes may appear in assistant text. Never guess a missing number or group.",
+      "variant_order": [
+        "control",
+        "retained"
+      ]
+    }
+  ],
+  "variants": {
+    "control": {
+      "exactResultRetention": false
+    },
+    "retained": {
+      "exactResultRetention": true
+    }
+  },
+  "max_context_bytes": 24576,
+  "max_calls_per_job": 8,
+  "max_output_per_call": 1536,
+  "global_max_requests": 32,
+  "global_output_token_ceiling": 49152,
+  "request_timeout_ms": 20000,
+  "dataset_csv_sha256": "1f8144bb8670bcad07cde08205532fc6322d99e96c6ac8e8b5c979f169852065",
+  "shared_configuration": "Both same new core, nine real business tools/max8 routed, schema10k, recall8192 shared content budget/postresponsev2, field search disabled, identical application guard/schema and 24KiB provider context. Only exactResultRetention differs. Default application remains full/off. New concentration validation client stores claims unverified; independent grader runs after report.",
+  "retention_constants": {
+    "sourceBytes": 8388608,
+    "nodes": 20000,
+    "depth": 32,
+    "candidates": 4096,
+    "path": 512,
+    "unitBytes": 768,
+    "perResultBytes": 1536,
+    "totalBytes": 4096,
+    "unitsPerResult": 16
+  },
+  "algorithm": "Disjoint bounded structural frontier, complete subtrees with exact numeric literals, BM25(query,path+bounded siblinglabels+source_json)/sqrt(serialized slice bytes), stable source-order ties. After base packing fits, roundrobin ranked units across remaining results; actual normalized wholecontext cap and added-byte caps. No oracle labels or business fields enter ranking.",
+  "grader": "Independent CSV Decimal all-groups oracle; all saved rows, source identity, Top/OTHER/totals and comparison checked. Model top3 groups and exact signed deltas checked against all-groups top3 magnitude sum with ties; independent sum of selected absolutes; opposing maximum among returned Top20 or null. Notes/causality/human review not graded.",
+  "preflight": "Strict build/tests/fullUCI and four source-view-only scripted Pi controls, raw outcomes all retained. At least one correct control and genuine spill required, corrupt/missing-claim grader controls rejected. Do not tune task/budget/constants after outcomes to obtain successful scores. If no valid controls/pressure, stop before paid study. Controls need not imply real model success.",
+  "stopping": "Publish source+protocol+preflight before first API call. Each fixed case/variant once, no retries/topups/grader changes. Reserve unknowns; global32/output49152. Preserve no-pressure/failure outcomes. Counterbalanced fixed order still has cache/order/stochastic and small-sample limits; no general gain claim.",
+  "GPU": false
+}

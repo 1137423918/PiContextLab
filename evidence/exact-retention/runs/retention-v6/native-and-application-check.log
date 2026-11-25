@@ -1,0 +1,11 @@
+
+> pi-metriclab@0.1.0 check
+> tsc --noEmit -p vendor/pi-agent-core/tsconfig.json && tsc --noEmit
+
+scripts/run-dependency-audit-study.ts(44,394): error TS2345: Argument of type '{ type: "toolCall"; id: string; name: string; arguments: Record<string, unknown>; }[]' is not assignable to parameter of type '(TextContent | ThinkingContent | ToolCall)[]'.
+  Type '{ type: 'toolCall'; id: string; name: string; arguments: Record<string, unknown>; }' is not assignable to type 'TextContent | ThinkingContent | ToolCall'.
+    Type '{ type: 'toolCall'; id: string; name: string; arguments: Record<string, unknown>; }' is not assignable to type 'ToolCall'.
+      Types of property 'arguments' are incompatible.
+        Type 'Record<string, unknown>' is not assignable to type 'JsonObject'.
+          'string' index signatures are incompatible.
+            Type 'unknown' is not assignable to type 'JsonValue'.

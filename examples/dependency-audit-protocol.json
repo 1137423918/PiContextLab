@@ -1,0 +1,52 @@
+{
+  "purpose": "Fresh real project deployment-manifest audit, complete pinned public npm lock snapshot; same-budget exact JSON-retention ablation. Distinct from closed retail tasks; no old budgets reopened.",
+  "provider": "https://api.deepseek.com",
+  "model": "deepseek-flash",
+  "thinking": "disabled",
+  "temperature": 0,
+  "retries": 0,
+  "cases": [
+    {
+      "id": "linux-duckdb-deployment",
+      "pointers": [
+        "/packages/node_modules~1@duckdb~1node-api",
+        "/packages/node_modules~1@duckdb~1node-bindings",
+        "/packages/node_modules~1@duckdb~1node-bindings-linux-x64"
+      ],
+      "question": "For a deployment dependency audit, read the pinned complete npm lockfile. Return the complete exact JSON object at each of these JSON pointers: [\"/packages/node_modules~1@duckdb~1node-api\", \"/packages/node_modules~1@duckdb~1node-bindings\", \"/packages/node_modules~1@duckdb~1node-bindings-linux-x64\"]. In records use json_pointer and source_json (a JSON string containing the entire source object, including every dependency/platform/origin field). Preserve all versions, registry URLs, integrity hashes and absent/present fields exactly; do not substitute installed-machine observations. Use at most300 characters of note to explain why these records matter for Linux x64 deployment or for distinguishing the npm upstream alias from the local file fork. If a requested record is omitted, use exact artifact recall rather than guessing; submit_dependency_audit when complete. The locked file is a pinned historical project snapshot; it does not describe later source modifications or prove runtime installability, security, license clearance or human approval.",
+      "variant_order": [
+        "retained",
+        "control"
+      ]
+    },
+    {
+      "id": "pi-alias-and-local-fork",
+      "pointers": [
+        "/packages/node_modules~1@earendil-works~1pi-agent-core",
+        "/packages/vendor~1pi-agent-core",
+        "/packages/node_modules~1@pi-context-lab~1upstream-agent-core"
+      ],
+      "question": "For a deployment dependency audit, read the pinned complete npm lockfile. Return the complete exact JSON object at each of these JSON pointers: [\"/packages/node_modules~1@earendil-works~1pi-agent-core\", \"/packages/vendor~1pi-agent-core\", \"/packages/node_modules~1@pi-context-lab~1upstream-agent-core\"]. In records use json_pointer and source_json (a JSON string containing the entire source object, including every dependency/platform/origin field). Preserve all versions, registry URLs, integrity hashes and absent/present fields exactly; do not substitute installed-machine observations. Use at most300 characters of note to explain why these records matter for Linux x64 deployment or for distinguishing the npm upstream alias from the local file fork. If a requested record is omitted, use exact artifact recall rather than guessing; submit_dependency_audit when complete. The locked file is a pinned historical project snapshot; it does not describe later source modifications or prove runtime installability, security, license clearance or human approval.",
+      "variant_order": [
+        "control",
+        "retained"
+      ]
+    }
+  ],
+  "source_commit": "6bf2b5b3eee370b3615190530c8cc67eca62216a",
+  "source_path": "package-lock.json",
+  "input_file": "examples/dependency-audit-lock.json",
+  "input_sha256": "6df9522be82fde66701f3247ad2146d3762fae046909f8391635ae9ed9f6b278",
+  "input_bytes": 62649,
+  "max_context_bytes": 24576,
+  "max_calls_per_job": 6,
+  "max_output_per_call": 1536,
+  "global_max_requests": 24,
+  "request_timeout_ms": 20000,
+  "shared": "Same core12/native Agent/model/prompt/tool schemas/max4tools/schema10k, artifactSearchoff, same24KiB limit; only exactResultRetention changes. Two tools are real immutable lockfile loading and structured audit submission; recall provided by native policy. No hand-written model tool loop.",
+  "grader": "Independent required pointer set and full original JSON object equality including every registry/integrity/version/dependency/platform field; notes ungraded. Complete exact source JSON extraction is a deployment evidence check, not dependency security or installability validation.",
+  "preflight": "Four native scripted Agent controls on same immutable whole lock, exact source equality; at least one actual spill and retained slice required. May record control failures, must have at least one valid positive. Corrupted, missing and duplicated records must reject. Publish protocol+testedsource before API. If no pressure or valid controls stop; never change inputs/budget/ranking after results for a better score.",
+  "stopping": "Each case/variant once, no retries/topups, global24 includes unknowns. Preserve all raw calls and failures; old concentration CPU study closed with no pressure and zero paid. Counterbalanced fixed order/cache/small sample limit conclusions. Default real application remains full/off.",
+  "GPU": false,
+  "preflight_revision_note": "First dependency CPU controls used an invalid scripted read limit8192 against the real tool schema maximum4096; all four ran to cap without a valid read, preserved as retention-v7. Correct scripted read argument to4096 only; tasks/source/context/request/output/ranking constants and real model behavior unchanged. No paid calls occurred."
+}

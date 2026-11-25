@@ -1,0 +1,26 @@
+{
+  "ready": true,
+  "checks_passed": 14,
+  "checks": [
+    "full dataset visible",
+    "scripted control clearly labelled",
+    "explicit comparison inputs available",
+    "actual Pi-backed job completes in browser",
+    "evidence rendered",
+    "native policy trace visible",
+    "model numbers are separate from sealed facts",
+    "report is not human reviewed",
+    "review form available without agent approval",
+    "offline export includes SQL and result checksums",
+    "refresh restores selected job",
+    "narrow viewport has no horizontal overflow",
+    "no JavaScript page errors",
+    "no external browser requests"
+  ],
+  "page_errors": [],
+  "external_requests": [],
+  "real_browser": true,
+  "real_model_calls": 0,
+  "human_review_written": false,
+  "GPU_used": false
+}

@@ -1,0 +1,105 @@
+{
+  "kind": "Fresh cross-dimension concentration/offset family, two instances, same-budget retention ablation; no general accuracy benchmark",
+  "control": true,
+  "source_commit": null,
+  "protocol_sha256": "46615411e69c27ce5474d3b1d2daa892a10329db67515a35b3921714e63b94c9",
+  "actual_provider_attempts": 16,
+  "real_model_calls": 0,
+  "total_reserved": 16,
+  "cases": [
+    {
+      "case": "spring-gross-concentration",
+      "variant": "retained",
+      "status": "completed",
+      "error": null,
+      "wall_seconds": 0.695574733,
+      "grade": {
+        "passed": true,
+        "error": null,
+        "raw_groups_checked": 2848
+      },
+      "reserved": 4,
+      "input_tokens_including_cache": 0,
+      "output_tokens": 0,
+      "estimated_cost_usd": 0,
+      "usage_missing": 0,
+      "pressure_preparations": 0,
+      "spill_occurrences": 0,
+      "max_prepared_JSON_bytes": 18331,
+      "retained_slice_occurrences": 0,
+      "recall_calls": 0,
+      "result_budget_plans": 0
+    },
+    {
+      "case": "spring-gross-concentration",
+      "variant": "control",
+      "status": "completed",
+      "error": null,
+      "wall_seconds": 0.54403622,
+      "grade": {
+        "passed": true,
+        "error": null,
+        "raw_groups_checked": 2848
+      },
+      "reserved": 4,
+      "input_tokens_including_cache": 0,
+      "output_tokens": 0,
+      "estimated_cost_usd": 0,
+      "usage_missing": 0,
+      "pressure_preparations": 0,
+      "spill_occurrences": 0,
+      "max_prepared_JSON_bytes": 18331,
+      "retained_slice_occurrences": 0,
+      "recall_calls": 0,
+      "result_budget_plans": 0
+    },
+    {
+      "case": "november-net-offsets",
+      "variant": "control",
+      "status": "completed",
+      "error": null,
+      "wall_seconds": 0.610073977,
+      "grade": {
+        "passed": true,
+        "error": null,
+        "raw_groups_checked": 2972
+      },
+      "reserved": 4,
+      "input_tokens_including_cache": 0,
+      "output_tokens": 0,
+      "estimated_cost_usd": 0,
+      "usage_missing": 0,
+      "pressure_preparations": 0,
+      "spill_occurrences": 0,
+      "max_prepared_JSON_bytes": 18273,
+      "retained_slice_occurrences": 0,
+      "recall_calls": 0,
+      "result_budget_plans": 0
+    },
+    {
+      "case": "november-net-offsets",
+      "variant": "retained",
+      "status": "completed",
+      "error": null,
+      "wall_seconds": 0.5398573860000001,
+      "grade": {
+        "passed": true,
+        "error": null,
+        "raw_groups_checked": 2972
+      },
+      "reserved": 4,
+      "input_tokens_including_cache": 0,
+      "output_tokens": 0,
+      "estimated_cost_usd": 0,
+      "usage_missing": 0,
+      "pressure_preparations": 0,
+      "spill_occurrences": 0,
+      "max_prepared_JSON_bytes": 18275,
+      "retained_slice_occurrences": 0,
+      "recall_calls": 0,
+      "result_budget_plans": 0
+    }
+  ],
+  "GPU_used": false,
+  "not_an_invoice": true
+}

@@ -1,0 +1,7 @@
+{
+  "positive_controls": 4,
+  "corrupt_or_missing_claims_rejected": 24,
+  "independent_CSV_oracle": true,
+  "real_model_calls": 0,
+  "original_grades_unchanged": true
+}

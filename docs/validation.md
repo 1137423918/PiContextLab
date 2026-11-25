@@ -478,3 +478,9 @@ core11新CPU控制中两个完整分支各4次脚本请求，两个预算分支�
 初版v1未使用导入、v2控制脚本推断类型、v3JSON对象边界类型均留存；v4类型/构建、95项测试、回归与浏览器通过，任务78.839秒，owned0。99个当前执行文件匹配实际源码包；核心vendor、旧协议、旧评分器和原结果没有修改。
 
 [六次执行与错误原文](../evidence/brief-proof/results.json) · [95项测试](../evidence/brief-proof/tests.tap) · [源码核对](../evidence/brief-proof/source-verification.json) · [旧研究未变](../evidence/brief-proof/closed-study-unchanged.json) · [导出浏览器检查](../evidence/brief-proof/browser-proof.json) · [所有失败/资源/源码](../evidence/brief-proof/runs/) · [CPU回归导出示例](../evidence/brief-proof/exports/autumn-return-offset-full-source-claims-v1.html)。
+
+## core12：精确子树保留与先行验证
+
+新增默认关闭的完整JSON子树保留，先打包、再按实际剩余空间和单来源/整体增量上限加入；保留数值字面、路径和原始artifact，不注入oracle。101项服务端工程控制、14项浏览器和全UCI通过，见[完整证据](../evidence/exact-retention/)。
+
+首个新集中度预检四项均正确，但最高18,331字节/24KiB，没有触发压力；按冻结协议关闭且零付费，未改小预算重跑。随后改用另一个工作负载：完整历史部署锁文件的来源身份核对，固定62,649字节/123包，工具与预算相同的精确保留开关对照。四项CPU控制通过且真实外置，所有完整来源对象另经独立Python核对；两个开启保留的脚本任务仍各需一次回读，没有脚本调用收益。首版回读参数超过schema上限的失败及修正均留存。实际模型结果必须与这些CPU控制分开报告。

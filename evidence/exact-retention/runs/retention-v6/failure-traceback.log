@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/data1/wjz26/agent-lab-20261120/outputs/pi-metriclab-stage98-retention-v6/run_cpu.py", line 102, in <module>
+    for phase in spec['phases']:run(phase['name'],[str(node) if x=='NODE' else x for x in phase['argv']],code,phase.get('cap',120))
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data1/wjz26/agent-lab-20261120/outputs/pi-metriclab-stage98-retention-v6/run_cpu.py", line 80, in run
+    assert not guard and rc in allowed,name
+                         ^^^^^^^^^^^^^
+AssertionError: native-and-application-check
