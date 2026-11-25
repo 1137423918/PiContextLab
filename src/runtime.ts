@@ -84,7 +84,7 @@ export class Runner {
     try {
       const intent=this.store.intent(id);
       if(intent){const dataset=await this.warehouse.dataset(job.dataset);try{validateComparison(intent,dataset.min_time,dataset.max_time);}catch(e){this.store.clarify(claim,e instanceof Error?e.message:String(e));this.store.finish(claim,'clarification');return;}}
-      this.store.bindRuntime(claim,{model:this.model,policy:POLICY,Pi:'1.6.0-contextlab.4',request_binding:'v1',intent:this.store.intent(id),contextMode:this.contextMode,artifactSearch:this.artifactSearch,prompt_version:'v2-compact-context',requestTimeoutMs:this.requestTimeoutMs,maxContextBytes:this.maxContextBytes,tools:agent.state.tools.map(t=>({name:t.name,parameters:t.parameters}))});
+      this.store.bindRuntime(claim,{model:this.model,policy:POLICY,Pi:'1.6.0-contextlab.5',request_binding:'v1',intent:this.store.intent(id),contextMode:this.contextMode,artifactSearch:this.artifactSearch,prompt_version:'v2-compact-context',requestTimeoutMs:this.requestTimeoutMs,maxContextBytes:this.maxContextBytes,tools:agent.state.tools.map(t=>({name:t.name,parameters:t.parameters}))});
       // An assistant tool batch may have been committed before a process died. Reconcile through Pi's own validator/executor.
       const messages = [...agent.state.messages]; let index = messages.length - 1;
       const interrupted = messages.at(-1);

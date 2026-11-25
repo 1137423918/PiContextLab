@@ -1,0 +1,52 @@
+{
+  "purpose": "New CPU engineering diagnostics of unnecessary artifact writes, minimal spilling and parallel recall preservation. Synthetic sources; not model accuracy or actual token savings.",
+  "baseline": "Frozen core4 atfc2d13c, read-only compiled source. Currentcore5 compared on identical message objects.",
+  "cases": [
+    {
+      "id": "fits-large-output",
+      "max_context_bytes": 16384,
+      "ordinary_result_characters": [
+        11000
+      ],
+      "expected_core5_spills": 0
+    },
+    {
+      "id": "one-large-spill-suffices",
+      "max_context_bytes": 10000,
+      "ordinary_result_characters": [
+        3500,
+        12000
+      ],
+      "expected_core5_spills": 1
+    },
+    {
+      "id": "parallel-recall-preservation",
+      "max_context_bytes": 16384,
+      "ordinary_result_characters": [
+        8000
+      ],
+      "latest_batch_recall_characters": [
+        9500,
+        800
+      ],
+      "expected_core5_spills": 1,
+      "expected_core5_preserved_recalls": 2
+    }
+  ],
+  "metrics": [
+    "artifact writes",
+    "provider JSON bytes, not tokens",
+    "exact text retained",
+    "protected latest recall batch",
+    "shared-cursor gap in a separate Unicode control"
+  ],
+  "invariants": [
+    "No original transcript mutation",
+    "Selected declarations and execution objects remain checked by core",
+    "No artifact writes when routed provider view fits",
+    "No compressed replacement larger than source inpressuremode"
+  ],
+  "real_model_calls": 0,
+  "GPU": false,
+  "failure_handling": "Keep all old/new outcomes. Do not revise expected values after observing the diagnostic. This does not rerun closed API or ToolRet/field-location experiments."
+}

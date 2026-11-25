@@ -1,0 +1,149 @@
+{
+  "kind": "CPU-only synthetic mechanism comparison, not model performance",
+  "baseline": {
+    "version": "1.6.0-contextlab.4",
+    "context_budget_js_sha256": "86587f0a722f60a2f7e22c5c26e94cca452e25904df4a4dfd32d5ae711d1964f"
+  },
+  "protocol_sha256": "73c0cde3ffd53c2bd91a43137f3e4e7e44ae87b1b49e203e75124508261abeb0",
+  "rows": [
+    {
+      "case": "fits-large-output",
+      "variant": "frozen-core4",
+      "input_provider_JSON_bytes": 11656,
+      "output_provider_JSON_bytes": 1186,
+      "artifact_writes": 1,
+      "spilled_results": 1,
+      "retained_exact_fields": [
+        false
+      ],
+      "trace": {
+        "beforeBytes": 11595,
+        "afterBytes": 1186,
+        "spilledResults": [
+          "ctx_tool-result_5ce6c54c20734a6fde01af2108a9b3fb1174efe12deb31f61ec971777a6450b6"
+        ],
+        "archivedTurns": [],
+        "retainedHistoryTurns": 0
+      }
+    },
+    {
+      "case": "fits-large-output",
+      "variant": "core5-pressure",
+      "input_provider_JSON_bytes": 11656,
+      "output_provider_JSON_bytes": 11656,
+      "artifact_writes": 0,
+      "spilled_results": 0,
+      "retained_exact_fields": [
+        true
+      ],
+      "trace": {
+        "beforeBytes": 11595,
+        "normalizedBeforeBytes": 11656,
+        "spillMode": "pressure",
+        "trigger": "none",
+        "protectedRecallCallIds": [],
+        "afterBytes": 11656,
+        "spilledResults": [],
+        "archivedTurns": [],
+        "retainedHistoryTurns": 0
+      }
+    },
+    {
+      "case": "one-large-spill-suffices",
+      "variant": "frozen-core4",
+      "input_provider_JSON_bytes": 16384,
+      "output_provider_JSON_bytes": 1943,
+      "artifact_writes": 2,
+      "spilled_results": 2,
+      "retained_exact_fields": [
+        false
+      ],
+      "trace": {
+        "beforeBytes": 16323,
+        "afterBytes": 1943,
+        "spilledResults": [
+          "ctx_tool-result_06d88b29d1f05a51ecc55d5be36236067e75cdc70dae9c5f93bb2d7e9ce6e3fc",
+          "ctx_tool-result_95334fbddfa630aa721b406d4556ebe1cf303c63f184ffbc8b54b20f8067371b"
+        ],
+        "archivedTurns": [],
+        "retainedHistoryTurns": 0
+      }
+    },
+    {
+      "case": "one-large-spill-suffices",
+      "variant": "core5-pressure",
+      "input_provider_JSON_bytes": 16384,
+      "output_provider_JSON_bytes": 4914,
+      "artifact_writes": 1,
+      "spilled_results": 1,
+      "retained_exact_fields": [
+        true
+      ],
+      "trace": {
+        "beforeBytes": 16323,
+        "normalizedBeforeBytes": 16384,
+        "spillMode": "pressure",
+        "trigger": "pressure",
+        "protectedRecallCallIds": [],
+        "afterBytes": 4914,
+        "spilledResults": [
+          "ctx_tool-result_95334fbddfa630aa721b406d4556ebe1cf303c63f184ffbc8b54b20f8067371b"
+        ],
+        "archivedTurns": [],
+        "retainedHistoryTurns": 0
+      }
+    },
+    {
+      "case": "parallel-recall-preservation",
+      "variant": "frozen-core4",
+      "input_provider_JSON_bytes": 19747,
+      "output_provider_JSON_bytes": 3330,
+      "artifact_writes": 2,
+      "spilled_results": 2,
+      "retained_exact_fields": [
+        false,
+        true
+      ],
+      "trace": {
+        "beforeBytes": 19686,
+        "afterBytes": 3330,
+        "spilledResults": [
+          "ctx_tool-result_f407da2d8f9abf8041200c106cf7edf579a38a1c10ebbcb08b907e07d7fe6d2f",
+          "ctx_tool-result_b84929bd1f88f5c981b3b6dc9bf2e061d8a41c799cabc1cb308ca000c5cb9d4e"
+        ],
+        "archivedTurns": [],
+        "retainedHistoryTurns": 0
+      }
+    },
+    {
+      "case": "parallel-recall-preservation",
+      "variant": "core5-pressure",
+      "input_provider_JSON_bytes": 19747,
+      "output_provider_JSON_bytes": 12292,
+      "artifact_writes": 1,
+      "spilled_results": 1,
+      "retained_exact_fields": [
+        true,
+        true
+      ],
+      "trace": {
+        "beforeBytes": 19686,
+        "normalizedBeforeBytes": 19747,
+        "spillMode": "pressure",
+        "trigger": "pressure",
+        "protectedRecallCallIds": [
+          "recall-a",
+          "recall-b"
+        ],
+        "afterBytes": 12292,
+        "spilledResults": [
+          "ctx_tool-result_f407da2d8f9abf8041200c106cf7edf579a38a1c10ebbcb08b907e07d7fe6d2f"
+        ],
+        "archivedTurns": [],
+        "retainedHistoryTurns": 0
+      }
+    }
+  ],
+  "model_calls": 0,
+  "GPU_used": false
+}

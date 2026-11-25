@@ -1,6 +1,6 @@
 # 从 Pi 到 PiContextLab：框架改造与验证客户端完整讲解
 
-本文对应官方 Pi **1.6.0**、派生核心 **1.6.0-contextlab.4** 与本仓库代码。框架改进是主线，PiMetricLab 经营指标应用是验证客户端。建议按“先跑一个报告，再读架构和恢复，最后看源码”的顺序学习。上游身份见 [upstream-lock.json](../upstream-lock.json)，研究来由见 [references.md](references.md)，实际运行证据见 [validation.md](validation.md)。
+本文对应官方 Pi **1.6.0**、派生核心 **1.6.0-contextlab.5** 与本仓库代码。框架改进是主线，PiMetricLab 经营指标应用是验证客户端。建议按“先跑一个报告，再读架构和恢复，最后看源码”的顺序学习。上游身份见 [upstream-lock.json](../upstream-lock.json)，研究来由见 [references.md](references.md)，实际运行证据见 [validation.md](validation.md)。
 
 ## 1. 项目要解决的具体问题
 
@@ -300,11 +300,11 @@ node dist/scripts/validate-uci.js /path/to/retail-data /path/to/oracle.json /pat
 
 ## 21. 上下文打包怎样保持可追溯
 
-先验证 assistant 工具批次有且仅有对应结果；保留全部 system 指令，去掉仅用于显示的 details。超过阈值的文本结果按精确 UTF-8 字节哈希外置，替换成来源工具、SHA256、字节数、root keys 和最多 512 字节的精确身份字段。`ctx_` 只是存储句柄，不能当 report ID。
+先验证 assistant 工具批次有且仅有对应结果；保留全部 system 指令，去掉仅用于显示的 details。contextlab.5 先路由工具并测量规范化 provider 视图；只有超预算才把超过阈值的较大文本结果按精确 UTF-8 字节哈希外置，达到预算即停止。最近一个并行工具批次中的所有回读/搜索结果一起保护。外置时替换成来源工具、SHA256、字节数、root keys 和最多 512 字节的精确身份字段。`ctx_` 只是存储句柄，不能当 report ID。
 
 若仍超过预算，旧 user turn 按 `(BM25相关性 + 0.15×新近性)/sqrt(该轮字节数)` 排序尝试装入，保留原始时间顺序；当前用户轮及已完成工具回合整体保留。旧轮原文和索引也有内容身份。强制部分仍超预算时拒绝，不截断工具事务或用户要求。
 
-`read_context_artifact` 一次接受最多 8 个 JSON pointer。依次读取共享的最多 4,096 code points，超长值返回 `has_more`；读取先验证会话归属、哈希与长度。它返回精确原文，不做另一次 LLM 摘要。存储无损不等于推理无损：模型仍可能找错路径、读错身份或耗尽请求额度。
+`read_context_artifact` 一次接受最多 8 个 JSON pointer。依次读取共享的最多 4,096 code points，超长值逐字段返回 `has_more`、实际返回 code points、`next_offset` 和可直接传回的 `next_read`；读取先验证会话归属、哈希与长度。它返回精确原文，不做另一次 LLM 摘要。存储无损不等于推理无损：模型仍可能找错路径、读错身份或耗尽请求额度。
 
 ## 22. 怎样复现框架评测
 
@@ -339,3 +339,14 @@ v4使用新的六月/七月gross_sales报告和六项溯源字段。完整上下
 因此普通CLI/API入口与Runner默认使用完整上下文；预算策略和字段定位是显式研究选项。脚本演示、完整数据的16KiB控制和恢复测试显式选择budgeted，保留框架实现验证。接口实现与工程通过已经成立，通用效果提升尚未成立。
 
 本轮研究先在abd69e2提交冻结，再发出23次请求，结束后不再追加请求改善分数。前后默认配置不同，复现必须使用原提交。用户选择预算模式时，应自己为新的独立任务冻结模型、费用和失败标准。当前简历应写框架接口、执行约束、数值保真和真实负结果分析，不写压缩使成功率提升。
+
+
+## 26. 为什么新版不再见到大输出就外置
+
+大输出只是候选条件，实际超预算才是默认触发条件。假设一条11KiB左右的结果仍在16KiB预算内，提前外置会制造读取步骤，而直接保留可以继续看原文。v5 先做工具路由，再测量选定 schema 和显示信息去除后的规范化上下文；已满足预算就不写 artifact。
+
+确实超限时，优先尝试较大的普通结果，每次检查是否已经足够；最近一批并行回读/字段搜索结果整体保留，避免刚查到的多个字段立即又被外置。仍保留单条阈值用于筛选候选，仍可能需要归档完整旧轮，也仍可能因为当前轮和必要工具太大而拒绝。这里的约束是程序行为，不是模型效果保证。
+
+分页也由接口承担明确的算术：批量读取的 limit 由各字段共享，每项返回可直接复用的 `next_read`，offset 等于原 offset 加实际返回 code points。模型不必猜下一页从哪里开始。Unicode 控制将多个续读页串回原值，另覆盖共享预算为零、非法偏移及结束页。
+
+阅读顺序：`BudgetedContextPolicy.prepare → modelContextView → packModelContext → createContextReadTool`；随后看 `test/context-pressure.test.ts` 与 `scripts/probe-pressure.ts`。后者使用冻结的旧 core4 和相同合成输入，只比较字节、artifact 写入及精确文本保留。三组机制诊断不能充当公开 benchmark、模型准确率或成本收益；既有真实模型负结果保持原分数。

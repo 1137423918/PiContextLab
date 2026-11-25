@@ -1,0 +1,6 @@
+
+> pi-metriclab@0.1.0 check
+> tsc --noEmit -p vendor/pi-agent-core/tsconfig.json && tsc --noEmit
+
+scripts/probe-pressure.ts(24,9): error TS6133: 'serialized' is declared but its value is never read.
+test/context-pressure.test.ts(52,100): error TS7022: 'page' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.

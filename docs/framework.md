@@ -4,7 +4,7 @@
 
 ## 改动位置与已有能力
 
-固定 Pi 1.6.0 的完整 Agent Core 源码保留在 [vendor/pi-agent-core](../vendor/pi-agent-core)，原文件哈希见 [UPSTREAM.json](../vendor/pi-agent-core/UPSTREAM.json)，MIT 原许可一并保留。派生版本为 `1.6.0-contextlab.4`，不是上游发布或已合入 PR。原研究克隆保持不变。
+固定 Pi 1.6.0 的完整 Agent Core 源码保留在 [vendor/pi-agent-core](../vendor/pi-agent-core)，原文件哈希见 [UPSTREAM.json](../vendor/pi-agent-core/UPSTREAM.json)，MIT 原许可一并保留。派生版本为 `1.6.0-contextlab.5`，不是上游发布或已合入 PR。原研究克隆保持不变。
 
 上游已有 `transformContext`、工具调用屏障、完整的 `pi-durable` 持久化 Harness、摘要压缩，以及部分工具输出限制。本项目不把这些已有能力说成原创。
 
@@ -13,7 +13,7 @@
 ## 两个策略组件
 
 1. **工具选择：**按当前任务对名称、描述与参数文档作词法检索，在工具数量和 schema 字节双预算下选择完整依赖组。始终可用的工具显式固定；漏召回时通过 `discover_tools` 检索并在下一轮暴露候选 schema。
-2. **上下文管理：**合并但保留全部 system 指令；大段文本工具输出按 SHA256 外置，保留可读取的引用；预算仍不足时，以完整旧 user turn 为单位按相关性/大小与新近性选择，当前用户轮次整体保留。原文和历史索引支持显式、限量、带完整性检查的读取。
+2. **上下文管理：**合并但保留全部 system 指令；先按路由后实际上下文判断压力，只有超预算才将较大文本工具输出按 SHA256 外置，满足预算即停止，保留可读取的引用；预算仍不足时，以完整旧 user turn 为单位按相关性/大小与新近性选择，当前用户轮次整体保留。原文和历史索引支持显式、限量、带完整性检查的读取。
 
 这不是新提出的 BM25 算法，也不声称外置就天然无损完成所有任务。原文不丢失与模型能否成功取回、正确使用，是两个需要分别验证的问题。预算度量是 UTF-8 上下文 JSON 字节，实际输入 token 和成本以 provider usage 另行记录。
 
@@ -113,7 +113,7 @@ v2 失败轨迹表明：知道 artifact ID 不代表知道 JSON 内部路径。�
 
 ## CPU 诊断复现入口
 
-冻结输入在 `evidence/artifact-search/inputs`，只含本项目公开提交的元数据与锁文件。先在服务器单独检出提交 `02f69f7`，用它自己的 lock 安装并构建 v3，保留该目录。再构建当前 v4：
+冻结输入在 `evidence/artifact-search/inputs`，只含本项目公开提交的元数据与锁文件。该诊断被测端为 contextlab.4（提交 `fc2d13c`），应检出该版本并使用其 lock。另在服务器单独检出提交 `02f69f7`，用它自己的 lock 安装并构建 v3，保留该对照目录。以下命令在已构建的 contextlab.4 中运行：
 
 ```bash
 node dist/scripts/eval-field-location.js \
@@ -129,3 +129,20 @@ node dist/scripts/eval-field-location.js \
 真实源审计中，完整上下文完成两个案例，两种预算策略均未完成，累计输入还更高。当前真实入口与Runner默认不启用ModelContextPolicy；`METRICLAB_CONTEXT_POLICY=budgeted`才启用，字段定位另由`METRICLAB_ARTIFACT_SEARCH=1`选择。原生SDK的Agent本来就只在传入policy时启用。脚本演示和针对策略的控制显式启用budgeted，仍验证原生执行集合与恢复。
 
 这次默认值调整是减少未证实策略对普通任务的影响，不是新的效果提升实验。源码、35项预检、23请求研究和37项发布控制分别留存；复现研究使用先行发布的abd69e2版本，结果不由当前默认值重算。
+
+
+## contextlab.5：按压力触发、整批回读保护与续读协议
+
+v4 轨迹暴露了可在 CPU 上单独检验的程序行为，但没有证明它们是模型失败的唯一原因。v5 改动如下：
+
+1. 先以业务工具与必要发现工具完成路由，再通过 `modelContextView` 测量规范化 provider 上下文 JSON；移除仅显示的 `details`，不把未选中 schema 算入压力。这里不是供应商 HTTP 请求体大小或 tokenizer 计数。
+2. 默认 `spillMode: 'pressure'`。视图已在预算内时直接保留工具结果，不写 artifact，也不为“超过单条阈值”额外预留读取 schema。超预算时才加入读取工具；字段搜索仍由 `artifactSearch` 显式决定，再共同计入 schema 和上下文预算。
+3. 对超过单条阈值的普通纯文本工具结果，按内容字节降序尝试外置。替代引用必须更小，重建视图后达到预算就停止；这不是全局最优背包算法。仍放不下才沿用完整旧轮归档，强制部分超限则拒绝。
+4. 最近一个已完成 assistant 工具批次里的所有 `read_context_artifact` / `search_context_artifact` 结果一起保护，不再仅保护最后一条。较早批次仍可能外置；若最新批次本身太大，保持显式拒绝，不承诺任何读取都能放下。
+5. 每条成功读取返回 `returned_codepoints`、`next_offset` 与 `next_read`。`next_read` 包含该 pointer 单独续读的完整参数，按实际返回长度前进，结束时为 null。多个 pointer 共享本次 limit，因此模型不应从请求 limit 自行计算下一页。
+
+例如 limit=11，第一字段使用3个code points，第二字段仅获得8个；第二字段的下一次 offset 必须是8，而不是11。共享预算耗尽时可返回0个字符及同 offset 的单字段续读参数；下次独立调用恢复完整 limit，能够前进。emoji 按 code point 计数，不按 UTF-16 单元。非法路径独立报错，完整性失败仍拒绝整个读取。
+
+`spillMode: 'threshold'` 仅为明确选择的旧触发方式兼容选项，仍使用新版批次保护与续读接口，不代表完整复现旧版本。严格复现 v4 需要检出旧提交。审计新增 `normalizedBeforeBytes`、`trigger`、`spillMode` 和 `protectedRecallCallIds`；UI 使用规范化前后字节作比较，权威历史保持原样。
+
+新版继续保持真实入口默认完整上下文，预算策略为 opt-in。验证为新的合成机制控制和工程回归，没有追加 DeepSeek 请求；不能据此宣称修复了实际模型失败、降低累计 token 或提高成功率。对照、原始测试和失败类型检查见 [验证记录](validation.md)。

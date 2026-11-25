@@ -17,6 +17,13 @@ export interface ContextArtifactStore {
 	get(id: string): Promise<ContextArtifact | undefined>;
 }
 
+export interface ContextReadContinuation {
+	artifact_id: string;
+	json_pointers: string[];
+	offset: number;
+	limit: number;
+}
+
 /** Create an immutable identity for exact UTF-8 bytes, with no LLM summary. */
 export async function contextArtifact(text: string, kind: ContextArtifact["kind"]): Promise<ContextArtifact> {
 	const bytes = new TextEncoder().encode(text);
@@ -28,7 +35,7 @@ export async function contextArtifact(text: string, kind: ContextArtifact["kind"
 const readSchema = obj({
 	artifact_id: str({ description: "ctx_ artifact handle, not a source document/report identity" }),
 	json_pointers: arr(str({ maxLength: 512 }), { minItems: 1, maxItems: 8, description: "Read several precise RFC6901 paths in one call. Use [\"\"] only for bounded raw text inspection." }),
-	offset: int({ minimum: 0, description: "Offset in Unicode code points of the selected value" }),
+	offset: int({ minimum: 0, description: "Offset in Unicode code points. Copy the selected value's next_read cursor when continuing; batch values can have different cursors." }),
 	limit: int({ minimum: 1, maximum: 4096, description: "Total Unicode code-point budget across all requested values" }),
 });
 
@@ -37,11 +44,12 @@ export function createContextReadTool(store: ContextArtifactStore): AgentTool<ty
 	return {
 		name: "read_context_artifact",
 		label: "Recall context artifact",
-		description: "Read exact archived context data by artifact ID and JSON pointer. Use this when a context reference omitted required facts; never guess omitted values.",
+		description: "Read exact archived context data by artifact ID and JSON pointer. Use this when a context reference omitted required facts; never guess omitted values. For paging, copy that value's next_read object verbatim. The limit is shared across all values, so do not calculate the next offset from the requested limit.",
 		parameters: readSchema,
 		replay: "safe",
 		async execute(_callId, args, signal) {
 			signal?.throwIfAborted();
+			if (!Number.isSafeInteger(args.offset) || args.offset < 0 || !Number.isSafeInteger(args.limit) || args.limit < 1 || args.limit > 4096) throw new RangeError("Read offset and limit must be bounded safe integers");
 			const artifact = await store.get(args.artifact_id);
 			if (!artifact) throw new Error("Artifact does not belong to this conversation or does not exist");
 			const verified = await contextArtifact(artifact.text, artifact.kind);
@@ -55,7 +63,10 @@ export function createContextReadTool(store: ContextArtifactStore): AgentTool<ty
 				const text = field ? parsed!.text(field.value, field.parent, field.key) : artifact.text;
 				const points = Array.from(text);
 				const slice = points.slice(args.offset, args.offset + remaining);
-				values.push({ json_pointer: pointer, offset: args.offset, total_codepoints: points.length, text: slice.join(""), has_more: args.offset + slice.length < points.length });
+				const nextOffset = args.offset + slice.length;
+				const hasMore = nextOffset < points.length;
+				const nextRead: ContextReadContinuation | null = hasMore ? { artifact_id: artifact.id, json_pointers: [pointer], offset: nextOffset, limit: args.limit } : null;
+				values.push({ json_pointer: pointer, offset: args.offset, total_codepoints: points.length, text: slice.join(""), returned_codepoints: slice.length, next_offset: nextOffset, next_read: nextRead, has_more: hasMore });
 				remaining -= slice.length;
 				} catch (error) {
 					// One wrong path must not discard other exact values in the same bounded read.

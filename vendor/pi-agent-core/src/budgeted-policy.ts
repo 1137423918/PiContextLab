@@ -3,12 +3,12 @@ import { arr, compile, int, num, obj, str } from "@earendil-works/pi-schema";
 import { toToolDeclaration } from "@earendil-works/pi-ai";
 import { createContextReadTool, type ContextArtifactStore } from "./context-artifacts.ts";
 import { createContextSearchTool } from "./context-search.ts";
-import { contextBytes, packModelContext, type ContextPackingTrace } from "./context-budget.ts";
+import { contextBytes, modelContextView, packModelContext, type ContextPackingTrace } from "./context-budget.ts";
 import type { ExecutableTools, ModelContextPolicy, ModelContextPolicyInput, PreparedModelContext } from "./model-context.ts";
 import { routeTools, type RankedTool, type ToolRoutingOptions } from "./tool-router.ts";
 
 export interface BudgetedPolicyTrace extends ContextPackingTrace {
-	policy: "pi-context-lab-v2";
+	policy: "pi-context-lab-v5";
 	request: number;
 	registeredTools: number;
 	selectedToolNames: string[];
@@ -22,6 +22,7 @@ export interface BudgetedPolicyOptions extends ToolRoutingOptions {
 	artifacts: ContextArtifactStore;
 	/** Opt in to lexical JSON-field location alongside exact artifact reads. */
 	artifactSearch?: boolean;
+	spillMode?: "pressure" | "threshold";
 	onPrepared?: (trace: BudgetedPolicyTrace) => Promise<void> | void;
 }
 
@@ -79,17 +80,22 @@ export class BudgetedContextPolicy implements ModelContextPolicy {
 		const query = user ? typeof user.content === "string" ? user.content : user.content.filter((part) => part.type === "text").map((part) => part.type === "text" ? part.text : "").join("\n") : "";
 		const utilityNames = new Set(this.tools.map((tool) => tool.name));
 		const business = input.tools.filter((tool) => !utilityNames.has(tool.name));
-		const needsRead = input.context.messages.some((message) => message.role === "toolResult" && contextBytes(message.content) > this.options.inlineToolResultBytes) || contextBytes(input.context) > this.options.maxContextBytes;
 		const reader = this.tools[0];
-		const recallTools = needsRead ? [reader, ...(this.options.artifactSearch ? [this.tools[2]] : [])] : [];
-		const baseNames = [...this.options.alwaysInclude, ...recallTools.map(tool => tool.name)];
-		const totalSchemaBytes = [...business, ...recallTools].reduce((n, tool) => n + contextBytes(toToolDeclaration(tool)), 0);
-		const needsDiscovery = business.length + recallTools.length > this.options.maxTools || totalSchemaBytes > this.options.maxSchemaBytes;
-		const required = [...baseNames, ...(needsDiscovery ? ["discover_tools"] : [])];
-		const candidates = input.tools.filter((tool) => !utilityNames.has(tool.name) || required.includes(tool.name));
-		const decision = routeTools(query, candidates, { ...this.options, alwaysInclude: required }, [...promoted]);
-		const packed = await packModelContext(input.context, decision.tools, query, { maxContextBytes: this.options.maxContextBytes, inlineToolResultBytes: this.options.inlineToolResultBytes, store: this.options.artifacts, artifactSearch: this.options.artifactSearch }, signal);
-		const trace: BudgetedPolicyTrace = { policy: "pi-context-lab-v2", request: this.request, registeredTools: input.tools.length, selectedToolNames: decision.tools.map((t) => t.name), schemaBytes: decision.schemaBytes, ranking: decision.ranked, ...packed.trace };
+		const select = (recallTools: ExecutableTools) => {
+			const baseNames = [...this.options.alwaysInclude, ...recallTools.map(tool => tool.name)];
+			const totalSchemaBytes = [...business, ...recallTools].reduce((n, tool) => n + contextBytes(toToolDeclaration(tool)), 0);
+			const needsDiscovery = business.length + recallTools.length > this.options.maxTools || totalSchemaBytes > this.options.maxSchemaBytes;
+			const required = [...baseNames, ...(needsDiscovery ? ["discover_tools"] : [])];
+			const candidates = input.tools.filter((tool) => !utilityNames.has(tool.name) || required.includes(tool.name));
+			return routeTools(query, candidates, { ...this.options, alwaysInclude: required }, [...promoted]);
+		};
+		// Unselected schemas and display details must not manufacture context pressure.
+		const initial = select([]);
+		const exceedsBudget = contextBytes(modelContextView(input.context, initial.tools)) > this.options.maxContextBytes;
+		const eager = this.options.spillMode === "threshold" && input.context.messages.some(message => message.role === "toolResult" && contextBytes(message.content) > this.options.inlineToolResultBytes);
+		const decision = exceedsBudget || eager ? select([reader, ...(this.options.artifactSearch ? [this.tools[2]] : [])]) : initial;
+		const packed = await packModelContext(input.context, decision.tools, query, { maxContextBytes: this.options.maxContextBytes, inlineToolResultBytes: this.options.inlineToolResultBytes, store: this.options.artifacts, artifactSearch: this.options.artifactSearch, spillMode: this.options.spillMode }, signal);
+		const trace: BudgetedPolicyTrace = { policy: "pi-context-lab-v5", request: this.request, registeredTools: input.tools.length, selectedToolNames: decision.tools.map((t) => t.name), schemaBytes: decision.schemaBytes, ranking: decision.ranked, ...packed.trace };
 		await this.options.onPrepared?.(trace);
 		return { context: packed.context, tools: decision.tools };
 	}

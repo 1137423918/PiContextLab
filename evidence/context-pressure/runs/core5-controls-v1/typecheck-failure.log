@@ -1,0 +1,6 @@
+
+> pi-metriclab@0.1.0 check
+> tsc --noEmit -p vendor/pi-agent-core/tsconfig.json && tsc --noEmit
+
+test/context-pressure.test.ts(52,220): error TS2322: Type 'ContextReadContinuation | null' is not assignable to type 'ContextReadContinuation'.
+  Type 'null' is not assignable to type 'ContextReadContinuation'.

@@ -241,3 +241,22 @@ v4 最终服务器验证：**33 项测试、14 项浏览器检查通过**。完�
 研究结束后，CLI、真实API入口及Runner默认改为完整上下文；预算策略与字段定位需显式开启。没有为这个默认值调整追加模型请求，也没有修改原研究的分数或源文件。发布控制为**37项Node测试＋14项浏览器检查**，另通过显式budgeted模式下16KiB的全量数据控制；完整上下文业务路径和显式预算恢复都覆盖。
 
 [37项发布测试](../evidence/api-v4/release-tests.tap) · [发布源码身份](../evidence/api-v4/release-source-sha256.json) · [35项运行前检查](../evidence/api-v4/preflight-tests.tap) · [阶段和资源](../evidence/api-v4/runs/)。实验前的首次类型检查在发送模型请求前失败，修正输出目录的类型收窄后通过并先行提交；[失败日志](../evidence/api-v4/initial-typecheck-failure.log)保留。
+
+
+## contextlab.5：按压力外置和续读的 CPU 控制
+
+基于旧轨迹中的分页与外置行为，提前固定三组新的合成输入，对冻结 core4 与 core5 使用相同消息；旧 baseline 的 context-budget.ts 与公开 fc2d13c 提交逐字节核对。只测程序机制，不追加真实模型请求。
+
+| 新合成场景 | core4 artifact 写入 | core5 写入 | core5 精确保留 |
+|---|---:|---:|---|
+| 11,656 JSON 字节已在 16KiB 内 | 1 | 0 | 整条结果 |
+| 16,384 字节需压至 10,000 内 | 2 | 1 | 较小普通结果，最终4,914字节 |
+| 普通结果＋最新两个并行回读 | 2 | 1 | 两条回读，最终12,292/16,384字节 |
+
+第一例 core5 保留了更多字节，正是避免不必要外置；这里不追求压缩比例最高。第三例 core4 只保留最后一条回读，新版共同保护两条。三例不是泛化 benchmark，不含真实模型推理，不能用来推断成功率、累计 token 或费用改善。
+
+另外的 Unicode 控制中，同次共享 limit=11，第一项用3个 code points，第二项返回8个；第二项 next_read 从8继续，多页拼接与原值相同。覆盖共享剩余额度为0、越界整数拒绝、单字段续读及末页 null。路由控制还验证未选择 schema 与显示 details 不会触发虚假压力，历史超限仍按完整旧轮归档。
+
+服务器通过 **44 项测试、14 项浏览器检查**；541,909 行全量数据在显式 budgeted/16KiB 的脚本 provider 下完成，继续独立核对12个指标值、29个国家分组及质量计数。执行约46秒，owned 进程最终0，新增模型请求0、GPU0。旧真实 DeepSeek 负结果不变；普通入口继续默认完整上下文。
+
+[方案](../examples/pressure-policy-cpu-protocol.json) · [逐例结果与输入源码](../evidence/context-pressure/) · [44项测试](../evidence/context-pressure/tests.tap) · [源码身份](../evidence/context-pressure/source-sha256.json) · [全量核对](../evidence/context-pressure/uci-validation.json) · [浏览器](../evidence/context-pressure/browser-result.json) · [资源与两次类型错误](../evidence/context-pressure/runs/)。类型错误均发生在诊断运行之前，修复后使用全新目录，未改预期或重跑已评分数据。

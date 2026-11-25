@@ -1,6 +1,6 @@
 {
   "upstream_commit": "faac585884ae2c013a6b1400f3e9e77f10b34bac",
-  "fork_version": "1.6.0-contextlab.4",
+  "fork_version": "1.6.0-contextlab.5",
   "changed_source_files": [
     "src/agent-loop.ts",
     "src/agent.ts",
@@ -14,13 +14,15 @@
     "src/tool-router.ts",
     "src/types.ts"
   ],
-  "patch_sha256": "8b5bc2afff124cd66c4896824d1bd3cfe612b6ddd27ef29c5b869f373810e3d7",
-  "scope": "Source-only patch against packages/agent; standalone package/tsconfig under vendor. Historicalv1/v3 patches retained.",
+  "patch_sha256": "f03f92916aa55d63c9641fd50905ee4f227e40bf69b7489cf47f60f2ab79504b",
+  "scope": "Source-only patch against packages/agent; standalone package/tsconfig under vendor. Historical v1/v3/v4 patches retained.",
   "upstream_read_only_clone_unchanged": true,
   "unmodified_npm_baseline": "1.6.0",
   "real_API_evaluated_versions": [
     "contextlab.1",
-    "contextlab.2"
+    "contextlab.2",
+    "contextlab.4"
   ],
-  "v4_validation": "Preregistered real DeepSeek study atabd69e2:23requests;full2/2,native-read/search0/2. Post-study configuredAPI/Runner defaultfull, experiments opt-in.37engineering tests; no claimed performance improvement."
+  "v4_validation": "Preregistered real DeepSeek study atabd69e2:23requests;full2/2,native-read/search0/2. Post-study configuredAPI/Runner defaultfull, experiments opt-in.37engineering tests; no claimed performance improvement.",
+  "v5_validation": "44 engineering tests,14 browser checks, full UCI16KiB scripted control; three new synthetic mechanism comparisons against frozen core4. No additional real model requests; default full context preserved."
 }
